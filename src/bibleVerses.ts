@@ -108,3 +108,42 @@ export function getVerseText(
 
   throw new Error("Failed to find verse");
 }
+
+export async function getBibles() {
+  const response = await fetch(
+    "https://memorize-scripture-api-server.fly.dev/api/v1/bibles",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        language: "eng",
+        ids: "de4e12af7f28f599-02,32664dc3288a28df-02",
+        includeFullDetails: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": "memorize_scripture_web_app",
+      },
+    },
+  );
+  const data = await response.json();
+  return data;
+}
+
+export async function getVerse() {
+  const response = await fetch(
+    "https://memorize-scripture-api-server.fly.dev/api/v1/bibles/32664dc3288a28df-02/verses/GAL.2.20",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        contentType: "json",
+        includeNotes: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": "memorize_scripture_web_app",
+      },
+    },
+  );
+  const data = await response.json();
+  return data;
+}

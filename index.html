@@ -2,24 +2,83 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>︎Memorize Bible Verses</title>
   </head>
-  <body>
-    <div id="app">
-      <select id="select-bible-translation"></select>
-      <select id="select-verse-list"></select>
+  <body class="text-slate-900 bg-gray-950/5">
+    <div
+      id="app"
+      class="mx-auto max-w-2xl bg-white px-8 pb-8 min-h-[800px] font-base text-lg md:border-x md:border-solid md:border-slate-400"
+    >
+      <header class="pt-4 pb-6 text-center sm:py-8 lg:py-10">
+        <h1 class="font-tinos text-2xl font-bold sm:text-3xl lg:text-4xl">
+          ︎Memorize Bible Verses
+        </h1>
+        <p class="mt-6 hidden text-lg text-slate-800 sm:block">
+          Use your device's microphone to practice memorizing scripture.
+        </p>
+      </header>
 
-      <button id="button-start">Start</button>
-      <button id="button-stop">Stop</button>
-
-      <div id="results">
-        <div id="actual-verse"></div>
-        <div id="transcript"></div>
-        <div id="diff"></div>
-      </div>
+      <app-state-provider>
+        <accordion-container>
+          <details class="group border-1 border-slate-400" open>
+            <summary class="p-4 group-open:mb-4">
+              Step 1: Select your verse
+            </summary>
+            <div class="px-4">
+              <bible-translation-selector></bible-translation-selector>
+              <bible-verse-selector class="block my-6"></bible-verse-selector>
+            </div>
+          </details>
+          <details class="group border-1 border-t-0 border-slate-400">
+            <summary class="p-4 group-open:mb-4">
+              Step 2: Recite your verse
+            </summary>
+            <div class="px-4">
+              <recite-bible-verse class="block mb-6"></recite-bible-verse>
+            </div>
+          </details>
+          <details class="group border-1 border-t-0 border-slate-400">
+            <summary class="p-4 group-open:mb-4">
+              Step 3: See how well you did
+            </summary>
+            <div class="px-4">
+              <accuracy-report class="block mb-6"></accuracy-report>
+            </div>
+          </details>
+        </accordion-container>
+      </app-state-provider>
     </div>
+
+    <template id="loading-spinner-template">
+      <div
+        class="flex justify-center my-4 sm:col-span-2 md:col-span-3 lg:col-span-5"
+        data-template-id="loading-spinner"
+      >
+        <div
+          class="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-stone-700 rounded-full"
+          role="status"
+          aria-label="loading"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </template>
+
+    <template id="alert-error-template">
+      <div
+        class="flex justify-center my-4 sm:col-span-2 md:col-span-3 lg:col-span-5"
+        data-template-id="alert-error"
+      >
+        <div
+          class="alert-error w-full text-xl mb-8 bg-red-100 border border-red-300 text-red-800 p-4 relative"
+          role="alert"
+        >
+          <slot name="error-message">ERROR MESSAGE</slot>
+        </div>
+      </div>
+    </template>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
