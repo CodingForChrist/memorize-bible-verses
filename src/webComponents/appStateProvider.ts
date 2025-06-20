@@ -1,5 +1,4 @@
 import { getTemplate } from "./utils";
-import { AccuracyReport } from "./accuracyReport";
 import { CUSTOM_EVENTS } from "../constants";
 
 import type { BibleTranslation, BibleVerse } from "../types";
@@ -41,28 +40,31 @@ export class AppStateProvider extends HTMLElement {
   }
 
   #updateChildrenWithSelectedBibleVerse() {
-    const reciteBibleVerseElement = this.querySelector("recite-bible-verse");
-    if (reciteBibleVerseElement && this.selectedBibleVerse) {
-      const { id, reference, content } = this.selectedBibleVerse;
-      reciteBibleVerseElement.setAttribute("verse-id", id);
-      reciteBibleVerseElement.setAttribute("verse-reference", reference);
-      reciteBibleVerseElement.setAttribute("verse-content", content);
+    if (!this.selectedBibleVerse) {
+      return;
     }
 
-    const accuracyReportElement =
-      this.querySelector<AccuracyReport>("accuracy-report");
+    const { id, reference, content } = this.selectedBibleVerse;
+    const reciteBibleVerseElement = this.querySelector("recite-bible-verse");
+    const accuracyReportElement = this.querySelector("accuracy-report");
 
-    if (accuracyReportElement && this.selectedBibleVerse) {
-      accuracyReportElement.selectedBibleVerse = this.selectedBibleVerse;
+    for (const element of [reciteBibleVerseElement, accuracyReportElement]) {
+      if (element) {
+        element.setAttribute("verse-id", id);
+        element.setAttribute("verse-reference", reference);
+        element.setAttribute("verse-content", content);
+      }
     }
   }
 
   #updateChildrenWithRecitedBibleVerse() {
-    const accuracyReportElement =
-      this.querySelector<AccuracyReport>("accuracy-report");
+    const accuracyReportElement = this.querySelector("accuracy-report");
 
     if (accuracyReportElement && this.recitedBibleVerse) {
-      accuracyReportElement.recitedBibleVerse = this.recitedBibleVerse;
+      accuracyReportElement.setAttribute(
+        "recited-bible-verse",
+        this.recitedBibleVerse,
+      );
     }
   }
 

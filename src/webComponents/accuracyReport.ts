@@ -1,57 +1,31 @@
 import { diffWords } from "diff";
 
-import { LOADING_STATES, type LoadingStates } from "../constants";
-
-import type { BibleVerse } from "../types";
+import { getTemplate } from "./utils";
+import { convertBibleVerseToText } from "../formatBibleVerse";
 
 export class AccuracyReport extends HTMLElement {
-  #selectedBibleVerse?: BibleVerse;
-  #recitedBibleVerse?: string;
-
-  constructor() {
-    super();
-
-    this.loadingState = LOADING_STATES.INITIAL;
-  }
-
   static get observedAttributes() {
-    return ["loading-state"];
+    return ["recited-bible-verse"];
   }
 
-  get loadingState() {
-    return this.getAttribute("loading-state") as LoadingStates;
+  get verseReference() {
+    return this.getAttribute("verse-reference");
   }
 
-  set loadingState(value: LoadingStates) {
-    this.setAttribute("loading-state", value);
+  get verseContent() {
+    return this.getAttribute("verse-content");
   }
 
-  get selectedBibleVerse(): BibleVerse | undefined {
-    return this.#selectedBibleVerse;
-  }
-
-  set selectedBibleVerse(value: BibleVerse) {
-    this.#selectedBibleVerse = value;
-
-    this.loadingState = LOADING_STATES.PENDING;
-  }
-
-  get recitedBibleVerse(): string | undefined {
-    return this.#recitedBibleVerse;
-  }
-
-  set recitedBibleVerse(value: string) {
-    this.#recitedBibleVerse = value;
-
-    if (this.selectedBibleVerse) {
-      this.loadingState = LOADING_STATES.RESOLVED;
-    }
+  get recitedBibleVerse() {
+    return this.getAttribute("recited-bible-verse");
   }
 
   #renderReport() {
-    if (this.selectedBibleVerse?.content && this.recitedBibleVerse) {
+    this.innerHTML = "";
+
+    if (this.verseReference && this.verseContent && this.recitedBibleVerse) {
       // add reference and strip out html characters
-      const verseText = `${this.selectedBibleVerse.reference} ${getVerseTextFromHTML(this.selectedBibleVerse.content)} ${this.selectedBibleVerse.reference}`;
+      const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
       const results = getDifferenceBetweenVerseAndInput({
         originalBibleVerseText: verseText,
@@ -59,18 +33,34 @@ export class AccuracyReport extends HTMLElement {
       });
 
       this.append(results);
+    } else {
+      this.#renderErrorMessage(
+        "Unable to display report. Please complete Step 1 and Step 2 first.",
+      );
     }
   }
 
+  #renderErrorMessage(message: string) {
+    const alertErrorElement = getTemplate("alert-error-template");
+    const errorMessageSlot = alertErrorElement.querySelector<HTMLSlotElement>(
+      'slot[name="error-message"]',
+    );
+
+    if (errorMessageSlot) {
+      errorMessageSlot.innerText = message;
+      this.append(alertErrorElement);
+    }
+  }
+
+  connectedCallback() {
+    this.#renderReport();
+  }
+
   attributeChangedCallback(name: string) {
-    if (name !== "loading-state") {
+    if (name !== "recited-bible-verse") {
       return;
     }
-
-    // wait until both the bible verse and recited bible verse and received
-    if (this.loadingState === LOADING_STATES.RESOLVED) {
-      this.#renderReport();
-    }
+    this.#renderReport();
   }
 }
 
@@ -114,17 +104,6 @@ function getDifferenceBetweenVerseAndInput({
   }
 
   return fragment;
-}
-
-function getVerseTextFromHTML(verseContent: BibleVerse["content"]) {
-  const divElement = document.createElement("div");
-  divElement.innerHTML = verseContent;
-  // remove verse numbers
-  divElement
-    .querySelectorAll("[data-number]")
-    ?.forEach((element) => element.remove());
-
-  return divElement.innerText;
 }
 
 window.customElements.define("accuracy-report", AccuracyReport);
