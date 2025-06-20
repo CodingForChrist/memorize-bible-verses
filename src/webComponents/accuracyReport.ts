@@ -2,7 +2,6 @@ import { diffWords } from "diff";
 
 import { getTemplate } from "./utils";
 import { convertBibleVerseToText } from "../formatBibleVerse";
-import { error } from "happy-dom/lib/PropertySymbol.js";
 
 export class AccuracyReport extends HTMLElement {
   static get observedAttributes() {
