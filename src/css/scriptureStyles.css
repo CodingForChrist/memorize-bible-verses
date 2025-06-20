@@ -1,7 +1,8 @@
 /* copied from: https://github.com/americanbible/scripture-styles */
 
 .scripture-styles {
-  font-size: 18px;
+  /* custom update - comment out font size to match app styling */
+  /* font-size: 18px; */
   /* custom update - use tinos google font */
   font-family: "Tinos", "Noto Serif", serif;
   line-height: 25px;

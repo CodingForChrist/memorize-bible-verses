@@ -109,7 +109,7 @@ export class BibleVerseSelector extends HTMLElement {
 
   #renderSelectedBibleVerse() {
     const divContainer = document.createElement("div");
-    divContainer.classList.add("scripture-styles", "my-8");
+    divContainer.classList.add("scripture-styles", "my-8", "text-xl");
     divContainer.innerHTML = this.selectedBibleVerse!.content;
 
     const verseContentElement =
@@ -176,7 +176,7 @@ export class BibleVerseSelector extends HTMLElement {
         this.#renderSelectedBibleVerse();
       } else if (this.loadingState === LOADING_STATES.REJECTED) {
         this.#renderErrorMessage(
-          "Failed to find bible verse. Please try another search.",
+          "Failed to find the bible verse reference. Please try another search.",
         );
       }
     }

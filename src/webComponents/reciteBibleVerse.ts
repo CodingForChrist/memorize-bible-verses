@@ -6,16 +6,8 @@ export class ReciteBibleVerse extends HTMLElement {
   #speechTranscript?: string;
   #lastSpeechRecognitionResult?: SpeechRecognitionResultList;
 
-  #templates: {
-    loadingSpinner: DocumentFragment;
-  };
-
   constructor() {
     super();
-
-    this.#templates = {
-      loadingSpinner: getTemplate("loading-spinner-template"),
-    };
 
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -26,8 +18,16 @@ export class ReciteBibleVerse extends HTMLElement {
     this.speechRecognition.maxAlternatives = 1;
   }
 
+  static get observedAttributes() {
+    return ["verse-reference"];
+  }
+
+  get verseReference() {
+    return this.getAttribute("verse-reference");
+  }
+
   #showLoadingSpinner() {
-    this.appendChild(this.#templates.loadingSpinner);
+    this.appendChild(getTemplate("loading-spinner-template"));
   }
 
   #hideLoadingSpinner() {
@@ -61,9 +61,25 @@ export class ReciteBibleVerse extends HTMLElement {
     window.dispatchEvent(eventUpdateSelectedBible);
   }
 
+  #renderInitialContent() {
+    this.innerHTML = "";
+
+    if (this.verseReference) {
+      const paragraphElement = document.createElement("p");
+      paragraphElement.innerText = `Click the button below and recite ${this.verseReference}`;
+      paragraphElement.classList.add("mb-4");
+      this.append(paragraphElement);
+      this.#renderRecordVoiceButton();
+    } else {
+      this.#renderErrorMessage(
+        "Go back to Step 1 and select a bible verse reference",
+      );
+    }
+  }
+
   #renderRecordVoiceButton() {
     const html = `
-        <button type="button" id="button-record-voice" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 w-full text-sm/6 font-semibold text-white hover:bg-blue-800">
+        <button type="button" id="button-record-voice" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 w-full text-sm/6 font-semibold text-white cursor-pointer hover:bg-blue-800">
           Start recording with microphone input
         </button>
     `;
@@ -92,8 +108,20 @@ export class ReciteBibleVerse extends HTMLElement {
     this.append(divContainer);
   }
 
+  #renderErrorMessage(message: string) {
+    const alertErrorElement = getTemplate("alert-error-template");
+    const errorMessageSlot = alertErrorElement.querySelector<HTMLSlotElement>(
+      'slot[name="error-message"]',
+    );
+
+    if (errorMessageSlot) {
+      errorMessageSlot.innerText = message;
+      this.append(alertErrorElement);
+    }
+  }
+
   connectedCallback() {
-    this.#renderRecordVoiceButton();
+    this.#renderInitialContent();
 
     this.speechRecognition.addEventListener(
       "result",
@@ -107,6 +135,13 @@ export class ReciteBibleVerse extends HTMLElement {
         this.speechTranscript = this.#lastSpeechRecognitionResult;
       }
     });
+  }
+
+  attributeChangedCallback(name: string) {
+    if (name !== "verse-reference") {
+      return;
+    }
+    this.#renderInitialContent();
   }
 }
 
