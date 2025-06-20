@@ -85,6 +85,51 @@
       </div>
     </template>
 
+    <template id="accuracy-report-template">
+      <table class="table-auto">
+        <tbody>
+          <tr>
+            <td class="border-b border-slate-400 p-4 pl-8">Grade</td>
+            <td class="border-b border-slate-400 p-4 pl-8">
+              <slot name="grade"></slot>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-b border-slate-400 p-4 pl-8">Error Count</td>
+            <td class="border-b border-slate-400 p-4 pl-8">
+              <slot name="error-count"></slot>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-b border-slate-400 p-4 pl-8">Verse Reference</td>
+            <td class="border-b border-slate-400 p-4 pl-8">
+              <slot name="verse-reference"></slot>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-b border-slate-400 p-4 pl-8">Actual Verse</td>
+            <td class="border-b border-slate-400 p-4 pl-8">
+              <div class="scripture-styles text-xl">
+                <slot name="actual-verse"></slot>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-b border-slate-400 p-4 pl-8">Recited Verse</td>
+            <td class="border-b border-slate-400 p-4 pl-8">
+              <slot name="recited-verse"></slot>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-b border-slate-400 p-4 pl-8">Text Difference</td>
+            <td class="border-b border-slate-400 p-4 pl-8">
+              <slot name="text-difference"></slot>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </template>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

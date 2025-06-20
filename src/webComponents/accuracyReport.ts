@@ -2,6 +2,7 @@ import { diffWords } from "diff";
 
 import { getTemplate } from "./utils";
 import { convertBibleVerseToText } from "../formatBibleVerse";
+import { error } from "happy-dom/lib/PropertySymbol.js";
 
 export class AccuracyReport extends HTMLElement {
   static get observedAttributes() {
@@ -20,6 +21,36 @@ export class AccuracyReport extends HTMLElement {
     return this.getAttribute("recited-bible-verse");
   }
 
+  #calculateGrade({
+    wordCount,
+    errorCount,
+  }: {
+    wordCount: number;
+    errorCount: number;
+  }) {
+    const percentageInDecimal = (wordCount - errorCount) / wordCount;
+    let gradeLetter: string;
+
+    if (percentageInDecimal === 1) {
+      gradeLetter = "A+";
+    } else if (percentageInDecimal >= 0.9) {
+      gradeLetter = "A+";
+    } else if (percentageInDecimal >= 0.8) {
+      gradeLetter = "B";
+    } else if (percentageInDecimal >= 0.7) {
+      gradeLetter = "C";
+    } else if (percentageInDecimal >= 0.6) {
+      gradeLetter = "D";
+    } else {
+      gradeLetter = "F";
+    }
+
+    return {
+      percentage: Math.floor(percentageInDecimal * 100),
+      gradeLetter,
+    };
+  }
+
   #renderReport() {
     this.innerHTML = "";
 
@@ -27,12 +58,72 @@ export class AccuracyReport extends HTMLElement {
       // add reference and strip out html characters
       const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
-      const results = getDifferenceBetweenVerseAndInput({
-        originalBibleVerseText: verseText,
-        recitedBibleVerseText: this.recitedBibleVerse,
-      });
+      const { textDifferenceDocumentFragment, errorCount, wordCount } =
+        getDifferenceBetweenVerseAndInput({
+          originalBibleVerseText: verseText,
+          recitedBibleVerseText: this.recitedBibleVerse,
+        });
 
-      this.append(results);
+      const accurancyReportElement = getTemplate("accuracy-report-template");
+      const gradeSlot =
+        accurancyReportElement.querySelector<HTMLSlotElement>(
+          'slot[name="grade"]',
+        );
+
+      if (gradeSlot) {
+        const { percentage, gradeLetter } = this.#calculateGrade({
+          wordCount,
+          errorCount,
+        });
+        gradeSlot.innerText = `${gradeLetter} (${percentage}%)`;
+      }
+
+      const errorCountSlot =
+        accurancyReportElement.querySelector<HTMLSlotElement>(
+          'slot[name="error-count"]',
+        );
+
+      if (errorCountSlot) {
+        errorCountSlot.innerText = String(errorCount);
+      }
+
+      const verseReferenceSlot =
+        accurancyReportElement.querySelector<HTMLSlotElement>(
+          'slot[name="verse-reference"]',
+        );
+
+      if (verseReferenceSlot) {
+        verseReferenceSlot.innerText = this.verseReference;
+      }
+
+      const actualVerseSlot =
+        accurancyReportElement.querySelector<HTMLSlotElement>(
+          'slot[name="actual-verse"]',
+        );
+
+      if (actualVerseSlot) {
+        actualVerseSlot.innerHTML = this.verseContent;
+      }
+
+      const recitedVerseSlot =
+        accurancyReportElement.querySelector<HTMLSlotElement>(
+          'slot[name="recited-verse"]',
+        );
+
+      if (recitedVerseSlot) {
+        recitedVerseSlot.innerText = this.recitedBibleVerse;
+      }
+
+      const textDifferenceSlot =
+        accurancyReportElement.querySelector<HTMLSlotElement>(
+          'slot[name="text-difference"]',
+        );
+
+      if (textDifferenceSlot) {
+        textDifferenceSlot.append(textDifferenceDocumentFragment);
+      }
+
+      this.append(accurancyReportElement);
     } else {
       this.#renderErrorMessage(
         "Unable to display report. Please complete Step 1 and Step 2 first.",
@@ -103,7 +194,11 @@ function getDifferenceBetweenVerseAndInput({
     fragment.appendChild(span);
   }
 
-  return fragment;
+  return {
+    textDifferenceDocumentFragment: fragment,
+    errorCount: errorCount,
+    wordCount: difference.length,
+  };
 }
 
 window.customElements.define("accuracy-report", AccuracyReport);
