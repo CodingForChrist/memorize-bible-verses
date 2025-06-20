@@ -3,10 +3,15 @@ import { removeTitlesAndNotesFromBibleVerse } from "../formatBibleVerse";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
+  MEMORIZE_SCRIPTURE_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
 
 import type { BibleVerse } from "../types";
+
+const apiBaseURL =
+  import.meta.env.VITE_MEMORIZE_SCRIPTURE_API_BASE_URL ??
+  MEMORIZE_SCRIPTURE_API_BASE_URL;
 
 export class BibleVerseSelector extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
@@ -121,7 +126,7 @@ export class BibleVerseSelector extends HTMLElement {
       const selectedBibleId = this.selectedBibleId as string;
 
       const response = await fetch(
-        `https://memorize-scripture-api-server.fly.dev/api/v1/bibles/${selectedBibleId}/search`,
+        `${apiBaseURL}/api/v1/bibles/${selectedBibleId}/search/verse-reference`,
         {
           method: "POST",
           body: JSON.stringify({

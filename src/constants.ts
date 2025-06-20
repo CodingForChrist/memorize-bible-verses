@@ -14,3 +14,6 @@ export const CUSTOM_EVENTS = {
 } as const;
 
 export type CustomEvents = keyof typeof CUSTOM_EVENTS;
+
+export const MEMORIZE_SCRIPTURE_API_BASE_URL =
+  "https://memorize-scripture-api-server.fly.dev";

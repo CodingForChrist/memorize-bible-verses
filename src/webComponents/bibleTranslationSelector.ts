@@ -2,10 +2,15 @@ import { getTemplate } from "./utils";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
+  MEMORIZE_SCRIPTURE_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
 
 import type { BibleTranslation } from "../types";
+
+const apiBaseURL =
+  import.meta.env.VITE_MEMORIZE_SCRIPTURE_API_BASE_URL ??
+  MEMORIZE_SCRIPTURE_API_BASE_URL;
 
 const supportedBibles = [
   {
@@ -96,21 +101,18 @@ export class BibleTranslationSelector extends HTMLElement {
   async #fetchBibles() {
     try {
       this.loadingState = LOADING_STATES.PENDING;
-      const response = await fetch(
-        "https://memorize-scripture-api-server.fly.dev/api/v1/bibles",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            language: "eng",
-            ids: supportedBibles.map(({ id }) => id).toString(),
-            includeFullDetails: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "Application-User-Id": "memorize_scripture_web_app",
-          },
+      const response = await fetch(`${apiBaseURL}/api/v1/bibles`, {
+        method: "POST",
+        body: JSON.stringify({
+          language: "eng",
+          ids: supportedBibles.map(({ id }) => id).toString(),
+          includeFullDetails: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Application-User-Id": "memorize_scripture_web_app",
         },
-      );
+      });
       const json = await response.json();
       this.bibleTranslations = json.data;
       if (response.ok && this.bibleTranslations.length) {
