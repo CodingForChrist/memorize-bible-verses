@@ -69,13 +69,14 @@ export class BibleVerseSelector extends HTMLElement {
 
     const html = `
       <label for="form-input-verse" class="block">
-        <span class="text-gray-700">Enter a bible verse</span>
+        <span class="text-gray-700">Enter a bible verse reference</span><br>
+        <span class="text-gray-700 text-sm">e.g. "John 1:1" or "John 3:16-21"</span>
       </label>
       <div class="flex gap-1">
         <input type="text" id="form-input-verse" name="form-input-verse" class="flex-1 mt-1 w-full bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" autofocus placeholder="John 3:16" value="${bibleVerseReference}">
         </input>
 
-        <button type="button" id="button-search" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold text-white hover:bg-blue-800">Search</button>
+        <button type="button" id="button-search" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">Search</button>
       </div>
       <div id="verse-content"></div>
     `;

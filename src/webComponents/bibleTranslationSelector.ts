@@ -129,7 +129,7 @@ export class BibleTranslationSelector extends HTMLElement {
     const html = `
       <label class="block">
         <span class="text-gray-700">Select a bible translation</span>
-        <select id="${formSelectId}" class="block w-full mt-1 bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0">
+        <select id="${formSelectId}" class="block w-full mt-1 bg-gray-100 border-transparent cursor-pointer focus:border-gray-500 focus:bg-white focus:ring-0">
         </select>
       </label>
     `;
