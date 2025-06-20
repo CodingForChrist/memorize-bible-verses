@@ -126,3 +126,5 @@ function getVerseTextFromHTML(verseContent: BibleVerse["content"]) {
 
   return divElement.innerText;
 }
+
+window.customElements.define("accuracy-report", AccuracyReport);

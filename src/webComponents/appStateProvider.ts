@@ -103,3 +103,5 @@ export class AppStateProvider extends HTMLElement {
 function hasSupportForSpeechRecognition() {
   return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
 }
+
+window.customElements.define("app-state-provider", AppStateProvider);

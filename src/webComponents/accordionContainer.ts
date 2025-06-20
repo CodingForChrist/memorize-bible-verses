@@ -15,3 +15,5 @@ export class AccordionContainer extends HTMLElement {
     };
   }
 }
+
+window.customElements.define("accordion-container", AccordionContainer);

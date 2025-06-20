@@ -109,3 +109,5 @@ export class ReciteBibleVerse extends HTMLElement {
     });
   }
 }
+
+window.customElements.define("recite-bible-verse", ReciteBibleVerse);

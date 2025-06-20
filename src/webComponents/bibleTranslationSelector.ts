@@ -189,3 +189,8 @@ export class BibleTranslationSelector extends HTMLElement {
     }
   }
 }
+
+window.customElements.define(
+  "bible-translation-selector",
+  BibleTranslationSelector,
+);

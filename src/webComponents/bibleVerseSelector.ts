@@ -172,3 +172,5 @@ export class BibleVerseSelector extends HTMLElement {
     }
   }
 }
+
+window.customElements.define("bible-verse-selector", BibleVerseSelector);
