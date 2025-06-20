@@ -79,6 +79,8 @@ export class AppStateProvider extends HTMLElement {
   }
 
   connectedCallback() {
+    this.classList.remove("hidden");
+
     window.addEventListener(
       CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_TRANSLATION,
       (event: Event) => {
