@@ -21,7 +21,11 @@
 
       <app-state-provider class="hidden">
         <accordion-container>
-          <details class="group border-1 border-slate-400" open>
+          <details
+            id="accordion-details-step-1"
+            class="group border-1 border-slate-400"
+            open
+          >
             <summary
               class="p-4 cursor-pointer group-open:cursor-auto group-open:mb-4"
             >
@@ -32,7 +36,10 @@
               <bible-verse-selector class="block my-6"></bible-verse-selector>
             </div>
           </details>
-          <details class="group border-1 border-t-0 border-slate-400">
+          <details
+            id="accordion-details-step-2"
+            class="group border-1 border-t-0 border-slate-400"
+          >
             <summary
               class="p-4 cursor-pointer group-open:cursor-auto group-open:mb-4"
             >
@@ -42,7 +49,10 @@
               <recite-bible-verse class="block mb-6"></recite-bible-verse>
             </div>
           </details>
-          <details class="group border-1 border-t-0 border-slate-400">
+          <details
+            id="accordion-details-step-3"
+            class="group border-1 border-t-0 border-slate-400"
+          >
             <summary
               class="p-4 cursor-pointer group-open:cursor-auto group-open:mb-4"
             >
@@ -92,12 +102,6 @@
             <td class="border-b border-slate-400 p-4 pl-8">Grade</td>
             <td class="border-b border-slate-400 p-4 pl-8">
               <slot name="grade"></slot>
-            </td>
-          </tr>
-          <tr>
-            <td class="border-b border-slate-400 p-4 pl-8">Error Count</td>
-            <td class="border-b border-slate-400 p-4 pl-8">
-              <slot name="error-count"></slot>
             </td>
           </tr>
           <tr>

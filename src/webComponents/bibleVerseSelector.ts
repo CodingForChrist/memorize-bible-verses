@@ -78,7 +78,7 @@ export class BibleVerseSelector extends HTMLElement {
         <span class="text-gray-700 text-sm">e.g. "John 1:1" or "John 3:16-21"</span>
       </label>
       <div class="flex gap-1">
-        <input type="text" id="form-input-verse" name="form-input-verse" class="flex-1 mt-1 w-full bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" autofocus placeholder="John 3:16" value="${bibleVerseReference}">
+        <input type="text" id="form-input-verse" name="form-input-verse" class="flex-1 mt-1 w-full bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" autofocus value="${bibleVerseReference}">
         </input>
 
         <button type="button" id="button-search" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">Search</button>
@@ -108,16 +108,45 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #renderSelectedBibleVerse() {
-    const divContainer = document.createElement("div");
-    divContainer.classList.add("scripture-styles", "my-8", "text-xl");
-    divContainer.innerHTML = this.selectedBibleVerse!.content;
+    const scriptureDivContainer = document.createElement("div");
+    scriptureDivContainer.classList.add("scripture-styles", "my-8", "text-xl");
+    scriptureDivContainer.innerHTML = this.selectedBibleVerse!.content;
 
     const verseContentElement =
       this.querySelector<HTMLDivElement>("#verse-content");
     if (verseContentElement) {
       verseContentElement.innerHTML = "";
-      verseContentElement.append(divContainer);
+      const nextStepDivContainer = this.#getButtonToNavigateToStep2();
+      verseContentElement.append(scriptureDivContainer, nextStepDivContainer);
     }
+  }
+
+  #getButtonToNavigateToStep2() {
+    const htmlForNextStep = `
+      <p class="my-4">Ready to test your memorization skills?</p>
+      <button type="button" id="button-go-to-step-2" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">
+        Proceed to step 2
+      </button>
+    `;
+
+    const nextStepDivContainer = document.createElement("div");
+    nextStepDivContainer.innerHTML = htmlForNextStep;
+
+    const buttonGoToStep2 = nextStepDivContainer.querySelector(
+      "#button-go-to-step-2",
+    ) as HTMLButtonElement;
+
+    buttonGoToStep2.onclick = () => {
+      const eventNavigateToStep2 = new CustomEvent(
+        CUSTOM_EVENTS.NAVIGATE_TO_STEP,
+        {
+          detail: { step: "2" },
+        },
+      );
+      window.dispatchEvent(eventNavigateToStep2);
+    };
+
+    return nextStepDivContainer;
   }
 
   async #searchForVerse(query: string) {

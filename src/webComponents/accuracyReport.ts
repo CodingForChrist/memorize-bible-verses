@@ -21,13 +21,13 @@ export class AccuracyReport extends HTMLElement {
   }
 
   #calculateGrade({
-    wordCount,
+    partCount,
     errorCount,
   }: {
-    wordCount: number;
+    partCount: number;
     errorCount: number;
   }) {
-    const percentageInDecimal = (wordCount - errorCount) / wordCount;
+    const percentageInDecimal = (partCount - errorCount) / partCount;
     let gradeLetter: string;
 
     if (percentageInDecimal === 1) {
@@ -57,7 +57,7 @@ export class AccuracyReport extends HTMLElement {
       // add reference and strip out html characters
       const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
-      const { textDifferenceDocumentFragment, errorCount, wordCount } =
+      const { textDifferenceDocumentFragment, errorCount, partCount } =
         getDifferenceBetweenVerseAndInput({
           originalBibleVerseText: verseText,
           recitedBibleVerseText: this.recitedBibleVerse,
@@ -71,19 +71,10 @@ export class AccuracyReport extends HTMLElement {
 
       if (gradeSlot) {
         const { percentage, gradeLetter } = this.#calculateGrade({
-          wordCount,
+          partCount,
           errorCount,
         });
         gradeSlot.innerText = `${gradeLetter} (${percentage}%)`;
-      }
-
-      const errorCountSlot =
-        accurancyReportElement.querySelector<HTMLSlotElement>(
-          'slot[name="error-count"]',
-        );
-
-      if (errorCountSlot) {
-        errorCountSlot.innerText = String(errorCount);
       }
 
       const verseReferenceSlot =
@@ -125,7 +116,7 @@ export class AccuracyReport extends HTMLElement {
       this.append(accurancyReportElement);
     } else {
       this.#renderErrorMessage(
-        "Unable to display report. Please complete Step 1 and Step 2 first.",
+        "Unable to display report. Complete Step 1 and Step 2 first.",
       );
     }
   }
@@ -196,7 +187,7 @@ function getDifferenceBetweenVerseAndInput({
   return {
     textDifferenceDocumentFragment: fragment,
     errorCount: errorCount,
-    wordCount: difference.length,
+    partCount: difference.length,
   };
 }
 

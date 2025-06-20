@@ -72,7 +72,7 @@ export class ReciteBibleVerse extends HTMLElement {
       this.#renderRecordVoiceButton();
     } else {
       this.#renderErrorMessage(
-        "Go back to Step 1 and select a bible verse reference",
+        "Go back to Step 1 and select a bible verse reference.",
       );
     }
   }
@@ -96,7 +96,17 @@ export class ReciteBibleVerse extends HTMLElement {
         this.speechRecognition.stop();
         buttonRecordVoice.textContent = "Recording complete!";
         buttonRecordVoice.removeAttribute("recording-in-progress");
-        this.#hideLoadingSpinner();
+
+        setTimeout(() => {
+          this.#hideLoadingSpinner();
+          const eventNavigateToStep2 = new CustomEvent(
+            CUSTOM_EVENTS.NAVIGATE_TO_STEP,
+            {
+              detail: { step: "3" },
+            },
+          );
+          window.dispatchEvent(eventNavigateToStep2);
+        }, 200);
       } else {
         this.speechRecognition.start();
         buttonRecordVoice.textContent = "Click again to stop recording";
