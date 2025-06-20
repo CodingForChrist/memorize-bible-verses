@@ -1,4 +1,5 @@
 import { getTemplate } from "./utils";
+import { removeTitlesAndNotesFromBibleVerse } from "../formatBibleVerse";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
@@ -19,11 +20,15 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   set selectedBibleVerse(value: BibleVerse) {
-    this.#selectedBibleVerse = value;
+    const { content, ...rest } = value;
+    this.#selectedBibleVerse = {
+      ...rest,
+      content: removeTitlesAndNotesFromBibleVerse(content),
+    };
     const eventUpdateSelectedBible = new CustomEvent(
       CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_VERSE,
       {
-        detail: { selectedBibleVerse: value },
+        detail: { selectedBibleVerse: this.#selectedBibleVerse },
       },
     );
     window.dispatchEvent(eventUpdateSelectedBible);
@@ -99,7 +104,6 @@ export class BibleVerseSelector extends HTMLElement {
   #renderSelectedBibleVerse() {
     const divContainer = document.createElement("div");
     divContainer.classList.add("scripture-styles", "my-8");
-
     divContainer.innerHTML = this.selectedBibleVerse!.content;
 
     const verseContentElement =

@@ -41,6 +41,14 @@ export class AppStateProvider extends HTMLElement {
   }
 
   #updateChildrenWithSelectedBibleVerse() {
+    const reciteBibleVerseElement = this.querySelector("recite-bible-verse");
+    if (reciteBibleVerseElement && this.selectedBibleVerse) {
+      const { id, reference, content } = this.selectedBibleVerse;
+      reciteBibleVerseElement.setAttribute("verse-id", id);
+      reciteBibleVerseElement.setAttribute("verse-reference", reference);
+      reciteBibleVerseElement.setAttribute("verse-content", content);
+    }
+
     const accuracyReportElement =
       this.querySelector<AccuracyReport>("accuracy-report");
 
