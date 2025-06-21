@@ -5,6 +5,7 @@ export function removeExtraContentFromBibleVerse(htmlContentString: string) {
   removeSectionTitles(divElement);
   removeFootnotes(divElement);
   removeVerseNumbers(divElement);
+  trimParagraphBreaks(divElement);
 
   return divElement.innerHTML;
 }
@@ -29,6 +30,21 @@ function removeVerseNumbers(element: Element) {
   element
     .querySelectorAll("[data-number]")
     ?.forEach((verseNumberElement) => verseNumberElement.remove());
+
+  return element;
+}
+
+function trimParagraphBreaks(element: Element) {
+  const firstChildElement = element.firstElementChild;
+  const lastChildElement = element.lastElementChild;
+
+  if (firstChildElement && firstChildElement.classList.contains("b")) {
+    firstChildElement.remove();
+  }
+
+  if (lastChildElement && lastChildElement.classList.contains("b")) {
+    lastChildElement.remove();
+  }
 
   return element;
 }
