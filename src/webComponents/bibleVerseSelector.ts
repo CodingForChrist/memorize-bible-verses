@@ -1,5 +1,5 @@
 import { getTemplate } from "./utils";
-import { removeTitlesAndNotesFromBibleVerse } from "../formatBibleVerse";
+import { removeExtraContentFromBibleVerse } from "../formatBibleVerse";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
@@ -28,7 +28,7 @@ export class BibleVerseSelector extends HTMLElement {
     const { content, ...rest } = value;
     this.#selectedBibleVerse = {
       ...rest,
-      content: removeTitlesAndNotesFromBibleVerse(content),
+      content: removeExtraContentFromBibleVerse(content),
     };
     const eventUpdateSelectedBible = new CustomEvent(
       CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_VERSE,
