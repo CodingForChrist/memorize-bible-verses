@@ -148,6 +148,10 @@ export class ReciteBibleVerse extends HTMLElement {
   connectedCallback() {
     this.#renderInitialContent();
 
+    this.speechRecognition.addEventListener("start", () => {
+      this.speechRecognitionState = LOADING_STATES.PENDING;
+    });
+
     this.speechRecognition.addEventListener(
       "result",
       (event: SpeechRecognitionEvent) => {
@@ -156,7 +160,6 @@ export class ReciteBibleVerse extends HTMLElement {
           results: event.results,
         });
         this.#lastSpeechRecognitionResult = event.results;
-        this.speechRecognitionState = LOADING_STATES.PENDING;
       },
     );
 
