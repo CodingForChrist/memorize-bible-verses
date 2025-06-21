@@ -1,37 +1,44 @@
-export function removeTitlesAndNotesFromBibleVerse(htmlContentString: string) {
+export function removeExtraContentFromBibleVerse(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = htmlContentString;
 
-  // remove section titles from content
-  divElement.querySelectorAll("p.s1")?.forEach((element) => element.remove());
-
-  // remove footnotes from content
-  divElement.querySelectorAll("p.r")?.forEach((element) => element.remove());
+  removeSectionTitles(divElement);
+  removeFootnotes(divElement);
+  removeVerseNumbers(divElement);
 
   return divElement.innerHTML;
 }
 
-export function removeVerseNumbersFromBibleVerse(htmlContentString: string) {
-  const divElement = document.createElement("div");
-  divElement.innerHTML = htmlContentString;
+function removeFootnotes(element: Element) {
+  element
+    .querySelectorAll("p.r")
+    ?.forEach((footnoteElement) => footnoteElement.remove());
 
-  // remove verse numbers
-  divElement
+  return element;
+}
+
+function removeSectionTitles(element: Element) {
+  element
+    .querySelectorAll("p.s1")
+    ?.forEach((titleElement) => titleElement.remove());
+
+  return element;
+}
+
+function removeVerseNumbers(element: Element) {
+  element
     .querySelectorAll("[data-number]")
-    ?.forEach((element) => element.remove());
+    ?.forEach((verseNumberElement) => verseNumberElement.remove());
 
-  return divElement.innerHTML;
+  return element;
 }
 
-export function convertBibleVerseToText(htmlContent: string) {
-  const htmlContentWithoutTitlesAndNotes =
-    removeTitlesAndNotesFromBibleVerse(htmlContent);
-  const basicHTMLContent = removeVerseNumbersFromBibleVerse(
-    htmlContentWithoutTitlesAndNotes,
-  );
+export function convertBibleVerseToText(htmlContentString: string) {
+  const strippedHTMLContent =
+    removeExtraContentFromBibleVerse(htmlContentString);
 
   const divElement = document.createElement("div");
-  divElement.innerHTML = basicHTMLContent;
+  divElement.innerHTML = strippedHTMLContent;
 
   return divElement.innerText.trim();
 }
