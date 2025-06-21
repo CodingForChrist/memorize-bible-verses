@@ -90,9 +90,17 @@ export class AccuracyReport extends HTMLElement {
         accurancyReportElement.querySelector<HTMLSlotElement>(
           'slot[name="actual-verse"]',
         );
+      const scriptureBlockquoteElement = getTemplate(
+        "scripture-blockquote-template",
+      );
+      const scriptureContentSlot =
+        scriptureBlockquoteElement.querySelector<HTMLSlotElement>(
+          'slot[name="scripture-content"]',
+        );
 
-      if (actualVerseSlot) {
-        actualVerseSlot.innerHTML = this.verseContent;
+      if (actualVerseSlot && scriptureContentSlot) {
+        scriptureContentSlot.innerHTML = this.verseContent;
+        actualVerseSlot.append(scriptureBlockquoteElement);
       }
 
       const recitedVerseSlot =

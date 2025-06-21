@@ -83,7 +83,7 @@ export class BibleVerseSelector extends HTMLElement {
 
         <button type="button" id="button-search" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">Search</button>
       </div>
-      <div id="verse-content"></div>
+      <div class="mt-8" id="verse-content"></div>
     `;
 
     const divContainer = document.createElement("div");
@@ -108,22 +108,31 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #renderSelectedBibleVerse() {
-    const scriptureDivContainer = document.createElement("div");
-    scriptureDivContainer.classList.add("scripture-styles", "my-8", "text-xl");
-    scriptureDivContainer.innerHTML = this.selectedBibleVerse!.content;
+    const scriptureBlockquoteElement = getTemplate(
+      "scripture-blockquote-template",
+    );
+    const scriptureContentSlot =
+      scriptureBlockquoteElement.querySelector<HTMLSlotElement>(
+        'slot[name="scripture-content"]',
+      );
 
     const verseContentElement =
       this.querySelector<HTMLDivElement>("#verse-content");
-    if (verseContentElement) {
+
+    if (scriptureContentSlot && verseContentElement) {
       verseContentElement.innerHTML = "";
+      scriptureContentSlot.innerHTML = this.selectedBibleVerse!.content;
       const nextStepDivContainer = this.#getButtonToNavigateToStep2();
-      verseContentElement.append(scriptureDivContainer, nextStepDivContainer);
+      verseContentElement.append(
+        scriptureBlockquoteElement,
+        nextStepDivContainer,
+      );
     }
   }
 
   #getButtonToNavigateToStep2() {
     const htmlForNextStep = `
-      <p class="my-4">Ready to test your memorization skills?</p>
+      <p class="mt-8 mb-4">Ready to test your memorization skills?</p>
       <button type="button" id="button-go-to-step-2" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">
         Proceed to step 2
       </button>

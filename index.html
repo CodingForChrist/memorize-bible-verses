@@ -33,7 +33,7 @@
             </summary>
             <div class="px-4">
               <bible-translation-selector></bible-translation-selector>
-              <bible-verse-selector class="my-6 block"></bible-verse-selector>
+              <bible-verse-selector class="my-8 block"></bible-verse-selector>
             </div>
           </details>
           <details
@@ -46,7 +46,7 @@
               Step 2: Recite scripture
             </summary>
             <div class="px-4">
-              <recite-bible-verse class="mb-6 block"></recite-bible-verse>
+              <recite-bible-verse class="mb-8 block"></recite-bible-verse>
             </div>
           </details>
           <details
@@ -59,7 +59,7 @@
               Step 3: See how well you did
             </summary>
             <div class="px-4">
-              <accuracy-report class="mb-6 block"></accuracy-report>
+              <accuracy-report class="mb-8 block"></accuracy-report>
             </div>
           </details>
         </accordion-container>
@@ -90,9 +90,19 @@
           class="alert-error relative mb-8 w-full border border-red-300 bg-red-100 p-4 text-red-800"
           role="alert"
         >
-          <slot name="error-message">ERROR MESSAGE</slot>
+          <slot name="error-message"></slot>
         </div>
       </div>
+    </template>
+
+    <template id="scripture-blockquote-template">
+      <blockquote
+        class="my-4 border-s-4 border-gray-300 bg-gray-50 p-4 dark:border-gray-500 dark:bg-gray-800"
+      >
+        <div class="scripture-styles text-xl">
+          <slot name="scripture-content"></slot>
+        </div>
+      </blockquote>
     </template>
 
     <template id="accuracy-report-template">
@@ -113,9 +123,7 @@
           <tr>
             <td class="border-b border-slate-400 py-4 pr-8">Actual Verse</td>
             <td class="border-b border-slate-400 py-4">
-              <div class="scripture-styles text-xl">
-                <slot name="actual-verse"></slot>
-              </div>
+              <slot name="actual-verse"></slot>
             </td>
           </tr>
           <tr>
