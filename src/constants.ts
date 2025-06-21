@@ -16,5 +16,15 @@ export const CUSTOM_EVENTS = {
 
 export type CustomEvents = keyof typeof CUSTOM_EVENTS;
 
+export const SPEECH_RECOGNITION_STATES = {
+  INITIAL: "INITIAL",
+  WAITING_FOR_MICROPHONE_ACCESS: "WAITING_FOR_MICROPHONE_ACCESS",
+  LISTENING: "LISTENING",
+  RESOLVED: "RESOLVED",
+  REJECTED: "REJECTED",
+} as const;
+
+export type SpeechRecognitionStates = keyof typeof SPEECH_RECOGNITION_STATES;
+
 export const MEMORIZE_SCRIPTURE_API_BASE_URL =
   "https://memorize-scripture-api-server.fly.dev";

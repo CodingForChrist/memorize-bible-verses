@@ -1,15 +1,15 @@
 import { getTemplate } from "./utils";
 import {
   CUSTOM_EVENTS,
-  LOADING_STATES,
-  type LoadingStates,
+  SPEECH_RECOGNITION_STATES,
+  type SpeechRecognitionStates,
 } from "../constants";
 
 export class ReciteBibleVerse extends HTMLElement {
   speechRecognition: SpeechRecognition;
   #speechTranscript?: string;
   #lastSpeechRecognitionResult?: SpeechRecognitionResultList;
-  #speechRecognitionState: LoadingStates;
+  #speechRecognitionState: SpeechRecognitionStates;
 
   constructor() {
     super();
@@ -22,7 +22,7 @@ export class ReciteBibleVerse extends HTMLElement {
     this.speechRecognition.interimResults = false;
     this.speechRecognition.maxAlternatives = 5;
 
-    this.#speechRecognitionState = LOADING_STATES.INITIAL;
+    this.#speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
   }
 
   static get observedAttributes() {
@@ -37,10 +37,10 @@ export class ReciteBibleVerse extends HTMLElement {
     return this.#speechRecognitionState;
   }
 
-  set speechRecognitionState(value: LoadingStates) {
+  set speechRecognitionState(value: SpeechRecognitionStates) {
     this.#speechRecognitionState = value;
 
-    if (value === LOADING_STATES.RESOLVED) {
+    if (value === SPEECH_RECOGNITION_STATES.RESOLVED) {
       this.#hideLoadingSpinner();
       const eventNavigateToStep2 = new CustomEvent(
         CUSTOM_EVENTS.NAVIGATE_TO_STEP,
@@ -49,8 +49,17 @@ export class ReciteBibleVerse extends HTMLElement {
         },
       );
       window.dispatchEvent(eventNavigateToStep2);
-    } else if (value === LOADING_STATES.REJECTED) {
+      if (this.#recordVoiceButton) {
+        this.#recordVoiceButton.textContent =
+          "Start recording with microphone input";
+      }
+    } else if (value === SPEECH_RECOGNITION_STATES.REJECTED) {
+      this.#hideLoadingSpinner();
       this.#renderErrorMessage("Failed to use microphone input");
+      if (this.#recordVoiceButton) {
+        this.#recordVoiceButton.textContent =
+          "Start recording with microphone input";
+      }
     }
   }
 
@@ -90,22 +99,31 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #renderInitialContent() {
-    this.innerHTML = "";
-
     if (this.verseReference) {
-      const paragraphElement = document.createElement("p");
-      paragraphElement.innerText = `Click the button below and recite ${this.verseReference}`;
-      paragraphElement.classList.add("mb-4");
-      this.append(paragraphElement);
-      this.#renderRecordVoiceButton();
+      const html = `
+        <p class="mb-4">
+          Click the button below and recite ${this.verseReference}
+        </p>
+        <div id="button-record-voice-container"></div>
+        <div id="speech-recognition-error-container"></div>
+    `;
+      this.innerHTML = html;
+      this.querySelector("#button-record-voice-container")?.append(
+        this.#createRecordVoiceButton(),
+      );
     } else {
+      this.innerHTML = '<div id="speech-recognition-error-container"></div>';
       this.#renderErrorMessage(
         "Go back to Step 1 and select a bible verse reference.",
       );
     }
   }
 
-  #renderRecordVoiceButton() {
+  get #recordVoiceButton() {
+    return this.querySelector<HTMLButtonElement>("#button-record-voice");
+  }
+
+  #createRecordVoiceButton() {
     const html = `
         <button type="button" id="button-record-voice" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 w-full text-sm/6 font-semibold text-white cursor-pointer hover:bg-blue-800">
           Start recording with microphone input
@@ -120,17 +138,36 @@ export class ReciteBibleVerse extends HTMLElement {
     ) as HTMLButtonElement;
 
     buttonRecordVoice.onclick = () => {
-      if (this.speechRecognitionState === LOADING_STATES.PENDING) {
-        this.speechRecognition.stop();
-        buttonRecordVoice.textContent = "Recording complete!";
-      } else {
+      const {
+        INITIAL,
+        WAITING_FOR_MICROPHONE_ACCESS,
+        LISTENING,
+        RESOLVED,
+        REJECTED,
+      } = SPEECH_RECOGNITION_STATES;
+
+      if (
+        ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
+          this.speechRecognitionState,
+        )
+      ) {
         this.speechRecognition.start();
+        this.speechRecognitionState =
+          SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
         buttonRecordVoice.textContent = "Click again to stop recording";
         this.#showLoadingSpinner();
+      } else if (this.speechRecognitionState === LISTENING) {
+        this.speechRecognition.stop();
+        buttonRecordVoice.textContent = "Recording complete!";
+      } else if (
+        this.speechRecognitionState === WAITING_FOR_MICROPHONE_ACCESS
+      ) {
+        this.speechRecognition.stop();
+        this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
       }
     };
 
-    this.append(divContainer);
+    return divContainer;
   }
 
   #renderErrorMessage(message: string) {
@@ -138,10 +175,14 @@ export class ReciteBibleVerse extends HTMLElement {
     const errorMessageSlot = alertErrorElement.querySelector<HTMLSlotElement>(
       'slot[name="error-message"]',
     );
+    const errorMessageContainer = this.querySelector(
+      "#speech-recognition-error-container",
+    );
 
-    if (errorMessageSlot) {
+    if (errorMessageSlot && errorMessageContainer) {
       errorMessageSlot.innerText = message;
-      this.append(alertErrorElement);
+      errorMessageContainer.innerHTML = "";
+      errorMessageContainer.append(alertErrorElement);
     }
   }
 
@@ -149,7 +190,7 @@ export class ReciteBibleVerse extends HTMLElement {
     this.#renderInitialContent();
 
     this.speechRecognition.addEventListener("start", () => {
-      this.speechRecognitionState = LOADING_STATES.PENDING;
+      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.LISTENING;
     });
 
     this.speechRecognition.addEventListener(
@@ -166,9 +207,9 @@ export class ReciteBibleVerse extends HTMLElement {
     this.speechRecognition.addEventListener("end", () => {
       if (this.#lastSpeechRecognitionResult) {
         this.speechTranscript = this.#lastSpeechRecognitionResult;
-        this.speechRecognitionState = LOADING_STATES.RESOLVED;
+        this.speechRecognitionState = SPEECH_RECOGNITION_STATES.RESOLVED;
       } else {
-        this.speechRecognitionState = LOADING_STATES.REJECTED;
+        this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
       }
     });
   }
