@@ -22,7 +22,17 @@ describe("removeExtraContentFromBibleVerse()", () => {
 
     const results = removeExtraContentFromBibleVerse(htmlContentString);
     expect(results).toBe(
-      '<p class="b"></p><p class="m">There came a man who was sent from God. His name was John. He came as a witness to testify about the Light, so that through him everyone might believe. He himself was not the Light, but he came to testify about the Light.</p><p class="b"></p><p class="m">The true Light who gives light to every man was coming into the world. He was in the world, and though the world was made through Him, the world did not recognize Him. He came to His own, and His own did not receive Him. But to all who did receive Him, to those who believed in His name, He gave the right to become children of God— children born not of blood, nor of the desire or will of man, but born of God.</p><p class="b"></p><p class="m">The Word became flesh and made His dwelling among us. We have seen His glory, the glory of the one and only Son  from the Father, full of grace and truth.</p>',
+      '<p class="m">There came a man who was sent from God. His name was John. He came as a witness to testify about the Light, so that through him everyone might believe. He himself was not the Light, but he came to testify about the Light.</p><p class="b"></p><p class="m">The true Light who gives light to every man was coming into the world. He was in the world, and though the world was made through Him, the world did not recognize Him. He came to His own, and His own did not receive Him. But to all who did receive Him, to those who believed in His name, He gave the right to become children of God— children born not of blood, nor of the desire or will of man, but born of God.</p><p class="b"></p><p class="m">The Word became flesh and made His dwelling among us. We have seen His glory, the glory of the one and only Son  from the Father, full of grace and truth.</p>',
+    );
+  });
+
+  test("should remove paragraph breaks from the beginning and end of a verse", () => {
+    const htmlContentString =
+      '<p class="b"></p><p class="m"><span data-number="6" data-sid="JHN 14:6" class="v">6</span>Jesus answered, “I am the way and the truth and the life. No one comes to the Father except through Me. </p><p class="b"></p>';
+
+    const results = removeExtraContentFromBibleVerse(htmlContentString);
+    expect(results).toBe(
+      '<p class="m">Jesus answered, “I am the way and the truth and the life. No one comes to the Father except through Me. </p>',
     );
   });
 });
