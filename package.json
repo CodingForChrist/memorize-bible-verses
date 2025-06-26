@@ -2,7 +2,7 @@
   "name": "memorize-scripture-web-app",
   "private": true,
   "version": "0.0.0",
-  "description": "",
+  "description": "A web app for memorizing bible verses by speaking them into your phone",
   "type": "module",
   "scripts": {
     "dev": "vite",
