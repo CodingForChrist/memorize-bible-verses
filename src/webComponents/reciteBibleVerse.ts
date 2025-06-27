@@ -1,4 +1,3 @@
-import { getTemplate } from "./utils";
 import {
   CUSTOM_EVENTS,
   SPEECH_RECOGNITION_STATES,
