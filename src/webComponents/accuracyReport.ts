@@ -130,15 +130,11 @@ export class AccuracyReport extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    const alertErrorElement = getTemplate("alert-error-template");
-    const errorMessageSlot = alertErrorElement.querySelector<HTMLSlotElement>(
-      'slot[name="error-message"]',
-    );
-
-    if (errorMessageSlot) {
-      errorMessageSlot.innerText = message;
-      this.append(alertErrorElement);
-    }
+    const alertErrorElement = document.createElement("alert-error");
+    alertErrorElement.innerHTML = `
+      <span slot="alert-error-message">${message}</span>
+    `;
+    this.appendChild(alertErrorElement);
   }
 
   connectedCallback() {

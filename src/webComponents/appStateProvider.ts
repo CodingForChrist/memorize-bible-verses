@@ -1,4 +1,3 @@
-import { getTemplate } from "./utils";
 import { CUSTOM_EVENTS } from "../constants";
 
 import type { BibleTranslation, BibleVerse } from "../types";
@@ -8,16 +7,8 @@ export class AppStateProvider extends HTMLElement {
   selectedBibleVerse?: BibleVerse;
   recitedBibleVerse?: string;
 
-  #templates: {
-    alertError: DocumentFragment;
-  };
-
   constructor() {
     super();
-
-    this.#templates = {
-      alertError: getTemplate("alert-error-template"),
-    };
 
     if (!hasSupportForSpeechRecognition()) {
       this.innerHTML = "";
@@ -69,15 +60,11 @@ export class AppStateProvider extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    const errorMessageSlot =
-      this.#templates.alertError.querySelector<HTMLSlotElement>(
-        'slot[name="error-message"]',
-      );
-
-    if (errorMessageSlot) {
-      errorMessageSlot.innerText = message;
-      this.append(this.#templates.alertError);
-    }
+    const alertErrorElement = document.createElement("alert-error");
+    alertErrorElement.innerHTML = `
+      <span slot="alert-error-message">${message}</span>
+    `;
+    this.appendChild(alertErrorElement);
   }
 
   connectedCallback() {
@@ -87,7 +74,7 @@ export class AppStateProvider extends HTMLElement {
       CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_TRANSLATION,
       (event: Event) => {
         const customEvent = event as CustomEvent;
-        this.selectedBibleId = customEvent.detail.selectedBibleId;
+        this.selectedBibleId = customEvent.detail.selectedBibleTranslation.id;
         this.#updateChildrenWithSelectedBibleId();
       },
     );

@@ -9,10 +9,6 @@ import {
 
 import type { BibleVerse } from "../types";
 
-const apiBaseURL =
-  import.meta.env.VITE_MEMORIZE_SCRIPTURE_API_BASE_URL ??
-  MEMORIZE_SCRIPTURE_API_BASE_URL;
-
 export class BibleVerseSelector extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
 
@@ -53,13 +49,12 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #showLoadingSpinner() {
-    this.appendChild(getTemplate("loading-spinner-template"));
+    const loadingSpinnerElement = document.createElement("loading-spinner");
+    this.appendChild(loadingSpinnerElement);
   }
 
   #hideLoadingSpinner() {
-    const loadingSpinner = this.querySelector(
-      '[data-template-id="loading-spinner"]',
-    );
+    const loadingSpinner = this.querySelector("loading-spinner");
     if (loadingSpinner) {
       loadingSpinner.remove();
     }
@@ -164,7 +159,7 @@ export class BibleVerseSelector extends HTMLElement {
       const selectedBibleId = this.selectedBibleId as string;
 
       const response = await fetch(
-        `${apiBaseURL}/api/v1/bibles/${selectedBibleId}/search/verse-reference`,
+        `${MEMORIZE_SCRIPTURE_API_BASE_URL}/api/v1/bibles/${selectedBibleId}/search/verse-reference`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -191,18 +186,14 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    const alertErrorElement = getTemplate("alert-error-template");
-    const errorMessageSlot = alertErrorElement.querySelector<HTMLSlotElement>(
-      'slot[name="error-message"]',
-    );
-
-    if (errorMessageSlot) {
-      errorMessageSlot.innerText = message;
-      const verseContentElement = this.querySelector(
-        "#verse-content",
-      ) as HTMLDivElement;
-      verseContentElement.append(alertErrorElement);
-    }
+    const alertErrorElement = document.createElement("alert-error");
+    alertErrorElement.innerHTML = `
+      <span slot="alert-error-message">${message}</span>
+    `;
+    const verseContentElement = this.querySelector(
+      "#verse-content",
+    ) as HTMLDivElement;
+    verseContentElement.appendChild(alertErrorElement);
   }
 
   attributeChangedCallback(name: string) {

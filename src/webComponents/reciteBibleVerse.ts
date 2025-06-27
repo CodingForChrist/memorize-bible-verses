@@ -1,4 +1,3 @@
-import { getTemplate } from "./utils";
 import {
   CUSTOM_EVENTS,
   SPEECH_RECOGNITION_STATES,
@@ -64,13 +63,13 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #showLoadingSpinner() {
-    this.appendChild(getTemplate("loading-spinner-template"));
+    const loadingSpinnerElement = document.createElement("loading-spinner");
+    loadingSpinnerElement.classList.add("my-4");
+    this.appendChild(loadingSpinnerElement);
   }
 
   #hideLoadingSpinner() {
-    const loadingSpinner = this.querySelector(
-      '[data-template-id="loading-spinner"]',
-    );
+    const loadingSpinner = this.querySelector("loading-spinner");
     if (loadingSpinner) {
       loadingSpinner.remove();
     }
@@ -105,7 +104,7 @@ export class ReciteBibleVerse extends HTMLElement {
           Click the button below and recite ${this.verseReference}
         </p>
         <div id="button-record-voice-container"></div>
-        <div id="speech-recognition-error-container"></div>
+        <div class="my-4" id="speech-recognition-error-container"></div>
     `;
       this.innerHTML = html;
       this.querySelector("#button-record-voice-container")?.append(
@@ -171,18 +170,18 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    const alertErrorElement = getTemplate("alert-error-template");
-    const errorMessageSlot = alertErrorElement.querySelector<HTMLSlotElement>(
-      'slot[name="error-message"]',
-    );
+    const alertErrorElement = document.createElement("alert-error");
+    alertErrorElement.innerHTML = `
+      <span slot="alert-error-message">${message}</span>
+    `;
+
     const errorMessageContainer = this.querySelector(
       "#speech-recognition-error-container",
     );
 
-    if (errorMessageSlot && errorMessageContainer) {
-      errorMessageSlot.innerText = message;
+    if (errorMessageContainer) {
       errorMessageContainer.innerHTML = "";
-      errorMessageContainer.append(alertErrorElement);
+      errorMessageContainer.appendChild(alertErrorElement);
     }
   }
 

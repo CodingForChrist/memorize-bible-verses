@@ -7,3 +7,6 @@ import "./webComponents/bibleVerseSelector";
 import "./webComponents/accordionContainer";
 import "./webComponents/reciteBibleVerse";
 import "./webComponents/accuracyReport";
+import "./webComponents/bibleVerseBlockquote";
+import "./webComponents/alertError";
+import "./webComponents/loadingSpinner";
