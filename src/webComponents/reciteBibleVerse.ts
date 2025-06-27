@@ -104,7 +104,7 @@ export class ReciteBibleVerse extends HTMLElement {
           Click the button below and recite ${this.verseReference}
         </p>
         <div id="button-record-voice-container"></div>
-        <div id="speech-recognition-error-container"></div>
+        <div class="my-4" id="speech-recognition-error-container"></div>
     `;
       this.innerHTML = html;
       this.querySelector("#button-record-voice-container")?.append(
