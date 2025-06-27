@@ -66,35 +66,6 @@
       </app-state-provider>
     </div>
 
-    <template id="loading-spinner-template">
-      <div
-        class="my-4 flex justify-center sm:col-span-2 md:col-span-3 lg:col-span-5"
-        data-template-id="loading-spinner"
-      >
-        <div
-          class="inline-block h-8 w-8 animate-spin rounded-full border-[3px] border-current border-t-transparent text-stone-700"
-          role="status"
-          aria-label="loading"
-        >
-          <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-    </template>
-
-    <template id="alert-error-template">
-      <div
-        class="my-4 flex justify-center sm:col-span-2 md:col-span-3 lg:col-span-5"
-        data-template-id="alert-error"
-      >
-        <div
-          class="alert-error relative mb-8 w-full border border-red-300 bg-red-100 p-4 text-red-800"
-          role="alert"
-        >
-          <slot name="error-message"></slot>
-        </div>
-      </div>
-    </template>
-
     <template id="scripture-blockquote-template">
       <blockquote
         class="my-4 border-s-4 border-gray-300 bg-gray-50 p-4 dark:border-gray-500 dark:bg-gray-800"
