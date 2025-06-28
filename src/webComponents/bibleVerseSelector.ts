@@ -1,4 +1,3 @@
-import { getTemplate } from "./utils";
 import { removeExtraContentFromBibleVerse } from "../formatBibleVerse";
 import {
   LOADING_STATES,
@@ -6,11 +5,20 @@ import {
   MEMORIZE_SCRIPTURE_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
+import { buttonStyles, scriptureStyles } from "../sharedStyles";
 
 import type { BibleVerse } from "../types";
 
 export class BibleVerseSelector extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
+
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.appendChild(this.#containerElements);
+    shadowRoot.appendChild(this.#styleElement);
+  }
 
   static get observedAttributes() {
     return ["loading-state", "selected-bible-id"];
@@ -21,15 +29,16 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   set selectedBibleVerse(value: BibleVerse) {
-    const { content, ...rest } = value;
     this.#selectedBibleVerse = {
-      ...rest,
-      content: removeExtraContentFromBibleVerse(content),
+      ...value,
+      content: removeExtraContentFromBibleVerse(value.content),
     };
     const eventUpdateSelectedBible = new CustomEvent(
       CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_VERSE,
       {
         detail: { selectedBibleVerse: this.#selectedBibleVerse },
+        bubbles: true,
+        composed: true,
       },
     );
     window.dispatchEvent(eventUpdateSelectedBible);
@@ -50,94 +59,98 @@ export class BibleVerseSelector extends HTMLElement {
 
   #showLoadingSpinner() {
     const loadingSpinnerElement = document.createElement("loading-spinner");
-    this.appendChild(loadingSpinnerElement);
+    this.#searchResultsContainerElement.appendChild(loadingSpinnerElement);
   }
 
   #hideLoadingSpinner() {
-    const loadingSpinner = this.querySelector("loading-spinner");
-    if (loadingSpinner) {
-      loadingSpinner.remove();
-    }
+    const loadingSpinner =
+      this.#searchResultsContainerElement.querySelector("loading-spinner");
+    loadingSpinner?.remove();
   }
 
   get selectedBibleId() {
     return this.getAttribute("selected-bible-id");
   }
 
+  get #searchFormContainerElement() {
+    return this.shadowRoot!.querySelector(
+      "#search-form-container",
+    ) as HTMLDivElement;
+  }
+
+  get #searchResultsContainerElement() {
+    return this.shadowRoot!.querySelector(
+      "#search-results-container",
+    ) as HTMLDivElement;
+  }
+
   #renderSearchForm() {
+    this.#searchFormContainerElement.innerHTML = "";
+    this.#searchResultsContainerElement.innerHTML = "";
+
     const bibleVerseReference = this.#selectedBibleVerse?.reference ?? "";
+    const searchFormElement = document.createElement("bible-verse-search-form");
+    searchFormElement.setAttribute(
+      "bible-verse-reference",
+      bibleVerseReference,
+    );
 
+    window.addEventListener(
+      CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
+      (event: Event) => {
+        this.#searchResultsContainerElement.innerHTML = "";
+        const customEvent = event as CustomEvent;
+        this.#searchForVerse(customEvent.detail.bibleVerseReference);
+      },
+    );
+
+    this.#searchFormContainerElement.appendChild(searchFormElement);
+  }
+
+  #renderSelectedBibleVerse() {
+    this.#searchResultsContainerElement.innerHTML = "";
+
+    const bibleVerseBlockquoteElement = document.createElement(
+      "bible-verse-blockquote",
+    );
+    bibleVerseBlockquoteElement.innerHTML = `
+      <span class="scripture-styles" slot="bible-verse-content">
+        ${this.selectedBibleVerse!.content}
+      </span>
+    `;
+
+    this.#searchResultsContainerElement.append(
+      bibleVerseBlockquoteElement,
+      this.#buttonElementToNavigateToStep2,
+    );
+
+    // const verseContentElement =
+    //   this.querySelector<HTMLDivElement>("#verse-content");
+
+    // if (scriptureContentSlot && verseContentElement) {
+    //   verseContentElement.innerHTML = "";
+    //   scriptureContentSlot.innerHTML = this.selectedBibleVerse!.content;
+    //   const nextStepDivContainer = this.#getButtonToNavigateToStep2();
+    //   verseContentElement.append(
+    //     scriptureBlockquoteElement,
+    //     nextStepDivContainer,
+    //   );
+    // }
+  }
+
+  get #buttonElementToNavigateToStep2() {
     const html = `
-      <label for="form-input-verse" class="block">
-        <span class="text-gray-700">Enter a bible verse reference</span><br>
-        <span class="text-gray-700 text-sm">e.g. "John 1:1" or "John 3:16-21"</span>
-      </label>
-      <div class="flex gap-1">
-        <input type="text" id="form-input-verse" name="form-input-verse" class="flex-1 mt-1 w-full bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0" autofocus value="${bibleVerseReference}">
-        </input>
-
-        <button type="button" id="button-search" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">Search</button>
-      </div>
-      <div class="mt-8" id="verse-content"></div>
+      <p>Ready to test your memorization skills?</p>
+      <button type="button" class="button-primary">
+        Proceed to step 2
+      </button>
     `;
 
     const divContainer = document.createElement("div");
     divContainer.innerHTML = html;
 
-    const buttonSearch = divContainer.querySelector(
-      "#button-search",
-    ) as HTMLButtonElement;
-    const formInputVerse = divContainer.querySelector(
-      "#form-input-verse",
-    ) as HTMLInputElement;
-    const verseContentElement = divContainer.querySelector(
-      "#verse-content",
-    ) as HTMLDivElement;
-
-    buttonSearch.onclick = () => {
-      verseContentElement.innerHTML = "";
-      this.#searchForVerse(formInputVerse.value);
-    };
-
-    this.append(divContainer);
-  }
-
-  #renderSelectedBibleVerse() {
-    const scriptureBlockquoteElement = getTemplate(
-      "scripture-blockquote-template",
-    );
-    const scriptureContentSlot =
-      scriptureBlockquoteElement.querySelector<HTMLSlotElement>(
-        'slot[name="scripture-content"]',
-      );
-
-    const verseContentElement =
-      this.querySelector<HTMLDivElement>("#verse-content");
-
-    if (scriptureContentSlot && verseContentElement) {
-      verseContentElement.innerHTML = "";
-      scriptureContentSlot.innerHTML = this.selectedBibleVerse!.content;
-      const nextStepDivContainer = this.#getButtonToNavigateToStep2();
-      verseContentElement.append(
-        scriptureBlockquoteElement,
-        nextStepDivContainer,
-      );
-    }
-  }
-
-  #getButtonToNavigateToStep2() {
-    const htmlForNextStep = `
-      <p class="mt-8 mb-4">Ready to test your memorization skills?</p>
-      <button type="button" id="button-go-to-step-2" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 text-sm/6 font-semibold cursor-pointer text-white hover:bg-blue-800">
-        Proceed to step 2
-      </button>
-    `;
-
-    const nextStepDivContainer = document.createElement("div");
-    nextStepDivContainer.innerHTML = htmlForNextStep;
-
-    const buttonGoToStep2 = nextStepDivContainer.querySelector(
-      "#button-go-to-step-2",
+    const buttonGoToStep2 = divContainer.querySelector(
+      "button",
     ) as HTMLButtonElement;
 
     buttonGoToStep2.onclick = () => {
@@ -145,12 +158,14 @@ export class BibleVerseSelector extends HTMLElement {
         CUSTOM_EVENTS.NAVIGATE_TO_STEP,
         {
           detail: { step: "2" },
+          bubbles: true,
+          composed: true,
         },
       );
       window.dispatchEvent(eventNavigateToStep2);
     };
 
-    return nextStepDivContainer;
+    return divContainer;
   }
 
   async #searchForVerse(query: string) {
@@ -180,7 +195,7 @@ export class BibleVerseSelector extends HTMLElement {
       } else {
         throw new Error("Failed to find the verse");
       }
-    } catch (err) {
+    } catch (_error) {
       this.loadingState = LOADING_STATES.REJECTED;
     }
   }
@@ -190,24 +205,52 @@ export class BibleVerseSelector extends HTMLElement {
     alertErrorElement.innerHTML = `
       <span slot="alert-error-message">${message}</span>
     `;
-    const verseContentElement = this.querySelector(
-      "#verse-content",
-    ) as HTMLDivElement;
-    verseContentElement.appendChild(alertErrorElement);
+    this.#searchResultsContainerElement.appendChild(alertErrorElement);
+  }
+
+  get #containerElements() {
+    const divElement = document.createElement("div");
+    divElement.innerHTML = `
+      <div id="search-form-container"></div>
+      <div id="search-results-container"></div>
+    `;
+
+    return divElement;
+  }
+
+  get #styleElement() {
+    const styleElement = document.createElement("style");
+    const css = `
+    bible-verse-blockquote {
+      margin: 2rem 0;
+    }
+    p {
+      margin: 1rem 0;
+    }
+    ${buttonStyles}
+    ${scriptureStyles}
+    `;
+    styleElement.textContent = css;
+    return styleElement;
   }
 
   attributeChangedCallback(name: string) {
     if (name === "selected-bible-id") {
-      this.innerHTML = "";
-      this.#renderSearchForm();
-    } else if (name === "loading-state") {
-      if (this.loadingState === LOADING_STATES.RESOLVED) {
-        this.#renderSelectedBibleVerse();
-      } else if (this.loadingState === LOADING_STATES.REJECTED) {
-        this.#renderErrorMessage(
-          "Failed to find the bible verse reference. Please try another search.",
-        );
-      }
+      return this.#renderSearchForm();
+    }
+    if (
+      name === "loading-state" &&
+      this.loadingState === LOADING_STATES.RESOLVED
+    ) {
+      return this.#renderSelectedBibleVerse();
+    }
+    if (
+      name === "loading-state" &&
+      this.loadingState === LOADING_STATES.REJECTED
+    ) {
+      return this.#renderErrorMessage(
+        "Failed to find the bible verse reference. Please try another search.",
+      );
     }
   }
 }

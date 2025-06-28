@@ -37,9 +37,9 @@ export class BibleTranslationSelector extends HTMLElement {
     super();
 
     this.bibleTranslations = [];
-    this.attachShadow({ mode: "open" });
 
-    this.shadowRoot!.appendChild(this.#styleElement);
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.appendChild(this.#styleElement);
   }
 
   static get observedAttributes() {
@@ -83,9 +83,7 @@ export class BibleTranslationSelector extends HTMLElement {
 
   #hideLoadingSpinner() {
     const loadingSpinner = this.shadowRoot!.querySelector("loading-spinner");
-    if (loadingSpinner) {
-      loadingSpinner.remove();
-    }
+    loadingSpinner?.remove();
   }
 
   async #fetchBibles() {
@@ -129,7 +127,7 @@ export class BibleTranslationSelector extends HTMLElement {
       </label>
       `;
     const selectElement = divContainerElement.querySelector(
-      "select",
+      'select[name="select-bible-translation"]',
     ) as HTMLSelectElement;
 
     selectElement.value = defaultBible.id;
@@ -150,7 +148,7 @@ export class BibleTranslationSelector extends HTMLElement {
     const styleElement = document.createElement("style");
     const colorGray100 = "oklch(96.7% .003 264.542)";
     const colorGray500 = "oklch(55.1% .027 264.364)";
-    const colorGray700 = "oklch(37.3% .034 259.733);";
+    const colorGray700 = "oklch(37.3% .034 259.733)";
     const colorWhite = "#fff";
 
     const css = `
@@ -222,9 +220,10 @@ export class BibleTranslationSelector extends HTMLElement {
 
     // wait for bibles to finish loading before rendering
     if (this.loadingState === LOADING_STATES.RESOLVED) {
-      this.#renderSelectElement();
-    } else if (this.loadingState === LOADING_STATES.REJECTED) {
-      this.#renderErrorMessage(
+      return this.#renderSelectElement();
+    }
+    if (this.loadingState === LOADING_STATES.REJECTED) {
+      return this.#renderErrorMessage(
         "Failed to load Bibles. Please try again later.",
       );
     }
