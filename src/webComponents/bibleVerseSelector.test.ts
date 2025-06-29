@@ -13,7 +13,9 @@ describe("<bible-verse-selector>", () => {
       "bible-verse-selector",
     ) as BibleVerseSelector;
 
-    expect(bibleVerseSelector.querySelector("#form-input-verse")).toBeTruthy();
+    expect(
+      bibleVerseSelector.shadowRoot!.querySelector("bible-verse-search-form"),
+    ).toBeTruthy();
   });
 
   test("should not render form when selected-bible-id attribute is missing", () => {
@@ -22,6 +24,8 @@ describe("<bible-verse-selector>", () => {
       "bible-verse-selector",
     ) as BibleVerseSelector;
 
-    expect(bibleVerseSelector.innerHTML).toBe("");
+    expect(
+      bibleVerseSelector.shadowRoot!.querySelector("bible-verse-search-form"),
+    ).toBeNull();
   });
 });
