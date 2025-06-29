@@ -49,11 +49,12 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   set loadingState(value: LoadingStates) {
-    if (value === LOADING_STATES.INITIAL || value === LOADING_STATES.PENDING) {
+    if (value === LOADING_STATES.PENDING) {
       this.#showLoadingSpinner();
     } else {
       this.#hideLoadingSpinner();
     }
+
     this.setAttribute("loading-state", value);
   }
 
@@ -63,9 +64,9 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #hideLoadingSpinner() {
-    const loadingSpinner =
-      this.#searchResultsContainerElement.querySelector("loading-spinner");
-    loadingSpinner?.remove();
+    this.#searchResultsContainerElement
+      .querySelector("loading-spinner")
+      ?.remove();
   }
 
   get selectedBibleId() {
@@ -98,6 +99,9 @@ export class BibleVerseSelector extends HTMLElement {
     window.addEventListener(
       CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
       (event: Event) => {
+        if (this.loadingState === LOADING_STATES.PENDING) {
+          return;
+        }
         this.#searchResultsContainerElement.innerHTML = "";
         const customEvent = event as CustomEvent;
         this.#searchForVerse(customEvent.detail.bibleVerseReference);
