@@ -123,19 +123,6 @@ export class BibleVerseSelector extends HTMLElement {
       bibleVerseBlockquoteElement,
       this.#buttonElementToNavigateToStep2,
     );
-
-    // const verseContentElement =
-    //   this.querySelector<HTMLDivElement>("#verse-content");
-
-    // if (scriptureContentSlot && verseContentElement) {
-    //   verseContentElement.innerHTML = "";
-    //   scriptureContentSlot.innerHTML = this.selectedBibleVerse!.content;
-    //   const nextStepDivContainer = this.#getButtonToNavigateToStep2();
-    //   verseContentElement.append(
-    //     scriptureBlockquoteElement,
-    //     nextStepDivContainer,
-    //   );
-    // }
   }
 
   get #buttonElementToNavigateToStep2() {
@@ -201,6 +188,7 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
+    this.#searchResultsContainerElement.innerHTML = "";
     const alertErrorElement = document.createElement("alert-error");
     alertErrorElement.innerHTML = `
       <span slot="alert-error-message">${message}</span>
