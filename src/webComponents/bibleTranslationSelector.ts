@@ -68,11 +68,12 @@ export class BibleTranslationSelector extends HTMLElement {
   }
 
   set loadingState(value: LoadingStates) {
-    if (value === LOADING_STATES.INITIAL || value === LOADING_STATES.PENDING) {
+    if (value === LOADING_STATES.PENDING) {
       this.#showLoadingSpinner();
     } else {
       this.#hideLoadingSpinner();
     }
+
     this.setAttribute("loading-state", value);
   }
 
@@ -82,8 +83,7 @@ export class BibleTranslationSelector extends HTMLElement {
   }
 
   #hideLoadingSpinner() {
-    const loadingSpinner = this.shadowRoot!.querySelector("loading-spinner");
-    loadingSpinner?.remove();
+    this.shadowRoot!.querySelector("loading-spinner")?.remove();
   }
 
   async #fetchBibles() {
