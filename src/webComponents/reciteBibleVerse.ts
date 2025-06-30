@@ -4,6 +4,8 @@ import {
   type SpeechRecognitionStates,
 } from "../constants";
 
+import { buttonStyles } from "../sharedStyles";
+
 export class ReciteBibleVerse extends HTMLElement {
   speechRecognition: SpeechRecognition;
   #speechTranscript?: string;
@@ -12,6 +14,10 @@ export class ReciteBibleVerse extends HTMLElement {
 
   constructor() {
     super();
+
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.appendChild(this.#styleElement);
+    shadowRoot.appendChild(this.#containerElements);
 
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -45,34 +51,46 @@ export class ReciteBibleVerse extends HTMLElement {
         CUSTOM_EVENTS.NAVIGATE_TO_STEP,
         {
           detail: { step: "3" },
+          bubbles: true,
+          composed: true,
         },
       );
       window.dispatchEvent(eventNavigateToStep2);
-      if (this.#recordVoiceButton) {
-        this.#recordVoiceButton.textContent =
-          "Start recording with microphone input";
-      }
+      this.#recordVoiceButton.textContent =
+        "Start recording with microphone input";
     } else if (value === SPEECH_RECOGNITION_STATES.REJECTED) {
       this.#hideLoadingSpinner();
       this.#renderErrorMessage("Failed to use microphone input");
-      if (this.#recordVoiceButton) {
-        this.#recordVoiceButton.textContent =
-          "Start recording with microphone input";
-      }
+      this.#recordVoiceButton.textContent =
+        "Start recording with microphone input";
     }
+  }
+
+  get #initialContentContainerElement() {
+    return this.shadowRoot!.querySelector(
+      "#initial-content-container",
+    ) as HTMLDivElement;
+  }
+
+  get #resultsContainerElement() {
+    return this.shadowRoot!.querySelector(
+      "#results-container",
+    ) as HTMLDivElement;
+  }
+
+  get #recordVoiceButton() {
+    return this.#initialContentContainerElement.querySelector(
+      "button",
+    ) as HTMLButtonElement;
   }
 
   #showLoadingSpinner() {
     const loadingSpinnerElement = document.createElement("loading-spinner");
-    loadingSpinnerElement.classList.add("my-4");
-    this.appendChild(loadingSpinnerElement);
+    this.#resultsContainerElement.appendChild(loadingSpinnerElement);
   }
 
   #hideLoadingSpinner() {
-    const loadingSpinner = this.querySelector("loading-spinner");
-    if (loadingSpinner) {
-      loadingSpinner.remove();
-    }
+    this.#resultsContainerElement.querySelector("loading-spinner")?.remove();
   }
 
   get speechTranscript(): string | undefined {
@@ -92,81 +110,58 @@ export class ReciteBibleVerse extends HTMLElement {
       CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
       {
         detail: { recitedBibleVerse: this.#speechTranscript },
+        bubbles: true,
+        composed: true,
       },
     );
     window.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 
   #renderInitialContent() {
-    if (this.verseReference) {
-      const html = `
-        <p class="mb-4">
-          Click the button below and recite ${this.verseReference}
-        </p>
-        <div id="button-record-voice-container"></div>
-        <div class="my-4" id="speech-recognition-error-container"></div>
-    `;
-      this.innerHTML = html;
-      this.querySelector("#button-record-voice-container")?.append(
-        this.#createRecordVoiceButton(),
-      );
-    } else {
-      this.innerHTML = '<div id="speech-recognition-error-container"></div>';
-      this.#renderErrorMessage(
+    if (!this.verseReference) {
+      return this.#renderErrorMessage(
         "Go back to Step 1 and select a bible verse reference.",
       );
     }
-  }
 
-  get #recordVoiceButton() {
-    return this.querySelector<HTMLButtonElement>("#button-record-voice");
-  }
-
-  #createRecordVoiceButton() {
-    const html = `
-        <button type="button" id="button-record-voice" class="flex-none mt-1 z-1 bg-blue-600 px-4 py-2 w-full text-sm/6 font-semibold text-white cursor-pointer hover:bg-blue-800">
-          Start recording with microphone input
-        </button>
+    this.#initialContentContainerElement.innerHTML = `
+      <p>Click the button below and recite ${this.verseReference}</p>
+      <button class="button-primary">Start recording with microphone input</button>
     `;
 
-    const divContainer = document.createElement("div");
-    divContainer.innerHTML = html;
+    this.#initialContentContainerElement
+      .querySelector("button")!
+      .addEventListener("click", this.#recordVoiceButtonClick.bind(this));
+  }
 
-    const buttonRecordVoice = divContainer.querySelector(
-      "#button-record-voice",
-    ) as HTMLButtonElement;
+  #recordVoiceButtonClick(event: Event) {
+    const buttonElement = event.target as HTMLButtonElement;
 
-    buttonRecordVoice.onclick = () => {
-      const {
-        INITIAL,
-        WAITING_FOR_MICROPHONE_ACCESS,
-        LISTENING,
-        RESOLVED,
-        REJECTED,
-      } = SPEECH_RECOGNITION_STATES;
+    const {
+      INITIAL,
+      WAITING_FOR_MICROPHONE_ACCESS,
+      LISTENING,
+      RESOLVED,
+      REJECTED,
+    } = SPEECH_RECOGNITION_STATES;
 
-      if (
-        ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
-          this.speechRecognitionState,
-        )
-      ) {
-        this.speechRecognition.start();
-        this.speechRecognitionState =
-          SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
-        buttonRecordVoice.textContent = "Click again to stop recording";
-        this.#showLoadingSpinner();
-      } else if (this.speechRecognitionState === LISTENING) {
-        this.speechRecognition.stop();
-        buttonRecordVoice.textContent = "Recording complete!";
-      } else if (
-        this.speechRecognitionState === WAITING_FOR_MICROPHONE_ACCESS
-      ) {
-        this.speechRecognition.stop();
-        this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
-      }
-    };
-
-    return divContainer;
+    if (
+      ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
+        this.speechRecognitionState,
+      )
+    ) {
+      this.speechRecognition.start();
+      this.speechRecognitionState =
+        SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
+      buttonElement.textContent = "Click again to stop recording";
+      this.#showLoadingSpinner();
+    } else if (this.speechRecognitionState === LISTENING) {
+      this.speechRecognition.stop();
+      buttonElement.textContent = "Recording complete!";
+    } else if (this.speechRecognitionState === WAITING_FOR_MICROPHONE_ACCESS) {
+      this.speechRecognition.stop();
+      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
+    }
   }
 
   #renderErrorMessage(message: string) {
@@ -175,14 +170,37 @@ export class ReciteBibleVerse extends HTMLElement {
       <span slot="alert-error-message">${message}</span>
     `;
 
-    const errorMessageContainer = this.querySelector(
-      "#speech-recognition-error-container",
-    );
+    this.#initialContentContainerElement.innerHTML = "";
+    this.#initialContentContainerElement.appendChild(alertErrorElement);
+  }
 
-    if (errorMessageContainer) {
-      errorMessageContainer.innerHTML = "";
-      errorMessageContainer.appendChild(alertErrorElement);
-    }
+  get #containerElements() {
+    const divElement = document.createElement("div");
+    divElement.innerHTML = `
+      <div id="initial-content-container"></div>
+      <div id="results-container"></div>
+    `;
+
+    return divElement;
+  }
+
+  get #styleElement() {
+    const styleElement = document.createElement("style");
+    const css = `
+      :host {
+        display: block;
+        margin: 2rem 0;
+      }
+      p {
+        margin: 1rem 0;
+      }
+      .button-primary {
+        width: 100%;
+      }
+      ${buttonStyles}
+    `;
+    styleElement.textContent = css;
+    return styleElement;
   }
 
   connectedCallback() {
