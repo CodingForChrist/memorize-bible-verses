@@ -194,6 +194,9 @@ export class ReciteBibleVerse extends HTMLElement {
       p {
         margin: 1rem 0;
       }
+      .button-primary {
+        width: 100%;
+      }
       ${buttonStyles}
     `;
     styleElement.textContent = css;
