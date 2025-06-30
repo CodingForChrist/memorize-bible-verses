@@ -1,11 +1,24 @@
 import { diffWords } from "diff";
-
-import { getTemplate } from "./utils";
 import { convertBibleVerseToText } from "../formatBibleVerse";
+import { scriptureStyles } from "../sharedStyles";
 
 export class AccuracyReport extends HTMLElement {
+  constructor() {
+    super();
+
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.appendChild(this.#containerElement);
+    shadowRoot.appendChild(this.#styleElement);
+  }
+
   static get observedAttributes() {
     return ["recited-bible-verse"];
+  }
+
+  get #reportContainerElement() {
+    return this.shadowRoot!.querySelector(
+      "#report-container",
+    ) as HTMLDivElement;
   }
 
   get verseReference() {
@@ -51,82 +64,71 @@ export class AccuracyReport extends HTMLElement {
   }
 
   #renderReport() {
-    this.innerHTML = "";
+    this.#reportContainerElement.innerHTML = "";
 
-    if (this.verseReference && this.verseContent && this.recitedBibleVerse) {
-      // add reference and strip out html characters
-      const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
-
-      const { textDifferenceDocumentFragment, errorCount, partCount } =
-        getDifferenceBetweenVerseAndInput({
-          originalBibleVerseText: verseText,
-          recitedBibleVerseText: this.recitedBibleVerse,
-        });
-
-      const accurancyReportElement = getTemplate("accuracy-report-template");
-      const gradeSlot =
-        accurancyReportElement.querySelector<HTMLSlotElement>(
-          'slot[name="grade"]',
-        );
-
-      if (gradeSlot) {
-        const { percentage, gradeLetter } = this.#calculateGrade({
-          partCount,
-          errorCount,
-        });
-        gradeSlot.innerText = `${gradeLetter} (${percentage}%)`;
-      }
-
-      const verseReferenceSlot =
-        accurancyReportElement.querySelector<HTMLSlotElement>(
-          'slot[name="verse-reference"]',
-        );
-
-      if (verseReferenceSlot) {
-        verseReferenceSlot.innerText = this.verseReference;
-      }
-
-      const actualVerseSlot =
-        accurancyReportElement.querySelector<HTMLSlotElement>(
-          'slot[name="actual-verse"]',
-        );
-      const scriptureBlockquoteElement = getTemplate(
-        "scripture-blockquote-template",
-      );
-      const scriptureContentSlot =
-        scriptureBlockquoteElement.querySelector<HTMLSlotElement>(
-          'slot[name="scripture-content"]',
-        );
-
-      if (actualVerseSlot && scriptureContentSlot) {
-        scriptureContentSlot.innerHTML = this.verseContent;
-        actualVerseSlot.append(scriptureBlockquoteElement);
-      }
-
-      const recitedVerseSlot =
-        accurancyReportElement.querySelector<HTMLSlotElement>(
-          'slot[name="recited-verse"]',
-        );
-
-      if (recitedVerseSlot) {
-        recitedVerseSlot.innerText = this.recitedBibleVerse;
-      }
-
-      const textDifferenceSlot =
-        accurancyReportElement.querySelector<HTMLSlotElement>(
-          'slot[name="text-difference"]',
-        );
-
-      if (textDifferenceSlot) {
-        textDifferenceSlot.append(textDifferenceDocumentFragment);
-      }
-
-      this.append(accurancyReportElement);
-    } else {
-      this.#renderErrorMessage(
+    if (!this.verseReference || !this.verseContent || !this.recitedBibleVerse) {
+      return this.#renderErrorMessage(
         "Unable to display report. Complete Step 1 and Step 2 first.",
       );
     }
+
+    // add reference and strip out html characters
+    const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
+
+    const { textDifferenceDivContainer, errorCount, partCount } =
+      getDifferenceBetweenVerseAndInput({
+        originalBibleVerseText: verseText,
+        recitedBibleVerseText: this.recitedBibleVerse,
+      });
+
+    const { percentage, gradeLetter } = this.#calculateGrade({
+      partCount,
+      errorCount,
+    });
+
+    const divElement = document.createElement("div");
+    divElement.innerHTML = `
+      <table>
+        <tbody>
+          <tr>
+            <td>Grade</td>
+            <td>
+              ${gradeLetter} (${percentage}%)
+            </td>
+          </tr>
+          <tr>
+            <td>Verse Reference</td>
+            <td>
+              ${this.verseReference}
+            </td>
+          </tr>
+          <tr>
+            <td>Actual Verse</td>
+            <td>
+              <bible-verse-blockquote>
+                <span class="scripture-styles" slot="bible-verse-content">
+                  ${this.verseContent}
+                 </span>
+              </bible-verse-blockquote>
+            </td>
+          </tr>
+          <tr>
+            <td>Recited Verse</td>
+            <td>
+              ${this.recitedBibleVerse}
+            </td>
+          </tr>
+          <tr>
+            <td>Text Difference</td>
+            <td>
+              ${textDifferenceDivContainer.innerHTML}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+
+    this.#reportContainerElement.appendChild(divElement);
   }
 
   #renderErrorMessage(message: string) {
@@ -134,7 +136,41 @@ export class AccuracyReport extends HTMLElement {
     alertErrorElement.innerHTML = `
       <span slot="alert-error-message">${message}</span>
     `;
-    this.appendChild(alertErrorElement);
+    this.#reportContainerElement.appendChild(alertErrorElement);
+  }
+
+  get #containerElement() {
+    const divElement = document.createElement("div");
+    divElement.id = "report-container";
+    return divElement;
+  }
+
+  get #styleElement() {
+    const styleElement = document.createElement("style");
+    const colorGray400 = "oklch(70.4% .04 256.788)";
+
+    const css = `
+      :host {
+        display: block;
+        margin: 2rem 0;
+      }
+      table {
+        table-layout: auto;
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+      }
+      td {
+        border-bottom: 1px solid ${colorGray400};
+        padding: 1rem 0;
+      }
+      td:first-child {
+        padding-right: 2rem;
+      }
+      ${scriptureStyles}
+    `;
+    styleElement.textContent = css;
+    return styleElement;
   }
 
   connectedCallback() {
@@ -162,7 +198,7 @@ function getDifferenceBetweenVerseAndInput({
     ignoreCase: true,
   });
 
-  const fragment = document.createDocumentFragment();
+  const divElement = document.createElement("div");
   let errorCount = 0;
   for (const part of difference) {
     // green for additions, red for deletions
@@ -185,11 +221,11 @@ function getDifferenceBetweenVerseAndInput({
     const span = document.createElement("span");
     span.style.color = color;
     span.appendChild(document.createTextNode(part.value));
-    fragment.appendChild(span);
+    divElement.appendChild(span);
   }
 
   return {
-    textDifferenceDocumentFragment: fragment,
+    textDifferenceDivContainer: divElement,
     errorCount: errorCount,
     partCount: difference.length,
   };
