@@ -9,8 +9,8 @@ import "./webComponents/alertError";
 import "./webComponents/bibleVerseBlockquote";
 
 // step 1 components
-import "./webComponents/bibleVerseSelector";
 import "./webComponents/bibleTranslationSelector";
+import "./webComponents/bibleVerseSelector";
 import "./webComponents/bibleVerseSearchForm";
 
 // step 2 component
