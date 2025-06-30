@@ -1,13 +1,20 @@
 import "./css/tailwind.css";
-import "./css/scriptureStyles.css";
 
 import "./webComponents/appStateProvider";
+import "./webComponents/accordionContainer";
+
+// shared components
+import "./webComponents/loadingSpinner";
+import "./webComponents/alertError";
+import "./webComponents/bibleVerseBlockquote";
+
+// step 1 components
 import "./webComponents/bibleTranslationSelector";
 import "./webComponents/bibleVerseSelector";
-import "./webComponents/bibleVerseBlockquote";
 import "./webComponents/bibleVerseSearchForm";
-import "./webComponents/accordionContainer";
+
+// step 2 component
 import "./webComponents/reciteBibleVerse";
+
+// step 3 component
 import "./webComponents/accuracyReport";
-import "./webComponents/alertError";
-import "./webComponents/loadingSpinner";
