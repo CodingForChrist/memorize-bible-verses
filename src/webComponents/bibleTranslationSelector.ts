@@ -154,7 +154,7 @@ export class BibleTranslationSelector extends HTMLElement {
     const css = `
       :host {
         display: block;
-        margin: 16px 0;
+        margin: 2rem 0;
       }
       label {
         display: block;
