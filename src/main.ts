@@ -1,4 +1,4 @@
-import "./css/tailwind.css";
+import "./css/styles.css";
 
 import "./webComponents/appStateProvider";
 import "./webComponents/accordionContainer";

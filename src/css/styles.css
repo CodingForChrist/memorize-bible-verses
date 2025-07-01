@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+.tinos-regular {
+  font-family: "Tinos", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.tinos-bold {
+  font-family: "Tinos", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.tinos-regular-italic {
+  font-family: "Tinos", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.tinos-bold-italic {
+  font-family: "Tinos", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+html {
+  background-color: whitesmoke;
+  tab-size: 4;
+  line-height: 1.5;
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+
+body {
+  margin: 0;
+}
+
+#app-container {
+  box-sizing: border-box;
+  background-color: white;
+  margin: 0 auto;
+  max-width: 42rem;
+  min-width: 20rem;
+  font-size: 1.125rem;
+
+  @media (width >= 40rem) {
+    /* slate 400 */
+    border-left: 1px solid oklch(70.4% 0.04 256.788);
+    border-right: 1px solid oklch(70.4% 0.04 256.788);
+    padding: 0 2rem;
+  }
+}
+
+header {
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+
+  @media (width >= 40rem) {
+    padding: 2rem 0;
+  }
+
+  @media (width >= 64rem) {
+    padding: 2.5rem 0;
+  }
+}
+
+header h1 {
+  /* slate 900 */
+  color: oklch(20.8% 0.042 265.755);
+  font-family: "Tinos", serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1.33;
+  margin: 0;
+
+  @media (width >= 40rem) {
+    font-size: 1.875rem;
+    line-height: 1.12;
+  }
+
+  @media (width >= 64rem) {
+    font-size: 2.25rem;
+    line-height: 1.11;
+  }
+}
+
+header p {
+  /* slate 800 */
+  color: oklch(27.9% 0.041 260.031);
+  display: none;
+  font-size: 1.125rem;
+  line-height: 1.55;
+  margin: 1.5rem 0 0 0;
+
+  @media (width >= 40rem) {
+    display: block;
+  }
+}
+
+details {
+  /* slate 400 */
+  border: 1px solid oklch(70.4% 0.04 256.788);
+  border-top: 0;
+  cursor: pointer;
+}
+
+details:is([open]) {
+  cursor: auto;
+}
+
+details:first-child {
+  /* slate 400 */
+  border-top: 1px solid oklch(70.4% 0.04 256.788);
+}
+
+summary {
+  padding: 1rem;
+}
+
+bible-translation-selector,
+bible-verse-selector,
+recite-bible-verse,
+accuracy-report {
+  padding: 0 1rem;
+}
