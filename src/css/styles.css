@@ -1,3 +1,5 @@
+@import "modern-normalize/modern-normalize.css";
+
 @import url("https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 .tinos-regular {
@@ -45,7 +47,10 @@ body {
   margin: 0 auto;
   max-width: 42rem;
   min-width: 20rem;
+  min-height: 50rem;
   font-size: 1.125rem;
+  line-height: 1.5555;
+  padding: 0 .5rem 4rem .5rem;
 
   @media (width >= 40rem) {
     /* slate 400 */
@@ -86,7 +91,7 @@ header h1 {
 
   @media (width >= 64rem) {
     font-size: 2.25rem;
-    line-height: 1.11;
+    line-height: 1.1111;
   }
 }
 
@@ -112,6 +117,11 @@ details {
 
 details:is([open]) {
   cursor: auto;
+  padding-bottom: 2rem;
+}
+
+details[open] > summary {
+  margin-bottom: 1rem;
 }
 
 details:first-child {
@@ -128,4 +138,8 @@ bible-verse-selector,
 recite-bible-verse,
 accuracy-report {
   padding: 0 1rem;
+}
+
+bible-translation-selector {
+  margin-bottom: 2rem;
 }

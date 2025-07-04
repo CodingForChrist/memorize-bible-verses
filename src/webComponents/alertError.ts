@@ -28,7 +28,6 @@ export class AlertError extends HTMLElement {
     const css = `
       :host {
         display: block;
-        margin: 1rem 0;
       }
       .alert-error-container {
         background-color: ${colorRed100};

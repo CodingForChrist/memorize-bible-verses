@@ -152,7 +152,6 @@ export class AccuracyReport extends HTMLElement {
     const css = `
       :host {
         display: block;
-        margin: 2rem 0;
       }
       table {
         table-layout: auto;

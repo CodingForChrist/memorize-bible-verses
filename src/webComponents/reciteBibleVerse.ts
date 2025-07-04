@@ -189,7 +189,6 @@ export class ReciteBibleVerse extends HTMLElement {
     const css = `
       :host {
         display: block;
-        margin: 2rem 0;
       }
       p {
         margin: 1rem 0;

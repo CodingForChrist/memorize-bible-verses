@@ -49,7 +49,6 @@ export class BibleVerseSearchForm extends HTMLElement {
     const css = `
       :host {
         display: block;
-        margin: 2rem 0;
       }
       label {
         display: block;
