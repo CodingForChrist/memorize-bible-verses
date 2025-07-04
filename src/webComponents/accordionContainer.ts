@@ -20,7 +20,7 @@ export class AccordionContainer extends HTMLElement {
       [...this.children].map((detail) => {
         detail.removeAttribute("open");
       });
-      this.querySelector(`#accordion-details-step-${stepNumber}`)?.setAttribute(
+      this.querySelector(`details:nth-child(${stepNumber})`)?.setAttribute(
         "open",
         "",
       );

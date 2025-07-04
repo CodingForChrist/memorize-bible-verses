@@ -213,8 +213,14 @@ export class BibleVerseSelector extends HTMLElement {
   get #styleElement() {
     const styleElement = document.createElement("style");
     const css = `
+    :host {
+      display: block;
+    }
     bible-verse-blockquote {
       margin: 2rem 0;
+    }
+    alert-error {
+      margin-top: 2rem;
     }
     p {
       margin: 1rem 0;

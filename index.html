@@ -5,62 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>︎Memorize Bible Verses</title>
   </head>
-  <body class="bg-gray-950/5 text-slate-900">
-    <div
-      id="app"
-      class="font-base mx-auto min-h-[900px] max-w-2xl min-w-xs bg-white px-2 pb-8 text-lg sm:px-8 md:border-x md:border-solid md:border-slate-400"
-    >
-      <header class="pt-4 pb-6 text-center sm:py-8 lg:py-10">
-        <h1 class="font-tinos text-2xl font-bold sm:text-3xl lg:text-4xl">
-          ︎Memorize Bible Verses
-        </h1>
-        <p class="mt-6 hidden text-lg text-slate-800 sm:block">
-          Use your device's microphone to practice memorizing scripture.
-        </p>
+  <body>
+    <div id="app-container">
+      <header>
+        <h1>Memorize Bible Verses</h1>
+        <p>Use your device's microphone to practice memorizing scripture.</p>
       </header>
 
-      <app-state-provider class="hidden">
+      <app-state-provider>
         <accordion-container>
-          <details
-            id="accordion-details-step-1"
-            class="group border-1 border-slate-400"
-            open
-          >
-            <summary
-              class="cursor-pointer p-4 group-open:mb-4 group-open:cursor-auto"
-            >
-              Step 1: Select scripture
-            </summary>
-            <div class="px-4">
-              <bible-translation-selector></bible-translation-selector>
-              <bible-verse-selector class="my-8 block"></bible-verse-selector>
-            </div>
+          <details open>
+            <summary>Step 1: Select scripture</summary>
+            <bible-translation-selector></bible-translation-selector>
+            <bible-verse-selector></bible-verse-selector>
           </details>
-          <details
-            id="accordion-details-step-2"
-            class="group border-1 border-t-0 border-slate-400"
-          >
-            <summary
-              class="cursor-pointer p-4 group-open:mb-4 group-open:cursor-auto"
-            >
-              Step 2: Recite scripture
-            </summary>
-            <div class="px-4">
-              <recite-bible-verse class="mb-8 block"></recite-bible-verse>
-            </div>
+          <details>
+            <summary>Step 2: Recite scripture</summary>
+            <recite-bible-verse></recite-bible-verse>
           </details>
-          <details
-            id="accordion-details-step-3"
-            class="group border-1 border-t-0 border-slate-400"
-          >
-            <summary
-              class="cursor-pointer p-4 group-open:mb-4 group-open:cursor-auto"
-            >
-              Step 3: See how well you did
-            </summary>
-            <div class="px-4">
-              <accuracy-report class="mb-8 block"></accuracy-report>
-            </div>
+          <details>
+            <summary>Step 3: See how well you did</summary>
+            <accuracy-report></accuracy-report>
           </details>
         </accordion-container>
       </app-state-provider>
