@@ -24,7 +24,7 @@ export class ReciteBibleVerse extends HTMLElement {
     this.speechRecognition = new SpeechRecognition();
     this.speechRecognition.continuous = true;
     this.speechRecognition.lang = "en-US";
-    this.speechRecognition.interimResults = false;
+    this.speechRecognition.interimResults = true;
     this.speechRecognition.maxAlternatives = 5;
 
     this.#speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
@@ -58,11 +58,13 @@ export class ReciteBibleVerse extends HTMLElement {
       window.dispatchEvent(eventNavigateToStep2);
       this.#recordVoiceButton.textContent =
         "Start recording with microphone input";
+      this.#interimResultsParagraphElement.innerText = "";
     } else if (value === SPEECH_RECOGNITION_STATES.REJECTED) {
       this.#hideLoadingSpinner();
       this.#renderErrorMessage("Failed to use microphone input");
       this.#recordVoiceButton.textContent =
         "Start recording with microphone input";
+      this.#interimResultsParagraphElement.innerText = "";
     }
   }
 
@@ -76,6 +78,12 @@ export class ReciteBibleVerse extends HTMLElement {
     return this.shadowRoot!.querySelector(
       "#results-container",
     ) as HTMLDivElement;
+  }
+
+  get #interimResultsParagraphElement() {
+    return this.#resultsContainerElement.querySelector(
+      "p",
+    ) as HTMLParagraphElement;
   }
 
   get #recordVoiceButton() {
@@ -164,6 +172,19 @@ export class ReciteBibleVerse extends HTMLElement {
     }
   }
 
+  #printSpeechRecognitionInterimResults(results: SpeechRecognitionResultList) {
+    if (!results) {
+      return;
+    }
+
+    let interimTranscript = "";
+    for (const result of results) {
+      interimTranscript += result[0].transcript;
+    }
+
+    this.#interimResultsParagraphElement.innerText = interimTranscript;
+  }
+
   #renderErrorMessage(message: string) {
     const alertErrorElement = document.createElement("alert-error");
     alertErrorElement.innerHTML = `
@@ -178,7 +199,9 @@ export class ReciteBibleVerse extends HTMLElement {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
       <div id="initial-content-container"></div>
-      <div id="results-container"></div>
+      <div id="results-container">
+        <p></p>
+      </div>
     `;
 
     return divElement;
@@ -216,6 +239,8 @@ export class ReciteBibleVerse extends HTMLElement {
           label: "speechRecognitionResults",
           results: event.results,
         });
+
+        this.#printSpeechRecognitionInterimResults(event.results);
         this.#lastSpeechRecognitionResult = event.results;
       },
     );
