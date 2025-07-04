@@ -55,12 +55,12 @@ export class BibleVerseSearchForm extends HTMLElement {
         color: ${colorGray700};
       }
       label small {
-        font-size: .875rem;
-        line-height: calc(1.25 / .875);
+        font-size: 0.875rem;
+        line-height: calc(1.25 / 0.875);
       }
       .search-form-container {
         display: flex;
-        gap: .25rem;
+        gap: 0.25rem;
       }
       input {
         font: inherit;
@@ -69,8 +69,8 @@ export class BibleVerseSearchForm extends HTMLElement {
         line-height: 1.5rem;
         flex: 1;
         width: 100%;
-        margin-top: .25rem;
-        padding: .5rem .75rem;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.75rem;
         background-color: ${colorGray100};
         border: 1px solid transparent;
         border-radius: 0;

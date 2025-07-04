@@ -168,15 +168,15 @@ export class BibleTranslationSelector extends HTMLElement {
         line-height: 1.5rem;
         display: block;
         width: 100%;
-        margin-top: .25rem;
-        padding: .5rem 2.5rem .5rem .75rem;
+        margin-top: 0.25rem;
+        padding: 0.5rem 2.5rem 0.5rem 0.75rem;
         background-color: ${colorGray100};
         border: 1px solid transparent;
         border-radius: 0;
         print-color-adjust: exact;
         appearance: none;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-        background-position: right .5rem center;
+        background-position: right 0.5rem center;
         background-repeat: no-repeat;
         background-size: 1.5em 1.5em;
       }

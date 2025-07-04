@@ -50,7 +50,7 @@ body {
   min-height: 50rem;
   font-size: 1.125rem;
   line-height: 1.5555;
-  padding: 0 .5rem 4rem .5rem;
+  padding: 0 0.5rem 4rem 0.5rem;
 
   @media (width >= 40rem) {
     /* slate 400 */
