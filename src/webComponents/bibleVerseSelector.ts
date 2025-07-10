@@ -7,7 +7,12 @@ import {
 } from "../constants";
 import { buttonStyles, scriptureStyles } from "../sharedStyles";
 
-import type { BibleVerse } from "../types";
+import type {
+  BibleVerse,
+  CustomEventUpdateBibleVerse,
+  CustomEventNavigateToStep,
+  CustomEventSearchForBibleVerse,
+} from "../types";
 
 export class BibleVerseSelector extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
@@ -21,7 +26,7 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state", "selected-bible-id"];
+    return ["loading-state", "bible-id"];
   }
 
   get selectedBibleVerse(): BibleVerse | undefined {
@@ -33,14 +38,15 @@ export class BibleVerseSelector extends HTMLElement {
       ...value,
       content: removeExtraContentFromBibleVerse(value.content),
     };
-    const eventUpdateSelectedBible = new CustomEvent(
-      CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_VERSE,
-      {
-        detail: { selectedBibleVerse: this.#selectedBibleVerse },
-        bubbles: true,
-        composed: true,
-      },
-    );
+    const eventUpdateSelectedBible =
+      new CustomEvent<CustomEventUpdateBibleVerse>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
+        {
+          detail: { bibleVerse: this.#selectedBibleVerse },
+          bubbles: true,
+          composed: true,
+        },
+      );
     window.dispatchEvent(eventUpdateSelectedBible);
   }
 
@@ -69,8 +75,8 @@ export class BibleVerseSelector extends HTMLElement {
       ?.remove();
   }
 
-  get selectedBibleId() {
-    return this.getAttribute("selected-bible-id");
+  get bibleId() {
+    return this.getAttribute("bible-id");
   }
 
   get #searchFormContainerElement() {
@@ -98,13 +104,15 @@ export class BibleVerseSelector extends HTMLElement {
 
     window.addEventListener(
       CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
-      (event: Event) => {
+      (event: CustomEventInit<CustomEventSearchForBibleVerse>) => {
         if (this.loadingState === LOADING_STATES.PENDING) {
           return;
         }
-        this.#searchResultsContainerElement.innerHTML = "";
-        const customEvent = event as CustomEvent;
-        this.#searchForVerse(customEvent.detail.bibleVerseReference);
+        const bibleVerseReference = event.detail?.bibleVerseReference;
+        if (bibleVerseReference) {
+          this.#searchResultsContainerElement.innerHTML = "";
+          this.#searchForVerse(bibleVerseReference);
+        }
       },
     );
 
@@ -145,10 +153,10 @@ export class BibleVerseSelector extends HTMLElement {
     ) as HTMLButtonElement;
 
     buttonGoToStep2.onclick = () => {
-      const eventNavigateToStep2 = new CustomEvent(
+      const eventNavigateToStep2 = new CustomEvent<CustomEventNavigateToStep>(
         CUSTOM_EVENTS.NAVIGATE_TO_STEP,
         {
-          detail: { step: "2" },
+          detail: { stepNumber: 2 },
           bubbles: true,
           composed: true,
         },
@@ -160,12 +168,15 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   async #searchForVerse(query: string) {
+    if (!this.bibleId) {
+      return;
+    }
+
     try {
       this.loadingState = LOADING_STATES.PENDING;
-      const selectedBibleId = this.selectedBibleId as string;
 
       const response = await fetch(
-        `${MEMORIZE_SCRIPTURE_API_BASE_URL}/api/v1/bibles/${selectedBibleId}/search/verse-reference`,
+        `${MEMORIZE_SCRIPTURE_API_BASE_URL}/api/v1/bibles/${this.bibleId}/search/verse-reference`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -233,7 +244,7 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   attributeChangedCallback(name: string) {
-    if (name === "selected-bible-id") {
+    if (name === "bible-id") {
       return this.#renderSearchForm();
     }
     if (

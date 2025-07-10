@@ -1,6 +1,23 @@
 import { CUSTOM_EVENTS } from "../constants";
 
+import type { CustomEventNavigateToStep } from "../types";
+
 export class AccordionContainer extends HTMLElement {
+  #openStep(stepNumber: number) {
+    const detailsElement = this.querySelector<HTMLDetailsElement>(
+      `details:nth-child(${stepNumber})`,
+    );
+    if (detailsElement) {
+      detailsElement.open = true;
+    }
+  }
+
+  #closeAllSteps() {
+    this.querySelectorAll("details").forEach(
+      (detailElement) => (detailElement.open = false),
+    );
+  }
+
   connectedCallback() {
     this.onclick = (event: Event) => {
       const eventTarget = event.target as HTMLElement;
@@ -14,17 +31,16 @@ export class AccordionContainer extends HTMLElement {
       });
     };
 
-    window.addEventListener(CUSTOM_EVENTS.NAVIGATE_TO_STEP, (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const stepNumber = customEvent.detail.step;
-      [...this.children].map((detail) => {
-        detail.removeAttribute("open");
-      });
-      this.querySelector(`details:nth-child(${stepNumber})`)?.setAttribute(
-        "open",
-        "",
-      );
-    });
+    window.addEventListener(
+      CUSTOM_EVENTS.NAVIGATE_TO_STEP,
+      (event: CustomEventInit<CustomEventNavigateToStep>) => {
+        const stepNumber = event.detail?.stepNumber;
+        if (stepNumber) {
+          this.#closeAllSteps();
+          this.#openStep(stepNumber);
+        }
+      },
+    );
   }
 }
 

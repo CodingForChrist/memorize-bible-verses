@@ -1,12 +1,14 @@
 import { CUSTOM_EVENTS } from "../constants";
 
-import type { BibleTranslation, BibleVerse } from "../types";
+import type {
+  BibleTranslation,
+  BibleVerse,
+  CustomEventUpdateBibleTranslation,
+  CustomEventUpdateBibleVerse,
+  CustomEventUpdateRecitedBibleVerse,
+} from "../types";
 
 export class AppStateProvider extends HTMLElement {
-  selectedBibleId?: BibleTranslation["id"];
-  selectedBibleVerse?: BibleVerse;
-  recitedBibleVerse?: string;
-
   constructor() {
     super();
 
@@ -18,28 +20,28 @@ export class AppStateProvider extends HTMLElement {
     }
   }
 
-  #updateChildrenWithSelectedBibleId() {
-    const bibleVerseSelectorElement = this.querySelector(
-      "bible-verse-selector",
-    );
-    if (bibleVerseSelectorElement && this.selectedBibleId) {
-      bibleVerseSelectorElement.setAttribute(
-        "selected-bible-id",
-        this.selectedBibleId,
-      );
+  #updateChildrenWithBibleTranslation({
+    id,
+    name,
+    abbreviationLocal,
+  }: BibleTranslation) {
+    for (const element of [
+      this.querySelector("bible-verse-selector"),
+      this.querySelector("accuracy-report"),
+    ]) {
+      if (element) {
+        element.setAttribute("bible-id", id);
+        element.setAttribute("bible-name", name);
+        element.setAttribute("bible-abbreviation-local", abbreviationLocal);
+      }
     }
   }
 
-  #updateChildrenWithSelectedBibleVerse() {
-    if (!this.selectedBibleVerse) {
-      return;
-    }
-
-    const { id, reference, content } = this.selectedBibleVerse;
-    const reciteBibleVerseElement = this.querySelector("recite-bible-verse");
-    const accuracyReportElement = this.querySelector("accuracy-report");
-
-    for (const element of [reciteBibleVerseElement, accuracyReportElement]) {
+  #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
+    for (const element of [
+      this.querySelector("recite-bible-verse"),
+      this.querySelector("accuracy-report"),
+    ]) {
       if (element) {
         element.setAttribute("verse-id", id);
         element.setAttribute("verse-reference", reference);
@@ -48,13 +50,13 @@ export class AppStateProvider extends HTMLElement {
     }
   }
 
-  #updateChildrenWithRecitedBibleVerse() {
+  #updateChildrenWithRecitedBibleVerse(recitedBibleVerse: string) {
     const accuracyReportElement = this.querySelector("accuracy-report");
 
-    if (accuracyReportElement && this.recitedBibleVerse) {
+    if (accuracyReportElement) {
       accuracyReportElement.setAttribute(
         "recited-bible-verse",
-        this.recitedBibleVerse,
+        recitedBibleVerse,
       );
     }
   }
@@ -69,29 +71,32 @@ export class AppStateProvider extends HTMLElement {
 
   connectedCallback() {
     window.addEventListener(
-      CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_TRANSLATION,
-      (event: Event) => {
-        const customEvent = event as CustomEvent;
-        this.selectedBibleId = customEvent.detail.selectedBibleTranslation.id;
-        this.#updateChildrenWithSelectedBibleId();
+      CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
+      (event: CustomEventInit<CustomEventUpdateBibleTranslation>) => {
+        const bibleTranslation = event.detail?.bibleTranslation;
+        if (bibleTranslation) {
+          this.#updateChildrenWithBibleTranslation(bibleTranslation);
+        }
       },
     );
 
     window.addEventListener(
-      CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_VERSE,
-      (event: Event) => {
-        const customEvent = event as CustomEvent;
-        this.selectedBibleVerse = customEvent.detail.selectedBibleVerse;
-        this.#updateChildrenWithSelectedBibleVerse();
+      CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
+      (event: CustomEventInit<CustomEventUpdateBibleVerse>) => {
+        const bibleVerse = event.detail?.bibleVerse;
+        if (bibleVerse) {
+          this.#updateChildrenWithBibleVerse(bibleVerse);
+        }
       },
     );
 
     window.addEventListener(
       CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
-      (event: Event) => {
-        const customEvent = event as CustomEvent;
-        this.recitedBibleVerse = customEvent.detail.recitedBibleVerse;
-        this.#updateChildrenWithRecitedBibleVerse();
+      (event: CustomEventInit<CustomEventUpdateRecitedBibleVerse>) => {
+        const recitedBibleVerse = event.detail?.recitedBibleVerse;
+        if (recitedBibleVerse) {
+          this.#updateChildrenWithRecitedBibleVerse(recitedBibleVerse);
+        }
       },
     );
   }

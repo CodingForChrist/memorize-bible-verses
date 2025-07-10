@@ -6,6 +6,11 @@ import {
 
 import { buttonStyles } from "../sharedStyles";
 
+import type {
+  CustomEventUpdateRecitedBibleVerse,
+  CustomEventNavigateToStep,
+} from "../types";
+
 export class ReciteBibleVerse extends HTMLElement {
   speechRecognition: SpeechRecognition;
   #speechTranscript?: string;
@@ -47,10 +52,10 @@ export class ReciteBibleVerse extends HTMLElement {
 
     if (value === SPEECH_RECOGNITION_STATES.RESOLVED) {
       this.#hideLoadingSpinner();
-      const eventNavigateToStep2 = new CustomEvent(
+      const eventNavigateToStep2 = new CustomEvent<CustomEventNavigateToStep>(
         CUSTOM_EVENTS.NAVIGATE_TO_STEP,
         {
-          detail: { step: "3" },
+          detail: { stepNumber: 3 },
           bubbles: true,
           composed: true,
         },
@@ -114,14 +119,15 @@ export class ReciteBibleVerse extends HTMLElement {
 
     this.#speechTranscript = transcriptArray.join(" ");
 
-    const eventUpdateRecitedBibleVerse = new CustomEvent(
-      CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
-      {
-        detail: { recitedBibleVerse: this.#speechTranscript },
-        bubbles: true,
-        composed: true,
-      },
-    );
+    const eventUpdateRecitedBibleVerse =
+      new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
+        CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
+        {
+          detail: { recitedBibleVerse: this.#speechTranscript },
+          bubbles: true,
+          composed: true,
+        },
+      );
     window.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 
