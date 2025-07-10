@@ -5,7 +5,10 @@ import {
   type LoadingStates,
 } from "../constants";
 
-import type { BibleTranslation } from "../types";
+import type {
+  BibleTranslation,
+  CustomEventUpdateBibleTranslation,
+} from "../types";
 
 const supportedBibles = [
   {
@@ -52,14 +55,15 @@ export class BibleTranslationSelector extends HTMLElement {
 
   set selectedBibleTranslation(value: BibleTranslation) {
     this.#selectedBibleTranslation = value;
-    const eventUpdateSelectedBibleTranslation = new CustomEvent(
-      CUSTOM_EVENTS.UPDATE_SELECTED_BIBLE_TRANSLATION,
-      {
-        detail: { selectedBibleTranslation: value },
-        bubbles: true,
-        composed: true,
-      },
-    );
+    const eventUpdateSelectedBibleTranslation =
+      new CustomEvent<CustomEventUpdateBibleTranslation>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
+        {
+          detail: { bibleTranslation: value },
+          bubbles: true,
+          composed: true,
+        },
+      );
     window.dispatchEvent(eventUpdateSelectedBibleTranslation);
   }
 

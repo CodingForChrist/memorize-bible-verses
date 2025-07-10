@@ -1,6 +1,8 @@
 import { buttonStyles } from "../sharedStyles";
 import { CUSTOM_EVENTS } from "../constants";
 
+import type { CustomEventSearchForBibleVerse } from "../types";
+
 export class BibleVerseSearchForm extends HTMLElement {
   constructor() {
     super();
@@ -29,12 +31,15 @@ export class BibleVerseSearchForm extends HTMLElement {
         <span>Enter a bible verse reference</span><br>
         <small>e.g. "John 1:1" or "John 3:16-21"</small>
       </label>
-      <div class="search-form-container">
-        <input type="text" name="input-bible-verse"
-          value="${this.bibleVerseReference}" autofocus />
-        <button type="button" class="button-primary">Search</button>
-      </div>
+      <form class="search-form-container">
+        <input type="text" name="input-bible-verse" required autofocus>
+        <button type="submit" class="button-primary">Search</button>
+      </form>
     `;
+
+    if (this.bibleVerseReference) {
+      divElement.querySelector("input")!.value = this.bibleVerseReference;
+    }
 
     return divElement;
   }
@@ -87,24 +92,29 @@ export class BibleVerseSearchForm extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot!.querySelector("button")?.addEventListener("click", () => {
-      const inputElement = this.shadowRoot!.querySelector(
-        'input[name="input-bible-verse"]',
-      ) as HTMLInputElement;
-      this.bibleVerseReference = inputElement.value;
-      this.#dispatchSearchEvent();
-    });
+    this.shadowRoot!.querySelector("form")?.addEventListener(
+      "submit",
+      (event: Event) => {
+        event.preventDefault();
+        const inputElement = this.shadowRoot!.querySelector(
+          'input[name="input-bible-verse"]',
+        ) as HTMLInputElement;
+        this.bibleVerseReference = inputElement.value;
+        this.#dispatchSearchEvent();
+      },
+    );
   }
 
   #dispatchSearchEvent() {
-    const eventUpdateSelectedBible = new CustomEvent(
-      CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
-      {
-        detail: { bibleVerseReference: this.bibleVerseReference },
-        bubbles: true,
-        composed: true,
-      },
-    );
+    const eventUpdateSelectedBible =
+      new CustomEvent<CustomEventSearchForBibleVerse>(
+        CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
+        {
+          detail: { bibleVerseReference: this.bibleVerseReference },
+          bubbles: true,
+          composed: true,
+        },
+      );
     window.dispatchEvent(eventUpdateSelectedBible);
   }
 

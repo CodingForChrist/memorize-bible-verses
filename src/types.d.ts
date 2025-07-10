@@ -12,3 +12,23 @@ export type BibleVerse = {
   reference: string;
   content: string;
 };
+
+export type CustomEventUpdateBibleTranslation = {
+  bibleTranslation: BibleTranslation;
+};
+
+export type CustomEventUpdateBibleVerse = {
+  bibleVerse: BibleVerse;
+};
+
+export type CustomEventUpdateRecitedBibleVerse = {
+  recitedBibleVerse: string;
+};
+
+export type CustomEventNavigateToStep = {
+  stepNumber: number;
+};
+
+export type CustomEventSearchForBibleVerse = {
+  bibleVerseReference: string;
+};
