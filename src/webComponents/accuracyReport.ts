@@ -21,6 +21,14 @@ export class AccuracyReport extends HTMLElement {
     ) as HTMLDivElement;
   }
 
+  get bibleName() {
+    return this.getAttribute("bible-name");
+  }
+
+  get BibleAbbreviationLocal() {
+    return this.getAttribute("bible-abbreviation-local");
+  }
+
   get verseReference() {
     return this.getAttribute("verse-reference");
   }
@@ -94,6 +102,12 @@ export class AccuracyReport extends HTMLElement {
             <td>Grade</td>
             <td>
               ${gradeLetter} (${percentage}%)
+            </td>
+          </tr>
+          <tr>
+            <td>Bible</td>
+            <td>
+              ${this.bibleName} (${this.BibleAbbreviationLocal})
             </td>
           </tr>
           <tr>
