@@ -1,6 +1,7 @@
 import { diffWords } from "diff";
-import { convertBibleVerseToText } from "../formatBibleVerse";
+import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { scriptureStyles } from "../sharedStyles";
+import { improveSpeechRecognitionInput } from "../improveSpeechRecognitionInput";
 
 export class AccuracyReport extends HTMLElement {
   constructor() {
@@ -83,10 +84,21 @@ export class AccuracyReport extends HTMLElement {
     // add reference and strip out html characters
     const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
+    const improvedRecitedBibleVerse = improveSpeechRecognitionInput({
+      transcript: this.recitedBibleVerse,
+      verseReference: this.verseReference,
+      verseText,
+    });
+
+    console.log({
+      recitedBibleVerse: this.recitedBibleVerse,
+      improvedRecitedBibleVerse,
+    });
+
     const { textDifferenceDivContainer, errorCount, partCount } =
       getDifferenceBetweenVerseAndInput({
         originalBibleVerseText: verseText,
-        recitedBibleVerseText: this.recitedBibleVerse,
+        recitedBibleVerseText: improvedRecitedBibleVerse,
       });
 
     const { percentage, gradeLetter } = this.#calculateGrade({
@@ -129,7 +141,7 @@ export class AccuracyReport extends HTMLElement {
           <tr>
             <td>Recited Verse</td>
             <td>
-              ${this.recitedBibleVerse}
+              ${improvedRecitedBibleVerse}
             </td>
           </tr>
           <tr>

@@ -1,4 +1,4 @@
-import { removeExtraContentFromBibleVerse } from "../formatBibleVerse";
+import { removeExtraContentFromBibleVerse } from "../formatBibleVerseFromApi";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
