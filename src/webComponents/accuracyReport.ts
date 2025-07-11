@@ -43,13 +43,13 @@ export class AccuracyReport extends HTMLElement {
   }
 
   #calculateGrade({
-    partCount,
+    wordCount,
     errorCount,
   }: {
-    partCount: number;
+    wordCount: number;
     errorCount: number;
   }) {
-    const percentageInDecimal = (partCount - errorCount) / partCount;
+    const percentageInDecimal = (wordCount - errorCount) / wordCount;
     let gradeLetter: string;
 
     if (percentageInDecimal === 1) {
@@ -95,14 +95,14 @@ export class AccuracyReport extends HTMLElement {
       improvedRecitedBibleVerse,
     });
 
-    const { textDifferenceDivContainer, errorCount, partCount } =
+    const { textDifferenceDivContainer, errorCount, wordCount } =
       getDifferenceBetweenVerseAndInput({
         originalBibleVerseText: verseText,
         recitedBibleVerseText: improvedRecitedBibleVerse,
       });
 
     const { percentage, gradeLetter } = this.#calculateGrade({
-      partCount,
+      wordCount,
       errorCount,
     });
 
@@ -224,24 +224,27 @@ function getDifferenceBetweenVerseAndInput({
   });
 
   const divElement = document.createElement("div");
+  let wordCount = 0;
   let errorCount = 0;
+
   for (const part of difference) {
     // green for additions, red for deletions
     // grey for common parts
     let color = "grey";
 
-    if (part.added) {
-      // ignore punctuation
-      if (![".", ";", ",", "¶"].includes(part.value.trim())) {
-        color = "green";
-        errorCount++;
-      }
+    const isPunctuation = [".", ";", ",", "¶"].includes(part.value.trim());
+
+    if (part.added && !isPunctuation) {
+      color = "green";
+      errorCount += part.count;
     }
 
     if (part.removed) {
       color = "red";
-      errorCount++;
+      errorCount += part.count;
     }
+
+    wordCount += part.count;
 
     const span = document.createElement("span");
     span.style.color = color;
@@ -252,7 +255,7 @@ function getDifferenceBetweenVerseAndInput({
   return {
     textDifferenceDivContainer: divElement,
     errorCount: errorCount,
-    partCount: difference.length,
+    wordCount,
   };
 }
 
