@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import {
   removeExtraContentFromBibleVerse,
   convertBibleVerseToText,
-} from "./formatBibleVerse";
+} from "./formatBibleVerseFromApi";
 
 describe("removeExtraContentFromBibleVerse()", () => {
   test("should remove title, notes, and verse numbers from a single verse", () => {

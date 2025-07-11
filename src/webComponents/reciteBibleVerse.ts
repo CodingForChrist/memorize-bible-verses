@@ -5,6 +5,8 @@ import {
 } from "../constants";
 
 import { buttonStyles } from "../sharedStyles";
+import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
+import { improveSpeechRecognitionInput } from "../improveSpeechRecognitionInput";
 
 import type {
   CustomEventUpdateRecitedBibleVerse,
@@ -41,6 +43,10 @@ export class ReciteBibleVerse extends HTMLElement {
 
   get verseReference() {
     return this.getAttribute("verse-reference");
+  }
+
+  get verseContent() {
+    return this.getAttribute("verse-content");
   }
 
   get speechRecognitionState() {
@@ -179,7 +185,7 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #printSpeechRecognitionInterimResults(results: SpeechRecognitionResultList) {
-    if (!results) {
+    if (!results || !this.verseReference || !this.verseContent) {
       return;
     }
 
@@ -188,7 +194,12 @@ export class ReciteBibleVerse extends HTMLElement {
       interimTranscript += result[0].transcript;
     }
 
-    this.#interimResultsParagraphElement.innerText = interimTranscript;
+    this.#interimResultsParagraphElement.innerText =
+      improveSpeechRecognitionInput({
+        transcript: interimTranscript,
+        verseReference: this.verseReference,
+        verseText: convertBibleVerseToText(this.verseContent),
+      });
   }
 
   #renderErrorMessage(message: string) {
