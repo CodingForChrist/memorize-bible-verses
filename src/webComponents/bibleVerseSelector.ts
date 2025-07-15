@@ -194,6 +194,7 @@ export class BibleVerseSelector extends HTMLElement {
         const { id, reference, content } = json.data.passages[0] as BibleVerse;
         this.selectedBibleVerse = { id, reference, content };
         this.loadingState = LOADING_STATES.RESOLVED;
+        this.#renderTrackingPixel(json.meta.fumsId);
       } else {
         throw new Error("Failed to find the verse");
       }
@@ -209,6 +210,17 @@ export class BibleVerseSelector extends HTMLElement {
       <span slot="alert-error-message">${message}</span>
     `;
     this.#searchResultsContainerElement.appendChild(alertErrorElement);
+  }
+
+  #renderTrackingPixel(fumsId: string) {
+    const imageElement = document.createElement("img");
+    imageElement.width = 1;
+    imageElement.height = 1;
+    imageElement.style.width = "0";
+    imageElement.style.height = "0";
+    imageElement.src = `https://d3btgtzu3ctdwx.cloudfront.net/nf1?t=${fumsId}`;
+
+    this.#searchResultsContainerElement.appendChild(imageElement);
   }
 
   get #containerElements() {
