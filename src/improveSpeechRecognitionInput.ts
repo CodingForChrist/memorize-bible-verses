@@ -21,6 +21,12 @@ export function improveSpeechRecognitionInput({
     verseText,
   });
 
+  improvedTranscript = useDashForVerseRanges({
+    transcript: improvedTranscript,
+    verseReference,
+    verseText,
+  });
+
   return improvedTranscript;
 }
 
@@ -28,14 +34,33 @@ function addMissingColonsToBibleReference({
   transcript,
   verseReference,
 }: ImproveSpeechRecognitionInputOptions) {
+  let singleVerseReference = verseReference;
+  if (verseReference.includes("-")) {
+    // remove the verse range and just use the first verse
+    singleVerseReference = verseReference.split("-")[0];
+  }
+
   let improvedTranscript = transcript;
-  const verseReferenceWithoutColon = verseReference.replace(":", "");
-  if (transcript.includes(verseReferenceWithoutColon)) {
+  const singleVerseReferenceWithoutColon = singleVerseReference.replace(
+    ":",
+    "",
+  );
+  if (improvedTranscript.includes(singleVerseReferenceWithoutColon)) {
     improvedTranscript = improvedTranscript.replaceAll(
-      verseReferenceWithoutColon,
-      verseReference,
+      singleVerseReferenceWithoutColon,
+      singleVerseReference,
     );
   }
+
+  const singleVerseReferenceWithoutColonWithSpace =
+    singleVerseReference.replace(":", " ");
+  if (improvedTranscript.includes(singleVerseReferenceWithoutColonWithSpace)) {
+    improvedTranscript = improvedTranscript.replaceAll(
+      singleVerseReferenceWithoutColonWithSpace,
+      singleVerseReference,
+    );
+  }
+
   return improvedTranscript;
 }
 
@@ -71,7 +96,7 @@ function replaceSpelledOutNumbersInBibleReference({
   if (bookNumber && ordinalNumbersMap[bookNumber]) {
     const bookNumberAsOrdinalNumbers = ordinalNumbersMap[bookNumber];
 
-    bookNumberAsOrdinalNumbers.forEach((bookNumberAsOrdinalNumber) => {
+    for (const bookNumberAsOrdinalNumber of bookNumberAsOrdinalNumbers) {
       if (
         improvedTranscript.includes(`${bookNumberAsOrdinalNumber} ${bookName}`)
       ) {
@@ -80,7 +105,7 @@ function replaceSpelledOutNumbersInBibleReference({
           `${bookNumber} ${bookName}`,
         );
       }
-    });
+    }
   }
 
   if (spelledOutNumbersMap[chapter]) {
@@ -103,6 +128,32 @@ function replaceSpelledOutNumbersInBibleReference({
       improvedTranscript = improvedTranscript.replaceAll(
         `${bookName} ${chapter} ${verseNumberStartSpelledOut}`,
         `${bookName} ${chapter}:${verseNumberStart}`,
+      );
+    }
+  }
+
+  return improvedTranscript;
+}
+
+function useDashForVerseRanges({
+  transcript,
+  verseReference,
+}: ImproveSpeechRecognitionInputOptions) {
+  if (!verseReference.includes("-")) {
+    return transcript;
+  }
+
+  const rangeDividers = [" to ", " through ", "2"];
+  const singleVerseReference = verseReference.split("-")[0];
+  const { verseNumberEnd } = parseVerseReferenceIntoParts(verseReference);
+  let improvedTranscript = transcript;
+
+  for (const rangeDivider of rangeDividers) {
+    const verseReferenceWithDividerWord = `${singleVerseReference}${rangeDivider}${verseNumberEnd}`;
+    if (improvedTranscript.includes(verseReferenceWithDividerWord)) {
+      improvedTranscript = improvedTranscript.replaceAll(
+        verseReferenceWithDividerWord,
+        verseReference,
       );
     }
   }
