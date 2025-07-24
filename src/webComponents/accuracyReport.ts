@@ -55,7 +55,7 @@ export class AccuracyReport extends HTMLElement {
     if (percentageInDecimal === 1) {
       gradeLetter = "A+";
     } else if (percentageInDecimal >= 0.9) {
-      gradeLetter = "A+";
+      gradeLetter = "A";
     } else if (percentageInDecimal >= 0.8) {
       gradeLetter = "B";
     } else if (percentageInDecimal >= 0.7) {
@@ -223,31 +223,33 @@ function getDifferenceBetweenVerseAndInput({
     ignoreCase: true,
   });
 
+  const colorGreen = "#aceebb";
+  const colorRed = "#ffcecb";
+
   const divElement = document.createElement("div");
   let wordCount = 0;
   let errorCount = 0;
 
   for (const part of difference) {
     // green for additions, red for deletions
-    // grey for common parts
-    let color = "grey";
+    let color = "transparent";
 
     const isPunctuation = [".", ";", ",", "¶"].includes(part.value.trim());
 
     if (part.added && !isPunctuation) {
-      color = "green";
+      color = colorGreen;
       errorCount += part.count;
     }
 
     if (part.removed) {
-      color = "red";
+      color = colorRed;
       errorCount += part.count;
     }
 
     wordCount += part.count;
 
     const span = document.createElement("span");
-    span.style.color = color;
+    span.style.backgroundColor = color;
     span.appendChild(document.createTextNode(part.value));
     divElement.appendChild(span);
   }
