@@ -1,7 +1,7 @@
 import { diffWords } from "diff";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { scriptureStyles } from "../sharedStyles";
-import { improveSpeechRecognitionInput } from "../improveSpeechRecognitionInput";
+import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 
 export class AccuracyReport extends HTMLElement {
   constructor() {
@@ -84,7 +84,7 @@ export class AccuracyReport extends HTMLElement {
     // add reference and strip out html characters
     const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
-    const improvedRecitedBibleVerse = improveSpeechRecognitionInput({
+    const improvedRecitedBibleVerse = normalizeSpeechRecognitionInput({
       transcript: this.recitedBibleVerse,
       verseReference: this.verseReference,
       verseText,

@@ -6,7 +6,7 @@ import {
 
 import { buttonStyles } from "../sharedStyles";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
-import { improveSpeechRecognitionInput } from "../improveSpeechRecognitionInput";
+import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 
 import type {
   CustomEventUpdateRecitedBibleVerse,
@@ -195,7 +195,7 @@ export class ReciteBibleVerse extends HTMLElement {
     }
 
     this.#interimResultsParagraphElement.innerText =
-      improveSpeechRecognitionInput({
+      normalizeSpeechRecognitionInput({
         transcript: interimTranscript,
         verseReference: this.verseReference,
         verseText: convertBibleVerseToText(this.verseContent),
