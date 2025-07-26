@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
 
 import {
-  improveSpeechRecognitionInput,
+  normalizeSpeechRecognitionInput,
   parseVerseReferenceIntoParts,
-} from "./improveSpeechRecognitionInput";
+} from "./normalizeSpeechRecognitionInput";
 
-describe("improveSpeechRecognitionInput()", () => {
+describe("normalizeSpeechRecognitionInput()", () => {
   test("should add missing colon between chapter and verse number for a single verse", () => {
     const transcript =
       "Genesis 11 In the beginning God created the heavens and the earth Genesis 11";
@@ -13,7 +13,7 @@ describe("improveSpeechRecognitionInput()", () => {
       "Genesis 1:1 In the beginning God created the heavens and the earth Genesis 1:1";
 
     expect(
-      improveSpeechRecognitionInput({
+      normalizeSpeechRecognitionInput({
         transcript,
         verseReference: "Genesis 1:1",
         verseText: expectedOutput,
@@ -28,7 +28,7 @@ describe("improveSpeechRecognitionInput()", () => {
       "Galatians 5:22-23 But the fruit of the Spirit is love joy peace patience kindness goodness faithfulness gentleness and self control against such things there is no law Galatians 5:22-23";
 
     expect(
-      improveSpeechRecognitionInput({
+      normalizeSpeechRecognitionInput({
         transcript,
         verseReference: "Galatians 5:22-23",
         verseText: expectedOutput,
@@ -43,7 +43,7 @@ describe("improveSpeechRecognitionInput()", () => {
       "Genesis 1:1 In the beginning God created the heavens and the earth Genesis 1:1";
 
     expect(
-      improveSpeechRecognitionInput({
+      normalizeSpeechRecognitionInput({
         transcript,
         verseReference: "Genesis 1:1",
         verseText: expectedOutput,
@@ -58,7 +58,7 @@ describe("improveSpeechRecognitionInput()", () => {
       "2 Corinthians 5:7 For we walk by faith not by sight 2 Corinthians 5:7";
 
     expect(
-      improveSpeechRecognitionInput({
+      normalizeSpeechRecognitionInput({
         transcript,
         verseReference: "2 Corinthians 5:7",
         verseText: expectedOutput,
@@ -73,7 +73,7 @@ describe("improveSpeechRecognitionInput()", () => {
       "Genesis 1:1-2 In the beginning God created the heavens and the earth Now the earth was formless and void and darkness was over the surface of the deep and the Spirit of God was hovering over the surface of the waters Genesis 1:1-2";
 
     expect(
-      improveSpeechRecognitionInput({
+      normalizeSpeechRecognitionInput({
         transcript,
         verseReference: "Genesis 1:1-2",
         verseText: expectedOutput,

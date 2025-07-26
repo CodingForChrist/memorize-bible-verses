@@ -1,14 +1,14 @@
-type ImproveSpeechRecognitionInputOptions = {
+type NormalizeSpeechRecognitionInputOptions = {
   transcript: string;
   verseReference: string;
   verseText: string;
 };
 
-export function improveSpeechRecognitionInput({
+export function normalizeSpeechRecognitionInput({
   transcript,
   verseReference,
   verseText,
-}: ImproveSpeechRecognitionInputOptions) {
+}: NormalizeSpeechRecognitionInputOptions) {
   let improvedTranscript = replaceSpelledOutNumbersInBibleReference({
     transcript,
     verseReference,
@@ -33,7 +33,7 @@ export function improveSpeechRecognitionInput({
 function addMissingColonsToBibleReference({
   transcript,
   verseReference,
-}: ImproveSpeechRecognitionInputOptions) {
+}: NormalizeSpeechRecognitionInputOptions) {
   let singleVerseReference = verseReference;
   if (verseReference.includes("-")) {
     // remove the verse range and just use the first verse
@@ -67,7 +67,7 @@ function addMissingColonsToBibleReference({
 function replaceSpelledOutNumbersInBibleReference({
   transcript,
   verseReference,
-}: ImproveSpeechRecognitionInputOptions) {
+}: NormalizeSpeechRecognitionInputOptions) {
   // safari spells out numbers less than ten
   const spelledOutNumbersMap: Record<string, string> = {
     1: "one",
@@ -138,7 +138,7 @@ function replaceSpelledOutNumbersInBibleReference({
 function useDashForVerseRanges({
   transcript,
   verseReference,
-}: ImproveSpeechRecognitionInputOptions) {
+}: NormalizeSpeechRecognitionInputOptions) {
   if (!verseReference.includes("-")) {
     return transcript;
   }
