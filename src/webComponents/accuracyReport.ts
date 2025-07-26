@@ -1,7 +1,7 @@
-import { diffWords } from "diff";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { scriptureStyles } from "../sharedStyles";
 import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
+import { getTextDifferenceForBibleVerse } from "../textDifferenceForBibleVerse";
 
 export class AccuracyReport extends HTMLElement {
   constructor() {
@@ -96,7 +96,7 @@ export class AccuracyReport extends HTMLElement {
     });
 
     const { textDifferenceDivContainer, errorCount, wordCount } =
-      getDifferenceBetweenVerseAndInput({
+      getTextDifferenceForBibleVerse({
         originalBibleVerseText: verseText,
         recitedBibleVerseText: improvedRecitedBibleVerse,
       });
@@ -208,57 +208,6 @@ export class AccuracyReport extends HTMLElement {
     }
     this.#renderReport();
   }
-}
-
-type GetDifferenceBetweenVerseAndInputOptions = {
-  originalBibleVerseText: string;
-  recitedBibleVerseText: string;
-};
-
-function getDifferenceBetweenVerseAndInput({
-  originalBibleVerseText,
-  recitedBibleVerseText,
-}: GetDifferenceBetweenVerseAndInputOptions) {
-  const difference = diffWords(recitedBibleVerseText, originalBibleVerseText, {
-    ignoreCase: true,
-  });
-
-  const colorGreen = "#aceebb";
-  const colorRed = "#ffcecb";
-
-  const divElement = document.createElement("div");
-  let wordCount = 0;
-  let errorCount = 0;
-
-  for (const part of difference) {
-    // green for additions, red for deletions
-    let color = "transparent";
-
-    const isPunctuation = [".", ";", ",", "¶"].includes(part.value.trim());
-
-    if (part.added && !isPunctuation) {
-      color = colorGreen;
-      errorCount += part.count;
-    }
-
-    if (part.removed) {
-      color = colorRed;
-      errorCount += part.count;
-    }
-
-    wordCount += part.count;
-
-    const span = document.createElement("span");
-    span.style.backgroundColor = color;
-    span.appendChild(document.createTextNode(part.value));
-    divElement.appendChild(span);
-  }
-
-  return {
-    textDifferenceDivContainer: divElement,
-    errorCount: errorCount,
-    wordCount,
-  };
 }
 
 window.customElements.define("accuracy-report", AccuracyReport);
