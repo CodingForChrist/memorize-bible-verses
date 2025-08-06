@@ -5,7 +5,7 @@ type GetTextDifferenceForBibleVerseOptions = {
   recitedBibleVerseText: string;
 };
 
-const punctuationCharacters = [".", ";", ",", "!", "¶"];
+const punctuationCharacters = [".", ";", ",", "!", "¶", "“"];
 
 export function getTextDifferenceForBibleVerse({
   originalBibleVerseText,

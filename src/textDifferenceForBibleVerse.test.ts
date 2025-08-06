@@ -17,6 +17,20 @@ describe("getTextDifferenceForBibleVerse()", () => {
         wordCount: 36,
       }),
     );
+
+    expect(
+      getTextDifferenceForBibleVerse({
+        originalBibleVerseText:
+          "John 3:16 “For God so loved the world, that He gave His only Son, so that everyone who believes in Him will not perish, but have eternal life. John 3:16",
+        recitedBibleVerseText:
+          "John 3:16 For God so loved the world that He gave His only Son so that everyone who believes in Him will not perish but have eternal life John 3:16",
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        errorCount: 0,
+        wordCount: 39,
+      }),
+    );
   });
 
   test("should return expected error count", () => {
