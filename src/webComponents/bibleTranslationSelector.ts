@@ -12,6 +12,10 @@ import type {
 
 const supportedBibles = [
   {
+    id: "a761ca71e0b3ddcf-01",
+    abbreviationLocal: "NASB",
+  },
+  {
     id: "bba9f40183526463-01",
     abbreviationLocal: "BSB",
   },
@@ -29,7 +33,7 @@ const supportedBibles = [
   },
 ];
 
-// default to BSB
+// default to NASB
 const defaultBible = supportedBibles[0];
 
 export class BibleTranslationSelector extends HTMLElement {
