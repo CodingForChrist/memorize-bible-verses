@@ -1,0 +1,19 @@
+{
+  "name": "Memorize Scripture App",
+  "short_name": "",
+  "icons": [
+    {
+      "src": "/favicon/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#013047",
+  "background_color": "#F7FBF5",
+  "display": "standalone"
+}
