@@ -31,8 +31,7 @@ export class BibleVerseBlockquote extends HTMLElement {
       blockquote {
         background-color: transparent;
         border: 0;
-        border-left: 1px solid var(--color-light-gray);
-        padding: 1rem;
+        padding: 0;
         margin: 0;
       }
     `;

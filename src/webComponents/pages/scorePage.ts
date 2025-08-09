@@ -56,7 +56,7 @@ export class ScorePage extends HTMLElement {
         background-color: var(--color-primary-mint-cream);
         border-radius: 1.5rem;
         color: var(--color-gray);
-        padding: 2rem;
+        padding: 1.5rem;
         text-align: left;
         min-height: 20rem;
         margin: 2rem 1rem;

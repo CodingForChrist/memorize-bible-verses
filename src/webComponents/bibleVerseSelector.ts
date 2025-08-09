@@ -206,7 +206,7 @@ export class BibleVerseSelector extends HTMLElement {
       display: block;
     }
     bible-verse-blockquote {
-      margin: 2rem 0;
+      margin: 4rem 0;
     }
     alert-error {
       margin-top: 2rem;
