@@ -78,7 +78,7 @@ export class InstructionsPage extends HTMLElement {
         margin-bottom: 2rem;
       }
       branded-button {
-        margin-top: 2rem;
+        margin-top: 1rem;
         min-width: 10rem;
       }
     `;
