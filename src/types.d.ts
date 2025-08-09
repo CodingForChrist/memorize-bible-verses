@@ -29,6 +29,10 @@ export type CustomEventNavigateToStep = {
   stepNumber: number;
 };
 
+export type CustomEventNavigateToPage = {
+  pageName: string;
+};
+
 export type CustomEventSearchForBibleVerse = {
   bibleVerseReference: string;
 };

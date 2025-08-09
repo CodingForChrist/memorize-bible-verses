@@ -6,6 +6,7 @@ import type {
   CustomEventUpdateBibleTranslation,
   CustomEventUpdateBibleVerse,
   CustomEventUpdateRecitedBibleVerse,
+  CustomEventNavigateToPage,
 } from "../types";
 
 export class AppStateProvider extends HTMLElement {
@@ -27,6 +28,9 @@ export class AppStateProvider extends HTMLElement {
   }: BibleTranslation) {
     for (const element of [
       this.querySelector("bible-verse-selector"),
+      this.querySelector("search-advanced-page")?.shadowRoot?.querySelector(
+        "bible-verse-selector",
+      ),
       this.querySelector("accuracy-report"),
     ]) {
       if (element) {
@@ -69,6 +73,33 @@ export class AppStateProvider extends HTMLElement {
     this.appendChild(alertErrorElement);
   }
 
+  #updatePageNavigation(pageName: string) {
+    for (const element of [
+      this.querySelector<HTMLElement>("instructions-page"),
+      this.querySelector<HTMLElement>("search-advanced-page"),
+    ]) {
+      if (!element) {
+        return;
+      }
+      element.style.display =
+        element === this.querySelector(pageName) ? "block" : "none";
+    }
+
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("page-name")) {
+      url.searchParams.set("page-name", pageName);
+    } else {
+      url.searchParams.append("page-name", pageName);
+    }
+    history.pushState({}, "", url);
+  }
+
+  #navigateToPageBasedOnURLParam() {
+    const url = new URL(window.location.href);
+    const pageName = url.searchParams.get("page-name") || "instructions-page";
+    this.#updatePageNavigation(pageName);
+  }
+
   connectedCallback() {
     window.addEventListener(
       CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
@@ -99,6 +130,22 @@ export class AppStateProvider extends HTMLElement {
         }
       },
     );
+
+    window.addEventListener(
+      CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+      (event: CustomEventInit<CustomEventNavigateToPage>) => {
+        const pageName = event.detail?.pageName;
+        if (pageName) {
+          this.#updatePageNavigation(pageName);
+        }
+      },
+    );
+
+    addEventListener("popstate", () => {
+      this.#navigateToPageBasedOnURLParam();
+    });
+
+    this.#navigateToPageBasedOnURLParam();
   }
 }
 

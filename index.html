@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>︎Memorize Bible Verses</title>
+    <meta
+      name="description"
+      content="Use your device's microphone to practice memorizing bible verses"
+    />
     <link rel="icon" href="/favicon/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon/favicon-192x192.png" />
@@ -11,27 +15,9 @@
   </head>
   <body>
     <div id="app-container">
-      <header>
-        <h1>Memorize Bible Verses</h1>
-        <p>Use your device's microphone to practice memorizing scripture.</p>
-      </header>
-
       <app-state-provider>
-        <accordion-container>
-          <details open>
-            <summary>Step 1: Select scripture</summary>
-            <bible-translation-selector></bible-translation-selector>
-            <bible-verse-selector></bible-verse-selector>
-          </details>
-          <details>
-            <summary>Step 2: Recite scripture</summary>
-            <recite-bible-verse></recite-bible-verse>
-          </details>
-          <details>
-            <summary>Step 3: See how well you did</summary>
-            <accuracy-report></accuracy-report>
-          </details>
-        </accordion-container>
+        <instructions-page></instructions-page>
+        <search-advanced-page style="display: none"></search-advanced-page>
       </app-state-provider>
     </div>
 

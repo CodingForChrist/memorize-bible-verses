@@ -130,7 +130,11 @@ export class BibleTranslationSelector extends HTMLElement {
       <label>
         <span>Select a bible translation</span>
         <select name="select-bible-translation">
-        ${this.bibleTranslations.map(({ id, name, abbreviationLocal }) => `<option value="${id}">${name} (${abbreviationLocal})</option>`)}
+        ${this.bibleTranslations.map(({ id, name, abbreviationLocal }) => {
+          const formattedName =
+            abbreviationLocal === "NASB" ? name.replace("2020", "") : "";
+          return `<option value="${id}">${formattedName} (${abbreviationLocal})</option>`;
+        })}
         </select>
       </label>
       `;
@@ -154,11 +158,6 @@ export class BibleTranslationSelector extends HTMLElement {
 
   get #styleElement() {
     const styleElement = document.createElement("style");
-    const colorGray100 = "oklch(96.7% .003 264.542)";
-    const colorGray500 = "oklch(55.1% .027 264.364)";
-    const colorGray700 = "oklch(37.3% .034 259.733)";
-    const colorWhite = "#fff";
-
     const css = `
       :host {
         display: block;
@@ -166,21 +165,17 @@ export class BibleTranslationSelector extends HTMLElement {
       label {
         display: block;
       }
-      label span {
-        color: ${colorGray700};
-      }
       select {
         font: inherit;
         color: inherit;
-        font-size: 1rem;
         line-height: 1.5rem;
         display: block;
         width: 100%;
         margin-top: 0.25rem;
         padding: 0.5rem 2.5rem 0.5rem 0.75rem;
-        background-color: ${colorGray100};
-        border: 1px solid transparent;
-        border-radius: 0;
+        background-color: var(--color-primary-mint-cream);
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
         print-color-adjust: exact;
         appearance: none;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -189,9 +184,8 @@ export class BibleTranslationSelector extends HTMLElement {
         background-size: 1.5em 1.5em;
       }
       select:focus {
-        background-color: ${colorWhite};
-        border-color: ${colorGray500};
-        outline: 2px solid #0000;
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
       }
     `;
     styleElement.textContent = css;

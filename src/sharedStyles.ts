@@ -25,9 +25,8 @@ export const buttonStyles = `
 export const scriptureStyles = `
   .scripture-styles {
     /* custom update - comment out font size to match app styling */
-    /* font-size: 18px; */
-    /* custom update - use tinos google font */
-    font-family: "Tinos", "Noto Serif", serif;
+    font-size: 18px;
+    font-family: "Noto Serif", serif;
     line-height: 25px;
     /* custom update - comment out font color to match app styling */
     /* color: #111; */

@@ -1,4 +1,5 @@
 import "./css/styles.css";
+import "./css/fonts.css";
 
 import "./webComponents/appStateProvider";
 import "./webComponents/accordionContainer";
@@ -18,3 +19,7 @@ import "./webComponents/reciteBibleVerse";
 
 // step 3 component
 import "./webComponents/accuracyReport";
+
+import "./webComponents/pages/instructionsPage";
+import "./webComponents/pages/searchAdvancedPage";
+import "./webComponents/brandedButton";

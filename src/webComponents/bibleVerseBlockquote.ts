@@ -22,8 +22,6 @@ export class BibleVerseBlockquote extends HTMLElement {
 
   get #styleElement() {
     const styleElement = document.createElement("style");
-    const colorGray50 = "oklch(98.5% 0.002 247.839)";
-    const colorGray300 = "oklch(87.2% 0.01 258.338)";
     const css = `
       :host {
         display: block;
@@ -31,9 +29,9 @@ export class BibleVerseBlockquote extends HTMLElement {
         font-size: 1.25rem;
       }
       blockquote {
-        background-color: ${colorGray50};
+        background-color: transparent;
         border: 0;
-        border-left: 4px solid ${colorGray300};
+        border-left: 1px solid var(--color-light-gray);
         padding: 1rem;
         margin: 0;
       }
