@@ -1,4 +1,3 @@
-import { buttonStyles } from "../sharedStyles";
 import { CUSTOM_EVENTS } from "../constants";
 
 import type { CustomEventSearchForBibleVerse } from "../types";
@@ -33,7 +32,7 @@ export class BibleVerseSearchForm extends HTMLElement {
       </label>
       <form class="search-form-container">
         <input type="text" name="input-bible-verse" required autofocus>
-        <button type="submit" class="button-primary">Search</button>
+        <branded-button type="submit" text-content="Search"></branded-button>
       </form>
     `;
 
@@ -46,46 +45,44 @@ export class BibleVerseSearchForm extends HTMLElement {
 
   get #styleElement() {
     const styleElement = document.createElement("style");
-    const colorGray100 = "oklch(96.7% .003 264.542)";
-    const colorGray500 = "oklch(55.1% .027 264.364)";
-    const colorGray700 = "oklch(37.3% .034 259.733)";
-    const colorWhite = "#fff";
-
     const css = `
       :host {
         display: block;
       }
       label {
         display: block;
-        color: ${colorGray700};
       }
       label small {
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         line-height: calc(1.25 / 0.875);
       }
       .search-form-container {
         display: flex;
         gap: 0.25rem;
+        margin-top: 0.25rem;
       }
       input {
         font: inherit;
         color: inherit;
-        font-size: 1rem;
         line-height: 1.5rem;
         flex: 1;
         width: 100%;
-        margin-top: 0.25rem;
         padding: 0.5rem 0.75rem;
-        background-color: ${colorGray100};
-        border: 1px solid transparent;
-        border-radius: 0;
+        background-color: var(--color-primary-mint-cream);
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
       }
       input:focus, input:active {
-        background-color: ${colorWhite};
-        border-color: ${colorGray500};
-        outline: 2px solid #0000;
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
       }
-      ${buttonStyles}
+      input:-webkit-autofill,
+      input:-webkit-autofill:focus {
+        transition: background-color 0s 600000s, color 0s 600000s !important;
+      }
+      branded-button {
+        min-width: 5rem;
+      }
     `;
     styleElement.textContent = css;
     return styleElement;

@@ -3,12 +3,12 @@
   "short_name": "",
   "icons": [
     {
-      "src": "/favicon/favicon-96x96.png",
+      "src": "/memorize-scripture-web-app/favicon/favicon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "/favicon/favicon-192x192.png",
+      "src": "/memorize-scripture-web-app/favicon/favicon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }

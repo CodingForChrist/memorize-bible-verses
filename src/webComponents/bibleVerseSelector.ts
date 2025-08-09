@@ -5,12 +5,11 @@ import {
   MEMORIZE_SCRIPTURE_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
-import { buttonStyles, scriptureStyles } from "../sharedStyles";
+import { scriptureStyles } from "../sharedStyles";
 
 import type {
   BibleVerse,
   CustomEventUpdateBibleVerse,
-  CustomEventNavigateToStep,
   CustomEventSearchForBibleVerse,
 } from "../types";
 
@@ -131,40 +130,7 @@ export class BibleVerseSelector extends HTMLElement {
       </span>
     `;
 
-    this.#searchResultsContainerElement.append(
-      bibleVerseBlockquoteElement,
-      this.#buttonElementToNavigateToStep2,
-    );
-  }
-
-  get #buttonElementToNavigateToStep2() {
-    const html = `
-      <p>Ready to test your memorization skills?</p>
-      <button type="button" class="button-primary">
-        Proceed to step 2
-      </button>
-    `;
-
-    const divContainer = document.createElement("div");
-    divContainer.innerHTML = html;
-
-    const buttonGoToStep2 = divContainer.querySelector(
-      "button",
-    ) as HTMLButtonElement;
-
-    buttonGoToStep2.onclick = () => {
-      const eventNavigateToStep2 = new CustomEvent<CustomEventNavigateToStep>(
-        CUSTOM_EVENTS.NAVIGATE_TO_STEP,
-        {
-          detail: { stepNumber: 2 },
-          bubbles: true,
-          composed: true,
-        },
-      );
-      window.dispatchEvent(eventNavigateToStep2);
-    };
-
-    return divContainer;
+    this.#searchResultsContainerElement.append(bibleVerseBlockquoteElement);
   }
 
   async #searchForVerse(query: string) {
@@ -248,7 +214,6 @@ export class BibleVerseSelector extends HTMLElement {
     p {
       margin: 1rem 0;
     }
-    ${buttonStyles}
     ${scriptureStyles}
     `;
     styleElement.textContent = css;

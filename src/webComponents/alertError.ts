@@ -32,6 +32,7 @@ export class AlertError extends HTMLElement {
       .alert-error-container {
         background-color: ${colorRed100};
         border: 1px solid ${colorRed300};
+        border-radius: 1.5rem;
         color: ${colorRed800};
         padding: 1rem;
       }
