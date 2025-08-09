@@ -5,7 +5,7 @@ import {
   MEMORIZE_SCRIPTURE_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
-import { buttonStyles, scriptureStyles } from "../sharedStyles";
+import { scriptureStyles } from "../sharedStyles";
 
 import type {
   BibleVerse,
@@ -214,7 +214,6 @@ export class BibleVerseSelector extends HTMLElement {
     p {
       margin: 1rem 0;
     }
-    ${buttonStyles}
     ${scriptureStyles}
     `;
     styleElement.textContent = css;

@@ -127,16 +127,12 @@ export class BibleTranslationSelector extends HTMLElement {
   #renderSelectElement() {
     const divContainerElement = document.createElement("div");
     divContainerElement.innerHTML = `
-      <label>
-        <span>Select a bible translation</span>
-        <select name="select-bible-translation">
-        ${this.bibleTranslations.map(({ id, name, abbreviationLocal }) => {
-          const formattedName =
-            abbreviationLocal === "NASB" ? name.replace("2020", "") : "";
-          return `<option value="${id}">${formattedName} (${abbreviationLocal})</option>`;
-        })}
-        </select>
-      </label>
+      <select name="select-bible-translation">
+      ${this.bibleTranslations.map(
+        ({ id, name, abbreviationLocal }) =>
+          `<option value="${id}">${abbreviationLocal} - ${name}</option>`,
+      )}
+      </select>
       `;
     const selectElement = divContainerElement.querySelector(
       'select[name="select-bible-translation"]',
@@ -160,9 +156,6 @@ export class BibleTranslationSelector extends HTMLElement {
     const styleElement = document.createElement("style");
     const css = `
       :host {
-        display: block;
-      }
-      label {
         display: block;
       }
       select {

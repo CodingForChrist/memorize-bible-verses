@@ -25,10 +25,6 @@ export type CustomEventUpdateRecitedBibleVerse = {
   recitedBibleVerse: string;
 };
 
-export type CustomEventNavigateToStep = {
-  stepNumber: number;
-};
-
 export type CustomEventNavigateToPage = {
   pageName: string;
 };

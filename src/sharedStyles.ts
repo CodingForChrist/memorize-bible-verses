@@ -1,26 +1,3 @@
-const colorBlue600 = "oklch(54.6% .245 262.881)";
-const colorBlue800 = "oklch(42.4% .199 265.638)";
-const colorWhite = "#fff";
-
-export const buttonStyles = `
-  .button-primary {
-    display: inline-block;
-    font: inherit;
-    font-weight: 600;
-    font-size: .875rem;
-    line-height: 1.5rem;
-    background-color: ${colorBlue600};
-    color: ${colorWhite};
-    margin-top: .25rem;
-    padding: .5rem 1rem;
-    cursor: pointer;
-    border: 0;
-  }
-  .button-primary:hover {
-    background-color: ${colorBlue800};
-  }
-`;
-
 // copied from https://github.com/americanbible/scripture-styles
 export const scriptureStyles = `
   .scripture-styles {

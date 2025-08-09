@@ -24,7 +24,6 @@ export class LoadingSpinner extends HTMLElement {
 
   get #styleElement() {
     const styleElement = document.createElement("style");
-    const colorStone700 = "oklch(37.4% 0.01 67.558)";
     const css = `
       :host {
         display: block;
@@ -37,7 +36,7 @@ export class LoadingSpinner extends HTMLElement {
       .loading-spinner {
         height: 26px;
         width: 26px;
-        border: 3px solid ${colorStone700};
+        border: 3px solid var(--color-gray);
         border-top-color: transparent;
         border-radius: calc(infinity * 1px);
         animation: spin 1s linear infinite;

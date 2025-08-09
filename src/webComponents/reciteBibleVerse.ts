@@ -4,14 +4,10 @@ import {
   type SpeechRecognitionStates,
 } from "../constants";
 
-import { buttonStyles } from "../sharedStyles";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 
-import type {
-  CustomEventUpdateRecitedBibleVerse,
-  CustomEventNavigateToStep,
-} from "../types";
+import type { CustomEventUpdateRecitedBibleVerse } from "../types";
 
 export class ReciteBibleVerse extends HTMLElement {
   speechRecognition: SpeechRecognition;
@@ -56,25 +52,10 @@ export class ReciteBibleVerse extends HTMLElement {
   set speechRecognitionState(value: SpeechRecognitionStates) {
     this.#speechRecognitionState = value;
 
-    if (value === SPEECH_RECOGNITION_STATES.RESOLVED) {
-      this.#hideLoadingSpinner();
-      const eventNavigateToStep2 = new CustomEvent<CustomEventNavigateToStep>(
-        CUSTOM_EVENTS.NAVIGATE_TO_STEP,
-        {
-          detail: { stepNumber: 3 },
-          bubbles: true,
-          composed: true,
-        },
-      );
-      window.dispatchEvent(eventNavigateToStep2);
-      this.#recordVoiceButton.textContent =
-        "Start recording with microphone input";
-      this.#interimResultsParagraphElement.innerText = "";
-    } else if (value === SPEECH_RECOGNITION_STATES.REJECTED) {
+    if (value === SPEECH_RECOGNITION_STATES.REJECTED) {
       this.#hideLoadingSpinner();
       this.#renderErrorMessage("Failed to use microphone input");
-      this.#recordVoiceButton.textContent =
-        "Start recording with microphone input";
+      this.#showTryAgainButton();
       this.#interimResultsParagraphElement.innerText = "";
     }
   }
@@ -91,16 +72,16 @@ export class ReciteBibleVerse extends HTMLElement {
     ) as HTMLDivElement;
   }
 
+  get #recordingControlsContainerElement() {
+    return this.shadowRoot!.querySelector(
+      "#recording-controls-container",
+    ) as HTMLDivElement;
+  }
+
   get #interimResultsParagraphElement() {
     return this.#resultsContainerElement.querySelector(
       "p",
     ) as HTMLParagraphElement;
-  }
-
-  get #recordVoiceButton() {
-    return this.#initialContentContainerElement.querySelector(
-      "button",
-    ) as HTMLButtonElement;
   }
 
   #showLoadingSpinner() {
@@ -138,32 +119,33 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #renderInitialContent() {
+    // clear out existing content
+    this.#interimResultsParagraphElement.innerText = "";
+    this.#recordingControlsContainerElement.innerHTML = "";
+
     if (!this.verseReference) {
       return this.#renderErrorMessage(
-        "Go back to Step 1 and select a bible verse reference.",
+        "Go back to Step 1 and select a bible verse.",
       );
     }
 
     this.#initialContentContainerElement.innerHTML = `
-      <p>Click the button below and recite ${this.verseReference}</p>
-      <button class="button-primary">Start recording with microphone input</button>
+      <h2>${this.verseReference}</h2>
+      <branded-button
+        id="button-record"
+        type="button"
+        brand="secondary"
+        text-content="&#9679; RECORD">
+      </branded-button>
     `;
 
     this.#initialContentContainerElement
-      .querySelector("button")!
+      .querySelector("#button-record")!
       .addEventListener("click", this.#recordVoiceButtonClick.bind(this));
   }
 
-  #recordVoiceButtonClick(event: Event) {
-    const buttonElement = event.target as HTMLButtonElement;
-
-    const {
-      INITIAL,
-      WAITING_FOR_MICROPHONE_ACCESS,
-      LISTENING,
-      RESOLVED,
-      REJECTED,
-    } = SPEECH_RECOGNITION_STATES;
+  #recordVoiceButtonClick() {
+    const { INITIAL, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
 
     if (
       ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
@@ -173,14 +155,56 @@ export class ReciteBibleVerse extends HTMLElement {
       this.speechRecognition.start();
       this.speechRecognitionState =
         SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
-      buttonElement.textContent = "Click again to stop recording";
       this.#showLoadingSpinner();
-    } else if (this.speechRecognitionState === LISTENING) {
+      this.#showStopButton();
+    }
+  }
+
+  #showStopButton() {
+    this.#recordingControlsContainerElement.innerHTML = `
+      <branded-button
+        id="button-stop"
+        type="button"
+        brand="secondary"
+        text-content="&#9632; Stop">
+      </branded-button>
+    `;
+
+    this.#recordingControlsContainerElement
+      .querySelector("#button-stop")!
+      .addEventListener("click", this.#stopRecordingButtonClick.bind(this));
+  }
+
+  #showTryAgainButton() {
+    this.#recordingControlsContainerElement.innerHTML = `
+      <branded-button
+        id="button-try-again"
+        type="button"
+        brand="secondary"
+        text-content="Try Again">
+      </branded-button>
+    `;
+
+    this.#recordingControlsContainerElement
+      .querySelector("#button-try-again")!
+      .addEventListener("click", () => {
+        this.#interimResultsParagraphElement.innerText = "";
+        this.#recordVoiceButtonClick();
+      });
+  }
+
+  #stopRecordingButtonClick() {
+    const { WAITING_FOR_MICROPHONE_ACCESS, LISTENING } =
+      SPEECH_RECOGNITION_STATES;
+
+    if (this.speechRecognitionState === LISTENING) {
       this.speechRecognition.stop();
-      buttonElement.textContent = "Recording complete!";
+      this.#hideLoadingSpinner();
+      this.#showTryAgainButton();
     } else if (this.speechRecognitionState === WAITING_FOR_MICROPHONE_ACCESS) {
       this.speechRecognition.stop();
       this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
+      this.#showTryAgainButton();
     }
   }
 
@@ -214,11 +238,13 @@ export class ReciteBibleVerse extends HTMLElement {
 
   get #containerElements() {
     const divElement = document.createElement("div");
+    divElement.id = "parent-container";
     divElement.innerHTML = `
       <div id="initial-content-container"></div>
       <div id="results-container">
         <p></p>
       </div>
+      <div id="recording-controls-container"></div>
     `;
 
     return divElement;
@@ -227,16 +253,32 @@ export class ReciteBibleVerse extends HTMLElement {
   get #styleElement() {
     const styleElement = document.createElement("style");
     const css = `
-      :host {
-        display: block;
+      #parent-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
       }
-      p {
-        margin: 1rem 0;
+      #initial-content-container {
+        text-align: center;
       }
-      .button-primary {
-        width: 100%;
+      #results-container {
+        min-height: 14rem;
       }
-      ${buttonStyles}
+      #recording-controls-container {
+        text-align: center;
+      }
+      branded-button {
+        min-width: 7rem;
+      }
+      h2 {
+        margin-top: 0;
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+      }
+      alert-error {
+        text-align: left;
+      }
     `;
     styleElement.textContent = css;
     return styleElement;

@@ -27,11 +27,12 @@ export class AppStateProvider extends HTMLElement {
     abbreviationLocal,
   }: BibleTranslation) {
     for (const element of [
-      this.querySelector("bible-verse-selector"),
       this.querySelector("search-advanced-page")?.shadowRoot?.querySelector(
         "bible-verse-selector",
       ),
-      this.querySelector("accuracy-report"),
+      this.querySelector("score-page")?.shadowRoot?.querySelector(
+        "accuracy-report",
+      ),
     ]) {
       if (element) {
         element.setAttribute("bible-id", id);
@@ -43,8 +44,12 @@ export class AppStateProvider extends HTMLElement {
 
   #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
     for (const element of [
-      this.querySelector("recite-bible-verse"),
-      this.querySelector("accuracy-report"),
+      this.querySelector("speak-page")?.shadowRoot?.querySelector(
+        "recite-bible-verse",
+      ),
+      this.querySelector("score-page")?.shadowRoot?.querySelector(
+        "accuracy-report",
+      ),
     ]) {
       if (element) {
         element.setAttribute("verse-id", id);
@@ -55,7 +60,10 @@ export class AppStateProvider extends HTMLElement {
   }
 
   #updateChildrenWithRecitedBibleVerse(recitedBibleVerse: string) {
-    const accuracyReportElement = this.querySelector("accuracy-report");
+    const accuracyReportElement =
+      this.querySelector("score-page")?.shadowRoot?.querySelector(
+        "accuracy-report",
+      );
 
     if (accuracyReportElement) {
       accuracyReportElement.setAttribute(
@@ -77,6 +85,8 @@ export class AppStateProvider extends HTMLElement {
     for (const element of [
       this.querySelector<HTMLElement>("instructions-page"),
       this.querySelector<HTMLElement>("search-advanced-page"),
+      this.querySelector<HTMLElement>("speak-page"),
+      this.querySelector<HTMLElement>("score-page"),
     ]) {
       if (!element) {
         return;

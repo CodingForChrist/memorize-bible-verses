@@ -44,39 +44,3 @@ body {
   min-height: 40rem;
   padding: 0 0.5rem 4rem 0.5rem;
 }
-
-details {
-  /* slate 400 */
-  border: 1px solid oklch(70.4% 0.04 256.788);
-  border-top: 0;
-  cursor: pointer;
-}
-
-details:is([open]) {
-  cursor: auto;
-  padding-bottom: 2rem;
-}
-
-details[open] > summary {
-  margin-bottom: 1rem;
-}
-
-details:first-child {
-  /* slate 400 */
-  border-top: 1px solid oklch(70.4% 0.04 256.788);
-}
-
-summary {
-  padding: 1rem;
-}
-
-bible-translation-selector,
-bible-verse-selector,
-recite-bible-verse,
-accuracy-report {
-  padding: 0 1rem;
-}
-
-bible-translation-selector {
-  margin-bottom: 2rem;
-}
