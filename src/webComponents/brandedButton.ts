@@ -34,8 +34,6 @@ export class BrandedButton extends HTMLElement {
     buttonElement.type = this.#buttonType;
     buttonElement.textContent = this.#buttonTextContent;
     buttonElement.classList.add(this.#buttonBrand);
-
-    console.log(buttonElement);
   }
 
   get #styleElement() {

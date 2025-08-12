@@ -60,7 +60,7 @@ export class SpeakPage extends HTMLElement {
         color: var(--color-gray);
         padding: 1.5rem;
         text-align: left;
-        min-height: 20rem;
+        min-height: 16rem;
         margin: 2rem 1rem;
       }
       .page-navigation {
