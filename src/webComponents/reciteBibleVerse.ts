@@ -263,7 +263,8 @@ export class ReciteBibleVerse extends HTMLElement {
         text-align: center;
       }
       #results-container {
-        min-height: 14rem;
+        margin: 2rem 0;
+        min-height: 10rem;
       }
       #recording-controls-container {
         text-align: center;

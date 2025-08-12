@@ -102,6 +102,7 @@ export class AppStateProvider extends HTMLElement {
       url.searchParams.append("page-name", pageName);
     }
     history.pushState({}, "", url);
+    window.scrollTo(0, 0);
   }
 
   #navigateToPageBasedOnURLParam() {
@@ -155,6 +156,7 @@ export class AppStateProvider extends HTMLElement {
       this.#navigateToPageBasedOnURLParam();
     });
 
+    window.history.scrollRestoration = "manual";
     this.#navigateToPageBasedOnURLParam();
   }
 }
