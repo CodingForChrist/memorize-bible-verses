@@ -2,7 +2,7 @@ export function removeExtraContentFromBibleVerse(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = htmlContentString;
 
-  removeSectionTitles(divElement);
+  removeSectionHeadings(divElement);
   removeFootnotes(divElement);
   removeVerseNumbers(divElement);
   trimParagraphBreaks(divElement);
@@ -18,10 +18,25 @@ function removeFootnotes(element: Element) {
   return element;
 }
 
-function removeSectionTitles(element: Element) {
-  element
-    .querySelectorAll("p.s1")
-    ?.forEach((titleElement) => titleElement.remove());
+function removeSectionHeadings(element: Element) {
+  const cssClasses = [
+    "ms",
+    "ms1",
+    "ms2",
+    "ms3",
+    "s",
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "d",
+  ];
+
+  for (const cssClass of cssClasses) {
+    element
+      .querySelectorAll(`p.${cssClass}`)
+      ?.forEach((titleElement) => titleElement.remove());
+  }
 
   return element;
 }

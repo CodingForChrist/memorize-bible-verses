@@ -7,12 +7,20 @@ import {
 
 describe("removeExtraContentFromBibleVerse()", () => {
   test("should remove title, notes, and verse numbers from a single verse", () => {
-    const htmlContentString =
-      '<p class="s1">The Beginning</p><p class="r">(<span id="GEN.1.1-GEN.1.2">Genesis 1:1–2</span>; <span id="HEB.11.1-HEB.11.3">Hebrews 11:1–3</span>)</p><p class="m"><span data-number="1" data-sid="JHN 1:1" class="v">1</span>In the beginning was the Word, and the Word was with God, and the Word was God. </p>';
-
-    const results = removeExtraContentFromBibleVerse(htmlContentString);
-    expect(results).toBe(
+    expect(
+      removeExtraContentFromBibleVerse(
+        '<p class="s1">The Beginning</p><p class="r">(<span id="GEN.1.1-GEN.1.2">Genesis 1:1–2</span>; <span id="HEB.11.1-HEB.11.3">Hebrews 11:1–3</span>)</p><p class="m"><span data-number="1" data-sid="JHN 1:1" class="v">1</span>In the beginning was the Word, and the Word was with God, and the Word was God. </p>',
+      ),
+    ).toBe(
       '<p class="m">In the beginning was the Word, and the Word was with God, and the Word was God. </p>',
+    );
+
+    expect(
+      removeExtraContentFromBibleVerse(
+        '<p class="ms2">Psalm 23</p><p class="s"><span class="it">The L<span class="sc"><span class="it">ord</span></span>, the Psalmist’s Shepherd.</span></p><p class="d">A Psalm of David.</p><p class="q">The L<span class="sc">ord</span> is my shepherd,</p><p data-vid="PSA 23:1" class="q">I will not be in need.</p>',
+      ),
+    ).toBe(
+      '<p class="q">The L<span class="sc">ord</span> is my shepherd,</p><p data-vid="PSA 23:1" class="q">I will not be in need.</p>',
     );
   });
 
