@@ -11,6 +11,16 @@ export class SearchAdvancedPage extends HTMLElement {
     shadowRoot.appendChild(this.#styleElement);
   }
 
+  static get observedAttributes() {
+    return ["bible-id", "verse-reference"];
+  }
+
+  get #bibleVerseSelectorElement() {
+    return this.shadowRoot!.querySelector(
+      "bible-verse-selector",
+    ) as HTMLElement;
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -80,38 +90,50 @@ export class SearchAdvancedPage extends HTMLElement {
     return styleElement;
   }
 
+  #navigateToPreviousPage() {
+    const eventNavigateToSearchPage =
+      new CustomEvent<CustomEventNavigateToPage>(
+        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+        {
+          detail: { pageName: "instructions-page" },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventNavigateToSearchPage);
+  }
+
+  #navigateToNextPage() {
+    const eventNavigateToSearchPage =
+      new CustomEvent<CustomEventNavigateToPage>(
+        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+        {
+          detail: { pageName: "speak-page" },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventNavigateToSearchPage);
+  }
+
   connectedCallback() {
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
-      () => {
-        const eventNavigateToSearchPage =
-          new CustomEvent<CustomEventNavigateToPage>(
-            CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-            {
-              detail: { pageName: "instructions-page" },
-              bubbles: true,
-              composed: true,
-            },
-          );
-        window.dispatchEvent(eventNavigateToSearchPage);
-      },
+      () => this.#navigateToPreviousPage(),
     );
 
     this.shadowRoot!.querySelector("#button-forward")?.addEventListener(
       "click",
-      () => {
-        const eventNavigateToSearchPage =
-          new CustomEvent<CustomEventNavigateToPage>(
-            CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-            {
-              detail: { pageName: "speak-page" },
-              bubbles: true,
-              composed: true,
-            },
-          );
-        window.dispatchEvent(eventNavigateToSearchPage);
-      },
+      () => this.#navigateToNextPage(),
     );
+  }
+
+  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
+    for (const attributeName of SearchAdvancedPage.observedAttributes) {
+      if (name === attributeName) {
+        this.#bibleVerseSelectorElement?.setAttribute(attributeName, newValue);
+      }
+    }
   }
 }
 

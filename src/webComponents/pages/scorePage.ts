@@ -1,6 +1,9 @@
 import { CUSTOM_EVENTS } from "../../constants";
 
-import type { CustomEventNavigateToPage } from "../../types";
+import type {
+  CustomEventNavigateToPage,
+  CustomEventUpdateBibleVerse,
+} from "../../types";
 
 export class ScorePage extends HTMLElement {
   constructor() {
@@ -9,6 +12,22 @@ export class ScorePage extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(this.#containerElement);
     shadowRoot.appendChild(this.#styleElement);
+  }
+
+  static get observedAttributes() {
+    return [
+      "bible-id",
+      "bible-name",
+      "bible-abbreviation-local",
+      "verse-id",
+      "verse-reference",
+      "verse-content",
+      "recited-bible-verse",
+    ];
+  }
+
+  get #accuracyReportElement() {
+    return this.shadowRoot!.querySelector("accuracy-report") as HTMLElement;
   }
 
   get #containerElement() {
@@ -74,38 +93,68 @@ export class ScorePage extends HTMLElement {
     return styleElement;
   }
 
+  #navigateToPreviousPage() {
+    const eventNavigateToSearchPage =
+      new CustomEvent<CustomEventNavigateToPage>(
+        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+        {
+          detail: { pageName: "speak-page" },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventNavigateToSearchPage);
+  }
+
+  #navigateToNextPage() {
+    const eventNavigateToSearchPage =
+      new CustomEvent<CustomEventNavigateToPage>(
+        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+        {
+          detail: { pageName: "search-advanced-page" },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventNavigateToSearchPage);
+
+    // clear out the selected verse
+    const emptyBibleVerse = {
+      id: "",
+      reference: "",
+      content: "",
+    };
+
+    const eventUpdateSelectedBible =
+      new CustomEvent<CustomEventUpdateBibleVerse>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
+        {
+          detail: { bibleVerse: emptyBibleVerse },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventUpdateSelectedBible);
+  }
+
   connectedCallback() {
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
-      () => {
-        const eventNavigateToSearchPage =
-          new CustomEvent<CustomEventNavigateToPage>(
-            CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-            {
-              detail: { pageName: "speak-page" },
-              bubbles: true,
-              composed: true,
-            },
-          );
-        window.dispatchEvent(eventNavigateToSearchPage);
-      },
+      () => this.#navigateToPreviousPage(),
     );
 
     this.shadowRoot!.querySelector("#button-forward")?.addEventListener(
       "click",
-      () => {
-        const eventNavigateToSearchPage =
-          new CustomEvent<CustomEventNavigateToPage>(
-            CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-            {
-              detail: { pageName: "search-advanced-page" },
-              bubbles: true,
-              composed: true,
-            },
-          );
-        window.dispatchEvent(eventNavigateToSearchPage);
-      },
+      () => this.#navigateToNextPage(),
     );
+  }
+
+  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
+    for (const attributeName of ScorePage.observedAttributes) {
+      if (name === attributeName) {
+        this.#accuracyReportElement?.setAttribute(attributeName, newValue);
+      }
+    }
   }
 }
 

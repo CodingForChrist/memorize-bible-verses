@@ -25,7 +25,11 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state", "bible-id"];
+    return ["loading-state", "bible-id", "verse-reference"];
+  }
+
+  get bibleId() {
+    return this.getAttribute("bible-id");
   }
 
   get selectedBibleVerse(): BibleVerse | undefined {
@@ -74,8 +78,9 @@ export class BibleVerseSelector extends HTMLElement {
       ?.remove();
   }
 
-  get bibleId() {
-    return this.getAttribute("bible-id");
+  #clearSelectedBibleVerse() {
+    this.#selectedBibleVerse = undefined;
+    this.#renderSearchForm();
   }
 
   get #searchFormContainerElement() {
@@ -94,12 +99,9 @@ export class BibleVerseSelector extends HTMLElement {
     this.#searchFormContainerElement.innerHTML = "";
     this.#searchResultsContainerElement.innerHTML = "";
 
-    const bibleVerseReference = this.#selectedBibleVerse?.reference ?? "";
+    const verseReference = this.#selectedBibleVerse?.reference ?? "";
     const searchFormElement = document.createElement("bible-verse-search-form");
-    searchFormElement.setAttribute(
-      "bible-verse-reference",
-      bibleVerseReference,
-    );
+    searchFormElement.setAttribute("verse-reference", verseReference);
 
     window.addEventListener(
       CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
@@ -107,10 +109,10 @@ export class BibleVerseSelector extends HTMLElement {
         if (this.loadingState === LOADING_STATES.PENDING) {
           return;
         }
-        const bibleVerseReference = event.detail?.bibleVerseReference;
-        if (bibleVerseReference) {
+        const verseReference = event.detail?.verseReference;
+        if (verseReference) {
           this.#searchResultsContainerElement.innerHTML = "";
-          this.#searchForVerse(bibleVerseReference);
+          this.#searchForVerse(verseReference);
         }
       },
     );
@@ -220,7 +222,7 @@ export class BibleVerseSelector extends HTMLElement {
     return styleElement;
   }
 
-  attributeChangedCallback(name: string) {
+  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     if (name === "bible-id") {
       return this.#renderSearchForm();
     }
@@ -237,6 +239,9 @@ export class BibleVerseSelector extends HTMLElement {
       return this.#renderErrorMessage(
         "Failed to find the bible verse reference. Please try another search.",
       );
+    }
+    if (name === "verse-reference" && !newValue) {
+      this.#clearSelectedBibleVerse();
     }
   }
 }
