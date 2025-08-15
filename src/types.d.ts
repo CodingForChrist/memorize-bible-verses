@@ -30,5 +30,5 @@ export type CustomEventNavigateToPage = {
 };
 
 export type CustomEventSearchForBibleVerse = {
-  bibleVerseReference: string;
+  verseReference: string;
 };

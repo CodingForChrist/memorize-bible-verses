@@ -12,15 +12,15 @@ export class BibleVerseSearchForm extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["bible-verse-reference"];
+    return ["verse-reference"];
   }
 
-  get bibleVerseReference() {
-    return this.getAttribute("bible-verse-reference") ?? "";
+  get verseReference() {
+    return this.getAttribute("verse-reference") ?? "";
   }
 
-  set bibleVerseReference(value: string) {
-    this.setAttribute("bible-verse-reference", value);
+  set verseReference(value: string) {
+    this.setAttribute("verse-reference", value);
   }
 
   get #searchForm() {
@@ -35,10 +35,7 @@ export class BibleVerseSearchForm extends HTMLElement {
         <branded-button type="submit" text-content="Search"></branded-button>
       </form>
     `;
-
-    if (this.bibleVerseReference) {
-      divElement.querySelector("input")!.value = this.bibleVerseReference;
-    }
+    divElement.querySelector("input")!.value = this.verseReference ?? "";
 
     return divElement;
   }
@@ -96,7 +93,7 @@ export class BibleVerseSearchForm extends HTMLElement {
         const inputElement = this.shadowRoot!.querySelector(
           'input[name="input-bible-verse"]',
         ) as HTMLInputElement;
-        this.bibleVerseReference = inputElement.value;
+        this.verseReference = inputElement.value;
         this.#dispatchSearchEvent();
       },
     );
@@ -107,7 +104,7 @@ export class BibleVerseSearchForm extends HTMLElement {
       new CustomEvent<CustomEventSearchForBibleVerse>(
         CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
         {
-          detail: { bibleVerseReference: this.bibleVerseReference },
+          detail: { verseReference: this.verseReference },
           bubbles: true,
           composed: true,
         },
@@ -116,7 +113,7 @@ export class BibleVerseSearchForm extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
-    if (name !== "bible-verse-reference") {
+    if (name !== "verse-reference") {
       return;
     }
     const inputElement = this.shadowRoot!.querySelector(
