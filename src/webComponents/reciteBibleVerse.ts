@@ -256,7 +256,7 @@ export class ReciteBibleVerse extends HTMLElement {
     divElement.innerHTML = `
       <div id="initial-content-container"></div>
       <div id="results-container">
-        <p></p>
+        <p contenteditable="plaintext-only"></p>
       </div>
       <div id="recording-controls-container"></div>
     `;
