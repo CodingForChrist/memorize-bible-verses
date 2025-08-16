@@ -1,8 +1,9 @@
+import { BasePage } from "./basePage";
 import { CUSTOM_EVENTS } from "../../constants";
 
 import type { CustomEventNavigateToPage } from "../../types";
 
-export class SpeakPage extends HTMLElement {
+export class SpeakPage extends BasePage {
   constructor() {
     super();
 
@@ -12,15 +13,17 @@ export class SpeakPage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["is-visible", "verse-id", "verse-reference", "verse-content"];
+    return [
+      ...BasePage.observedAttributes,
+      "verse-id",
+      "verse-reference",
+      "verse-content",
+    ];
   }
 
-  static get pageTitle() {
-    return "︎Speak | Memorize Bible Verses";
-  }
-
-  get isVisible() {
-    return this.getAttribute("is-visible") === "true";
+  get pageTitle() {
+    const verseReference = this.getAttribute("verse-reference") ?? "";
+    return `Speak ${verseReference} | Memorize Bible Verses`;
   }
 
   get #reciteBibleVerseElement() {
@@ -92,15 +95,6 @@ export class SpeakPage extends HTMLElement {
     return styleElement;
   }
 
-  #updateVisibility() {
-    if (this.isVisible) {
-      this.style.display = "block";
-      document.title = SpeakPage.pageTitle;
-    } else {
-      this.style.display = "none";
-    }
-  }
-
   #navigateToPreviousPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -128,7 +122,7 @@ export class SpeakPage extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#updateVisibility();
+    super.connectedCallback();
 
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
@@ -141,10 +135,8 @@ export class SpeakPage extends HTMLElement {
     );
   }
 
-  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
-    if (name === "is-visible") {
-      return this.#updateVisibility();
-    }
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    super.attributeChangedCallback(name, oldValue, newValue);
 
     for (const attributeName of SpeakPage.observedAttributes) {
       if (name === attributeName) {

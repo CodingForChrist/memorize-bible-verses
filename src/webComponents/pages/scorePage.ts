@@ -1,3 +1,4 @@
+import { BasePage } from "./basePage";
 import { CUSTOM_EVENTS } from "../../constants";
 
 import type {
@@ -5,7 +6,7 @@ import type {
   CustomEventUpdateBibleVerse,
 } from "../../types";
 
-export class ScorePage extends HTMLElement {
+export class ScorePage extends BasePage {
   constructor() {
     super();
 
@@ -16,7 +17,7 @@ export class ScorePage extends HTMLElement {
 
   static get observedAttributes() {
     return [
-      "is-visible",
+      ...BasePage.observedAttributes,
       "bible-id",
       "bible-name",
       "bible-abbreviation-local",
@@ -27,12 +28,9 @@ export class ScorePage extends HTMLElement {
     ];
   }
 
-  static get pageTitle() {
-    return "Score | Memorize Bible Verses";
-  }
-
-  get isVisible() {
-    return this.getAttribute("is-visible") === "true";
+  get pageTitle() {
+    const verseReference = this.getAttribute("verse-reference") ?? "";
+    return `Score ${verseReference} | Memorize Bible Verses`;
   }
 
   get #accuracyReportElement() {
@@ -102,15 +100,6 @@ export class ScorePage extends HTMLElement {
     return styleElement;
   }
 
-  #updateVisibility() {
-    if (this.isVisible) {
-      this.style.display = "block";
-      document.title = ScorePage.pageTitle;
-    } else {
-      this.style.display = "none";
-    }
-  }
-
   #navigateToPreviousPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -156,7 +145,7 @@ export class ScorePage extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#updateVisibility();
+    super.connectedCallback();
 
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
@@ -169,10 +158,8 @@ export class ScorePage extends HTMLElement {
     );
   }
 
-  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
-    if (name === "is-visible") {
-      return this.#updateVisibility();
-    }
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    super.attributeChangedCallback(name, oldValue, newValue);
 
     for (const attributeName of ScorePage.observedAttributes) {
       if (name === attributeName) {
