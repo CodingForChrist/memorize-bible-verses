@@ -71,7 +71,7 @@ export class SearchAdvancedPage extends BasePage {
         margin: 0 2.5rem 1rem 2.5rem;
       }
       bible-translation-selector {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
       }
       .search-container {
         background-color: var(--color-primary-mint-cream);
