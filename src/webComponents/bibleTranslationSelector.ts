@@ -13,27 +13,27 @@ import type {
 const supportedBibles = [
   {
     id: "b8ee27bcd1cae43a-01",
-    abbreviationLocal: "NASB 1995",
+    label: "NASB 1995 (New American Standard Bible)",
   },
   {
     id: "a761ca71e0b3ddcf-01",
-    abbreviationLocal: "NASB 2020",
+    label: "NASB 2020 (New American Standard Bible)",
   },
   {
     id: "bba9f40183526463-01",
-    abbreviationLocal: "BSB",
+    label: "BSB (Berean Standard Bible)",
   },
   {
     id: "de4e12af7f28f599-02",
-    abbreviationLocal: "KJV",
+    label: "KJV (King James Version)",
   },
   {
     id: "06125adad2d5898a-01",
-    abbreviationLocal: "ASV",
+    label: "ASV (American Standard Version)",
   },
   {
     id: "9879dbb7cfe39e4d-04",
-    abbreviationLocal: "WEB",
+    label: "WEB (World English Bible)",
   },
 ];
 
@@ -128,13 +128,23 @@ export class BibleTranslationSelector extends HTMLElement {
     }
   }
 
+  #getSelectOptionText(id: string) {
+    const supportedBible = supportedBibles.find(
+      (supportedBible) => supportedBible.id === id,
+    );
+    if (!supportedBible) {
+      throw new Error("Failed to find the supported bible by id");
+    }
+    return supportedBible.label;
+  }
+
   #renderSelectElement() {
     const divContainerElement = document.createElement("div");
     divContainerElement.innerHTML = `
       <select name="select-bible-translation">
       ${this.bibleTranslations.map(
-        ({ id, name, abbreviationLocal }) =>
-          `<option value="${id}">${abbreviationLocal} - ${name}</option>`,
+        ({ id }) =>
+          `<option value="${id}">${this.#getSelectOptionText(id)}</option>`,
       )}
       </select>
       `;
