@@ -76,7 +76,9 @@ export class BrandedButton extends HTMLElement {
   connectedCallback() {
     this.onclick = () => {
       if (this.#buttonType === "submit") {
-        this.closest("form")?.dispatchEvent(new Event("submit"));
+        this.closest("form")?.dispatchEvent(
+          new Event("submit", { bubbles: true, cancelable: true }),
+        );
       }
     };
   }

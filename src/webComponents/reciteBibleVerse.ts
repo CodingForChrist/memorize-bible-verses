@@ -10,7 +10,7 @@ import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionIn
 import type { CustomEventUpdateRecitedBibleVerse } from "../types";
 
 export class ReciteBibleVerse extends HTMLElement {
-  speechRecognition: SpeechRecognition;
+  speechRecognition?: SpeechRecognition;
   #speechTranscript?: string;
   #lastSpeechRecognitionResult?: SpeechRecognitionResultList;
   #speechRecognitionState: SpeechRecognitionStates;
@@ -22,15 +22,19 @@ export class ReciteBibleVerse extends HTMLElement {
     shadowRoot.appendChild(this.#styleElement);
     shadowRoot.appendChild(this.#containerElements);
 
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    this.speechRecognition = new SpeechRecognition();
-    this.speechRecognition.continuous = true;
-    this.speechRecognition.lang = "en-US";
-    this.speechRecognition.interimResults = true;
-    this.speechRecognition.maxAlternatives = 5;
-
     this.#speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
+
+    try {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      this.speechRecognition = new SpeechRecognition();
+      this.speechRecognition.continuous = true;
+      this.speechRecognition.lang = "en-US";
+      this.speechRecognition.interimResults = true;
+      this.speechRecognition.maxAlternatives = 5;
+    } catch (error) {
+      console.error("Unable to use the SpeechRecognition API", error);
+    }
   }
 
   static get observedAttributes() {
@@ -118,10 +122,20 @@ export class ReciteBibleVerse extends HTMLElement {
     window.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 
+  #hasSupportForSpeechRecognition() {
+    return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+  }
+
   #renderInitialContent() {
     // clear out existing content
     this.#interimResultsParagraphElement.innerText = "";
     this.#recordingControlsContainerElement.innerHTML = "";
+
+    if (!this.#hasSupportForSpeechRecognition()) {
+      return this.#renderErrorMessage(
+        "Your browser does not support the Web Speech API. Please try another browser like Chrome or Safari.",
+      );
+    }
 
     if (!this.verseReference) {
       return this.#renderErrorMessage(
@@ -152,7 +166,7 @@ export class ReciteBibleVerse extends HTMLElement {
         this.speechRecognitionState,
       )
     ) {
-      this.speechRecognition.start();
+      this.speechRecognition?.start();
       this.speechRecognitionState =
         SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
       this.#showLoadingSpinner();
@@ -198,11 +212,11 @@ export class ReciteBibleVerse extends HTMLElement {
       SPEECH_RECOGNITION_STATES;
 
     if (this.speechRecognitionState === LISTENING) {
-      this.speechRecognition.stop();
+      this.speechRecognition?.stop();
       this.#hideLoadingSpinner();
       this.#showTryAgainButton();
     } else if (this.speechRecognitionState === WAITING_FOR_MICROPHONE_ACCESS) {
-      this.speechRecognition.stop();
+      this.speechRecognition?.stop();
       this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
       this.#showTryAgainButton();
     }
@@ -288,11 +302,11 @@ export class ReciteBibleVerse extends HTMLElement {
   connectedCallback() {
     this.#renderInitialContent();
 
-    this.speechRecognition.addEventListener("start", () => {
+    this.speechRecognition?.addEventListener("start", () => {
       this.speechRecognitionState = SPEECH_RECOGNITION_STATES.LISTENING;
     });
 
-    this.speechRecognition.addEventListener(
+    this.speechRecognition?.addEventListener(
       "result",
       (event: SpeechRecognitionEvent) => {
         console.log({
@@ -305,7 +319,7 @@ export class ReciteBibleVerse extends HTMLElement {
       },
     );
 
-    this.speechRecognition.addEventListener("end", () => {
+    this.speechRecognition?.addEventListener("end", () => {
       if (this.#lastSpeechRecognitionResult) {
         this.speechTranscript = this.#lastSpeechRecognitionResult;
         this.speechRecognitionState = SPEECH_RECOGNITION_STATES.RESOLVED;

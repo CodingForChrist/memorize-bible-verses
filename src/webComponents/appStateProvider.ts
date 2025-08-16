@@ -10,17 +10,6 @@ import type {
 } from "../types";
 
 export class AppStateProvider extends HTMLElement {
-  constructor() {
-    super();
-
-    if (!hasSupportForSpeechRecognition()) {
-      this.innerHTML = "";
-      this.#renderErrorMessage(
-        "Your browser does not support the Web Speech API. Please try another browser like Chrome or Safari.",
-      );
-    }
-  }
-
   #updateChildrenWithBibleTranslation({
     id,
     name,
@@ -61,14 +50,6 @@ export class AppStateProvider extends HTMLElement {
         recitedBibleVerse,
       );
     }
-  }
-
-  #renderErrorMessage(message: string) {
-    const alertErrorElement = document.createElement("alert-error");
-    alertErrorElement.innerHTML = `
-      <span slot="alert-error-message">${message}</span>
-    `;
-    this.appendChild(alertErrorElement);
   }
 
   #updatePageNavigation(pageName: string) {
@@ -149,10 +130,6 @@ export class AppStateProvider extends HTMLElement {
     window.history.scrollRestoration = "manual";
     this.#navigateToPageBasedOnURLParam();
   }
-}
-
-function hasSupportForSpeechRecognition() {
-  return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
 }
 
 window.customElements.define("app-state-provider", AppStateProvider);
