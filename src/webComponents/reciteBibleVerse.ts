@@ -84,7 +84,7 @@ export class ReciteBibleVerse extends HTMLElement {
 
   get #interimResultsParagraphElement() {
     return this.#resultsContainerElement.querySelector(
-      "p",
+      "#transcript-pararaph",
     ) as HTMLParagraphElement;
   }
 
@@ -101,14 +101,15 @@ export class ReciteBibleVerse extends HTMLElement {
     return this.#speechTranscript;
   }
 
-  set speechTranscript(value: SpeechRecognitionResultList) {
-    const transcriptArray = [];
+  #formatSpeechTranscript(value: SpeechRecognitionResultList) {
+    const transcriptArray = Array.from(value).map(
+      (result) => result[0].transcript,
+    );
+    return transcriptArray.join(" ");
+  }
 
-    for (const result of value) {
-      transcriptArray.push(result[0].transcript);
-    }
-
-    this.#speechTranscript = transcriptArray.join(" ");
+  set speechTranscript(value: string) {
+    this.#speechTranscript = value;
 
     const eventUpdateRecitedBibleVerse =
       new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
@@ -255,13 +256,36 @@ export class ReciteBibleVerse extends HTMLElement {
     divElement.id = "parent-container";
     divElement.innerHTML = `
       <div id="initial-content-container"></div>
-      <div id="results-container">
-        <p contenteditable="plaintext-only"></p>
-      </div>
+      <div id="results-container"></div>
       <div id="recording-controls-container"></div>
     `;
 
+    divElement
+      .querySelector("#results-container")
+      ?.appendChild(this.#editableTranscriptParagraphElement);
+
     return divElement;
+  }
+
+  get #editableTranscriptParagraphElement() {
+    const paragraphElement = document.createElement("p");
+    paragraphElement.id = "transcript-pararaph";
+    paragraphElement.setAttribute("contenteditable", "plaintext-only");
+
+    let shouldFireChange = false;
+
+    paragraphElement.addEventListener("input", () => {
+      shouldFireChange = true;
+    });
+
+    paragraphElement.addEventListener("focusout", () => {
+      if (shouldFireChange) {
+        this.speechTranscript = paragraphElement.innerText;
+        shouldFireChange = false;
+      }
+    });
+
+    return paragraphElement;
   }
 
   get #styleElement() {
@@ -321,7 +345,9 @@ export class ReciteBibleVerse extends HTMLElement {
 
     this.speechRecognition?.addEventListener("end", () => {
       if (this.#lastSpeechRecognitionResult) {
-        this.speechTranscript = this.#lastSpeechRecognitionResult;
+        this.speechTranscript = this.#formatSpeechTranscript(
+          this.#lastSpeechRecognitionResult,
+        );
         this.speechRecognitionState = SPEECH_RECOGNITION_STATES.RESOLVED;
       } else {
         this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
