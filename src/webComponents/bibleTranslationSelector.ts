@@ -16,6 +16,10 @@ const supportedBibles = [
     abbreviationLocal: "NASB",
   },
   {
+    id: "b8ee27bcd1cae43a-01",
+    abbreviationLocal: "NASB 1995",
+  },
+  {
     id: "bba9f40183526463-01",
     abbreviationLocal: "BSB",
   },
