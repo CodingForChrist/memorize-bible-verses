@@ -12,6 +12,18 @@ export class InstructionsPage extends HTMLElement {
     shadowRoot.appendChild(this.#styleElement);
   }
 
+  static get observedAttributes() {
+    return ["is-visible"];
+  }
+
+  static get pageTitle() {
+    return "︎Instructions | Memorize Bible Verses";
+  }
+
+  get isVisible() {
+    return this.getAttribute("is-visible") === "true";
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -86,22 +98,41 @@ export class InstructionsPage extends HTMLElement {
     return styleElement;
   }
 
+  #updateVisibility() {
+    if (this.isVisible) {
+      this.style.display = "block";
+      document.title = InstructionsPage.pageTitle;
+    } else {
+      this.style.display = "none";
+    }
+  }
+
+  #navigateToNextPage() {
+    const eventNavigateToSearchPage =
+      new CustomEvent<CustomEventNavigateToPage>(
+        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+        {
+          detail: { pageName: "search-advanced-page" },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventNavigateToSearchPage);
+  }
+
   connectedCallback() {
+    this.#updateVisibility();
+
     this.shadowRoot!.querySelector("branded-button")?.addEventListener(
       "click",
-      () => {
-        const eventNavigateToSearchPage =
-          new CustomEvent<CustomEventNavigateToPage>(
-            CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-            {
-              detail: { pageName: "search-advanced-page" },
-              bubbles: true,
-              composed: true,
-            },
-          );
-        window.dispatchEvent(eventNavigateToSearchPage);
-      },
+      () => this.#navigateToNextPage(),
     );
+  }
+
+  attributeChangedCallback(name: string) {
+    if (name === "is-visible") {
+      this.#updateVisibility();
+    }
   }
 }
 
