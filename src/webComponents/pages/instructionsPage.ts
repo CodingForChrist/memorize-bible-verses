@@ -1,9 +1,10 @@
+import { BasePage } from "./basePage";
 import { CUSTOM_EVENTS } from "../../constants";
 import logoURL from "../../images/logo.svg";
 
 import type { CustomEventNavigateToPage } from "../../types";
 
-export class InstructionsPage extends HTMLElement {
+export class InstructionsPage extends BasePage {
   constructor() {
     super();
 
@@ -13,15 +14,11 @@ export class InstructionsPage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["is-visible"];
+    return [...BasePage.observedAttributes];
   }
 
-  static get pageTitle() {
+  get pageTitle() {
     return "︎Instructions | Memorize Bible Verses";
-  }
-
-  get isVisible() {
-    return this.getAttribute("is-visible") === "true";
   }
 
   get #containerElement() {
@@ -98,15 +95,6 @@ export class InstructionsPage extends HTMLElement {
     return styleElement;
   }
 
-  #updateVisibility() {
-    if (this.isVisible) {
-      this.style.display = "block";
-      document.title = InstructionsPage.pageTitle;
-    } else {
-      this.style.display = "none";
-    }
-  }
-
   #navigateToNextPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -121,18 +109,12 @@ export class InstructionsPage extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#updateVisibility();
+    super.connectedCallback();
 
     this.shadowRoot!.querySelector("branded-button")?.addEventListener(
       "click",
       () => this.#navigateToNextPage(),
     );
-  }
-
-  attributeChangedCallback(name: string) {
-    if (name === "is-visible") {
-      this.#updateVisibility();
-    }
   }
 }
 

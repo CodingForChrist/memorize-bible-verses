@@ -1,8 +1,9 @@
+import { BasePage } from "./basePage";
 import { CUSTOM_EVENTS } from "../../constants";
 
 import type { CustomEventNavigateToPage } from "../../types";
 
-export class SearchAdvancedPage extends HTMLElement {
+export class SearchAdvancedPage extends BasePage {
   constructor() {
     super();
 
@@ -12,15 +13,11 @@ export class SearchAdvancedPage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["is-visible", "bible-id", "verse-reference"];
+    return [...BasePage.observedAttributes, "bible-id", "verse-reference"];
   }
 
-  static get pageTitle() {
+  get pageTitle() {
     return "︎Advanced Search | Memorize Bible Verses";
-  }
-
-  get isVisible() {
-    return this.getAttribute("is-visible") === "true";
   }
 
   get #bibleVerseSelectorElement() {
@@ -98,15 +95,6 @@ export class SearchAdvancedPage extends HTMLElement {
     return styleElement;
   }
 
-  #updateVisibility() {
-    if (this.isVisible) {
-      this.style.display = "block";
-      document.title = SearchAdvancedPage.pageTitle;
-    } else {
-      this.style.display = "none";
-    }
-  }
-
   #navigateToPreviousPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -134,7 +122,7 @@ export class SearchAdvancedPage extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#updateVisibility();
+    super.connectedCallback();
 
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
@@ -147,10 +135,8 @@ export class SearchAdvancedPage extends HTMLElement {
     );
   }
 
-  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
-    if (name === "is-visible") {
-      return this.#updateVisibility();
-    }
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    super.attributeChangedCallback(name, oldValue, newValue);
 
     for (const attributeName of SearchAdvancedPage.observedAttributes) {
       if (name === attributeName) {
