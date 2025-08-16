@@ -12,7 +12,15 @@ export class SpeakPage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["verse-id", "verse-reference", "verse-content"];
+    return ["is-visible", "verse-id", "verse-reference", "verse-content"];
+  }
+
+  static get pageTitle() {
+    return "︎Speak | Memorize Bible Verses";
+  }
+
+  get isVisible() {
+    return this.getAttribute("is-visible") === "true";
   }
 
   get #reciteBibleVerseElement() {
@@ -84,6 +92,15 @@ export class SpeakPage extends HTMLElement {
     return styleElement;
   }
 
+  #updateVisibility() {
+    if (this.isVisible) {
+      this.style.display = "block";
+      document.title = SpeakPage.pageTitle;
+    } else {
+      this.style.display = "none";
+    }
+  }
+
   #navigateToPreviousPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -111,6 +128,8 @@ export class SpeakPage extends HTMLElement {
   }
 
   connectedCallback() {
+    this.#updateVisibility();
+
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
       () => this.#navigateToPreviousPage(),
@@ -123,6 +142,10 @@ export class SpeakPage extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
+    if (name === "is-visible") {
+      return this.#updateVisibility();
+    }
+
     for (const attributeName of SpeakPage.observedAttributes) {
       if (name === attributeName) {
         this.#reciteBibleVerseElement?.setAttribute(attributeName, newValue);

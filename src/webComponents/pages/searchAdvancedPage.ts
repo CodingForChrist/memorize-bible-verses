@@ -12,7 +12,15 @@ export class SearchAdvancedPage extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["bible-id", "verse-reference"];
+    return ["is-visible", "bible-id", "verse-reference"];
+  }
+
+  static get pageTitle() {
+    return "︎Advanced Search | Memorize Bible Verses";
+  }
+
+  get isVisible() {
+    return this.getAttribute("is-visible") === "true";
   }
 
   get #bibleVerseSelectorElement() {
@@ -90,6 +98,15 @@ export class SearchAdvancedPage extends HTMLElement {
     return styleElement;
   }
 
+  #updateVisibility() {
+    if (this.isVisible) {
+      this.style.display = "block";
+      document.title = SearchAdvancedPage.pageTitle;
+    } else {
+      this.style.display = "none";
+    }
+  }
+
   #navigateToPreviousPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -117,6 +134,8 @@ export class SearchAdvancedPage extends HTMLElement {
   }
 
   connectedCallback() {
+    this.#updateVisibility();
+
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
       () => this.#navigateToPreviousPage(),
@@ -129,6 +148,10 @@ export class SearchAdvancedPage extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
+    if (name === "is-visible") {
+      return this.#updateVisibility();
+    }
+
     for (const attributeName of SearchAdvancedPage.observedAttributes) {
       if (name === attributeName) {
         this.#bibleVerseSelectorElement?.setAttribute(attributeName, newValue);

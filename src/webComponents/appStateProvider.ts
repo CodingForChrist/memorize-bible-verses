@@ -81,8 +81,8 @@ export class AppStateProvider extends HTMLElement {
       if (!element) {
         return;
       }
-      element.style.display =
-        element === this.querySelector(pageName) ? "block" : "none";
+      const isVisible = element === this.querySelector(pageName);
+      element.setAttribute("is-visible", String(isVisible));
     }
 
     const url = new URL(window.location.href);

@@ -16,6 +16,7 @@ export class ScorePage extends HTMLElement {
 
   static get observedAttributes() {
     return [
+      "is-visible",
       "bible-id",
       "bible-name",
       "bible-abbreviation-local",
@@ -24,6 +25,14 @@ export class ScorePage extends HTMLElement {
       "verse-content",
       "recited-bible-verse",
     ];
+  }
+
+  static get pageTitle() {
+    return "Score | Memorize Bible Verses";
+  }
+
+  get isVisible() {
+    return this.getAttribute("is-visible") === "true";
   }
 
   get #accuracyReportElement() {
@@ -93,6 +102,15 @@ export class ScorePage extends HTMLElement {
     return styleElement;
   }
 
+  #updateVisibility() {
+    if (this.isVisible) {
+      this.style.display = "block";
+      document.title = ScorePage.pageTitle;
+    } else {
+      this.style.display = "none";
+    }
+  }
+
   #navigateToPreviousPage() {
     const eventNavigateToSearchPage =
       new CustomEvent<CustomEventNavigateToPage>(
@@ -138,6 +156,8 @@ export class ScorePage extends HTMLElement {
   }
 
   connectedCallback() {
+    this.#updateVisibility();
+
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
       () => this.#navigateToPreviousPage(),
@@ -150,6 +170,10 @@ export class ScorePage extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
+    if (name === "is-visible") {
+      return this.#updateVisibility();
+    }
+
     for (const attributeName of ScorePage.observedAttributes) {
       if (name === attributeName) {
         this.#accuracyReportElement?.setAttribute(attributeName, newValue);
