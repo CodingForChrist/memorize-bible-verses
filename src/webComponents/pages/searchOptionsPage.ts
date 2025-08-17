@@ -33,7 +33,7 @@ export class SearchOptionsPage extends BasePage {
       <div class="buttons-container">
         <button id="button-awana-discovery-of-grace" type="button">Awana: Discovery of Grace</button>
         <button id="button-share-the-gospel" type="button">Share the Gospel</button>
-        <button id="button-psalm-23" type="button">The 23<span class="number-suffix">rd</span> Psalm</button>
+        <button id="button-psalm-23" type="button">Psalm 23</button>
         <button id="button-power-user" type="button">Power User: Choose Your Verses</button>
       </div>
 
@@ -99,10 +99,6 @@ export class SearchOptionsPage extends BasePage {
       }
       #button-power-user {
         background-color: var(--color-secondary-jade);
-      }
-      .number-suffix {
-        vertical-align: super;
-        font-size: 0.7rem;
       }
       .page-navigation {
         margin: 2rem 0;
