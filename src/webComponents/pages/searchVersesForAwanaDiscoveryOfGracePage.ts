@@ -20,6 +20,12 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
     return "︎Verses for Awana Discovery of Grace Book | Memorize Bible Verses";
   }
 
+  get #bibleTranslationSelectorElement() {
+    return this.shadowRoot!.querySelector(
+      "bible-translation-selector",
+    ) as HTMLElement;
+  }
+
   get #bibleVerseListElement() {
     return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
   }
@@ -34,7 +40,7 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
 
       <div class="search-container">
         <bible-translation-selector></bible-translation-selector>
-        <bible-verse-list verses="Jeremiah 10:10,Jeremiah 10:12,Psalm 139:7-10,Psalm 139:1-3,2 Corinthians 13:14"></bible-verse-list>
+        <bible-verse-list verses="Jeremiah 10:10,Jeremiah 10:12,Psalms 139:7-10,Psalms 139:1-3,2 Corinthians 13:14"></bible-verse-list>
       </div>
 
       <div class="page-navigation">
@@ -144,10 +150,9 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    for (const attributeName of SearchVersesForAwanaDiscoveryOfGracePage.observedAttributes) {
-      if (name === attributeName) {
-        this.#bibleVerseListElement?.setAttribute(attributeName, newValue);
-      }
+    if (name === "bible-id") {
+      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
+      this.#bibleVerseListElement?.setAttribute(name, newValue);
     }
   }
 }

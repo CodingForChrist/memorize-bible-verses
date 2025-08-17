@@ -20,6 +20,12 @@ export class SearchAdvancedPage extends BasePage {
     return "︎Advanced Search | Memorize Bible Verses";
   }
 
+  get #bibleTranslationSelectorElement() {
+    return this.shadowRoot!.querySelector(
+      "bible-translation-selector",
+    ) as HTMLElement;
+  }
+
   get #bibleVerseSelectorElement() {
     return this.shadowRoot!.querySelector(
       "bible-verse-selector",
@@ -146,6 +152,10 @@ export class SearchAdvancedPage extends BasePage {
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
+
+    if (name === "bible-id") {
+      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
+    }
 
     for (const attributeName of SearchAdvancedPage.observedAttributes) {
       if (name === attributeName) {
