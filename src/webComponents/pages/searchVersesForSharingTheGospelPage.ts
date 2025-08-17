@@ -3,7 +3,7 @@ import { CUSTOM_EVENTS } from "../../constants";
 
 import type { CustomEventNavigateToPage } from "../../types";
 
-export class SearchAdvancedPage extends BasePage {
+export class SearchVersesForSharingTheGospelPage extends BasePage {
   constructor() {
     super();
 
@@ -13,17 +13,15 @@ export class SearchAdvancedPage extends BasePage {
   }
 
   static get observedAttributes() {
-    return [...BasePage.observedAttributes, "bible-id", "verse-reference"];
+    return [...BasePage.observedAttributes, "bible-id"];
   }
 
   get pageTitle() {
-    return "︎Advanced Search | Memorize Bible Verses";
+    return "︎Verses for Sharing the Gospel | Memorize Bible Verses";
   }
 
-  get #bibleVerseSelectorElement() {
-    return this.shadowRoot!.querySelector(
-      "bible-verse-selector",
-    ) as HTMLElement;
+  get #bibleVerseListElement() {
+    return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
   }
 
   get #containerElement() {
@@ -31,13 +29,12 @@ export class SearchAdvancedPage extends BasePage {
     divElement.innerHTML = `
       <h1>Search</h1>
 
-      <p>Power Users can enter specific verses. <br> Simply type in the book, chapter number
-      and verse number you wish to learn. Then practice the verse.</p>
+      <p>Pick and practice a verse for sharing the gospel.</p>
       <p>When you have the verse memorized go to Step 2.</p>
 
       <div class="search-container">
         <bible-translation-selector></bible-translation-selector>
-        <bible-verse-selector></bible-verse-selector>
+        <bible-verse-list verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9"></bible-verse-list>
       </div>
 
       <div class="page-navigation">
@@ -147,12 +144,15 @@ export class SearchAdvancedPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    for (const attributeName of SearchAdvancedPage.observedAttributes) {
+    for (const attributeName of SearchVersesForSharingTheGospelPage.observedAttributes) {
       if (name === attributeName) {
-        this.#bibleVerseSelectorElement?.setAttribute(attributeName, newValue);
+        this.#bibleVerseListElement?.setAttribute(attributeName, newValue);
       }
     }
   }
 }
 
-window.customElements.define("search-advanced-page", SearchAdvancedPage);
+window.customElements.define(
+  "search-verses-for-sharing-the-gospel-page",
+  SearchVersesForSharingTheGospelPage,
+);

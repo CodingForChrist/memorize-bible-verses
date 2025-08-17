@@ -12,6 +12,7 @@ import "./webComponents/brandedButton";
 // step 1 components
 import "./webComponents/bibleTranslationSelector";
 import "./webComponents/bibleVerseSelector";
+import "./webComponents/bibleVerseList";
 import "./webComponents/bibleVerseSearchForm";
 
 // step 2 component
@@ -22,6 +23,9 @@ import "./webComponents/accuracyReport";
 
 // pages
 import "./webComponents/pages/instructionsPage";
+import "./webComponents/pages/searchOptionsPage";
+import "./webComponents/pages/searchVersesForAwanaDiscoveryOfGracePage";
+import "./webComponents/pages/searchVersesForSharingTheGospelPage";
 import "./webComponents/pages/searchAdvancedPage";
 import "./webComponents/pages/speakPage";
 import "./webComponents/pages/scorePage";

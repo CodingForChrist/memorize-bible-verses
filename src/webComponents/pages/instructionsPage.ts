@@ -100,7 +100,7 @@ export class InstructionsPage extends BasePage {
       new CustomEvent<CustomEventNavigateToPage>(
         CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
         {
-          detail: { pageName: "search-advanced-page" },
+          detail: { pageName: "search-options-page" },
           bubbles: true,
           composed: true,
         },

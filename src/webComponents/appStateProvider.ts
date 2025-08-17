@@ -16,6 +16,8 @@ export class AppStateProvider extends HTMLElement {
     abbreviationLocal,
   }: BibleTranslation) {
     for (const element of [
+      this.querySelector("search-verses-for-awana-discovery-of-grace-page"),
+      this.querySelector("search-verses-for-sharing-the-gospel-page"),
       this.querySelector("search-advanced-page"),
       this.querySelector("score-page"),
     ]) {
@@ -55,6 +57,13 @@ export class AppStateProvider extends HTMLElement {
   #updatePageNavigation(pageName: string) {
     for (const element of [
       this.querySelector<HTMLElement>("instructions-page"),
+      this.querySelector<HTMLElement>("search-options-page"),
+      this.querySelector<HTMLElement>(
+        "search-verses-for-awana-discovery-of-grace-page",
+      ),
+      this.querySelector<HTMLElement>(
+        "search-verses-for-sharing-the-gospel-page",
+      ),
       this.querySelector<HTMLElement>("search-advanced-page"),
       this.querySelector<HTMLElement>("speak-page"),
       this.querySelector<HTMLElement>("score-page"),
