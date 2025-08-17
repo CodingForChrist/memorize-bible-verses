@@ -82,15 +82,24 @@ export class ScorePage extends BasePage {
         background-color: var(--color-primary-mint-cream);
         border-radius: 1.5rem;
         color: var(--color-gray);
-        padding: 1.5rem;
         text-align: left;
         min-height: 16rem;
-        margin: 2rem 1rem;
+        margin: 2rem 0;
+        padding: 1.5rem 1rem;
+
+        @media (width >= 28rem) {
+          margin: 2rem 1rem;
+          padding: 1.5rem;
+        }
       }
       .page-navigation {
-        margin: 2rem 1rem;
+        margin: 2rem 0;
         display: flex;
         justify-content: space-between;
+
+        @media (width >= 28rem) {
+          margin: 2rem 1rem;
+        }
       }
       .page-navigation branded-button {
         min-width: 6rem;
