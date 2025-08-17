@@ -3,7 +3,7 @@ import { CUSTOM_EVENTS } from "../../constants";
 
 import type { CustomEventNavigateToPage } from "../../types";
 
-export class SearchAdvancedPage extends BasePage {
+export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
   constructor() {
     super();
 
@@ -13,17 +13,15 @@ export class SearchAdvancedPage extends BasePage {
   }
 
   static get observedAttributes() {
-    return [...BasePage.observedAttributes, "bible-id", "verse-reference"];
+    return [...BasePage.observedAttributes, "bible-id"];
   }
 
   get pageTitle() {
-    return "︎Advanced Search | Memorize Bible Verses";
+    return "︎Verses for Awana Discovery of Grace Book | Memorize Bible Verses";
   }
 
-  get #bibleVerseSelectorElement() {
-    return this.shadowRoot!.querySelector(
-      "bible-verse-selector",
-    ) as HTMLElement;
+  get #bibleVerseListElement() {
+    return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
   }
 
   get #containerElement() {
@@ -31,13 +29,12 @@ export class SearchAdvancedPage extends BasePage {
     divElement.innerHTML = `
       <h1>Search</h1>
 
-      <p>Power Users can enter specific verses. <br> Simply type in the book, chapter number
-      and verse number you wish to learn. Then practice the verse.</p>
+      <p>Pick and practice an Awana verse.</p>
       <p>When you have the verse memorized go to Step 2.</p>
 
       <div class="search-container">
         <bible-translation-selector></bible-translation-selector>
-        <bible-verse-selector></bible-verse-selector>
+        <bible-verse-list verses="Jeremiah 10:10,Jeremiah 10:12,Psalm 139:7-10,Psalm 139:1-3,2 Corinthians 13:14"></bible-verse-list>
       </div>
 
       <div class="page-navigation">
@@ -147,12 +144,15 @@ export class SearchAdvancedPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    for (const attributeName of SearchAdvancedPage.observedAttributes) {
+    for (const attributeName of SearchVersesForAwanaDiscoveryOfGracePage.observedAttributes) {
       if (name === attributeName) {
-        this.#bibleVerseSelectorElement?.setAttribute(attributeName, newValue);
+        this.#bibleVerseListElement?.setAttribute(attributeName, newValue);
       }
     }
   }
 }
 
-window.customElements.define("search-advanced-page", SearchAdvancedPage);
+window.customElements.define(
+  "search-verses-for-awana-discovery-of-grace-page",
+  SearchVersesForAwanaDiscoveryOfGracePage,
+);

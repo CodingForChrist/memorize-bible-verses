@@ -7,13 +7,9 @@ import {
 } from "../constants";
 import { scriptureStyles } from "../sharedStyles";
 
-import type {
-  BibleVerse,
-  CustomEventUpdateBibleVerse,
-  CustomEventSearchForBibleVerse,
-} from "../types";
+import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
 
-export class BibleVerseSelector extends HTMLElement {
+export class BibleVerseList extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
 
   constructor() {
@@ -25,11 +21,15 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state", "bible-id", "verse-reference"];
+    return ["loading-state", "bible-id", "verses"];
   }
 
   get bibleId() {
     return this.getAttribute("bible-id");
+  }
+
+  get verses() {
+    return this.getAttribute("verses")?.split(",");
   }
 
   get selectedBibleVerse(): BibleVerse | undefined {
@@ -69,59 +69,31 @@ export class BibleVerseSelector extends HTMLElement {
 
   #showLoadingSpinner() {
     const loadingSpinnerElement = document.createElement("loading-spinner");
-    this.#searchResultsContainerElement.appendChild(loadingSpinnerElement);
+    this.#resultsContainerElement.appendChild(loadingSpinnerElement);
   }
 
   #hideLoadingSpinner() {
-    this.#searchResultsContainerElement
-      .querySelector("loading-spinner")
-      ?.remove();
+    this.#resultsContainerElement.querySelector("loading-spinner")?.remove();
   }
 
   #clearSelectedBibleVerse() {
     this.#selectedBibleVerse = undefined;
-    this.#renderSearchForm();
   }
 
-  get #searchFormContainerElement() {
+  get #selectContainerElement() {
     return this.shadowRoot!.querySelector(
-      "#search-form-container",
+      "#select-container",
     ) as HTMLDivElement;
   }
 
-  get #searchResultsContainerElement() {
+  get #resultsContainerElement() {
     return this.shadowRoot!.querySelector(
-      "#search-results-container",
+      "#results-container",
     ) as HTMLDivElement;
-  }
-
-  #renderSearchForm() {
-    this.#searchFormContainerElement.innerHTML = "";
-    this.#searchResultsContainerElement.innerHTML = "";
-
-    const verseReference = this.#selectedBibleVerse?.reference ?? "";
-    const searchFormElement = document.createElement("bible-verse-search-form");
-    searchFormElement.setAttribute("verse-reference", verseReference);
-
-    window.addEventListener(
-      CUSTOM_EVENTS.SEARCH_FOR_BIBLE_VERSE,
-      (event: CustomEventInit<CustomEventSearchForBibleVerse>) => {
-        if (this.loadingState === LOADING_STATES.PENDING) {
-          return;
-        }
-        const verseReference = event.detail?.verseReference;
-        if (verseReference) {
-          this.#searchResultsContainerElement.innerHTML = "";
-          this.#searchForVerse(verseReference);
-        }
-      },
-    );
-
-    this.#searchFormContainerElement.appendChild(searchFormElement);
   }
 
   #renderSelectedBibleVerse() {
-    this.#searchResultsContainerElement.innerHTML = "";
+    this.#resultsContainerElement.innerHTML = "";
 
     const bibleVerseBlockquoteElement = document.createElement(
       "bible-verse-blockquote",
@@ -132,7 +104,35 @@ export class BibleVerseSelector extends HTMLElement {
       </span>
     `;
 
-    this.#searchResultsContainerElement.append(bibleVerseBlockquoteElement);
+    this.#resultsContainerElement.append(bibleVerseBlockquoteElement);
+  }
+
+  #renderSelect() {
+    if (!this.verses) {
+      return;
+    }
+
+    this.#selectContainerElement.innerHTML = "";
+
+    const divContainerElement = document.createElement("div");
+    divContainerElement.innerHTML = `
+      <select name="select-verse" autofocus>
+      <option disabled selected value> -- select a verse -- </option>
+      ${this.verses.map(
+        (verse) => `<option value="${verse}">${verse}</option>`,
+      )}
+      </select>
+      `;
+    const selectElement = divContainerElement.querySelector(
+      'select[name="select-verse"]',
+    ) as HTMLSelectElement;
+
+    selectElement.onchange = async () => {
+      this.#resultsContainerElement.innerHTML = "";
+      await this.#searchForVerse(selectElement.value);
+    };
+
+    this.#selectContainerElement.appendChild(divContainerElement);
   }
 
   async #searchForVerse(query: string) {
@@ -172,12 +172,12 @@ export class BibleVerseSelector extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    this.#searchResultsContainerElement.innerHTML = "";
+    this.#resultsContainerElement.innerHTML = "";
     const alertErrorElement = document.createElement("alert-error");
     alertErrorElement.innerHTML = `
       <span slot="alert-error-message">${message}</span>
     `;
-    this.#searchResultsContainerElement.appendChild(alertErrorElement);
+    this.#resultsContainerElement.appendChild(alertErrorElement);
   }
 
   #renderTrackingPixel(fumsId: string) {
@@ -188,20 +188,14 @@ export class BibleVerseSelector extends HTMLElement {
     imageElement.style.height = "0";
     imageElement.src = `https://d3btgtzu3ctdwx.cloudfront.net/nf1?t=${fumsId}`;
 
-    this.#searchResultsContainerElement.appendChild(imageElement);
-  }
-
-  #updateSearchFormValue(value: string) {
-    this.#searchFormContainerElement
-      .querySelector("bible-verse-search-form")
-      ?.setAttribute("verse-reference", value);
+    this.#resultsContainerElement.appendChild(imageElement);
   }
 
   get #containerElements() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
-      <div id="search-form-container"></div>
-      <div id="search-results-container"></div>
+      <div id="select-container"></div>
+      <div id="results-container"></div>
     `;
 
     return divElement;
@@ -222,6 +216,28 @@ export class BibleVerseSelector extends HTMLElement {
     p {
       margin: 1rem 0;
     }
+    select {
+      font: inherit;
+      color: inherit;
+      line-height: 1.5rem;
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      background-color: var(--color-primary-mint-cream);
+      border: 1px solid var(--color-light-gray);
+      border-radius: 1.5rem;
+      print-color-adjust: exact;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+    }
+    select:focus {
+      border-color: var(--color-primary-mint-cream);
+      outline: 1px solid var(--color-gray);
+    }
     ${scriptureStyles}
     `;
     styleElement.textContent = css;
@@ -230,12 +246,8 @@ export class BibleVerseSelector extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === "bible-id" && oldValue !== newValue) {
-      return this.#renderSearchForm();
+      return this.#renderSelect();
     }
-    if (name === "verse-reference" && oldValue !== newValue) {
-      this.#updateSearchFormValue(newValue);
-    }
-
     if (
       name === "loading-state" &&
       this.loadingState === LOADING_STATES.RESOLVED
@@ -256,4 +268,4 @@ export class BibleVerseSelector extends HTMLElement {
   }
 }
 
-window.customElements.define("bible-verse-selector", BibleVerseSelector);
+window.customElements.define("bible-verse-list", BibleVerseList);
