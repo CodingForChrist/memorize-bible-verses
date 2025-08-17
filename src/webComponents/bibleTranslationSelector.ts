@@ -54,7 +54,7 @@ export class BibleTranslationSelector extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state"];
+    return ["loading-state", "bible-id"];
   }
 
   get selectedBibleTranslation(): BibleTranslation | undefined {
@@ -96,6 +96,10 @@ export class BibleTranslationSelector extends HTMLElement {
 
   #hideLoadingSpinner() {
     this.shadowRoot!.querySelector("loading-spinner")?.remove();
+  }
+
+  get #bibleTranslationSelectElement() {
+    return this.shadowRoot!.querySelector("select") as HTMLSelectElement;
   }
 
   async #fetchBibles() {
@@ -222,16 +226,22 @@ export class BibleTranslationSelector extends HTMLElement {
     await this.#fetchBibles();
   }
 
-  attributeChangedCallback(name: string) {
-    if (name !== "loading-state") {
-      return;
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === "bible-id" && oldValue !== newValue) {
+      this.#bibleTranslationSelectElement.value = newValue;
     }
 
     // wait for bibles to finish loading before rendering
-    if (this.loadingState === LOADING_STATES.RESOLVED) {
+    if (
+      name === "loading-state" &&
+      this.loadingState === LOADING_STATES.RESOLVED
+    ) {
       return this.#renderSelectElement();
     }
-    if (this.loadingState === LOADING_STATES.REJECTED) {
+    if (
+      name === "loading-state" &&
+      this.loadingState === LOADING_STATES.REJECTED
+    ) {
       return this.#renderErrorMessage(
         "Failed to load Bibles. Please try again later.",
       );

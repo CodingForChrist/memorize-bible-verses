@@ -113,6 +113,7 @@ export class BibleVerseList extends HTMLElement {
     }
 
     this.#selectContainerElement.innerHTML = "";
+    this.#resultsContainerElement.innerHTML = "";
 
     const divContainerElement = document.createElement("div");
     divContainerElement.innerHTML = `
@@ -131,6 +132,11 @@ export class BibleVerseList extends HTMLElement {
       this.#resultsContainerElement.innerHTML = "";
       await this.#searchForVerse(selectElement.value);
     };
+
+    if (this.selectedBibleVerse?.reference) {
+      selectElement.value = this.selectedBibleVerse.reference;
+      selectElement.dispatchEvent(new Event("change"));
+    }
 
     this.#selectContainerElement.appendChild(divContainerElement);
   }

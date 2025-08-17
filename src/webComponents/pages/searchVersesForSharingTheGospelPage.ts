@@ -20,6 +20,12 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     return "︎Verses for Sharing the Gospel | Memorize Bible Verses";
   }
 
+  get #bibleTranslationSelectorElement() {
+    return this.shadowRoot!.querySelector(
+      "bible-translation-selector",
+    ) as HTMLElement;
+  }
+
   get #bibleVerseListElement() {
     return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
   }
@@ -144,10 +150,9 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    for (const attributeName of SearchVersesForSharingTheGospelPage.observedAttributes) {
-      if (name === attributeName) {
-        this.#bibleVerseListElement?.setAttribute(attributeName, newValue);
-      }
+    if (name === "bible-id") {
+      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
+      this.#bibleVerseListElement?.setAttribute(name, newValue);
     }
   }
 }
