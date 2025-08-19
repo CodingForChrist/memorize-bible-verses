@@ -78,6 +78,7 @@ export class InstructionsPage extends BasePage {
       h2 {
         font-family: var(--font-heading);
         font-size: 1.3rem;
+        font-weight: 400;
         margin: 0;
 
         @media (width >= 40rem) {

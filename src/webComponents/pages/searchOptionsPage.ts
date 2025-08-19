@@ -62,6 +62,7 @@ export class SearchOptionsPage extends BasePage {
       h1 {
         font-family: var(--font-heading);
         font-size: 2rem;
+        font-weight: 400;
         margin: 2rem 0;
 
         @media (width >= 40rem) {
