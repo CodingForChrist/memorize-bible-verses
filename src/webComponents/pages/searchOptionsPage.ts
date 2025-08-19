@@ -38,8 +38,12 @@ export class SearchOptionsPage extends BasePage {
       </div>
 
       <div class="page-navigation">
-        <branded-button id="button-back" type="button" brand="secondary" text-content="< Back"></branded-button>
-        <branded-button id="button-forward" type="button" text-content="Step 1 >"></branded-button>
+        <branded-button id="button-back" type="button" brand="secondary">
+          <span slot="button-text">&lt; Back</span>
+        </branded-button>
+        <branded-button id="button-forward" type="button">
+          <span slot="button-text">Step 1 &gt;</span>
+        </branded-button>
       </div>
     `;
 
@@ -69,6 +73,11 @@ export class SearchOptionsPage extends BasePage {
       }
       .buttons-container {
         margin-top: 2rem;
+
+        @media (width >= 28rem) {
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
       }
       button {
         font-size: 1.25rem;

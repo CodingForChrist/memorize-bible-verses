@@ -227,7 +227,11 @@ export class BibleTranslationSelector extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === "bible-id" && oldValue !== newValue) {
+    if (
+      name === "bible-id" &&
+      this.#bibleTranslationSelectElement &&
+      oldValue !== newValue
+    ) {
       this.#bibleTranslationSelectElement.value = newValue;
     }
 

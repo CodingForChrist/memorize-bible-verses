@@ -3,14 +3,10 @@ export class BrandedButton extends HTMLElement {
     super();
 
     const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#buttonElement);
-    shadowRoot.appendChild(this.#styleElement);
-  }
+    const templateContent = this.#templateElement.content;
 
-  get #buttonElement() {
-    const buttonElement = document.createElement("button");
-    this.#updateButtonProperties(buttonElement);
-    return buttonElement;
+    shadowRoot.appendChild(this.#styleElement);
+    shadowRoot.appendChild(templateContent.cloneNode(true));
   }
 
   get #buttonType() {
@@ -26,14 +22,15 @@ export class BrandedButton extends HTMLElement {
     return this.getAttribute("brand") ?? "primary";
   }
 
-  get #buttonTextContent() {
-    return this.getAttribute("text-content") ?? "";
-  }
+  get #templateElement() {
+    const templateElement = document.createElement("template");
+    templateElement.innerHTML = `
+      <button type="${this.#buttonType}" class="${this.#buttonBrand}">
+        <slot name="button-text">BUTTON TEXT MISSING</slot>
+      </button>
+    `;
 
-  #updateButtonProperties(buttonElement: HTMLButtonElement) {
-    buttonElement.type = this.#buttonType;
-    buttonElement.textContent = this.#buttonTextContent;
-    buttonElement.classList.add(this.#buttonBrand);
+    return templateElement;
   }
 
   get #styleElement() {

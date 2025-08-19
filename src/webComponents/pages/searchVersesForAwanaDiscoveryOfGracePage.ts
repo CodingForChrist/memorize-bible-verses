@@ -33,20 +33,22 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
-      <h1>Search</h1>
+      <verse-text-page-template>
+        <span slot="page-heading">Search</span>
 
-      <p>Pick and practice an Awana verse.</p>
-      <p>When you have the verse memorized go to Step 2.</p>
+        <span slot="page-description">
+          <p>Pick and practice an Awana verse.</p>
+          <p>When you have the verse memorized go to Step 2.</p>
+        </span>
 
-      <div class="search-container">
-        <bible-translation-selector></bible-translation-selector>
-        <bible-verse-list verses="Jeremiah 10:10,Jeremiah 10:12,Psalms 139:7-10,Psalms 139:1-3,2 Corinthians 13:14"></bible-verse-list>
-      </div>
+        <span slot="page-content">
+          <bible-translation-selector></bible-translation-selector>
+          <bible-verse-list verses="Jeremiah 10:10,Jeremiah 10:12,Psalms 139:7-10,Psalms 139:1-3,2 Corinthians 13:14"></bible-verse-list>
+        </span>
 
-      <div class="page-navigation">
-        <branded-button id="button-back" type="button" brand="secondary" text-content="< Back"></branded-button>
-        <branded-button id="button-forward" type="button" text-content="Step 2 >"></branded-button>
-      </div>
+        <span slot="page-navigation-back-button">&lt; Back</span>
+        <span slot="page-navigation-forward-button">Step 2 &gt;</span>
+      </verse-text-page-template>
     `;
 
     return divElement;
@@ -55,52 +57,11 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
   get #styleElement() {
     const styleElement = document.createElement("style");
     const css = `
-      :host {
-        margin: 1rem auto;
-        text-align: center;
-        max-width: 28rem;
-        display: block;
-      }
-      h1 {
-        font-family: var(--font-heading);
-        font-size: 2rem;
-        margin: 2rem 0;
-
-        @media (width >= 40rem) {
-          font-size: 2.5rem;
-        }
-      }
-      p {
-        margin: 0 2.5rem 1rem 2.5rem;
-      }
       bible-translation-selector {
         margin-bottom: 1.5rem;
       }
-      .search-container {
-        background-color: var(--color-primary-mint-cream);
-        border-radius: 1.5rem;
-        color: var(--color-gray);
-        text-align: left;
-        min-height: 16rem;
-        margin: 2rem 0;
-        padding: 1.5rem 1rem;
-
-        @media (width >= 28rem) {
-          margin: 2rem 1rem;
-          padding: 1.5rem;
-        }
-      }
-      .page-navigation {
-        margin: 2rem 0;
-        display: flex;
-        justify-content: space-between;
-
-        @media (width >= 28rem) {
-          margin: 2rem 1rem;
-        }
-      }
-      .page-navigation branded-button {
-        min-width: 6rem;
+      p {
+        margin: 1rem 0;
       }
     `;
     styleElement.textContent = css;
@@ -136,14 +97,16 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
   connectedCallback() {
     super.connectedCallback();
 
-    this.shadowRoot!.querySelector("#button-back")?.addEventListener(
-      "click",
-      () => this.#navigateToPreviousPage(),
+    this.shadowRoot!.querySelector(
+      "verse-text-page-template",
+    )?.addEventListener("page-navigation-back-button-click", () =>
+      this.#navigateToPreviousPage(),
     );
 
-    this.shadowRoot!.querySelector("#button-forward")?.addEventListener(
-      "click",
-      () => this.#navigateToNextPage(),
+    this.shadowRoot!.querySelector(
+      "verse-text-page-template",
+    )?.addEventListener("page-navigation-forward-button-click", () =>
+      this.#navigateToNextPage(),
     );
   }
 
