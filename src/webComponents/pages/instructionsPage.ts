@@ -38,7 +38,9 @@ export class InstructionsPage extends BasePage {
       <h2>Score</h2>
       <p>Find out how well you have each verse memorized</p>
 
-      <branded-button type="button" text-content="Get Started"></branded-button>
+      <branded-button type="button">
+        <span slot="button-text">Get Started</span>
+      </branded-button>
     `;
 
     return divElement;

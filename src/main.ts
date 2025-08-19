@@ -22,6 +22,7 @@ import "./webComponents/reciteBibleVerse";
 import "./webComponents/accuracyReport";
 
 // pages
+import "./webComponents/pages/verseTextPageTemplate";
 import "./webComponents/pages/instructionsPage";
 import "./webComponents/pages/searchOptionsPage";
 import "./webComponents/pages/searchVersesForAwanaDiscoveryOfGracePage";

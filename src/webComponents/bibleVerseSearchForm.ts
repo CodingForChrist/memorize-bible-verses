@@ -32,7 +32,9 @@ export class BibleVerseSearchForm extends HTMLElement {
       </label>
       <form class="search-form-container">
         <input type="text" name="input-bible-verse" required autofocus>
-        <branded-button type="submit" text-content="Search"></branded-button>
+        <branded-button type="submit">
+          <span slot="button-text">Search</span>
+        </branded-button>
       </form>
     `;
     divElement.querySelector("input")!.value = this.verseReference ?? "";

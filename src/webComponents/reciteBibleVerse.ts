@@ -146,11 +146,8 @@ export class ReciteBibleVerse extends HTMLElement {
 
     this.#initialContentContainerElement.innerHTML = `
       <h2>${this.verseReference}</h2>
-      <branded-button
-        id="button-record"
-        type="button"
-        brand="secondary"
-        text-content="&#9679; RECORD">
+      <branded-button id="button-record" type="button" brand="secondary">
+        <span slot="button-text">&#9679; RECORD</span>
       </branded-button>
     `;
 
@@ -177,11 +174,8 @@ export class ReciteBibleVerse extends HTMLElement {
 
   #showStopButton() {
     this.#recordingControlsContainerElement.innerHTML = `
-      <branded-button
-        id="button-stop"
-        type="button"
-        brand="secondary"
-        text-content="&#9632; Stop">
+      <branded-button id="button-stop" type="button" brand="secondary">
+        <span slot="button-text">&#9632; Stop</span>
       </branded-button>
     `;
 
@@ -192,11 +186,8 @@ export class ReciteBibleVerse extends HTMLElement {
 
   #showTryAgainButton() {
     this.#recordingControlsContainerElement.innerHTML = `
-      <branded-button
-        id="button-try-again"
-        type="button"
-        brand="secondary"
-        text-content="Try Again">
+      <branded-button id="button-try-again" type="button" brand="secondary">
+        <span slot="button-text">Try Again</span>
       </branded-button>
     `;
 
@@ -314,6 +305,7 @@ export class ReciteBibleVerse extends HTMLElement {
         margin-top: 0;
         margin-bottom: 2rem;
         font-size: 1.5rem;
+        font-weight: 400;
       }
       alert-error {
         text-align: left;
