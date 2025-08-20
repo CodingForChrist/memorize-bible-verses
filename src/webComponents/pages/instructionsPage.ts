@@ -1,8 +1,5 @@
 import { BasePage } from "./basePage";
-import { CUSTOM_EVENTS } from "../../constants";
 import logoURL from "../../images/logo.svg";
-
-import type { CustomEventNavigateToPage } from "../../types";
 
 export class InstructionsPage extends BasePage {
   constructor() {
@@ -98,25 +95,12 @@ export class InstructionsPage extends BasePage {
     return styleElement;
   }
 
-  #navigateToNextPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "search-options-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
   connectedCallback() {
     super.connectedCallback();
 
     this.shadowRoot!.querySelector("branded-button")?.addEventListener(
       "click",
-      () => this.#navigateToNextPage(),
+      () => this.navigateToPage({ nextPage: "search-options-page" }),
     );
   }
 }

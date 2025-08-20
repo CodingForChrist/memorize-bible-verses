@@ -1,7 +1,4 @@
 import { BasePage } from "./basePage";
-import { CUSTOM_EVENTS } from "../../constants";
-
-import type { CustomEventNavigateToPage } from "../../types";
 
 export class SearchVersesForSharingTheGospelPage extends BasePage {
   constructor() {
@@ -68,45 +65,22 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     return styleElement;
   }
 
-  #navigateToPreviousPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "search-options-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
-  #navigateToNextPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "speak-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
   connectedCallback() {
     super.connectedCallback();
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.#navigateToPreviousPage(),
+      this.navigateToPage({ nextPage: "search-options-page" }),
     );
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
-      this.#navigateToNextPage(),
+      this.navigateToPage({
+        nextPage: "speak-page",
+        previousPage: "search-verses-for-sharing-the-gospel-page",
+      }),
     );
   }
 

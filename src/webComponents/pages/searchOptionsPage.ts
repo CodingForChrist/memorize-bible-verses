@@ -1,10 +1,7 @@
 import { BasePage } from "./basePage";
 import { CUSTOM_EVENTS } from "../../constants";
 
-import type {
-  CustomEventNavigateToPage,
-  CustomEventUpdateBibleVerse,
-} from "../../types";
+import type { CustomEventUpdateBibleVerse } from "../../types";
 
 export class SearchOptionsPage extends BasePage {
   constructor() {
@@ -127,47 +124,6 @@ export class SearchOptionsPage extends BasePage {
     return styleElement;
   }
 
-  #navigateToSearchAdvancedPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "search-advanced-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
-  #navigateToAwanaDiscoveryOfGracePage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: {
-            pageName: "search-verses-for-awana-discovery-of-grace-page",
-          },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
-  #navigateToShareTheGospelPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "search-verses-for-sharing-the-gospel-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
   #navigateToPsalm23Page() {
     const bibleVersePsalm23 = {
       id: "",
@@ -186,24 +142,7 @@ export class SearchOptionsPage extends BasePage {
       );
     window.dispatchEvent(eventUpdateSelectedBible);
 
-    this.#navigateToSearchAdvancedPage();
-  }
-
-  #navigateToPreviousPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "instructions-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
-  #navigateToNextPage() {
-    this.#navigateToSearchAdvancedPage();
+    this.navigateToPage({ nextPage: "search-advanced-page" });
   }
 
   connectedCallback() {
@@ -212,12 +151,18 @@ export class SearchOptionsPage extends BasePage {
     this.shadowRoot!.querySelector(
       "#button-awana-discovery-of-grace",
     )?.addEventListener("click", () =>
-      this.#navigateToAwanaDiscoveryOfGracePage(),
+      this.navigateToPage({
+        nextPage: "search-verses-for-awana-discovery-of-grace-page",
+      }),
     );
 
     this.shadowRoot!.querySelector(
       "#button-share-the-gospel",
-    )?.addEventListener("click", () => this.#navigateToShareTheGospelPage());
+    )?.addEventListener("click", () =>
+      this.navigateToPage({
+        nextPage: "search-verses-for-sharing-the-gospel-page",
+      }),
+    );
 
     this.shadowRoot!.querySelector("#button-psalm-23")?.addEventListener(
       "click",
@@ -226,17 +171,17 @@ export class SearchOptionsPage extends BasePage {
 
     this.shadowRoot!.querySelector("#button-power-user")?.addEventListener(
       "click",
-      () => this.#navigateToSearchAdvancedPage(),
+      () => this.navigateToPage({ nextPage: "search-advanced-page" }),
     );
 
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
-      () => this.#navigateToPreviousPage(),
+      () => this.navigateToPage({ nextPage: "instructions-page" }),
     );
 
     this.shadowRoot!.querySelector("#button-forward")?.addEventListener(
       "click",
-      () => this.#navigateToNextPage(),
+      () => this.navigateToPage({ nextPage: "search-advanced-page" }),
     );
   }
 }
