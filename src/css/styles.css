@@ -38,9 +38,9 @@ body {
 
 #app-container {
   box-sizing: border-box;
-  margin: 0 auto;
+  margin: 0 auto 4rem auto;
   max-width: 42rem;
   min-width: 20rem;
-  min-height: 54rem;
+  min-height: 100vh;
   padding: 0 0.5rem 4rem 0.5rem;
 }
