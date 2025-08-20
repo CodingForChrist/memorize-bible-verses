@@ -25,7 +25,7 @@ export class SearchAdvancedPage extends BasePage {
 
   get #bibleVerseSelectorElement() {
     return this.shadowRoot!.querySelector(
-      "bible-verse-selector",
+      "bible-verse-advanced-search",
     ) as HTMLElement;
   }
 
@@ -43,7 +43,7 @@ export class SearchAdvancedPage extends BasePage {
 
         <span slot="page-content">
           <bible-translation-selector></bible-translation-selector>
-          <bible-verse-selector></bible-verse-selector>
+          <bible-verse-advanced-search></bible-verse-advanced-search>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
