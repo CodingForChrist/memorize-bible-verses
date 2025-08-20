@@ -28,8 +28,8 @@ export class SearchOptionsPage extends BasePage {
       <p>Choose to memorize verses from the options below.</p>
 
       <div class="buttons-container">
-        <button id="button-awana-truth-and-training" type="button">Awana Truth and Training (3-6)</button>
-        <button id="button-awana-sparks" type="button">Awana Sparks (K-2)</button>
+        <button id="button-awana-truth-and-training" type="button">Awana Truth and Training</button>
+        <button id="button-awana-sparks" type="button">Awana Sparks</button>
         <button id="button-share-the-gospel" type="button">Share the Gospel</button>
         <button id="button-psalm-23" type="button">Psalm 23</button>
         <button id="button-power-user" type="button">Power User: Choose Your Verses</button>
