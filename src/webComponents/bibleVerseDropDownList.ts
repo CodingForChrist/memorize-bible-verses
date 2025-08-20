@@ -9,7 +9,7 @@ import { scriptureStyles } from "../sharedStyles";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
 
-export class BibleVerseList extends HTMLElement {
+export class BibleVerseDropDownList extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
 
   constructor() {
@@ -282,4 +282,7 @@ export class BibleVerseList extends HTMLElement {
   }
 }
 
-window.customElements.define("bible-verse-list", BibleVerseList);
+window.customElements.define(
+  "bible-verse-drop-down-list",
+  BibleVerseDropDownList,
+);

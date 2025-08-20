@@ -10,10 +10,10 @@ import "./webComponents/bibleVerseBlockquote";
 import "./webComponents/brandedButton";
 
 // step 1 components
-import "./webComponents/bibleTranslationSelector";
-import "./webComponents/bibleVerseAdvancedSearch";
-import "./webComponents/bibleVerseList";
+import "./webComponents/bibleTranslationDropDownList";
+import "./webComponents/bibleVerseDropDownList";
 import "./webComponents/bibleVerseSearchForm";
+import "./webComponents/bibleVerseAdvancedSearch";
 
 // step 2 component
 import "./webComponents/reciteBibleVerse";
