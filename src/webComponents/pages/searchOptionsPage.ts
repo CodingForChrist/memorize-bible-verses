@@ -28,7 +28,8 @@ export class SearchOptionsPage extends BasePage {
       <p>Choose to memorize verses from the options below.</p>
 
       <div class="buttons-container">
-        <button id="button-awana-discovery-of-grace" type="button">Awana: Discovery of Grace</button>
+        <button id="button-awana-truth-and-training" type="button">Awana Truth and Training (3-6)</button>
+        <button id="button-awana-sparks" type="button">Awana Sparks (K-2)</button>
         <button id="button-share-the-gospel" type="button">Share the Gospel</button>
         <button id="button-psalm-23" type="button">Psalm 23</button>
         <button id="button-power-user" type="button">Power User: Choose Your Verses</button>
@@ -95,17 +96,20 @@ export class SearchOptionsPage extends BasePage {
       button:hover {
         filter: brightness(85%);
       }
-      #button-awana-discovery-of-grace {
+      #button-awana-truth-and-training {
         background-color: var(--color-secondary-blue-green);
       }
-      #button-share-the-gospel {
+      #button-awana-sparks {
         background-color: var(--color-primary-bright-pink);
       }
-      #button-psalm-23 {
+      #button-share-the-gospel {
         background-color: var(--color-secondary-ut-orange);
       }
-      #button-power-user {
+      #button-psalm-23 {
         background-color: var(--color-secondary-jade);
+      }
+      #button-power-user {
+        background-color: var(--color-secondary-cerulean);
       }
       .page-navigation {
         margin: 2rem 0;
@@ -149,11 +153,19 @@ export class SearchOptionsPage extends BasePage {
     super.connectedCallback();
 
     this.shadowRoot!.querySelector(
-      "#button-awana-discovery-of-grace",
+      "#button-awana-truth-and-training",
     )?.addEventListener("click", () =>
       this.navigateToPage({
-        nextPage: "search-verses-for-awana-discovery-of-grace-page",
+        nextPage: "search-verses-for-awana-truth-and-training-page",
       }),
+    );
+
+    this.shadowRoot!.querySelector("#button-awana-sparks")?.addEventListener(
+      "click",
+      () =>
+        this.navigateToPage({
+          nextPage: "search-verses-for-awana-sparks-page",
+        }),
     );
 
     this.shadowRoot!.querySelector(

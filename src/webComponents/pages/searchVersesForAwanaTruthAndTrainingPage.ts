@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
+export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
   constructor() {
     super();
 
@@ -14,7 +14,7 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
   }
 
   get pageTitle() {
-    return "︎Verses for Awana Discovery of Grace Book | Memorize Bible Verses";
+    return "︎Verses for Awana T&T (grades 3-6) | Memorize Bible Verses";
   }
 
   get #bibleTranslationSelectorElement() {
@@ -27,6 +27,17 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
     return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
   }
 
+  get awanaBookDiscoveryOfGraceBibleVerses() {
+    return [
+      "Psalm 9:10",
+      "Romans 8:38-39",
+      "Deuteronomy 7:9",
+      "2 Peter 3:9",
+      "Romans 8:28",
+      "2 Timothy 1:9",
+    ];
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -34,13 +45,13 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
         <span slot="page-heading">Search</span>
 
         <span slot="page-description">
-          <p>Pick and practice an Awana verse.</p>
+          <p>Pick and practice a verse for Awana T&T.</p>
           <p>When you have the verse memorized go to Step 2.</p>
         </span>
 
         <span slot="page-content">
           <bible-translation-selector></bible-translation-selector>
-          <bible-verse-list verses="Jeremiah 10:10,Jeremiah 10:12,Psalms 139:7-10,Psalms 139:1-3,2 Corinthians 13:14"></bible-verse-list>
+          <bible-verse-list verses="${this.awanaBookDiscoveryOfGraceBibleVerses.join(",")}"></bible-verse-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -79,7 +90,7 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
         nextPage: "speak-page",
-        previousPage: "search-verses-for-awana-discovery-of-grace-page",
+        previousPage: "search-verses-for-awana-truth-and-training-page",
       }),
     );
   }
@@ -95,6 +106,6 @@ export class SearchVersesForAwanaDiscoveryOfGracePage extends BasePage {
 }
 
 window.customElements.define(
-  "search-verses-for-awana-discovery-of-grace-page",
-  SearchVersesForAwanaDiscoveryOfGracePage,
+  "search-verses-for-awana-truth-and-training-page",
+  SearchVersesForAwanaTruthAndTrainingPage,
 );
