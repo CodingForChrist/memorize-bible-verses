@@ -70,7 +70,7 @@ export class SearchOptionsPage extends BasePage {
         }
       }
       p {
-        margin: 0 2.5rem 1rem 2.5rem;
+        margin: 0 2.5rem 1rem;
       }
       .buttons-container {
         margin-top: 2rem;
