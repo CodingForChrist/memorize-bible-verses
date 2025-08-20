@@ -19,7 +19,7 @@ export class SearchAdvancedPage extends BasePage {
 
   get #bibleTranslationSelectorElement() {
     return this.shadowRoot!.querySelector(
-      "bible-translation-selector",
+      "bible-translation-drop-down-list",
     ) as HTMLElement;
   }
 
@@ -42,7 +42,7 @@ export class SearchAdvancedPage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <bible-translation-selector></bible-translation-selector>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
           <bible-verse-advanced-search></bible-verse-advanced-search>
         </span>
 
@@ -60,7 +60,7 @@ export class SearchAdvancedPage extends BasePage {
       p {
         margin: 1rem 0;
       }
-      bible-translation-selector {
+      bible-translation-drop-down-list {
         margin-bottom: 1.5rem;
       }
     `;

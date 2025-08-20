@@ -19,12 +19,14 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
 
   get #bibleTranslationSelectorElement() {
     return this.shadowRoot!.querySelector(
-      "bible-translation-selector",
+      "bible-translation-drop-down-list",
     ) as HTMLElement;
   }
 
   get #bibleVerseListElement() {
-    return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
+    return this.shadowRoot!.querySelector(
+      "bible-verse-drop-down-list",
+    ) as HTMLElement;
   }
 
   get #containerElement() {
@@ -39,8 +41,8 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <bible-translation-selector></bible-translation-selector>
-          <bible-verse-list verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9"></bible-verse-list>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
+          <bible-verse-drop-down-list verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9"></bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -54,7 +56,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
   get #styleElement() {
     const styleElement = document.createElement("style");
     const css = `
-      bible-translation-selector {
+      bible-translation-drop-down-list {
         margin-bottom: 1.5rem;
       }
       p {

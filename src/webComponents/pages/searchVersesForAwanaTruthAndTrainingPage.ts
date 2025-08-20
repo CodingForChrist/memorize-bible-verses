@@ -19,12 +19,14 @@ export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
 
   get #bibleTranslationSelectorElement() {
     return this.shadowRoot!.querySelector(
-      "bible-translation-selector",
+      "bible-translation-drop-down-list",
     ) as HTMLElement;
   }
 
   get #bibleVerseListElement() {
-    return this.shadowRoot!.querySelector("bible-verse-list") as HTMLElement;
+    return this.shadowRoot!.querySelector(
+      "bible-verse-drop-down-list",
+    ) as HTMLElement;
   }
 
   get awanaBookDiscoveryOfGraceBibleVerses() {
@@ -50,8 +52,8 @@ export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <bible-translation-selector></bible-translation-selector>
-          <bible-verse-list verses="${this.awanaBookDiscoveryOfGraceBibleVerses.join(",")}"></bible-verse-list>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
+          <bible-verse-drop-down-list verses="${this.awanaBookDiscoveryOfGraceBibleVerses.join(",")}"></bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -65,7 +67,7 @@ export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
   get #styleElement() {
     const styleElement = document.createElement("style");
     const css = `
-      bible-translation-selector {
+      bible-translation-drop-down-list {
         margin-bottom: 1.5rem;
       }
       p {

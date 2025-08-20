@@ -40,7 +40,7 @@ const supportedBibles = [
 // default to NASB 1995
 const defaultBible = supportedBibles[0];
 
-export class BibleTranslationSelector extends HTMLElement {
+export class BibleTranslationDropDownList extends HTMLElement {
   #selectedBibleTranslation?: BibleTranslation;
   bibleTranslations: BibleTranslation[];
 
@@ -254,6 +254,6 @@ export class BibleTranslationSelector extends HTMLElement {
 }
 
 window.customElements.define(
-  "bible-translation-selector",
-  BibleTranslationSelector,
+  "bible-translation-drop-down-list",
+  BibleTranslationDropDownList,
 );
