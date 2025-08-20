@@ -13,7 +13,7 @@ import type {
   CustomEventSearchForBibleVerse,
 } from "../types";
 
-export class BibleVerseSelector extends HTMLElement {
+export class BibleVerseAdvancedSearch extends HTMLElement {
   #selectedBibleVerse?: BibleVerse;
 
   constructor() {
@@ -256,4 +256,7 @@ export class BibleVerseSelector extends HTMLElement {
   }
 }
 
-window.customElements.define("bible-verse-selector", BibleVerseSelector);
+window.customElements.define(
+  "bible-verse-advanced-search",
+  BibleVerseAdvancedSearch,
+);
