@@ -1,7 +1,4 @@
 import { BasePage } from "./basePage";
-import { CUSTOM_EVENTS } from "../../constants";
-
-import type { CustomEventNavigateToPage } from "../../types";
 
 export class SpeakPage extends BasePage {
   constructor() {
@@ -27,6 +24,10 @@ export class SpeakPage extends BasePage {
 
   get pageTitle() {
     return `Speak ${this.verseReference ?? ""} | Memorize Bible Verses`;
+  }
+
+  get previousPage() {
+    return this.getAttribute("previous-page") ?? "search-advanced-page";
   }
 
   get #reciteBibleVerseElement() {
@@ -68,45 +69,19 @@ export class SpeakPage extends BasePage {
     return styleElement;
   }
 
-  #navigateToPreviousPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "search-advanced-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
-  #navigateToNextPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "score-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
   connectedCallback() {
     super.connectedCallback();
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.#navigateToPreviousPage(),
+      this.navigateToPage({ nextPage: this.previousPage }),
     );
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
-      this.#navigateToNextPage(),
+      this.navigateToPage({ nextPage: "score-page" }),
     );
   }
 

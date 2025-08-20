@@ -1,6 +1,10 @@
+import { CUSTOM_EVENTS } from "../../constants";
+
+import type { CustomEventNavigateToPage, PageNavigation } from "../../types";
+
 export class BasePage extends HTMLElement {
   static get observedAttributes() {
-    return ["is-visible"];
+    return ["is-visible", "previous-page"];
   }
 
   // override this title to be page-specific
@@ -10,6 +14,19 @@ export class BasePage extends HTMLElement {
 
   get isVisible() {
     return this.getAttribute("is-visible") === "true";
+  }
+
+  navigateToPage(pageNavigation: PageNavigation) {
+    const eventNavigateToSearchPage =
+      new CustomEvent<CustomEventNavigateToPage>(
+        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+        {
+          detail: { pageNavigation },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventNavigateToSearchPage);
   }
 
   #updateVisibility() {

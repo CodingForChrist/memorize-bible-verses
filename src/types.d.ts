@@ -13,6 +13,11 @@ export type BibleVerse = {
   content: string;
 };
 
+export type PageNavigation = {
+  nextPage: string;
+  previousPage?: string;
+};
+
 export type CustomEventUpdateBibleTranslation = {
   bibleTranslation: BibleTranslation;
 };
@@ -26,7 +31,7 @@ export type CustomEventUpdateRecitedBibleVerse = {
 };
 
 export type CustomEventNavigateToPage = {
-  pageName: string;
+  pageNavigation: PageNavigation;
 };
 
 export type CustomEventSearchForBibleVerse = {

@@ -1,10 +1,7 @@
 import { BasePage } from "./basePage";
 import { CUSTOM_EVENTS } from "../../constants";
 
-import type {
-  CustomEventNavigateToPage,
-  CustomEventUpdateBibleVerse,
-} from "../../types";
+import type { CustomEventUpdateBibleVerse } from "../../types";
 
 export class ScorePage extends BasePage {
   constructor() {
@@ -70,30 +67,8 @@ export class ScorePage extends BasePage {
     return styleElement;
   }
 
-  #navigateToPreviousPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "speak-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
-  }
-
   #navigateToNextPage() {
-    const eventNavigateToSearchPage =
-      new CustomEvent<CustomEventNavigateToPage>(
-        CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
-        {
-          detail: { pageName: "search-advanced-page" },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventNavigateToSearchPage);
+    this.navigateToPage({ nextPage: "search-options-page" });
 
     // clear out the selected verse
     const emptyBibleVerse = {
@@ -120,7 +95,7 @@ export class ScorePage extends BasePage {
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.#navigateToPreviousPage(),
+      this.navigateToPage({ nextPage: "speak-page" }),
     );
 
     this.shadowRoot!.querySelector(

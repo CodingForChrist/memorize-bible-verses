@@ -7,6 +7,7 @@ import type {
   CustomEventUpdateBibleVerse,
   CustomEventUpdateRecitedBibleVerse,
   CustomEventNavigateToPage,
+  PageNavigation,
 } from "../types";
 
 export class AppStateProvider extends HTMLElement {
@@ -54,32 +55,31 @@ export class AppStateProvider extends HTMLElement {
     }
   }
 
-  #updatePageNavigation(pageName: string) {
+  #updatePageNavigation({ previousPage, nextPage }: PageNavigation) {
     for (const element of [
-      this.querySelector<HTMLElement>("instructions-page"),
-      this.querySelector<HTMLElement>("search-options-page"),
-      this.querySelector<HTMLElement>(
-        "search-verses-for-awana-discovery-of-grace-page",
-      ),
-      this.querySelector<HTMLElement>(
-        "search-verses-for-sharing-the-gospel-page",
-      ),
-      this.querySelector<HTMLElement>("search-advanced-page"),
-      this.querySelector<HTMLElement>("speak-page"),
-      this.querySelector<HTMLElement>("score-page"),
+      this.querySelector("instructions-page"),
+      this.querySelector("search-options-page"),
+      this.querySelector("search-verses-for-awana-discovery-of-grace-page"),
+      this.querySelector("search-verses-for-sharing-the-gospel-page"),
+      this.querySelector("search-advanced-page"),
+      this.querySelector("speak-page"),
+      this.querySelector("score-page"),
     ]) {
       if (!element) {
         return;
       }
-      const isVisible = element === this.querySelector(pageName);
+      const isVisible = element === this.querySelector(nextPage);
       element.setAttribute("is-visible", String(isVisible));
+      if (previousPage) {
+        element.setAttribute("previous-page", previousPage);
+      }
     }
 
     const url = new URL(window.location.href);
     if (url.searchParams.has("page-name")) {
-      url.searchParams.set("page-name", pageName);
+      url.searchParams.set("page-name", nextPage);
     } else {
-      url.searchParams.append("page-name", pageName);
+      url.searchParams.append("page-name", nextPage);
     }
     history.pushState({}, "", url);
     window.scrollTo(0, 0);
@@ -87,8 +87,8 @@ export class AppStateProvider extends HTMLElement {
 
   #navigateToPageBasedOnURLParam() {
     const url = new URL(window.location.href);
-    const pageName = url.searchParams.get("page-name") || "instructions-page";
-    this.#updatePageNavigation(pageName);
+    const nextPage = url.searchParams.get("page-name") || "instructions-page";
+    this.#updatePageNavigation({ nextPage });
   }
 
   connectedCallback() {
@@ -125,9 +125,9 @@ export class AppStateProvider extends HTMLElement {
     window.addEventListener(
       CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
       (event: CustomEventInit<CustomEventNavigateToPage>) => {
-        const pageName = event.detail?.pageName;
-        if (pageName) {
-          this.#updatePageNavigation(pageName);
+        const pageNavigation = event.detail?.pageNavigation;
+        if (pageNavigation) {
+          this.#updatePageNavigation(pageNavigation);
         }
       },
     );
