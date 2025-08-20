@@ -134,7 +134,15 @@ export class BibleVerseList extends HTMLElement {
     };
 
     if (this.selectedBibleVerse?.reference) {
-      selectElement.value = this.selectedBibleVerse.reference;
+      if (this.selectedBibleVerse.reference.startsWith("Psalms")) {
+        const psalmVerseReference = this.selectedBibleVerse.reference.replace(
+          "Psalms",
+          "Psalm",
+        );
+        selectElement.value = psalmVerseReference;
+      } else {
+        selectElement.value = this.selectedBibleVerse.reference;
+      }
       selectElement.dispatchEvent(new Event("change"));
     }
 
