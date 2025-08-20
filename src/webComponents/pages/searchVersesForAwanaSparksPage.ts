@@ -30,7 +30,20 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
   }
 
   get awanaBookWingRunnerBibleVerses() {
-    return ["John 3:16", "1 John 4:14", "Psalm 147:5"];
+    return [
+      "John 3:16",
+      "1 John 4:14",
+      "Psalm 147:5",
+      "1 Corinthians 15:3",
+      "1 Corinthians 15:4",
+      "James 2:10",
+      "Acts 16:31",
+      "John 20:31",
+      "Psalm 118:1",
+      "Romans 6:23",
+      "Deuteronomy 6:5",
+      "Psalm 96:2",
+    ];
   }
 
   get #containerElement() {
