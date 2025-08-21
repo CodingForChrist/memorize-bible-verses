@@ -167,9 +167,11 @@ export const scriptureStyles = `
   .scripture-styles .v:after,
   .scripture-styles .vp:after,
   .scripture-styles sup[class^="v"]:after {
+    /* custom update - replace octal escape sequence with hexadecimal escape sequence */
     content: "\xA0";
   }
   .scripture-styles sup + sup:before {
+    /* custom update - replace octal escape sequence with hexadecimal escape sequence */
     content: "\xA0";
   }
   .scripture-styles .va {
@@ -221,6 +223,7 @@ export const scriptureStyles = `
     font-weight: bold;
   }
   .scripture-styles .notelink + sup:before {
+    /* custom update - replace octal escape sequence with hexadecimal escape sequence */
     content: "\xA0";
   }
   .scripture-styles .f {
@@ -258,6 +261,7 @@ export const scriptureStyles = `
     font-weight: bold;
   }
   .scripture-styles .fv:after {
+    /* custom update - replace octal escape sequence with hexadecimal escape sequence */
     content: "\xA0";
   }
   .scripture-styles .h {
