@@ -1,7 +1,6 @@
 // copied from https://github.com/americanbible/scripture-styles
 export const scriptureStyles = `
   .scripture-styles {
-    /* custom update - comment out font size to match app styling */
     font-size: 18px;
     font-family: "Noto Serif", serif;
     line-height: 25px;
@@ -168,10 +167,10 @@ export const scriptureStyles = `
   .scripture-styles .v:after,
   .scripture-styles .vp:after,
   .scripture-styles sup[class^="v"]:after {
-    content: "\a0";
+    content: "\xA0";
   }
   .scripture-styles sup + sup:before {
-    content: "\a0";
+    content: "\xA0";
   }
   .scripture-styles .va {
     font-style: italic;
@@ -222,7 +221,7 @@ export const scriptureStyles = `
     font-weight: bold;
   }
   .scripture-styles .notelink + sup:before {
-    content: "\a0";
+    content: "\xA0";
   }
   .scripture-styles .f {
     font-size: 16px;
@@ -259,7 +258,7 @@ export const scriptureStyles = `
     font-weight: bold;
   }
   .scripture-styles .fv:after {
-    content: "\a0";
+    content: "\xA0";
   }
   .scripture-styles .h {
     text-align: center;

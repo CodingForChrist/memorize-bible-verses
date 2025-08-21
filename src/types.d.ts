@@ -11,6 +11,7 @@ export type BibleVerse = {
   id: string;
   reference: string;
   content: string;
+  verseCount: number;
 };
 
 export type PageNavigation = {

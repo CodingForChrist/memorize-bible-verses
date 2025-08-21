@@ -1,11 +1,41 @@
-export function removeExtraContentFromBibleVerse(htmlContentString: string) {
+type RemoveExtraContentFromBibleVerseOptions = {
+  shouldRemoveSectionHeadings: boolean;
+  shouldRemoveFootnotes: boolean;
+  shouldRemoveVerseNumbers: boolean;
+  shouldTrimParagraphBreaks: boolean;
+};
+
+const defaultOptions = {
+  shouldRemoveSectionHeadings: true,
+  shouldRemoveFootnotes: true,
+  shouldRemoveVerseNumbers: true,
+  shouldTrimParagraphBreaks: true,
+};
+
+export function removeExtraContentFromBibleVerse(
+  htmlContentString: string,
+  {
+    shouldRemoveSectionHeadings,
+    shouldRemoveFootnotes,
+    shouldRemoveVerseNumbers,
+    shouldTrimParagraphBreaks,
+  }: RemoveExtraContentFromBibleVerseOptions = defaultOptions,
+) {
   const divElement = document.createElement("div");
   divElement.innerHTML = htmlContentString;
 
-  removeSectionHeadings(divElement);
-  removeFootnotes(divElement);
-  removeVerseNumbers(divElement);
-  trimParagraphBreaks(divElement);
+  if (shouldRemoveSectionHeadings) {
+    removeSectionHeadings(divElement);
+  }
+  if (shouldRemoveFootnotes) {
+    removeFootnotes(divElement);
+  }
+  if (shouldRemoveVerseNumbers) {
+    removeVerseNumbers(divElement);
+  }
+  if (shouldTrimParagraphBreaks) {
+    trimParagraphBreaks(divElement);
+  }
 
   return divElement.innerHTML;
 }
