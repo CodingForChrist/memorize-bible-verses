@@ -1,4 +1,7 @@
-import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
+import {
+  convertBibleVerseToText,
+  removeExtraContentFromBibleVerse,
+} from "../formatBibleVerseFromApi";
 import { scriptureStyles } from "../sharedStyles";
 import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 import { getTextDifferenceForBibleVerse } from "../textDifferenceForBibleVerse";
@@ -133,7 +136,7 @@ export class AccuracyReport extends HTMLElement {
             <td>
               <bible-verse-blockquote>
                 <span class="scripture-styles" slot="bible-verse-content">
-                  ${this.verseContent}
+                  ${removeExtraContentFromBibleVerse(this.verseContent)}
                  </span>
               </bible-verse-blockquote>
             </td>

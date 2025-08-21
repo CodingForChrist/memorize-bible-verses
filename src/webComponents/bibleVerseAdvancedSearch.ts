@@ -39,7 +39,7 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
   set selectedBibleVerse(value: BibleVerse) {
     this.#selectedBibleVerse = {
       ...value,
-      content: removeExtraContentFromBibleVerse(value.content),
+      content: this.#formatBibleVerse(value),
     };
     const eventUpdateSelectedBible =
       new CustomEvent<CustomEventUpdateBibleVerse>(
@@ -76,6 +76,17 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
     this.#searchResultsContainerElement
       .querySelector("loading-spinner")
       ?.remove();
+  }
+
+  #formatBibleVerse(bibleVerse: BibleVerse) {
+    const options = {
+      shouldRemoveSectionHeadings: true,
+      shouldRemoveFootnotes: true,
+      shouldRemoveVerseNumbers: bibleVerse.verseCount < 2,
+      shouldTrimParagraphBreaks: true,
+    };
+
+    return removeExtraContentFromBibleVerse(bibleVerse.content, options);
   }
 
   #clearSelectedBibleVerse() {
@@ -159,8 +170,9 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
       const json = await response.json();
 
       if (response.ok && json.data && json.data?.passages.length === 1) {
-        const { id, reference, content } = json.data.passages[0] as BibleVerse;
-        this.selectedBibleVerse = { id, reference, content };
+        const { id, reference, content, verseCount } = json.data
+          .passages[0] as BibleVerse;
+        this.selectedBibleVerse = { id, reference, content, verseCount };
         this.loadingState = LOADING_STATES.RESOLVED;
         this.#renderTrackingPixel(json.meta.fumsId);
       } else {

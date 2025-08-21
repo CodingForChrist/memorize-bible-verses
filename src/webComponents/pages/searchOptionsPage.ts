@@ -133,6 +133,7 @@ export class SearchOptionsPage extends BasePage {
       id: "",
       reference: "Psalm 23:1-6",
       content: "",
+      verseCount: 0,
     };
 
     const eventUpdateSelectedBible =

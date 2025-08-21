@@ -75,6 +75,7 @@ export class ScorePage extends BasePage {
       id: "",
       reference: "",
       content: "",
+      verseCount: 0,
     };
 
     const eventUpdateSelectedBible =
