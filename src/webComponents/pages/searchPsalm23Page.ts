@@ -53,10 +53,7 @@ export class SearchPsalm23Page extends BasePage {
       "true",
     );
 
-    bibleVerseFetchResultElement.setAttribute(
-      "bible-id",
-      this.bibleId ?? "",
-    );
+    bibleVerseFetchResultElement.setAttribute("bible-id", this.bibleId ?? "");
 
     this.#pageContentElement.appendChild(bibleVerseFetchResultElement);
   }
