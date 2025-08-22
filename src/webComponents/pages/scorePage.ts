@@ -68,26 +68,9 @@ export class ScorePage extends BasePage {
   }
 
   #navigateToNextPage() {
-    this.navigateToPage({ nextPage: "search-options-page" });
-
-    // clear out the selected verse
-    const emptyBibleVerse = {
-      id: "",
-      reference: "",
-      content: "",
-      verseCount: 0,
-    };
-
-    const eventUpdateSelectedBible =
-      new CustomEvent<CustomEventUpdateBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
-        {
-          detail: { bibleVerse: emptyBibleVerse },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventUpdateSelectedBible);
+    // do a full page redirect to clear out state
+    window.location.href =
+      "/memorize-scripture-web-app?page-name=search-options-page";
   }
 
   connectedCallback() {
