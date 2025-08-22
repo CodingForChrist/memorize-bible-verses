@@ -42,19 +42,17 @@ const defaultBible = supportedBibles[0];
 
 export class BibleTranslationDropDownList extends HTMLElement {
   #selectedBibleTranslation?: BibleTranslation;
-  bibleTranslations: BibleTranslation[];
+  static bibleTranslations: BibleTranslation[] = [];
 
   constructor() {
     super();
-
-    this.bibleTranslations = [];
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(this.#styleElement);
   }
 
   static get observedAttributes() {
-    return ["loading-state", "bible-id"];
+    return ["loading-state", "bible-id", "is-visible"];
   }
 
   get selectedBibleTranslation(): BibleTranslation | undefined {
@@ -73,6 +71,10 @@ export class BibleTranslationDropDownList extends HTMLElement {
         },
       );
     window.dispatchEvent(eventUpdateSelectedBibleTranslation);
+  }
+
+  get isVisible() {
+    return this.getAttribute("is-visible") === "true";
   }
 
   get loadingState() {
@@ -103,6 +105,12 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   async #fetchBibles() {
+    // avoid making a fetch call when results are already loaded
+    if (BibleTranslationDropDownList.bibleTranslations.length) {
+      this.loadingState = LOADING_STATES.RESOLVED;
+      return;
+    }
+
     try {
       this.loadingState = LOADING_STATES.PENDING;
       const response = await fetch(
@@ -121,8 +129,8 @@ export class BibleTranslationDropDownList extends HTMLElement {
         },
       );
       const json = await response.json();
-      this.bibleTranslations = json.data;
-      if (response.ok && this.bibleTranslations.length) {
+      if (response.ok && json.data.length) {
+        BibleTranslationDropDownList.bibleTranslations = json.data;
         this.loadingState = LOADING_STATES.RESOLVED;
       } else {
         throw new Error("Failed to load Bibles");
@@ -146,7 +154,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
     const divContainerElement = document.createElement("div");
     divContainerElement.innerHTML = `
       <select name="select-bible-translation">
-      ${this.bibleTranslations.map(
+      ${BibleTranslationDropDownList.bibleTranslations.map(
         ({ id }) =>
           `<option value="${id}">${this.#getSelectOptionText(id)}</option>`,
       )}
@@ -205,9 +213,10 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   #findBibleTranslationById(bibleId: string) {
-    const bibleTranslation = this.bibleTranslations.find(
-      (bibleTranslation) => bibleTranslation.id === bibleId,
-    );
+    const bibleTranslation =
+      BibleTranslationDropDownList.bibleTranslations.find(
+        (bibleTranslation) => bibleTranslation.id === bibleId,
+      );
     if (!bibleTranslation) {
       throw new Error("Failed to find the bible translation by id");
     }
@@ -222,17 +231,20 @@ export class BibleTranslationDropDownList extends HTMLElement {
     this.shadowRoot!.appendChild(alertErrorElement);
   }
 
-  async connectedCallback() {
-    await this.#fetchBibles();
-  }
-
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (
+      name === "is-visible" &&
+      newValue === "true" &&
+      !this.#bibleTranslationSelectElement
+    ) {
+      return this.#fetchBibles();
+    }
     if (
       name === "bible-id" &&
       this.#bibleTranslationSelectElement &&
       oldValue !== newValue
     ) {
-      this.#bibleTranslationSelectElement.value = newValue;
+      return (this.#bibleTranslationSelectElement.value = newValue);
     }
 
     // wait for bibles to finish loading before rendering

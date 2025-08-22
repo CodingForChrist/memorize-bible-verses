@@ -1,7 +1,4 @@
 import { BasePage } from "./basePage";
-import { CUSTOM_EVENTS } from "../../constants";
-
-import type { CustomEventUpdateBibleVerse } from "../../types";
 
 export class SearchOptionsPage extends BasePage {
   constructor() {
@@ -128,28 +125,6 @@ export class SearchOptionsPage extends BasePage {
     return styleElement;
   }
 
-  #navigateToPsalm23Page() {
-    const bibleVersePsalm23 = {
-      id: "",
-      reference: "Psalm 23:1-6",
-      content: "",
-      verseCount: 0,
-    };
-
-    const eventUpdateSelectedBible =
-      new CustomEvent<CustomEventUpdateBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
-        {
-          detail: { bibleVerse: bibleVersePsalm23 },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventUpdateSelectedBible);
-
-    this.navigateToPage({ nextPage: "search-advanced-page" });
-  }
-
   connectedCallback() {
     super.connectedCallback();
 
@@ -179,7 +154,10 @@ export class SearchOptionsPage extends BasePage {
 
     this.shadowRoot!.querySelector("#button-psalm-23")?.addEventListener(
       "click",
-      () => this.#navigateToPsalm23Page(),
+      () =>
+        this.navigateToPage({
+          nextPage: "search-psalm-23-page",
+        }),
     );
 
     this.shadowRoot!.querySelector("#button-power-user")?.addEventListener(

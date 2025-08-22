@@ -20,6 +20,7 @@ export class AppStateProvider extends HTMLElement {
       this.querySelector("search-verses-for-awana-truth-and-training-page"),
       this.querySelector("search-verses-for-awana-sparks-page"),
       this.querySelector("search-verses-for-sharing-the-gospel-page"),
+      this.querySelector("search-psalm-23-page"),
       this.querySelector("search-advanced-page"),
       this.querySelector("score-page"),
     ]) {
@@ -33,7 +34,6 @@ export class AppStateProvider extends HTMLElement {
 
   #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
     for (const element of [
-      this.querySelector("search-advanced-page"),
       this.querySelector("speak-page"),
       this.querySelector("score-page"),
     ]) {
@@ -63,6 +63,7 @@ export class AppStateProvider extends HTMLElement {
       this.querySelector("search-verses-for-awana-truth-and-training-page"),
       this.querySelector("search-verses-for-awana-sparks-page"),
       this.querySelector("search-verses-for-sharing-the-gospel-page"),
+      this.querySelector("search-psalm-23-page"),
       this.querySelector("search-advanced-page"),
       this.querySelector("speak-page"),
       this.querySelector("score-page"),

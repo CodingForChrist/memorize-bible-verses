@@ -17,13 +17,13 @@ export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
     return "︎Verses for Awana T&T (grades 3-6) | Memorize Bible Verses";
   }
 
-  get #bibleTranslationSelectorElement() {
+  get #bibleTranslationDropDownListElement() {
     return this.shadowRoot!.querySelector(
       "bible-translation-drop-down-list",
     ) as HTMLElement;
   }
 
-  get #bibleVerseListElement() {
+  get #bibleVerseDropDownListElement() {
     return this.shadowRoot!.querySelector(
       "bible-verse-drop-down-list",
     ) as HTMLElement;
@@ -120,9 +120,16 @@ export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
+    if (name === "is-visible" && newValue === "true") {
+      return this.#bibleTranslationDropDownListElement?.setAttribute(
+        name,
+        newValue,
+      );
+    }
+
     if (name === "bible-id") {
-      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
-      this.#bibleVerseListElement?.setAttribute(name, newValue);
+      this.#bibleTranslationDropDownListElement?.setAttribute(name, newValue);
+      this.#bibleVerseDropDownListElement?.setAttribute(name, newValue);
     }
   }
 }

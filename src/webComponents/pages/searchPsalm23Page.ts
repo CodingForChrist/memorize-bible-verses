@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-export class SearchVersesForAwanaSparksPage extends BasePage {
+export class SearchPsalm23Page extends BasePage {
   constructor() {
     super();
 
@@ -10,40 +10,23 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
   }
 
   static get observedAttributes() {
-    return [...BasePage.observedAttributes, "bible-id"];
+    return [...BasePage.observedAttributes, "bible-id", "verse-reference"];
   }
 
   get pageTitle() {
-    return "︎Verses for Awana Sparks (grades K-2) | Memorize Bible Verses";
+    return "︎Psalm 23 | Memorize Bible Verses";
   }
 
-  get #bibleTranslationDropDownListElement() {
+  get #bibleTranslationSelectorElement() {
     return this.shadowRoot!.querySelector(
       "bible-translation-drop-down-list",
     ) as HTMLElement;
   }
 
-  get #bibleVerseDropDownListElement() {
+  get #bibleVerseFetchResultElement() {
     return this.shadowRoot!.querySelector(
-      "bible-verse-drop-down-list",
+      "bible-verse-fetch-result",
     ) as HTMLElement;
-  }
-
-  get awanaBookWingRunnerBibleVerses() {
-    return [
-      "John 3:16",
-      "1 John 4:14",
-      "Psalm 147:5",
-      "1 Corinthians 15:3",
-      "1 Corinthians 15:4",
-      "James 2:10",
-      "Acts 16:31",
-      "John 20:31",
-      "Psalm 118:1",
-      "Romans 6:23",
-      "Deuteronomy 6:5",
-      "Psalm 96:2",
-    ];
   }
 
   get #containerElement() {
@@ -53,13 +36,13 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
         <span slot="page-heading">Search</span>
 
         <span slot="page-description">
-          <p>Pick and practice a verse for Awana Sparks.</p>
-          <p>When you have the verse memorized go to Step 2.</p>
+          <p>Practice memorizing Psalm 23.</p>
+          <p>When you have it memorized go to Step 2.</p>
         </span>
 
         <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list verses="${this.awanaBookWingRunnerBibleVerses.join(",")}"></bible-verse-drop-down-list>
+          <bible-verse-fetch-result verse-reference="Psalm 23:1-6" should-display-section-headings="true"></bible-verse-fetch-result>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -73,9 +56,6 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
   get #styleElement() {
     const styleElement = document.createElement("style");
     const css = `
-      bible-translation-drop-down-list {
-        margin-bottom: 1.5rem;
-      }
       p {
         margin: 1rem 0;
       }
@@ -98,7 +78,7 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
         nextPage: "speak-page",
-        previousPage: "search-verses-for-awana-sparks-page",
+        previousPage: "search-psalm-23-page",
       }),
     );
   }
@@ -106,21 +86,18 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
+    if (name === "bible-id") {
+      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
+      return this.#bibleVerseFetchResultElement?.setAttribute(name, newValue);
+    }
+
     if (name === "is-visible" && newValue === "true") {
-      return this.#bibleTranslationDropDownListElement?.setAttribute(
+      return this.#bibleTranslationSelectorElement?.setAttribute(
         name,
         newValue,
       );
     }
-
-    if (name === "bible-id") {
-      this.#bibleTranslationDropDownListElement?.setAttribute(name, newValue);
-      this.#bibleVerseDropDownListElement?.setAttribute(name, newValue);
-    }
   }
 }
 
-window.customElements.define(
-  "search-verses-for-awana-sparks-page",
-  SearchVersesForAwanaSparksPage,
-);
+window.customElements.define("search-psalm-23-page", SearchPsalm23Page);

@@ -10,20 +10,20 @@ export class SearchAdvancedPage extends BasePage {
   }
 
   static get observedAttributes() {
-    return [...BasePage.observedAttributes, "bible-id", "verse-reference"];
+    return [...BasePage.observedAttributes, "bible-id"];
   }
 
   get pageTitle() {
     return "︎Advanced Search | Memorize Bible Verses";
   }
 
-  get #bibleTranslationSelectorElement() {
+  get #bibleTranslationDropDownListElement() {
     return this.shadowRoot!.querySelector(
       "bible-translation-drop-down-list",
     ) as HTMLElement;
   }
 
-  get #bibleVerseSelectorElement() {
+  get #bibleVerseAdvancedSearchElement() {
     return this.shadowRoot!.querySelector(
       "bible-verse-advanced-search",
     ) as HTMLElement;
@@ -90,14 +90,16 @@ export class SearchAdvancedPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (name === "bible-id") {
-      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
+    if (name === "is-visible" && newValue === "true") {
+      return this.#bibleTranslationDropDownListElement?.setAttribute(
+        name,
+        newValue,
+      );
     }
 
-    for (const attributeName of SearchAdvancedPage.observedAttributes) {
-      if (name === attributeName) {
-        this.#bibleVerseSelectorElement?.setAttribute(attributeName, newValue);
-      }
+    if (name === "bible-id") {
+      this.#bibleTranslationDropDownListElement?.setAttribute(name, newValue);
+      this.#bibleVerseAdvancedSearchElement?.setAttribute(name, newValue);
     }
   }
 }
