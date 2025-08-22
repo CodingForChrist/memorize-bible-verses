@@ -14,7 +14,7 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["bible-id", "verse-reference"];
+    return ["is-visible", "bible-id"];
   }
 
   get bibleId() {
@@ -27,7 +27,8 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
 
   set selectedVerseReference(value: string) {
     this.#selectedVerseReference = value;
-    this.#updateBibleVerseResultElementAttributes();
+
+    this.#bibleVerseFetchResultElement.setAttribute("verse-reference", value);
   }
 
   get #bibleVerseFetchResultElement() {
@@ -42,16 +43,16 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
     ) as HTMLDivElement;
   }
 
-  #updateBibleVerseResultElementAttributes() {
-    this.#bibleVerseFetchResultElement.setAttribute(
-      "bible-id",
-      this.bibleId ?? "",
-    );
-    this.#bibleVerseFetchResultElement.setAttribute(
-      "verse-reference",
-      this.selectedVerseReference,
-    );
-  }
+  // #updateBibleVerseResultElementAttributes() {
+  //   this.#bibleVerseFetchResultElement.setAttribute(
+  //     "bible-id",
+  //     this.bibleId ?? "",
+  //   );
+  //   this.#bibleVerseFetchResultElement.setAttribute(
+  //     "verse-reference",
+  //     this.selectedVerseReference,
+  //   );
+  // }
 
   #renderSearchForm() {
     this.#searchFormContainerElement.innerHTML = "";
@@ -96,11 +97,15 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === "bible-id" && oldValue !== newValue) {
       this.#renderSearchForm();
-      this.#updateBibleVerseResultElementAttributes();
     }
-    if (name === "verse-reference" && !newValue) {
-      this.selectedVerseReference = "";
-      this.#updateBibleVerseResultElementAttributes();
+
+    for (const attributeName of BibleVerseAdvancedSearch.observedAttributes) {
+      if (name === attributeName) {
+        this.#bibleVerseFetchResultElement?.setAttribute(
+          attributeName,
+          newValue,
+        );
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ export class BibleVerseDropDownList extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["bible-id", "verses"];
+    return ["is-visible", "bible-id", "verses"];
   }
 
   get bibleId() {
@@ -27,7 +27,8 @@ export class BibleVerseDropDownList extends HTMLElement {
 
   set selectedVerseReference(value: string) {
     this.#selectedVerseReference = value;
-    this.#updateBibleVerseResultElementAttributes();
+
+    this.#bibleVerseFetchResultElement.setAttribute("verse-reference", value);
   }
 
   get #selectContainerElement() {
@@ -40,17 +41,6 @@ export class BibleVerseDropDownList extends HTMLElement {
     return this.shadowRoot!.querySelector(
       "bible-verse-fetch-result",
     ) as HTMLElement;
-  }
-
-  #updateBibleVerseResultElementAttributes() {
-    this.#bibleVerseFetchResultElement.setAttribute(
-      "bible-id",
-      this.bibleId ?? "",
-    );
-    this.#bibleVerseFetchResultElement.setAttribute(
-      "verse-reference",
-      this.selectedVerseReference,
-    );
   }
 
   #renderSelect() {
@@ -78,19 +68,25 @@ export class BibleVerseDropDownList extends HTMLElement {
     };
 
     if (this.selectedVerseReference) {
-      if (this.selectedVerseReference.startsWith("Psalms")) {
-        const psalmVerseReference = this.selectedVerseReference.replace(
-          "Psalms",
-          "Psalm",
-        );
-        selectElement.value = psalmVerseReference;
-      } else {
-        selectElement.value = this.selectedVerseReference;
-      }
+      selectElement.value = this.#normalizeBookNameForPsalms(
+        this.selectedVerseReference,
+      );
       selectElement.dispatchEvent(new Event("change"));
     }
 
     this.#selectContainerElement.appendChild(divContainerElement);
+  }
+
+  #normalizeBookNameForPsalms(verseReference: string) {
+    // the singular version "Psalm" is used for displaying references (ex: Psalm 23)
+    // but the data structure for a verse reference always uses "Psalms"
+    // this code handles that difference to make sure they match
+    if (verseReference.startsWith("Psalms")) {
+      const psalmVerseReference = verseReference.replace("Psalms", "Psalm");
+      return psalmVerseReference;
+    }
+
+    return verseReference;
   }
 
   get #containerElements() {
@@ -142,7 +138,15 @@ export class BibleVerseDropDownList extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === "bible-id" && oldValue !== newValue) {
       this.#renderSelect();
-      this.#updateBibleVerseResultElementAttributes();
+    }
+
+    for (const attributeName of ["is-visible", "bible-id"]) {
+      if (name === attributeName) {
+        this.#bibleVerseFetchResultElement.setAttribute(
+          attributeName,
+          newValue,
+        );
+      }
     }
   }
 }

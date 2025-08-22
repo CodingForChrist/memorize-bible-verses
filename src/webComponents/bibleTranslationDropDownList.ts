@@ -52,7 +52,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state", "bible-id", "is-visible"];
+    return ["is-visible", "loading-state", "bible-id"];
   }
 
   get selectedBibleTranslation(): BibleTranslation | undefined {
