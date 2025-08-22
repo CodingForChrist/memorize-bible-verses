@@ -103,3 +103,15 @@ export function convertBibleVerseToText(htmlContentString: string) {
 
   return divElement.innerText.trim();
 }
+
+export function normalizeBookNameInVerseReference(verseReference: string) {
+  // the singular version "Psalm" is used for displaying references (ex: Psalm 23)
+  // but the data structure for a verse reference always uses "Psalms"
+  // this code handles that difference to make sure they match
+  if (verseReference.startsWith("Psalms")) {
+    const psalmVerseReference = verseReference.replace("Psalms", "Psalm");
+    return psalmVerseReference;
+  }
+
+  return verseReference;
+}

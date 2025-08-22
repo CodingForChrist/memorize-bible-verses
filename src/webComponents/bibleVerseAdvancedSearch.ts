@@ -43,17 +43,6 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
     ) as HTMLDivElement;
   }
 
-  // #updateBibleVerseResultElementAttributes() {
-  //   this.#bibleVerseFetchResultElement.setAttribute(
-  //     "bible-id",
-  //     this.bibleId ?? "",
-  //   );
-  //   this.#bibleVerseFetchResultElement.setAttribute(
-  //     "verse-reference",
-  //     this.selectedVerseReference,
-  //   );
-  // }
-
   #renderSearchForm() {
     this.#searchFormContainerElement.innerHTML = "";
     const searchFormElement = document.createElement("bible-verse-search-form");
