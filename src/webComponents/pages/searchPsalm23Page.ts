@@ -10,11 +10,15 @@ export class SearchPsalm23Page extends BasePage {
   }
 
   static get observedAttributes() {
-    return [...BasePage.observedAttributes, "bible-id", "verse-reference"];
+    return [...BasePage.observedAttributes, "bible-id"];
   }
 
   get pageTitle() {
     return "︎Psalm 23 | Memorize Bible Verses";
+  }
+
+  get bibleId() {
+    return this.getAttribute("bible-id");
   }
 
   get #bibleTranslationSelectorElement() {
@@ -29,6 +33,31 @@ export class SearchPsalm23Page extends BasePage {
     ) as HTMLElement;
   }
 
+  get #pageContentElement() {
+    return this.shadowRoot!.querySelector(".page-content") as HTMLElement;
+  }
+
+  #renderVerse() {
+    this.#pageContentElement
+      .querySelector("bible-verse-fetch-result")
+      ?.remove();
+    const bibleVerseFetchResultElement = document.createElement(
+      "bible-verse-fetch-result",
+    );
+    bibleVerseFetchResultElement.setAttribute(
+      "verse-reference",
+      "Psalm 23:1-6",
+    );
+    bibleVerseFetchResultElement.setAttribute(
+      "should-display-section-headings",
+      "true",
+    );
+
+    bibleVerseFetchResultElement.setAttribute("bible-id", this.bibleId ?? "");
+
+    this.#pageContentElement.appendChild(bibleVerseFetchResultElement);
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -40,9 +69,8 @@ export class SearchPsalm23Page extends BasePage {
           <p>When you have it memorized go to Step 2.</p>
         </span>
 
-        <span slot="page-content">
+        <span class="page-content" slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-fetch-result verse-reference="Psalm 23:1-6" should-display-section-headings="true"></bible-verse-fetch-result>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -92,10 +120,8 @@ export class SearchPsalm23Page extends BasePage {
     }
 
     if (name === "is-visible" && newValue === "true") {
-      return this.#bibleTranslationSelectorElement?.setAttribute(
-        name,
-        newValue,
-      );
+      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
+      this.#renderVerse();
     }
   }
 }
