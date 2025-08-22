@@ -1,7 +1,4 @@
 import { BasePage } from "./basePage";
-import { CUSTOM_EVENTS } from "../../constants";
-
-import type { CustomEventUpdateBibleVerse } from "../../types";
 
 export class ScorePage extends BasePage {
   constructor() {
