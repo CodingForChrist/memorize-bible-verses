@@ -1,4 +1,7 @@
-import { removeExtraContentFromBibleVerse } from "../formatBibleVerseFromApi";
+import {
+  removeExtraContentFromBibleVerse,
+  normalizeBookNameInVerseReference,
+} from "../formatBibleVerseFromApi";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
@@ -44,10 +47,7 @@ export class BibleVerseFetchResult extends HTMLElement {
   }
 
   set selectedBibleVerse(value: BibleVerse) {
-    this.#selectedBibleVerse = {
-      ...value,
-      content: this.#formatBibleVerse(value),
-    };
+    this.#selectedBibleVerse = this.#formatBibleVerse(value);
     this.#sendEventForSelectedBibleVerse();
   }
 
@@ -90,15 +90,20 @@ export class BibleVerseFetchResult extends HTMLElement {
     this.shadowRoot!.querySelector("loading-spinner")?.remove();
   }
 
-  #formatBibleVerse(bibleVerse: BibleVerse) {
+  #formatBibleVerse({ id, reference, content, verseCount }: BibleVerse) {
     const options = {
       shouldRemoveSectionHeadings: !this.shouldDisplaySectionHeadings,
       shouldRemoveFootnotes: true,
-      shouldRemoveVerseNumbers: bibleVerse.verseCount < 2,
+      shouldRemoveVerseNumbers: verseCount < 2,
       shouldTrimParagraphBreaks: true,
     };
 
-    return removeExtraContentFromBibleVerse(bibleVerse.content, options);
+    return {
+      id,
+      reference: normalizeBookNameInVerseReference(reference),
+      content: removeExtraContentFromBibleVerse(content, options),
+      verseCount,
+    };
   }
 
   #clearSelectedBibleVerse() {

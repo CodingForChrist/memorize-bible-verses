@@ -68,25 +68,11 @@ export class BibleVerseDropDownList extends HTMLElement {
     };
 
     if (this.selectedVerseReference) {
-      selectElement.value = this.#normalizeBookNameForPsalms(
-        this.selectedVerseReference,
-      );
+      selectElement.value = this.selectedVerseReference;
       selectElement.dispatchEvent(new Event("change"));
     }
 
     this.#selectContainerElement.appendChild(divContainerElement);
-  }
-
-  #normalizeBookNameForPsalms(verseReference: string) {
-    // the singular version "Psalm" is used for displaying references (ex: Psalm 23)
-    // but the data structure for a verse reference always uses "Psalms"
-    // this code handles that difference to make sure they match
-    if (verseReference.startsWith("Psalms")) {
-      const psalmVerseReference = verseReference.replace("Psalms", "Psalm");
-      return psalmVerseReference;
-    }
-
-    return verseReference;
   }
 
   get #containerElements() {
