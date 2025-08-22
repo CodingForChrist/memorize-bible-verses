@@ -37,25 +37,17 @@ export class SearchPsalm23Page extends BasePage {
     return this.shadowRoot!.querySelector(".page-content") as HTMLElement;
   }
 
-  #renderVerse() {
-    this.#pageContentElement
-      .querySelector("bible-verse-fetch-result")
-      ?.remove();
-    const bibleVerseFetchResultElement = document.createElement(
+  #reloadVerse() {
+    const existingElement = this.#pageContentElement.querySelector(
       "bible-verse-fetch-result",
     );
-    bibleVerseFetchResultElement.setAttribute(
-      "verse-reference",
-      "Psalm 23:1-6",
-    );
-    bibleVerseFetchResultElement.setAttribute(
-      "should-display-section-headings",
-      "true",
-    );
+    if (!existingElement) {
+      return;
+    }
 
-    bibleVerseFetchResultElement.setAttribute("bible-id", this.bibleId ?? "");
+    existingElement.setAttribute("verse-reference", "");
 
-    this.#pageContentElement.appendChild(bibleVerseFetchResultElement);
+    existingElement.setAttribute("verse-reference", "Psalm 23:1-6");
   }
 
   get #containerElement() {
@@ -71,6 +63,7 @@ export class SearchPsalm23Page extends BasePage {
 
         <span class="page-content" slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
+          <bible-verse-fetch-result verse-reference="Psalm 23:1-6" should-display-section-headings="true"></bible-verse-fetch-result>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -121,7 +114,7 @@ export class SearchPsalm23Page extends BasePage {
 
     if (name === "is-visible" && newValue === "true") {
       this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
-      this.#renderVerse();
+      this.#reloadVerse();
     }
   }
 }
