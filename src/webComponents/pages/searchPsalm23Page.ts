@@ -21,7 +21,7 @@ export class SearchPsalm23Page extends BasePage {
     return this.getAttribute("bible-id");
   }
 
-  get #bibleTranslationSelectorElement() {
+  get #bibleTranslationDropDownListElement() {
     return this.shadowRoot!.querySelector(
       "bible-translation-drop-down-list",
     ) as HTMLElement;
@@ -31,31 +31,6 @@ export class SearchPsalm23Page extends BasePage {
     return this.shadowRoot!.querySelector(
       "bible-verse-fetch-result",
     ) as HTMLElement;
-  }
-
-  get #pageContentElement() {
-    return this.shadowRoot!.querySelector(".page-content") as HTMLElement;
-  }
-
-  #renderVerse() {
-    this.#pageContentElement
-      .querySelector("bible-verse-fetch-result")
-      ?.remove();
-    const bibleVerseFetchResultElement = document.createElement(
-      "bible-verse-fetch-result",
-    );
-    bibleVerseFetchResultElement.setAttribute(
-      "verse-reference",
-      "Psalm 23:1-6",
-    );
-    bibleVerseFetchResultElement.setAttribute(
-      "should-display-section-headings",
-      "true",
-    );
-
-    bibleVerseFetchResultElement.setAttribute("bible-id", this.bibleId ?? "");
-
-    this.#pageContentElement.appendChild(bibleVerseFetchResultElement);
   }
 
   get #containerElement() {
@@ -69,8 +44,9 @@ export class SearchPsalm23Page extends BasePage {
           <p>When you have it memorized go to Step 2.</p>
         </span>
 
-        <span class="page-content" slot="page-content">
+        <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
+          <bible-verse-fetch-result verse-reference="Psalm 23:1-6" should-display-section-headings="true"></bible-verse-fetch-result>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -114,14 +90,17 @@ export class SearchPsalm23Page extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (name === "bible-id") {
-      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
-      return this.#bibleVerseFetchResultElement?.setAttribute(name, newValue);
-    }
-
-    if (name === "is-visible" && newValue === "true") {
-      this.#bibleTranslationSelectorElement?.setAttribute(name, newValue);
-      this.#renderVerse();
+    for (const attributeName of SearchPsalm23Page.observedAttributes) {
+      if (name === attributeName) {
+        this.#bibleTranslationDropDownListElement?.setAttribute(
+          attributeName,
+          newValue,
+        );
+        this.#bibleVerseFetchResultElement?.setAttribute(
+          attributeName,
+          newValue,
+        );
+      }
     }
   }
 }

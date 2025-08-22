@@ -89,16 +89,17 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (name === "is-visible" && newValue === "true") {
-      return this.#bibleTranslationDropDownListElement?.setAttribute(
-        name,
-        newValue,
-      );
-    }
-
-    if (name === "bible-id") {
-      this.#bibleTranslationDropDownListElement?.setAttribute(name, newValue);
-      this.#bibleVerseDropDownListElement?.setAttribute(name, newValue);
+    for (const attributeName of SearchVersesForSharingTheGospelPage.observedAttributes) {
+      if (name === attributeName) {
+        this.#bibleTranslationDropDownListElement?.setAttribute(
+          attributeName,
+          newValue,
+        );
+        this.#bibleVerseDropDownListElement?.setAttribute(
+          attributeName,
+          newValue,
+        );
+      }
     }
   }
 }

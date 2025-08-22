@@ -20,7 +20,7 @@ export class BibleVerseFetchResult extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state", "bible-id", "verse-reference"];
+    return ["loading-state", "bible-id", "verse-reference", "is-visible"];
   }
 
   get bibleId() {
@@ -48,16 +48,7 @@ export class BibleVerseFetchResult extends HTMLElement {
       ...value,
       content: this.#formatBibleVerse(value),
     };
-    const eventUpdateSelectedBible =
-      new CustomEvent<CustomEventUpdateBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
-        {
-          detail: { bibleVerse: this.#selectedBibleVerse },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventUpdateSelectedBible);
+    this.#sendEventForSelectedBibleVerse();
   }
 
   get loadingState() {
@@ -72,6 +63,22 @@ export class BibleVerseFetchResult extends HTMLElement {
     }
 
     this.setAttribute("loading-state", value);
+  }
+
+  #sendEventForSelectedBibleVerse() {
+    if (!this.selectedBibleVerse) {
+      return;
+    }
+    const eventUpdateSelectedBible =
+      new CustomEvent<CustomEventUpdateBibleVerse>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
+        {
+          detail: { bibleVerse: this.selectedBibleVerse },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventUpdateSelectedBible);
   }
 
   #showLoadingSpinner() {
@@ -226,6 +233,14 @@ export class BibleVerseFetchResult extends HTMLElement {
     if (name === "bible-id" && oldValue !== newValue) {
       this.#bibleVerseBlockquoteElement?.remove();
       return this.#fetchVerseReference();
+    }
+
+    if (
+      name === "is-visible" &&
+      newValue === "true" &&
+      this.selectedBibleVerse
+    ) {
+      this.#sendEventForSelectedBibleVerse();
     }
   }
 }
