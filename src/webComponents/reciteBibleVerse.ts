@@ -169,6 +169,9 @@ export class ReciteBibleVerse extends HTMLElement {
         SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
       this.#showLoadingSpinner();
       this.#showStopButton();
+      this.#initialContentContainerElement
+        .querySelector("#button-record")
+        ?.scrollIntoView();
     }
   }
 
@@ -337,6 +340,9 @@ export class ReciteBibleVerse extends HTMLElement {
 
     this.speechRecognition?.addEventListener("end", () => {
       if (this.#lastSpeechRecognitionResult) {
+        this.#printSpeechRecognitionInterimResults(
+          this.#lastSpeechRecognitionResult,
+        );
         this.speechTranscript = this.#formatSpeechTranscript(
           this.#lastSpeechRecognitionResult,
         );
