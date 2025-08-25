@@ -227,12 +227,14 @@ export class BibleVerseFetchResult extends HTMLElement {
     if (name === "loading-state") {
       if (newValue === LOADING_STATES.RESOLVED) {
         return this.#renderSelectedBibleVerse();
-      } else if (newValue === LOADING_STATES.REJECTED) {
+      }
+      if (newValue === LOADING_STATES.REJECTED) {
         return this.#renderErrorMessage(
           "Failed to find the bible verse reference. Please try another search.",
         );
       }
     }
+
     if (
       ["verse-reference", "bible-id"].includes(name) &&
       oldValue !== newValue
