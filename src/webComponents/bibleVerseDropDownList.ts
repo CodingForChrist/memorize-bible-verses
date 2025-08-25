@@ -1,3 +1,9 @@
+import {
+  getOldTestamentVerseReferences,
+  getNewTestamentVerseReferences,
+  sortBibleVerseReferences,
+} from "../bibleVerseReferenceHelper";
+
 export class BibleVerseDropDownList extends HTMLElement {
   #selectedVerseReference?: string;
 
@@ -43,6 +49,22 @@ export class BibleVerseDropDownList extends HTMLElement {
     ) as HTMLElement;
   }
 
+  get #versesFromOldTestament() {
+    if (!this.verses) {
+      return [];
+    }
+    const oldTestamentVerses = getOldTestamentVerseReferences(this.verses);
+    return sortBibleVerseReferences(oldTestamentVerses);
+  }
+
+  get #versesFromNewTestament() {
+    if (!this.verses) {
+      return [];
+    }
+    const newTestamentVerses = getNewTestamentVerseReferences(this.verses);
+    return sortBibleVerseReferences(newTestamentVerses);
+  }
+
   #renderSelect() {
     if (!this.verses) {
       return;
@@ -54,7 +76,13 @@ export class BibleVerseDropDownList extends HTMLElement {
     divContainerElement.innerHTML = `
       <select name="select-verse" autofocus>
       <option disabled selected value> -- select a verse -- </option>
-      ${this.verses.map(
+      <optgroup label="Old Testament">
+      ${this.#versesFromOldTestament.map(
+        (verse) => `<option value="${verse}">${verse}</option>`,
+      )}
+      </optgroup>
+      <optgroup label="New Testament">
+      ${this.#versesFromNewTestament.map(
         (verse) => `<option value="${verse}">${verse}</option>`,
       )}
       </select>

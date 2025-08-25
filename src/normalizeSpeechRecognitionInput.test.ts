@@ -1,9 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  normalizeSpeechRecognitionInput,
-  parseVerseReferenceIntoParts,
-} from "./normalizeSpeechRecognitionInput";
+import { normalizeSpeechRecognitionInput } from "./normalizeSpeechRecognitionInput";
 
 describe("normalizeSpeechRecognitionInput()", () => {
   test("should add missing colon between chapter and verse number for a single verse", () => {
@@ -79,43 +76,5 @@ describe("normalizeSpeechRecognitionInput()", () => {
         verseText: expectedOutput,
       }),
     ).toBe(expectedOutput);
-  });
-});
-
-describe("parseVerseReferenceIntoParts()", () => {
-  test("parses a single verse", () => {
-    expect(parseVerseReferenceIntoParts("John 3:16")).toEqual({
-      bookName: "John",
-      bookNumber: undefined,
-      chapter: 3,
-      verseNumberStart: 16,
-      verseNumberEnd: 16,
-    });
-
-    expect(parseVerseReferenceIntoParts("2 Corinthians 5:17")).toEqual({
-      bookName: "Corinthians",
-      bookNumber: 2,
-      chapter: 5,
-      verseNumberStart: 17,
-      verseNumberEnd: 17,
-    });
-  });
-
-  test("parses a verse range", () => {
-    expect(parseVerseReferenceIntoParts("John 1:1-10")).toEqual({
-      bookName: "John",
-      bookNumber: undefined,
-      chapter: 1,
-      verseNumberStart: 1,
-      verseNumberEnd: 10,
-    });
-
-    expect(parseVerseReferenceIntoParts("2 Corinthians 5:1-17")).toEqual({
-      bookName: "Corinthians",
-      bookNumber: 2,
-      chapter: 5,
-      verseNumberStart: 1,
-      verseNumberEnd: 17,
-    });
   });
 });
