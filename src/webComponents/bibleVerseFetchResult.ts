@@ -42,6 +42,10 @@ export class BibleVerseFetchResult extends HTMLElement {
     return this.shadowRoot!.querySelector("bible-verse-blockquote");
   }
 
+  get #alertErrorElement() {
+    return this.shadowRoot!.querySelector("alert-error");
+  }
+
   get selectedBibleVerse(): BibleVerse | undefined {
     return this.#selectedBibleVerse;
   }
@@ -106,12 +110,13 @@ export class BibleVerseFetchResult extends HTMLElement {
     };
   }
 
-  #clearSelectedBibleVerse() {
-    this.#selectedBibleVerse = undefined;
+  #removeResultElements() {
+    this.#bibleVerseBlockquoteElement?.remove();
+    this.#alertErrorElement?.remove();
   }
 
   #renderSelectedBibleVerse() {
-    this.#bibleVerseBlockquoteElement?.remove();
+    this.#removeResultElements();
 
     const bibleVerseBlockquoteElement = document.createElement(
       "bible-verse-blockquote",
@@ -163,7 +168,7 @@ export class BibleVerseFetchResult extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    this.#bibleVerseBlockquoteElement?.remove();
+    this.#removeResultElements();
     const alertErrorElement = document.createElement("alert-error");
     alertErrorElement.innerHTML = `
       <span slot="alert-error-message">${message}</span>
@@ -210,42 +215,30 @@ export class BibleVerseFetchResult extends HTMLElement {
       // ignore changes while fetch call is pending
       return;
     }
-    if (
-      name === "loading-state" &&
-      this.loadingState === LOADING_STATES.RESOLVED
-    ) {
-      return this.#renderSelectedBibleVerse();
-    }
-    if (
-      name === "loading-state" &&
-      this.loadingState === LOADING_STATES.REJECTED
-    ) {
-      return this.#renderErrorMessage(
-        "Failed to find the bible verse reference. Please try another search.",
-      );
-    }
-
-    if (name === "verse-reference" && !newValue) {
-      this.#bibleVerseBlockquoteElement?.remove();
-      return this.#clearSelectedBibleVerse();
-    }
-
-    if (name === "verse-reference" && oldValue !== newValue) {
-      this.#bibleVerseBlockquoteElement?.remove();
-      return this.#fetchVerseReference();
-    }
-
-    if (name === "bible-id" && oldValue !== newValue) {
-      this.#bibleVerseBlockquoteElement?.remove();
-      return this.#fetchVerseReference();
-    }
 
     if (
       name === "is-visible" &&
       newValue === "true" &&
       this.selectedBibleVerse
     ) {
-      this.#sendEventForSelectedBibleVerse();
+      return this.#sendEventForSelectedBibleVerse();
+    }
+
+    if (name === "loading-state") {
+      if (newValue === LOADING_STATES.RESOLVED) {
+        return this.#renderSelectedBibleVerse();
+      } else if (newValue === LOADING_STATES.REJECTED) {
+        return this.#renderErrorMessage(
+          "Failed to find the bible verse reference. Please try another search.",
+        );
+      }
+    }
+    if (
+      ["verse-reference", "bible-id"].includes(name) &&
+      oldValue !== newValue
+    ) {
+      this.#removeResultElements();
+      return this.#fetchVerseReference();
     }
   }
 }
