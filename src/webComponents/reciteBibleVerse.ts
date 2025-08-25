@@ -102,8 +102,8 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #formatSpeechTranscript(value: SpeechRecognitionResultList) {
-    const transcriptArray = Array.from(value).map(
-      (result) => result[0].transcript,
+    const transcriptArray = Array.from(value).map((result) =>
+      result[0].transcript.trim(),
     );
     return transcriptArray.join(" ");
   }
@@ -169,10 +169,23 @@ export class ReciteBibleVerse extends HTMLElement {
         SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
       this.#showLoadingSpinner();
       this.#showStopButton();
-      this.#initialContentContainerElement
-        .querySelector("#button-record")
-        ?.scrollIntoView();
+      this.#scrollRecordButtonIntoView();
     }
+  }
+
+  #scrollRecordButtonIntoView() {
+    const recordButtonElement =
+      this.#initialContentContainerElement.querySelector("#button-record");
+    if (!recordButtonElement) {
+      return;
+    }
+
+    const { y } = recordButtonElement.getBoundingClientRect();
+
+    window.scrollTo({
+      top: y,
+      behavior: "smooth",
+    });
   }
 
   #showStopButton() {
@@ -222,10 +235,10 @@ export class ReciteBibleVerse extends HTMLElement {
       return;
     }
 
-    let interimTranscript = "";
-    for (const result of results) {
-      interimTranscript += result[0].transcript;
-    }
+    const transcriptArray = Array.from(results).map((result) =>
+      result[0].transcript.trim(),
+    );
+    const interimTranscript = transcriptArray.join(" ");
 
     this.#interimResultsParagraphElement.innerText =
       normalizeSpeechRecognitionInput({
