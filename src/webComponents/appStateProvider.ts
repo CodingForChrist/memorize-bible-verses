@@ -99,7 +99,7 @@ export class AppStateProvider extends HTMLElement {
       CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
       (event: CustomEventInit<CustomEventUpdateBibleTranslation>) => {
         const bibleTranslation = event.detail?.bibleTranslation;
-        if (bibleTranslation) {
+        if (bibleTranslation !== undefined) {
           this.#updateChildrenWithBibleTranslation(bibleTranslation);
         }
       },
@@ -109,7 +109,7 @@ export class AppStateProvider extends HTMLElement {
       CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
       (event: CustomEventInit<CustomEventUpdateBibleVerse>) => {
         const bibleVerse = event.detail?.bibleVerse;
-        if (bibleVerse) {
+        if (bibleVerse !== undefined) {
           this.#updateChildrenWithBibleVerse(bibleVerse);
         }
       },
@@ -119,7 +119,7 @@ export class AppStateProvider extends HTMLElement {
       CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
       (event: CustomEventInit<CustomEventUpdateRecitedBibleVerse>) => {
         const recitedBibleVerse = event.detail?.recitedBibleVerse;
-        if (recitedBibleVerse) {
+        if (recitedBibleVerse !== undefined) {
           this.#updateChildrenWithRecitedBibleVerse(recitedBibleVerse);
         }
       },
@@ -129,7 +129,7 @@ export class AppStateProvider extends HTMLElement {
       CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
       (event: CustomEventInit<CustomEventNavigateToPage>) => {
         const pageNavigation = event.detail?.pageNavigation;
-        if (pageNavigation) {
+        if (pageNavigation !== undefined) {
           this.#updatePageNavigation(pageNavigation);
         }
       },

@@ -131,6 +131,7 @@ export class ReciteBibleVerse extends HTMLElement {
     // clear out existing content
     this.#interimResultsParagraphElement.innerText = "";
     this.#recordingControlsContainerElement.innerHTML = "";
+    this.speechTranscript = "";
 
     if (!this.#hasSupportForSpeechRecognition()) {
       return this.#renderErrorMessage(
@@ -366,11 +367,10 @@ export class ReciteBibleVerse extends HTMLElement {
     });
   }
 
-  attributeChangedCallback(name: string) {
-    if (name !== "verse-reference") {
-      return;
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === "verse-reference" && oldValue !== newValue) {
+      return this.#renderInitialContent();
     }
-    this.#renderInitialContent();
   }
 }
 
