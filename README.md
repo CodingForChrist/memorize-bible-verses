@@ -1,4 +1,4 @@
-# Memorize Scripture Web App
+# Memorize Bible Verses Web App
 
 Practice memorizing bible verses by speaking them into your phone. This web app is built with
 
@@ -10,12 +10,12 @@ Practice memorizing bible verses by speaking them into your phone. This web app 
 
 1. Clone the repository by running the following command in your terminal:
    ```
-   git clone https://github.com/CodingForChrist/memorize-scripture-web-app.git
+   git clone https://github.com/CodingForChrist/memorize-bible-verses.git
    ```
 2. Create a `.env` file based on the `.env.sample` file at the root of this repository. You only need this .env file if you want to change the url for the [memorize-scripture-api-server](https://github.com/CodingForChrist/memorize-scripture-api-server) to run it locally.
 
    ```bash
-   cd memorize-scripture-web-app
+   cd memorize-bible-verses
    cp .env.sample .env
    ```
 
