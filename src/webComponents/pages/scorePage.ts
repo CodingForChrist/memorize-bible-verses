@@ -67,7 +67,7 @@ export class ScorePage extends BasePage {
   #navigateToNextPage() {
     // do a full page redirect to clear out state
     window.location.href =
-      "/memorize-scripture-web-app?page-name=search-options-page";
+      "/memorize-bible-verses/?page-name=search-options-page";
   }
 
   connectedCallback() {
