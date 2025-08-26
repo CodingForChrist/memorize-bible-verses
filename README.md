@@ -12,7 +12,7 @@ Practice memorizing bible verses by speaking them into your phone. This web app 
    ```
    git clone https://github.com/CodingForChrist/memorize-bible-verses.git
    ```
-2. Create a `.env` file based on the `.env.example` file at the root of this repository. You only need this .env file if you want to change the url for the [memorize-scripture-api-server](https://github.com/CodingForChrist/memorize-scripture-api-server) to run it locally.
+2. Create a `.env` file based on the `.env.example` file at the root of this repository. You only need this .env file if you want to change the url for the [memorize-bible-verses-api-server](https://github.com/CodingForChrist/memorize-bible-verses-api-server) to run it locally.
 
    ```bash
    cd memorize-bible-verses

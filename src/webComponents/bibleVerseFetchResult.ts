@@ -5,7 +5,7 @@ import {
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
-  MEMORIZE_SCRIPTURE_API_BASE_URL,
+  MEMORIZE_BIBLE_VERSES_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
 import { scriptureStyles } from "../sharedStyles";
@@ -139,7 +139,7 @@ export class BibleVerseFetchResult extends HTMLElement {
       this.loadingState = LOADING_STATES.PENDING;
 
       const response = await fetch(
-        `${MEMORIZE_SCRIPTURE_API_BASE_URL}/api/v1/bibles/${this.bibleId}/search/verse-reference`,
+        `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles/${this.bibleId}/search/verse-reference`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -147,7 +147,7 @@ export class BibleVerseFetchResult extends HTMLElement {
           }),
           headers: {
             "Content-Type": "application/json",
-            "Application-User-Id": "memorize_scripture_web_app",
+            "Application-User-Id": "memorize_bible_verses_web_app",
           },
         },
       );

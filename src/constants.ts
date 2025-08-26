@@ -27,6 +27,6 @@ export const SPEECH_RECOGNITION_STATES = {
 
 export type SpeechRecognitionStates = keyof typeof SPEECH_RECOGNITION_STATES;
 
-export const MEMORIZE_SCRIPTURE_API_BASE_URL =
-  import.meta.env.VITE_MEMORIZE_SCRIPTURE_API_BASE_URL ??
-  "https://memorize-scripture-api-server.fly.dev";
+export const MEMORIZE_BIBLE_VERSES_API_BASE_URL =
+  import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
+  "https://memorize-bible-verses-api-server.fly.dev";
