@@ -29,6 +29,7 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
     ) as HTMLElement;
   }
 
+  // https://store.awana.org/product/sparks-wingrunner-handbook
   get awanaBookWingRunnerBibleVerses() {
     return [
       "John 3:16",
@@ -43,6 +44,24 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
       "Romans 6:23",
       "Deuteronomy 6:5",
       "Psalm 96:2",
+      "Jeremiah 32:37",
+      "Leviticus 19:2",
+      "Proverbs 20:11",
+      "Psalm 23:1-2",
+      "Psalm 23:3",
+      "Psalm 23:4",
+      "Psalm 23:5",
+      "Psalm 23:6",
+      "1 Peter 5:7",
+      "Mark 16:15",
+      "1 Peter 1:25",
+      "1 Thessalonians 5:17-18",
+      "Colossians 3:23",
+      "John 1:1",
+      "John 1:2",
+      "John 1:3",
+      "Ephesians 4:32",
+      "Philippians 2:14",
     ];
   }
 
