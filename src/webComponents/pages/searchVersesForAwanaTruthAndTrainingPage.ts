@@ -29,6 +29,7 @@ export class SearchVersesForAwanaTruthAndTrainingPage extends BasePage {
     ) as HTMLElement;
   }
 
+  // https://store.awana.org/product/tt-mission-discovery-of-grace-kids-handbook
   get awanaBookDiscoveryOfGraceBibleVerses() {
     return [
       "Psalm 9:10",
