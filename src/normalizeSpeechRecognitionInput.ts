@@ -90,7 +90,7 @@ function replaceSpelledOutNumbersInBibleReference({
     3: ["3rd", "Third", "third"],
   };
 
-  const { bookNumber, bookName, chapter, verseNumberStart } =
+  const { bookNumber, bookName, chapter, verseNumberStart, verseNumberEnd } =
     parseVerseReferenceIntoParts(verseReference);
 
   let improvedTranscript = transcript;
@@ -112,9 +112,11 @@ function replaceSpelledOutNumbersInBibleReference({
 
   if (spelledOutNumbersMap[chapter]) {
     const chapterSpelledOut = spelledOutNumbersMap[chapter];
-    if (improvedTranscript.includes(`${bookName} ${chapterSpelledOut}`)) {
+
+    const searchPattern = new RegExp(`${bookName} ${chapterSpelledOut}`, "ig");
+    if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
-        `${bookName} ${chapterSpelledOut}`,
+        searchPattern,
         `${bookName} ${chapter}`,
       );
     }
@@ -122,14 +124,30 @@ function replaceSpelledOutNumbersInBibleReference({
 
   if (spelledOutNumbersMap[verseNumberStart]) {
     const verseNumberStartSpelledOut = spelledOutNumbersMap[verseNumberStart];
-    if (
-      improvedTranscript.includes(
-        `${bookName} ${chapter} ${verseNumberStartSpelledOut}`,
-      )
-    ) {
+
+    const searchPattern = new RegExp(
+      `${bookName} ${chapter} ${verseNumberStartSpelledOut}`,
+      "ig",
+    );
+    if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
-        `${bookName} ${chapter} ${verseNumberStartSpelledOut}`,
+        searchPattern,
         `${bookName} ${chapter}:${verseNumberStart}`,
+      );
+    }
+  }
+
+  if (spelledOutNumbersMap[verseNumberEnd]) {
+    const verseNumberEndSpelledOut = spelledOutNumbersMap[verseNumberEnd];
+
+    const searchPattern = new RegExp(
+      `${bookName} ${chapter}:${verseNumberStart} [-a-zA-Z]+ ${verseNumberEndSpelledOut}`,
+      "ig",
+    );
+    if (searchPattern.test(improvedTranscript)) {
+      improvedTranscript = improvedTranscript.replaceAll(
+        searchPattern,
+        `${bookName} ${chapter}:${verseNumberStart}-${verseNumberEnd}`,
       );
     }
   }
