@@ -139,11 +139,11 @@ export class BibleVerseFetchResult extends HTMLElement {
       this.loadingState = LOADING_STATES.PENDING;
 
       const response = await fetch(
-        `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles/${this.bibleId}/search/verse-reference`,
+        `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles/${this.bibleId}/passages/verse-reference`,
         {
           method: "POST",
           body: JSON.stringify({
-            query: this.verseReference,
+            verseReference: this.verseReference,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -153,9 +153,8 @@ export class BibleVerseFetchResult extends HTMLElement {
       );
       const json = await response.json();
 
-      if (response.ok && json.data && json.data?.passages.length === 1) {
-        const { id, reference, content, verseCount } = json.data
-          .passages[0] as BibleVerse;
+      if (response.ok && json?.data?.content) {
+        const { id, reference, content, verseCount } = json.data as BibleVerse;
         this.selectedBibleVerse = { id, reference, content, verseCount };
         this.loadingState = LOADING_STATES.RESOLVED;
         // this.#renderTrackingPixel(json.meta.fumsToken);
