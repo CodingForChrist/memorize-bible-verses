@@ -34,6 +34,10 @@ export class BibleVerseFetchResult extends HTMLElement {
     return this.getAttribute("verse-reference");
   }
 
+  get isVisible() {
+    return this.getAttribute("is-visible") === "true";
+  }
+
   get shouldDisplaySectionHeadings() {
     return this.getAttribute("should-display-section-headings") === "true";
   }
@@ -215,12 +219,12 @@ export class BibleVerseFetchResult extends HTMLElement {
       return;
     }
 
-    if (
-      name === "is-visible" &&
-      newValue === "true" &&
-      this.selectedBibleVerse
-    ) {
-      return this.#sendEventForSelectedBibleVerse();
+    if (name === "is-visible" && newValue === "true") {
+      if (this.selectedBibleVerse) {
+        return this.#sendEventForSelectedBibleVerse();
+      } else {
+        return this.#fetchVerseReference();
+      }
     }
 
     if (name === "loading-state") {
@@ -239,7 +243,12 @@ export class BibleVerseFetchResult extends HTMLElement {
       oldValue !== newValue
     ) {
       this.#removeResultElements();
-      return this.#fetchVerseReference();
+      if (this.isVisible) {
+        return this.#fetchVerseReference();
+      } else {
+        this.loadingState = LOADING_STATES.INITIAL;
+        this.#selectedBibleVerse = undefined;
+      }
     }
   }
 }
