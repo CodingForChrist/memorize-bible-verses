@@ -55,4 +55,13 @@ describe("convertBibleVerseToText()", () => {
       "In the beginning was the Word, and the Word was with God, and the Word was God.",
     );
   });
+
+  test("should return plain text for a verse range", () => {
+    const htmlContentString = `<p class="ms">PSALM 23</p><p class="s">The L<span class="sc"><span class="it">ord</span></span>, the Psalmist’s Shepherd.</p><p class="ms">A Psalm of David.</p><p class="q"><span data-number="1" data-sid="PSA 23:1" class="v">1</span>The L<span class="sc">ord</span> is my shepherd,</p><p data-vid="PSA 23:1" class="q">I shall not want.</p><p class="q"><span data-number="2" data-sid="PSA 23:2" class="v">2</span>He makes me lie down in green pastures;</p><p data-vid="PSA 23:2" class="q">He leads me beside quiet waters.</p><p class="q"><span data-number="3" data-sid="PSA 23:3" class="v">3</span>He restores my soul;</p><p data-vid="PSA 23:3" class="q">He guides me in the paths of righteousness</p><p data-vid="PSA 23:3" class="q">For His name’s sake.</p><p class="q"><span data-number="4" data-sid="PSA 23:4" class="v">4</span>Even though I walk through the valley of the shadow of death,</p><p data-vid="PSA 23:4" class="q">I fear no evil, for You are with me;</p><p data-vid="PSA 23:4" class="q">Your rod and Your staff, they comfort me.</p><p class="q"><span data-number="5" data-sid="PSA 23:5" class="v">5</span>You prepare a table before me in the presence of my enemies;</p><p data-vid="PSA 23:5" class="q">You have anointed my head with oil;</p><p data-vid="PSA 23:5" class="q">My cup overflows.</p><p class="q"><span data-number="6" data-sid="PSA 23:6" class="v">6</span>Surely goodness and lovingkindness will follow me all the days of my life,</p><p data-vid="PSA 23:6" class="q">And I will dwell in the house of the L<span class="sc">ord</span> forever.</p>"`;
+
+    const results = convertBibleVerseToText(htmlContentString);
+    expect(results).toBe(
+      "The Lord is my shepherd, I shall not want. He makes me lie down in green pastures; He leads me beside quiet waters. He restores my soul; He guides me in the paths of righteousness For His name’s sake. Even though I walk through the valley of the shadow of death, I fear no evil, for You are with me; Your rod and Your staff, they comfort me. You prepare a table before me in the presence of my enemies; You have anointed my head with oil; My cup overflows. Surely goodness and lovingkindness will follow me all the days of my life, And I will dwell in the house of the Lord forever.",
+    );
+  });
 });
