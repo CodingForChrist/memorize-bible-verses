@@ -101,7 +101,13 @@ export function convertBibleVerseToText(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = strippedHTMLContent;
 
-  return divElement.innerText.trim();
+  const textArray = Array.from(divElement.querySelectorAll("p")).map(
+    (paragraphElement) => {
+      return paragraphElement.innerText.trim();
+    },
+  );
+
+  return textArray.join(" ");
 }
 
 export function normalizeBookNameInVerseReference(verseReference: string) {
