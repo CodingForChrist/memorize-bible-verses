@@ -59,9 +59,9 @@ export class SpeechRecognitionService {
 
     for (const result of Array.from(results)) {
       // attempt to avoid duplicate words for android chrome
-      if (result[0].confidence > 0) {
-        transcriptArray.push(result[0].transcript.trim());
-      }
+      // if (result[0].confidence > 0) {
+      transcriptArray.push(result[0].transcript.trim());
+      // }
     }
     return transcriptArray.join(" ");
   }
