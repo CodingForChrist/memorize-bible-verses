@@ -61,7 +61,7 @@ export class SpeechRecognitionService {
       const { confidence, transcript } = value[0];
       // attempt to avoid duplicate phrases for android chrome
       if (confidence === 0 && transcript === transcriptArray[index - 1]) {
-        return;
+        continue;
       }
 
       transcriptArray.push(transcript.trim());
