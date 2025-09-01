@@ -4,6 +4,7 @@ import {
   type SpeechRecognitionStates,
 } from "../constants";
 
+import { SpeechRecognitionService } from "../speechRecognitionService";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 
@@ -31,7 +32,7 @@ export class ReciteBibleVerse extends HTMLElement {
       this.speechRecognition.continuous = true;
       this.speechRecognition.lang = "en-US";
       this.speechRecognition.interimResults = true;
-      this.speechRecognition.maxAlternatives = 5;
+      this.speechRecognition.maxAlternatives = 1;
     } catch (error) {
       console.error("Unable to use the SpeechRecognition API", error);
     }
@@ -236,9 +237,15 @@ export class ReciteBibleVerse extends HTMLElement {
       return;
     }
 
-    const transcriptArray = Array.from(results).map((result) =>
-      result[0].transcript.trim(),
-    );
+    let transcriptArray: string[] = [];
+
+    for (const result of Array.from(results)) {
+      // attempt to avoid duplicate words for android chrome
+      if (result[0].confidence > 0) {
+        transcriptArray.push(result[0].transcript.trim());
+      }
+    }
+
     const interimTranscript = transcriptArray.join(" ");
 
     this.#interimResultsParagraphElement.innerText =
