@@ -4,25 +4,29 @@ import {
 } from "./constants";
 
 export class SpeechRecognitionService {
-  speechRecognition?: SpeechRecognition;
   interimTranscript?: string;
   finalTranscript?: string;
-  speechRecognitionState: SpeechRecognitionStates;
-  #lastSpeechRecognitionResult?: SpeechRecognitionResultList;
+  state: SpeechRecognitionStates;
+  #recognition?: SpeechRecognition;
+  #lastResult?: SpeechRecognitionResultList;
   #resolveListener?: (value: string) => void;
   #rejectListener?: (reason: string) => void;
 
   constructor() {
-    this.speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
+    this.state = SPEECH_RECOGNITION_STATES.INITIAL;
 
     try {
       const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
-      this.speechRecognition = new SpeechRecognition();
-      this.speechRecognition.continuous = true;
-      this.speechRecognition.lang = "en-US";
-      this.speechRecognition.interimResults = true;
-      this.speechRecognition.maxAlternatives = 1;
+      this.#recognition = new SpeechRecognition();
+      this.#recognition.continuous = true;
+      this.#recognition.lang = "en-US";
+      this.#recognition.interimResults = true;
+      this.#recognition.maxAlternatives = 1;
+
+      this.#recognition?.addEventListener("start", this.#onStart.bind(this));
+      this.#recognition?.addEventListener("result", this.#onResult.bind(this));
+      this.#recognition?.addEventListener("end", this.#onEnd.bind(this));
     } catch (error) {
       console.error("Unable to use the SpeechRecognition API", error);
     }
@@ -34,21 +38,19 @@ export class SpeechRecognitionService {
       this.#resolveListener = resolve;
       this.#rejectListener = reject;
 
-      this.speechRecognition?.start();
-      this.speechRecognitionState =
-        SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
+      this.#recognition?.start();
+      this.state = SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
     });
   }
 
   stop() {
-    this.speechRecognition?.stop();
+    this.#recognition?.stop();
     if (
-      this.speechRecognitionState ===
-      SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS
+      this.state === SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS
     ) {
-      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
+      this.state = SPEECH_RECOGNITION_STATES.REJECTED;
     } else {
-      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.RESOLVED;
+      this.state = SPEECH_RECOGNITION_STATES.RESOLVED;
     }
   }
 
@@ -61,34 +63,28 @@ export class SpeechRecognitionService {
         transcriptArray.push(result[0].transcript.trim());
       }
     }
-
     return transcriptArray.join(" ");
   }
 
   #onStart() {
-    this.speechRecognitionState = SPEECH_RECOGNITION_STATES.LISTENING;
+    this.state = SPEECH_RECOGNITION_STATES.LISTENING;
   }
 
   #onResult(event: SpeechRecognitionEvent) {
     this.interimTranscript = this.#getTranscriptAsText(event.results);
-    this.#lastSpeechRecognitionResult = event.results;
+    this.#lastResult = event.results;
   }
 
   #onEnd() {
-    if (this.speechRecognitionState === SPEECH_RECOGNITION_STATES.LISTENING) {
+    if (this.state === SPEECH_RECOGNITION_STATES.LISTENING) {
       // restart for android chrome which can abruptly end early
-      this.speechRecognition?.stop();
-      this.speechRecognition?.start();
+      this.#recognition?.stop();
+      this.#recognition?.start();
       return;
     }
 
-    if (
-      this.speechRecognitionState === SPEECH_RECOGNITION_STATES.RESOLVED &&
-      this.#lastSpeechRecognitionResult
-    ) {
-      const transcript = this.#getTranscriptAsText(
-        this.#lastSpeechRecognitionResult,
-      );
+    if (this.state === SPEECH_RECOGNITION_STATES.RESOLVED && this.#lastResult) {
+      const transcript = this.#getTranscriptAsText(this.#lastResult);
       this.interimTranscript = transcript;
       this.finalTranscript = transcript;
 
@@ -100,14 +96,5 @@ export class SpeechRecognitionService {
         this.#rejectListener("Failed to get final transcript");
       }
     }
-  }
-
-  connectedCallback() {
-    this.speechRecognition?.addEventListener("start", this.#onStart.bind(this));
-    this.speechRecognition?.addEventListener(
-      "result",
-      this.#onResult.bind(this),
-    );
-    this.speechRecognition?.addEventListener("end", this.#onEnd.bind(this));
   }
 }
