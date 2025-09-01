@@ -101,11 +101,14 @@ export function convertBibleVerseToText(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = strippedHTMLContent;
 
-  const textArray = Array.from(divElement.querySelectorAll("p")).map(
-    (paragraphElement) => {
-      return paragraphElement.innerText.trim();
-    },
-  );
+  const textArray = Array.from(divElement.children).map((childElement) => {
+    if (childElement.nodeName === "P") {
+      return (childElement as HTMLParagraphElement).innerText.trim();
+    }
+    throw new Error(
+      `Unexpected element in verse html "${childElement.nodeName}"`,
+    );
+  });
 
   return textArray.join(" ");
 }

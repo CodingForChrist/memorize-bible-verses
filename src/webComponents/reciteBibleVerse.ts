@@ -4,16 +4,15 @@ import {
   type SpeechRecognitionStates,
 } from "../constants";
 
+import { SpeechRecognitionService } from "../speechRecognitionService";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../types";
 
 export class ReciteBibleVerse extends HTMLElement {
-  speechRecognition?: SpeechRecognition;
+  speechRecognitionService: SpeechRecognitionService;
   #speechTranscript?: string;
-  #lastSpeechRecognitionResult?: SpeechRecognitionResultList;
-  #speechRecognitionState: SpeechRecognitionStates;
 
   constructor() {
     super();
@@ -22,19 +21,7 @@ export class ReciteBibleVerse extends HTMLElement {
     shadowRoot.appendChild(this.#styleElement);
     shadowRoot.appendChild(this.#containerElements);
 
-    this.#speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
-
-    try {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      this.speechRecognition = new SpeechRecognition();
-      this.speechRecognition.continuous = true;
-      this.speechRecognition.lang = "en-US";
-      this.speechRecognition.interimResults = true;
-      this.speechRecognition.maxAlternatives = 5;
-    } catch (error) {
-      console.error("Unable to use the SpeechRecognition API", error);
-    }
+    this.speechRecognitionService = new SpeechRecognitionService();
   }
 
   static get observedAttributes() {
@@ -49,25 +36,14 @@ export class ReciteBibleVerse extends HTMLElement {
     return this.getAttribute("verse-content");
   }
 
-  get speechRecognitionState() {
-    return this.#speechRecognitionState;
-  }
-
-  set speechRecognitionState(value: SpeechRecognitionStates) {
-    this.#speechRecognitionState = value;
-
-    if (value === SPEECH_RECOGNITION_STATES.REJECTED) {
-      this.#hideLoadingSpinner();
-      this.#renderErrorMessage("Failed to use microphone input");
-      this.#showTryAgainButton();
-      this.#interimResultsParagraphElement.innerText = "";
-    }
-  }
-
   get #initialContentContainerElement() {
     return this.shadowRoot!.querySelector(
       "#initial-content-container",
     ) as HTMLDivElement;
+  }
+
+  get #alertErrorElement() {
+    return this.#initialContentContainerElement.querySelector("alert-error");
   }
 
   get #resultsContainerElement() {
@@ -99,13 +75,6 @@ export class ReciteBibleVerse extends HTMLElement {
 
   get speechTranscript(): string | undefined {
     return this.#speechTranscript;
-  }
-
-  #formatSpeechTranscript(value: SpeechRecognitionResultList) {
-    const transcriptArray = Array.from(value).map((result) =>
-      result[0].transcript.trim(),
-    );
-    return transcriptArray.join(" ");
   }
 
   set speechTranscript(value: string) {
@@ -157,20 +126,36 @@ export class ReciteBibleVerse extends HTMLElement {
       .addEventListener("click", this.#recordVoiceButtonClick.bind(this));
   }
 
-  #recordVoiceButtonClick() {
+  async #recordVoiceButtonClick() {
     const { INITIAL, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
 
     if (
       ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
-        this.speechRecognitionState,
+        this.speechRecognitionService.state,
       )
     ) {
-      this.speechRecognition?.start();
-      this.speechRecognitionState =
-        SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
       this.#showLoadingSpinner();
       this.#showStopButton();
       this.#scrollRecordButtonIntoView();
+
+      const intervalForPrintingInterimResults = setInterval(() => {
+        this.#printSpeechRecognitionInterimResults(
+          this.speechRecognitionService.interimTranscript,
+        );
+      }, 100);
+
+      try {
+        const finalTranscript = await this.speechRecognitionService.listen();
+        this.speechTranscript = finalTranscript;
+        clearInterval(intervalForPrintingInterimResults);
+        this.#printSpeechRecognitionInterimResults(finalTranscript);
+      } catch (_error) {
+        this.#hideLoadingSpinner();
+        this.#renderErrorMessage("Failed to use microphone input");
+        this.#showTryAgainButton();
+        this.#interimResultsParagraphElement.innerText = "";
+        clearInterval(intervalForPrintingInterimResults);
+      }
     }
   }
 
@@ -212,38 +197,25 @@ export class ReciteBibleVerse extends HTMLElement {
       .querySelector("#button-try-again")!
       .addEventListener("click", () => {
         this.#interimResultsParagraphElement.innerText = "";
+        this.#alertErrorElement?.remove();
         this.#recordVoiceButtonClick();
       });
   }
 
   #stopRecordingButtonClick() {
-    const { WAITING_FOR_MICROPHONE_ACCESS, LISTENING } =
-      SPEECH_RECOGNITION_STATES;
-
-    if (this.speechRecognitionState === LISTENING) {
-      this.speechRecognition?.stop();
-      this.#hideLoadingSpinner();
-      this.#showTryAgainButton();
-    } else if (this.speechRecognitionState === WAITING_FOR_MICROPHONE_ACCESS) {
-      this.speechRecognition?.stop();
-      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
-      this.#showTryAgainButton();
-    }
+    this.speechRecognitionService.stop();
+    this.#hideLoadingSpinner();
+    this.#showTryAgainButton();
   }
 
-  #printSpeechRecognitionInterimResults(results: SpeechRecognitionResultList) {
-    if (!results || !this.verseReference || !this.verseContent) {
+  #printSpeechRecognitionInterimResults(transcript?: string) {
+    if (!transcript || !this.verseReference || !this.verseContent) {
       return;
     }
 
-    const transcriptArray = Array.from(results).map((result) =>
-      result[0].transcript.trim(),
-    );
-    const interimTranscript = transcriptArray.join(" ");
-
     this.#interimResultsParagraphElement.innerText =
       normalizeSpeechRecognitionInput({
-        transcript: interimTranscript,
+        transcript,
         verseReference: this.verseReference,
         verseText: convertBibleVerseToText(this.verseContent),
       });
@@ -334,37 +306,6 @@ export class ReciteBibleVerse extends HTMLElement {
 
   connectedCallback() {
     this.#renderInitialContent();
-
-    this.speechRecognition?.addEventListener("start", () => {
-      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.LISTENING;
-    });
-
-    this.speechRecognition?.addEventListener(
-      "result",
-      (event: SpeechRecognitionEvent) => {
-        console.log({
-          label: "speechRecognitionResults",
-          results: event.results,
-        });
-
-        this.#printSpeechRecognitionInterimResults(event.results);
-        this.#lastSpeechRecognitionResult = event.results;
-      },
-    );
-
-    this.speechRecognition?.addEventListener("end", () => {
-      if (this.#lastSpeechRecognitionResult) {
-        this.#printSpeechRecognitionInterimResults(
-          this.#lastSpeechRecognitionResult,
-        );
-        this.speechTranscript = this.#formatSpeechTranscript(
-          this.#lastSpeechRecognitionResult,
-        );
-        this.speechRecognitionState = SPEECH_RECOGNITION_STATES.RESOLVED;
-      } else {
-        this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
-      }
-    });
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
