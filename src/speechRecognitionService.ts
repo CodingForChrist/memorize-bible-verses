@@ -3,9 +3,18 @@ import {
   type SpeechRecognitionStates,
 } from "./constants";
 
+const {
+  INITIAL,
+  WAITING_FOR_MICROPHONE_ACCESS,
+  LISTENING,
+  RESOLVED,
+  REJECTED,
+} = SPEECH_RECOGNITION_STATES;
+
 export class SpeechRecognitionService {
   interimTranscript?: string;
   finalTranscript?: string;
+  #transcriptHistory: string[];
   state: SpeechRecognitionStates;
   #recognition?: SpeechRecognition;
   #lastResult?: SpeechRecognitionResultList;
@@ -13,7 +22,8 @@ export class SpeechRecognitionService {
   #rejectListener?: (reason: string) => void;
 
   constructor() {
-    this.state = SPEECH_RECOGNITION_STATES.INITIAL;
+    this.state = INITIAL;
+    this.#transcriptHistory = [];
 
     try {
       const SpeechRecognition =
@@ -33,44 +43,58 @@ export class SpeechRecognitionService {
   }
 
   listen() {
+    this.#resetState();
+
     return new Promise<string>((resolve, reject) => {
       // resolve or reject get invoked in the "end" event
       this.#resolveListener = resolve;
       this.#rejectListener = reject;
 
       this.#recognition?.start();
-      this.state = SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS;
+      this.state = WAITING_FOR_MICROPHONE_ACCESS;
     });
   }
 
   stop() {
     this.#recognition?.stop();
-    if (
-      this.state === SPEECH_RECOGNITION_STATES.WAITING_FOR_MICROPHONE_ACCESS
-    ) {
-      this.state = SPEECH_RECOGNITION_STATES.REJECTED;
-    } else {
-      this.state = SPEECH_RECOGNITION_STATES.RESOLVED;
+
+    if (this.state === WAITING_FOR_MICROPHONE_ACCESS) {
+      this.state = REJECTED;
+      return;
     }
+
+    this.state = RESOLVED;
+  }
+
+  #resetState() {
+    this.#transcriptHistory = [];
+    this.interimTranscript = "";
+    this.finalTranscript = "";
+    this.state = INITIAL;
   }
 
   #getTranscriptAsText(results: SpeechRecognitionResultList) {
     let transcriptArray: string[] = [];
 
-    for (const [index, value] of Array.from(results).entries()) {
-      const { confidence, transcript } = value[0];
+    for (const result of Array.from(results)) {
+      const { confidence, transcript } = result[0];
       // attempt to avoid duplicate phrases for android chrome
-      if (confidence === 0 && transcript === transcriptArray[index - 1]) {
+      if (isAndroid() && confidence === 0) {
         continue;
       }
 
       transcriptArray.push(transcript.trim());
     }
+
+    if (isAndroid()) {
+      transcriptArray = [...this.#transcriptHistory, ...transcriptArray];
+    }
+
     return transcriptArray.join(" ");
   }
 
   #onStart() {
-    this.state = SPEECH_RECOGNITION_STATES.LISTENING;
+    this.state = LISTENING;
   }
 
   #onResult(event: SpeechRecognitionEvent) {
@@ -79,14 +103,18 @@ export class SpeechRecognitionService {
   }
 
   #onEnd() {
-    if (this.state === SPEECH_RECOGNITION_STATES.LISTENING) {
-      // restart for android chrome which can abruptly end early
+    // restart for android chrome which can abruptly end early
+    if (isAndroid() && this.state === LISTENING) {
+      if (this.interimTranscript) {
+        this.#transcriptHistory.push(this.interimTranscript);
+      }
+
       this.#recognition?.stop();
       this.#recognition?.start();
       return;
     }
 
-    if (this.state === SPEECH_RECOGNITION_STATES.RESOLVED && this.#lastResult) {
+    if (this.state === RESOLVED && this.#lastResult) {
       const transcript = this.#getTranscriptAsText(this.#lastResult);
       this.interimTranscript = transcript;
       this.finalTranscript = transcript;
@@ -100,4 +128,8 @@ export class SpeechRecognitionService {
       }
     }
   }
+}
+
+function isAndroid() {
+  return /(android)/i.test(navigator.userAgent);
 }
