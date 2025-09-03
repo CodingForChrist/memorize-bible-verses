@@ -111,6 +111,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         padding-left: 1rem;
       }
       .verse-container {
+        margin-left: -0.25rem;
         margin-top: 0.25rem;
       }
       .verse-container button {
@@ -118,12 +119,13 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         color: var(--color-primary-bright-pink);
         text-decoration: underline;
         cursor: pointer;
+        padding: 0.25rem;
       }
-      .verse-container button {
+      .verse-container button:focus {
         outline: revert;
-      }
-      .verse-container button:first-child {
-        margin-right: 0.25rem;
+        outline: none;
+        background-color: var(--color-primary-bright-pink);
+        color: var(--color-primary-mint-cream);
       }
     `;
     styleElement.textContent = css;
