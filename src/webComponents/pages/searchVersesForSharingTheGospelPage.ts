@@ -29,6 +29,26 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     ) as HTMLElement;
   }
 
+  #selectVerseButtonClick(buttonElement: HTMLButtonElement) {
+    const orderedListElement = this.shadowRoot!.querySelector("ol");
+
+    this.shadowRoot!.querySelector("bible-verse-drop-down-list")?.setAttribute(
+      "selected-verse",
+      buttonElement.innerText,
+    );
+
+    const { y } = orderedListElement!.getBoundingClientRect();
+
+    if (y <= 0) {
+      return;
+    }
+
+    window.scrollTo({
+      top: y,
+      behavior: "smooth",
+    });
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -41,8 +61,32 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         </span>
 
         <span slot="page-content">
+          <ol>
+            <li>
+              All have sinned
+              <p class="verse-container">
+                <button type="button">Romans 3:23</button>
+                <button type="button">Romans 6:23</button>
+              </p>
+            </li>
+            <li>
+              Jesus paid the penalty for our sins
+              <p class="verse-container">
+                <button type="button">Romans 5:8</button>
+                <button type="button">2 Corinthians 5:21</button>
+              </p>
+            </li>
+            <li>
+              Believe in Jesus and be saved
+              <p class="verse-container">
+                <button type="button">Ephesians 2:8-9</button>
+                <button type="button">John 3:16-17</button>
+              </p>
+            </li>
+          </ol>
+
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9"></bible-verse-drop-down-list>
+          <bible-verse-drop-down-list verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9,2 Corinthians 5:21,John 3:16-17"></bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -61,6 +105,27 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       }
       p {
         margin: 1rem 0;
+      }
+      ol {
+        margin: 0 0 2rem;
+        padding-left: 1rem;
+      }
+      .verse-container {
+        margin-left: -0.25rem;
+        margin-top: 0.25rem;
+      }
+      .verse-container button {
+        all: unset;
+        color: var(--color-primary-bright-pink);
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0.25rem;
+      }
+      .verse-container button:focus {
+        outline: revert;
+        outline: none;
+        background-color: var(--color-primary-bright-pink);
+        color: var(--color-primary-mint-cream);
       }
     `;
     styleElement.textContent = css;
@@ -84,6 +149,12 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         previousPage: "search-verses-for-sharing-the-gospel-page",
       }),
     );
+
+    for (const buttonElement of this.shadowRoot!.querySelectorAll("button")) {
+      buttonElement.addEventListener("click", () => {
+        this.#selectVerseButtonClick(buttonElement);
+      });
+    }
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {

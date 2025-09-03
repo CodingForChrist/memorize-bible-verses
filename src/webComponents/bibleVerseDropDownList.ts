@@ -16,7 +16,7 @@ export class BibleVerseDropDownList extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["is-visible", "bible-id", "verses"];
+    return ["is-visible", "bible-id", "verses", "selected-verse"];
   }
 
   get bibleId() {
@@ -35,6 +35,20 @@ export class BibleVerseDropDownList extends HTMLElement {
     this.#selectedVerseReference = value;
 
     this.#bibleVerseFetchResultElement.setAttribute("verse-reference", value);
+  }
+
+  #updateSelectedVerseFromAttribute() {
+    const selectedVerseFromAttribute = this.getAttribute("selected-verse");
+    if (!selectedVerseFromAttribute) {
+      return;
+    }
+
+    const selectElement = this.#selectContainerElement.querySelector(
+      'select[name="select-verse"]',
+    ) as HTMLSelectElement;
+
+    selectElement.value = selectedVerseFromAttribute;
+    selectElement.dispatchEvent(new Event("change"));
   }
 
   get #selectContainerElement() {
@@ -161,6 +175,10 @@ export class BibleVerseDropDownList extends HTMLElement {
           newValue,
         );
       }
+    }
+
+    if (name === "selected-verse" && oldValue !== newValue) {
+      this.#updateSelectedVerseFromAttribute();
     }
   }
 }
