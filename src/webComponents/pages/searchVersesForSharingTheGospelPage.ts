@@ -29,24 +29,24 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     ) as HTMLElement;
   }
 
-  #selectVerseButtonClick(buttonElement: HTMLButtonElement) {
-    const orderedListElement = this.shadowRoot!.querySelector("ol");
+  get #bibleVerseButtonElements() {
+    return this.shadowRoot!.querySelectorAll<HTMLButtonElement>(
+      ".verse-container button",
+    );
+  }
 
-    this.shadowRoot!.querySelector("bible-verse-drop-down-list")?.setAttribute(
+  #selectVerseButtonClick(buttonElement: HTMLButtonElement) {
+    this.#bibleVerseDropDownListElement?.setAttribute(
       "selected-verse",
       buttonElement.innerText,
     );
 
-    const { y } = orderedListElement!.getBoundingClientRect();
-
-    if (y <= 0) {
-      return;
+    for (const nonActiveButtonElement of this.#bibleVerseButtonElements) {
+      nonActiveButtonElement.classList.remove("active");
     }
+    buttonElement.classList.add("active");
 
-    window.scrollTo({
-      top: y,
-      behavior: "smooth",
-    });
+    this.shadowRoot!.querySelector("ol")?.scrollIntoView();
   }
 
   get #containerElement() {
@@ -86,7 +86,10 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
           </ol>
 
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9,2 Corinthians 5:21,John 3:16-17"></bible-verse-drop-down-list>
+          <bible-verse-drop-down-list
+            verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9,2 Corinthians 5:21,John 3:16-17"
+          >
+          </bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -111,7 +114,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         padding-left: 1rem;
       }
       .verse-container {
-        margin-left: -0.25rem;
+        margin-left: -1rem;
         margin-top: 0.25rem;
       }
       .verse-container button {
@@ -119,13 +122,24 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         color: var(--color-primary-bright-pink);
         text-decoration: underline;
         cursor: pointer;
-        padding: 0.25rem;
+        padding: 0.25rem 0;
       }
-      .verse-container button:focus {
+      .verse-container button:first-child {
+        padding-left: 1rem;
+        padding-right: 0.5rem;
+      }
+      .verse-container button:hover,
+      .verse-container button:focus,
+      .verse-container button:focus-visible,
+      .verse-container button:active,
+      .verse-container button.active {
         outline: revert;
         outline: none;
+        text-decoration: none;
+        border-radius: 1.5rem;
         background-color: var(--color-primary-bright-pink);
         color: var(--color-primary-mint-cream);
+        padding: 0.25rem 1rem;
       }
     `;
     styleElement.textContent = css;
@@ -150,7 +164,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       }),
     );
 
-    for (const buttonElement of this.shadowRoot!.querySelectorAll("button")) {
+    for (const buttonElement of this.#bibleVerseButtonElements) {
       buttonElement.addEventListener("click", () => {
         this.#selectVerseButtonClick(buttonElement);
       });
