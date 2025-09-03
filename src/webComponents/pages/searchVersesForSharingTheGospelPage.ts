@@ -37,16 +37,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       buttonElement.innerText,
     );
 
-    const { y } = orderedListElement!.getBoundingClientRect();
-
-    if (y <= 0) {
-      return;
-    }
-
-    window.scrollTo({
-      top: y,
-      behavior: "smooth",
-    });
+    orderedListElement?.scrollIntoView();
   }
 
   get #containerElement() {

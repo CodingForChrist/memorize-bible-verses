@@ -136,7 +136,9 @@ export class ReciteBibleVerse extends HTMLElement {
     ) {
       this.#showLoadingSpinner();
       this.#showStopButton();
-      this.#scrollRecordButtonIntoView();
+      this.#initialContentContainerElement
+        .querySelector("#button-record")
+        ?.scrollIntoView();
 
       const intervalForPrintingInterimResults = setInterval(() => {
         this.#printSpeechRecognitionInterimResults(
@@ -157,21 +159,6 @@ export class ReciteBibleVerse extends HTMLElement {
         clearInterval(intervalForPrintingInterimResults);
       }
     }
-  }
-
-  #scrollRecordButtonIntoView() {
-    const recordButtonElement =
-      this.#initialContentContainerElement.querySelector("#button-record");
-    if (!recordButtonElement) {
-      return;
-    }
-
-    const { y } = recordButtonElement.getBoundingClientRect();
-
-    window.scrollTo({
-      top: y,
-      behavior: "smooth",
-    });
   }
 
   #showStopButton() {
