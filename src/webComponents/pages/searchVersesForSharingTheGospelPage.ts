@@ -176,7 +176,10 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     // set first verse as active
     const firstVerseButton = this.#bibleVerseButtonElements[0];
     if (firstVerseButton) {
-      this.#bibleVerseFetchResultElement.setAttribute("verse-reference", firstVerseButton.innerText);
+      this.#bibleVerseFetchResultElement.setAttribute(
+        "verse-reference",
+        firstVerseButton.innerText,
+      );
       firstVerseButton.classList.add("active");
     }
   }
