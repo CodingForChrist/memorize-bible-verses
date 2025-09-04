@@ -23,9 +23,9 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     ) as HTMLElement;
   }
 
-  get #bibleVerseDropDownListElement() {
+  get #bibleVerseFetchResultElement() {
     return this.shadowRoot!.querySelector(
-      "bible-verse-drop-down-list",
+      "bible-verse-fetch-result",
     ) as HTMLElement;
   }
 
@@ -36,8 +36,8 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
   }
 
   #selectVerseButtonClick(buttonElement: HTMLButtonElement) {
-    this.#bibleVerseDropDownListElement?.setAttribute(
-      "selected-verse",
+    this.#bibleVerseFetchResultElement?.setAttribute(
+      "verse-reference",
       buttonElement.innerText,
     );
 
@@ -60,7 +60,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
           <p>When you have the verse memorized go to Step 2.</p>
         </span>
 
-        <span slot="page-content">
+        <div class="page-content" slot="page-content">
           <ol>
             <li>
               All have sinned
@@ -86,11 +86,8 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
           </ol>
 
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list
-            verses="Romans 3:23,Romans 6:23,Romans 5:8,Ephesians 2:8-9,2 Corinthians 5:21,John 3:16-17"
-          >
-          </bible-verse-drop-down-list>
-        </span>
+          <bible-verse-fetch-result></bible-verse-fetch-result>
+        </div>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
         <span slot="page-navigation-forward-button">Step 2 &gt;</span>
@@ -106,12 +103,18 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       bible-translation-drop-down-list {
         margin-bottom: 1.5rem;
       }
+      bible-verse-fetch-result {
+        margin: 3rem 0 1.5rem;
+      }
       p {
         margin: 1rem 0;
       }
       ol {
         margin: 0 0 2rem;
         padding-left: 1rem;
+      }
+      .page-content {
+        min-height: 26rem;
       }
       .verse-container {
         margin-left: -1rem;
@@ -169,6 +172,13 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         this.#selectVerseButtonClick(buttonElement);
       });
     }
+
+    // set first verse as active
+    const firstVerseButton = this.#bibleVerseButtonElements[0];
+    if (firstVerseButton) {
+      this.#bibleVerseFetchResultElement.setAttribute("verse-reference", firstVerseButton.innerText);
+      firstVerseButton.classList.add("active");
+    }
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -180,7 +190,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
           attributeName,
           newValue,
         );
-        this.#bibleVerseDropDownListElement?.setAttribute(
+        this.#bibleVerseFetchResultElement?.setAttribute(
           attributeName,
           newValue,
         );
