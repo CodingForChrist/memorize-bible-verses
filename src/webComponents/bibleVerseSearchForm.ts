@@ -80,6 +80,7 @@ export class BibleVerseSearchForm extends HTMLElement {
         transition: background-color 0s 600000s, color 0s 600000s !important;
       }
       branded-button {
+        --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
         min-width: 5rem;
       }
     `;

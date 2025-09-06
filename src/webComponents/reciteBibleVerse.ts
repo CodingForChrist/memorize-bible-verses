@@ -286,6 +286,11 @@ export class ReciteBibleVerse extends HTMLElement {
       alert-error {
         text-align: left;
       }
+      #button-record,
+      #button-stop,
+      #button-try-again {
+        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+      }
     `;
     styleElement.textContent = css;
     return styleElement;
