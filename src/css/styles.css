@@ -2,15 +2,25 @@
 
 :root {
   --color-primary-prussian-blue: #013047;
+  --color-primary-prussian-blue-rgb: 1, 48, 71;
   --color-primary-sky-blue: #8fcae5;
+  --color-primary-sky-blue-rgb: 143, 202, 229;
   --color-primary-sunglow: #ffd167;
+  --color-primary-sunglow-rgb: 255, 209, 103;
   --color-primary-bright-pink: #ef476f;
+  --color-primary-bright-pink-rgb: 239, 71, 111;
   --color-primary-mint-cream: #f7fbf5;
+  --color-primary-mint-cream-rgb: 247, 251, 245;
   --color-secondary-cerulean: #126883;
+  --color-secondary-cerulean-rgb: 18, 104, 131;
   --color-secondary-blue-green: #219ebc;
+  --color-secondary-blue-green-rgb: 33, 158, 188;
   --color-secondary-jade: #07ad69;
+  --color-secondary-jade-rgb: 7, 173, 105;
   --color-secondary-ut-orange: #f6851f;
+  --color-secondary-ut-orange-rgb: 246, 133, 31;
   --color-secondary-orange-peel: #f99e1c;
+  --color-secondary-orange-peel-rgb: 249, 158, 28;
   --color-gray: rgba(0, 0, 0, 0.7);
   --color-light-gray: rgba(0, 0, 0, 0.2);
   --font-body: "PT Sans", ui-sans-serif, system-ui, sans-serif;

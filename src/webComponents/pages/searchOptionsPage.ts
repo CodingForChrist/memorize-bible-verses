@@ -76,6 +76,8 @@ export class SearchOptionsPage extends BasePage {
         }
       }
       button {
+        --button-background-color: var(--color-primary-bright-pink);
+        --button-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
         font-size: 1.25rem;
         font-family: var(--font-heading);
         line-height: 1.5rem;
@@ -86,27 +88,36 @@ export class SearchOptionsPage extends BasePage {
         height: 100%;
         border: 0;
         border-radius: 1.5rem;
-        background-color: var(--color-primary-bright-pink);
+        background-color: var(--button-background-color);
         color: var(--color-primary-mint-cream);
         margin-bottom: 1.25rem;
       }
       button:hover {
         filter: brightness(85%);
       }
+      button:focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(var(--button-box-shadow-color-rgb), 0.5);
+      }
       #button-awana-truth-and-training {
-        background-color: var(--color-secondary-blue-green);
+        --button-background-color: var(--color-secondary-blue-green);
+        --button-box-shadow-color-rgb: var(--color-secondary-blue-green-rgb);
       }
       #button-awana-sparks {
-        background-color: var(--color-primary-bright-pink);
+        --button-background-color: var(--color-primary-bright-pink);
+        --button-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
       }
       #button-share-the-gospel {
-        background-color: var(--color-secondary-ut-orange);
+        --button-background-color: var(--color-secondary-ut-orange);
+        --button-box-shadow-color-rgb: var(--color-secondary-ut-orange-rgb);
       }
       #button-psalm-23 {
-        background-color: var(--color-secondary-jade);
+        --button-background-color: var(--color-secondary-jade);
+        --button-box-shadow-color-rgb: var(--color-secondary-jade-rgb);
       }
       #button-power-user {
-        background-color: var(--color-secondary-cerulean);
+        --button-background-color: var(--color-secondary-cerulean);
+        --button-box-shadow-color-rgb: var(--color-secondary-cerulean-rgb);
       }
       .page-navigation {
         margin: 2rem 0;

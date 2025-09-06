@@ -37,6 +37,13 @@ export class BrandedButton extends HTMLElement {
     const styleElement = document.createElement("style");
     const css = `
       :host {
+        --primary-color: var(--color-primary-mint-cream);
+        --primary-background-color: var(--color-primary-bright-pink);
+        --primary-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
+        --secondary-color: var(--color-primary-bright-pink);
+        --secondary-background-color: var(--color-primary-mint-cream);
+        --secondary-border-color: var(--color-primary-bright-pink);
+        --secondary-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
         display: inline-block;
       }
       button {
@@ -51,19 +58,27 @@ export class BrandedButton extends HTMLElement {
         border-radius: 1.5rem;
       }
       .primary {
-        background-color: var(--color-primary-bright-pink);
-        color: var(--color-primary-mint-cream);
+        background-color: var(--primary-background-color);
+        color: var(--primary-color);
       }
       .primary:hover {
         filter: brightness(85%);
       }
+      .primary:focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(var(--primary-box-shadow-color-rgb), 0.5);
+      }
       .secondary {
-        background-color: var(--color-primary-mint-cream);
-        border: 2px solid var(--color-primary-bright-pink);
-        color: var(--color-primary-bright-pink);
+        background-color: var(--secondary-background-color);
+        border: 2px solid var(--secondary-border-color);
+        color: var(--secondary-color);
       }
       .secondary:hover {
         filter: brightness(85%);
+      }
+      .secondary:focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(var(--secondary-box-shadow-color-rgb), 0.5);
       }
     `;
     styleElement.textContent = css;

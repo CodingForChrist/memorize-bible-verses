@@ -144,6 +144,9 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         color: var(--color-primary-mint-cream);
         padding: 0.25rem 1rem;
       }
+      .verse-container button:focus-visible {
+        text-decoration: underline;
+      }
     `;
     styleElement.textContent = css;
     return styleElement;
