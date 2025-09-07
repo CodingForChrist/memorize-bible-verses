@@ -78,6 +78,8 @@ export class SearchOptionsPage extends BasePage {
       button {
         --button-background-color: var(--color-primary-bright-pink);
         --button-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
+        --button-background-color-hover: var(--color-primary-bright-pink-darker-one);
+        --button-border-color-hover: var(--color-primary-bright-pink-darker-two);
         font-size: 1.25rem;
         font-family: var(--font-heading);
         line-height: 1.5rem;
@@ -86,14 +88,15 @@ export class SearchOptionsPage extends BasePage {
         cursor: pointer;
         width: 100%;
         height: 100%;
-        border: 0;
+        border: 1px solid var(--button-background-color);
         border-radius: 1.5rem;
         background-color: var(--button-background-color);
         color: var(--color-primary-mint-cream);
         margin-bottom: 1.25rem;
       }
       button:hover {
-        filter: brightness(85%);
+        background-color: var(--button-background-color-hover);
+        border-color: var(--button-border-color-hover);
       }
       button:focus-visible {
         outline: 0;
@@ -102,22 +105,32 @@ export class SearchOptionsPage extends BasePage {
       #button-awana-truth-and-training {
         --button-background-color: var(--color-secondary-blue-green);
         --button-box-shadow-color-rgb: var(--color-secondary-blue-green-rgb);
+        --button-background-color-hover: var(--color-secondary-blue-green-darker-one);
+        --button-border-color-hover: var(--color-secondary-blue-green-darker-two);
       }
       #button-awana-sparks {
         --button-background-color: var(--color-primary-bright-pink);
         --button-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+        --button-background-color-hover: var(--color-primary-bright-pink-darker-one);
+        --button-border-color-hover: var(--color-primary-bright-pink-darker-two);
       }
       #button-share-the-gospel {
         --button-background-color: var(--color-secondary-ut-orange);
         --button-box-shadow-color-rgb: var(--color-secondary-ut-orange-rgb);
+        --button-background-color-hover: var(--color-secondary-ut-orange-darker-one);
+        --button-border-color-hover: var(--color-secondary-ut-orange-darker-two);
       }
       #button-psalm-23 {
         --button-background-color: var(--color-secondary-jade);
         --button-box-shadow-color-rgb: var(--color-secondary-jade-rgb);
+        --button-background-color-hover: var(--color-secondary-jade-darker-one);
+        --button-border-color-hover: var(--color-secondary-jade-darker-two);
       }
       #button-power-user {
         --button-background-color: var(--color-secondary-cerulean);
         --button-box-shadow-color-rgb: var(--color-secondary-cerulean-rgb);
+        --button-background-color-hover: var(--color-secondary-cerulean-darker-one);
+        --button-border-color-hover: var(--color-secondary-cerulean-darker-two);
       }
       .page-navigation {
         margin: 2rem 0;

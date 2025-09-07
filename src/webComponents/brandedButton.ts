@@ -39,11 +39,21 @@ export class BrandedButton extends HTMLElement {
       :host {
         --primary-color: var(--color-primary-mint-cream);
         --primary-background-color: var(--color-primary-bright-pink);
+        --primary-border-color: var(--color-primary-bright-pink);
         --primary-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
+
+        --primary-color-hover: var(--color-primary-mint-cream);
+        --primary-background-color-hover: var(--color-primary-bright-pink-darker-one);
+        --primary-border-color-hover: var(--color-primary-bright-pink-darker-two);
+
         --secondary-color: var(--color-primary-bright-pink);
         --secondary-background-color: var(--color-primary-mint-cream);
         --secondary-border-color: var(--color-primary-bright-pink);
         --secondary-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
+
+        --secondary-color-hover: var(--color-primary-bright-pink-darker-two);
+        --secondary-background-color-hover: var(--color-primary-mint-cream-darker-one);
+        --secondary-border-color-hover: var(--color-primary-bright-pink-darker-two);
         display: inline-block;
       }
       button {
@@ -54,15 +64,18 @@ export class BrandedButton extends HTMLElement {
         cursor: pointer;
         width: 100%;
         height: 100%;
-        border: 0;
         border-radius: 1.5rem;
       }
       .primary {
         background-color: var(--primary-background-color);
+        border: 1px solid var(--primary-background-color);
         color: var(--primary-color);
       }
-      .primary:hover {
-        filter: brightness(85%);
+      .primary:hover,
+      .primary:active {
+        color: var(--primary-color-hover);
+        background-color: var(--primary-background-color-hover);
+        border-color: var(--primary-border-color-hover);
       }
       .primary:focus-visible {
         outline: 0;
@@ -73,8 +86,11 @@ export class BrandedButton extends HTMLElement {
         border: 2px solid var(--secondary-border-color);
         color: var(--secondary-color);
       }
-      .secondary:hover {
-        filter: brightness(85%);
+      .secondary:hover,
+      .secondary:active {
+        color: var(--secondary-color-hover);
+        background-color: var(--secondary-background-color-hover);
+        border-color: var(--secondary-border-color-hover);
       }
       .secondary:focus-visible {
         outline: 0;
