@@ -25,11 +25,21 @@ export class SearchOptionsPage extends BasePage {
       <p>Choose to memorize verses from the options below.</p>
 
       <div class="buttons-container">
-        <button id="button-awana-truth-and-training" type="button">Awana Truth and Training</button>
-        <button id="button-awana-sparks" type="button">Awana Sparks</button>
-        <button id="button-share-the-gospel" type="button">Share the Gospel</button>
-        <button id="button-psalm-23" type="button">Psalm 23</button>
-        <button id="button-power-user" type="button">Power User: Choose Your Verses</button>
+        <branded-button id="button-awana-truth-and-training" type="button">
+          <span slot="button-text">Awana Truth and Training</span>
+        </branded-button>
+        <branded-button id="button-awana-sparks" type="button">
+          <span slot="button-text">Awana Sparks</span>
+        </branded-button>
+        <branded-button id="button-share-the-gospel" type="button">
+          <span slot="button-text">Share the Gospel</span>
+        </branded-button>
+        <branded-button id="button-psalm-23" type="button">
+          <span slot="button-text">Psalm 23</span>
+        </branded-button>
+        <branded-button id="button-power-user" type="button">
+          <span slot="button-text">Power User: Choose Your Verses</span>
+        </branded-button>
       </div>
 
       <div class="page-navigation">
@@ -75,62 +85,43 @@ export class SearchOptionsPage extends BasePage {
           margin-right: 1rem;
         }
       }
-      button {
-        --button-background-color: var(--color-primary-bright-pink);
-        --button-box-shadow-color-rgb: var(--color-primary-mint-cream-rgb);
-        --button-background-color-hover: var(--color-primary-bright-pink-darker-one);
-        --button-border-color-hover: var(--color-primary-bright-pink-darker-two);
+      .buttons-container branded-button {
+        --base-padding: 1rem;
+        display: block;
         font-size: 1.25rem;
         font-family: var(--font-heading);
-        line-height: 1.5rem;
-        text-transform: uppercase;
-        padding: 1rem;
-        cursor: pointer;
-        width: 100%;
-        height: 100%;
-        border: 1px solid var(--button-background-color);
-        border-radius: 1.5rem;
-        background-color: var(--button-background-color);
-        color: var(--color-primary-mint-cream);
         margin-bottom: 1.25rem;
       }
-      button:hover {
-        background-color: var(--button-background-color-hover);
-        border-color: var(--button-border-color-hover);
-      }
-      button:focus-visible {
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(var(--button-box-shadow-color-rgb), 0.5);
-      }
+
       #button-awana-truth-and-training {
-        --button-background-color: var(--color-secondary-blue-green);
-        --button-box-shadow-color-rgb: var(--color-secondary-blue-green-rgb);
-        --button-background-color-hover: var(--color-secondary-blue-green-darker-one);
-        --button-border-color-hover: var(--color-secondary-blue-green-darker-two);
+        --primary-background-color: var(--color-secondary-blue-green);
+        --primary-box-shadow-color-rgb: var(--color-secondary-blue-green-rgb);
+        --primary-background-color-hover: var(--color-secondary-blue-green-darker-one);
+        --primary-border-color-hover: var(--color-secondary-blue-green-darker-two);
       }
       #button-awana-sparks {
-        --button-background-color: var(--color-primary-bright-pink);
-        --button-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-        --button-background-color-hover: var(--color-primary-bright-pink-darker-one);
-        --button-border-color-hover: var(--color-primary-bright-pink-darker-two);
+        --primary-background-color: var(--color-primary-bright-pink);
+        --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+        --primary-background-color-hover: var(--color-primary-bright-pink-darker-one);
+        --primary-border-color-hover: var(--color-primary-bright-pink-darker-two);
       }
       #button-share-the-gospel {
-        --button-background-color: var(--color-secondary-ut-orange);
-        --button-box-shadow-color-rgb: var(--color-secondary-ut-orange-rgb);
-        --button-background-color-hover: var(--color-secondary-ut-orange-darker-one);
-        --button-border-color-hover: var(--color-secondary-ut-orange-darker-two);
+        --primary-background-color: var(--color-secondary-ut-orange);
+        --primary-box-shadow-color-rgb: var(--color-secondary-ut-orange-rgb);
+        --primary-background-color-hover: var(--color-secondary-ut-orange-darker-one);
+        --primary-border-color-hover: var(--color-secondary-ut-orange-darker-two);
       }
       #button-psalm-23 {
-        --button-background-color: var(--color-secondary-jade);
-        --button-box-shadow-color-rgb: var(--color-secondary-jade-rgb);
-        --button-background-color-hover: var(--color-secondary-jade-darker-one);
-        --button-border-color-hover: var(--color-secondary-jade-darker-two);
+        --primary-background-color: var(--color-secondary-jade);
+        --primary-box-shadow-color-rgb: var(--color-secondary-jade-rgb);
+        --primary-background-color-hover: var(--color-secondary-jade-darker-one);
+        --primary-border-color-hover: var(--color-secondary-jade-darker-two);
       }
       #button-power-user {
-        --button-background-color: var(--color-secondary-cerulean);
-        --button-box-shadow-color-rgb: var(--color-secondary-cerulean-rgb);
-        --button-background-color-hover: var(--color-secondary-cerulean-darker-one);
-        --button-border-color-hover: var(--color-secondary-cerulean-darker-two);
+        --primary-background-color: var(--color-secondary-cerulean);
+        --primary-box-shadow-color-rgb: var(--color-secondary-cerulean-rgb);
+        --primary-background-color-hover: var(--color-secondary-cerulean-darker-one);
+        --primary-border-color-hover: var(--color-secondary-cerulean-darker-two);
       }
       .page-navigation {
         margin: 2rem 0;
