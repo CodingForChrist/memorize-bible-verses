@@ -120,7 +120,7 @@ export class SpeechRecognitionService {
       });
 
       if (this.interimTranscript) {
-        this.#transcriptHistory.push(this.interimTranscript);
+        this.#transcriptHistory = [this.interimTranscript];
       }
 
       this.#recognition?.stop();
