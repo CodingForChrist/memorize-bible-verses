@@ -37,6 +37,8 @@ export class BrandedButton extends HTMLElement {
     const styleElement = document.createElement("style");
     const css = `
       :host {
+        --base-padding: .25rem 1rem;
+
         --primary-color: var(--color-primary-mint-cream);
         --primary-background-color: var(--color-primary-bright-pink);
         --primary-border-color: var(--color-primary-bright-pink);
@@ -58,9 +60,8 @@ export class BrandedButton extends HTMLElement {
       }
       button {
         font: inherit;
-        font-size: .875rem;
         line-height: 1.5rem;
-        padding: .25rem 1rem;
+        padding: var(--base-padding);
         cursor: pointer;
         width: 100%;
         height: 100%;
@@ -95,6 +96,13 @@ export class BrandedButton extends HTMLElement {
       .secondary:focus-visible {
         outline: 0;
         box-shadow: 0 0 0 0.25rem rgba(var(--secondary-box-shadow-color-rgb), 0.5);
+      }
+      .primary:active,
+      .secondary:active {
+        scale: 95% 95%;
+        transition-property: scale;
+        transition-timing-function: ease-out;
+        transition-duration: .3s
       }
     `;
     styleElement.textContent = css;
