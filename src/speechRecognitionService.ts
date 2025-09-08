@@ -79,6 +79,11 @@ export class SpeechRecognitionService {
     for (const result of Array.from(results)) {
       const { confidence, transcript } = result[0];
       // attempt to avoid duplicate phrases for android chrome
+      console.log({
+        label: "getTranscriptAsText",
+        isAndroid: isAndroid(),
+        confidence,
+      });
       if (isAndroid() && confidence === 0) {
         continue;
       }
@@ -105,6 +110,13 @@ export class SpeechRecognitionService {
   #onEnd() {
     // restart for android chrome which can abruptly end early
     if (isAndroid() && this.state === LISTENING) {
+      console.log({
+        label: "onEnd",
+        isAndroid: isAndroid(),
+        transcriptHistory: this.#transcriptHistory,
+        interimTranscript: this.interimTranscript,
+      });
+
       if (this.interimTranscript) {
         this.#transcriptHistory.push(this.interimTranscript);
       }
