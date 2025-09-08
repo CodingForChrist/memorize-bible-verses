@@ -83,6 +83,8 @@ export class SpeechRecognitionService {
         label: "getTranscriptAsText",
         isAndroid: isAndroid(),
         confidence,
+        transcriptHistory: this.#transcriptHistory,
+        transcriptArray: transcriptArray,
       });
       if (isAndroid() && confidence === 0) {
         continue;
