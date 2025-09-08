@@ -136,13 +136,23 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       .verse-container button:focus-visible,
       .verse-container button:active,
       .verse-container button.active {
-        outline: revert;
-        outline: none;
+        outline: 0;
         text-decoration: none;
+        border: 1px solid var(--color-primary-bright-pink);
         border-radius: 1.5rem;
         background-color: var(--color-primary-bright-pink);
         color: var(--color-primary-mint-cream);
         padding: 0.25rem 1rem;
+      }
+      .verse-container button:hover {
+        background-color: var(--color-primary-bright-pink-darker-one);
+        border-color: var(--color-primary-bright-pink-darker-two);
+      }
+      .verse-container button:active {
+        scale: 95% 95%;
+        transition-property: scale;
+        transition-timing-function: ease-out;
+        transition-duration: .3s
       }
       .verse-container button:focus-visible {
         text-decoration: underline;
