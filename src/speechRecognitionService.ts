@@ -79,6 +79,9 @@ export class SpeechRecognitionService {
     for (const result of Array.from(results)) {
       const { confidence, transcript } = result[0];
       // attempt to avoid duplicate phrases for android chrome
+      if (isAndroid() && confidence === 0) {
+        continue;
+      }
       console.log({
         label: "getTranscriptAsText",
         isAndroid: isAndroid(),
@@ -86,9 +89,6 @@ export class SpeechRecognitionService {
         transcriptHistory: this.#transcriptHistory,
         transcriptArray: transcriptArray,
       });
-      if (isAndroid() && confidence === 0) {
-        continue;
-      }
 
       transcriptArray.push(transcript.trim());
     }
