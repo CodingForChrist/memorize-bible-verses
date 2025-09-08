@@ -73,15 +73,8 @@ export class SpeechRecognitionService {
     this.state = INITIAL;
   }
 
-  #getTranscriptAsText(results?: SpeechRecognitionResultList) {
+  #getTranscriptAsText(results: SpeechRecognitionResultList) {
     let transcriptArray: string[] = [];
-
-    if (!results) {
-      if (isAndroid()) {
-        return this.#transcriptHistory.join(" ");
-      }
-      return "";
-    }
 
     for (const result of Array.from(results)) {
       const { confidence, transcript } = result[0];
@@ -101,7 +94,14 @@ export class SpeechRecognitionService {
     }
 
     if (isAndroid()) {
-      transcriptArray = [...this.#transcriptHistory, ...transcriptArray];
+      if (
+        this.state === RESOLVED &&
+        this.#transcriptHistory[0].endsWith(transcriptArray[0])
+      ) {
+        transcriptArray = [...this.#transcriptHistory];
+      } else {
+        transcriptArray = [...this.#transcriptHistory, ...transcriptArray];
+      }
     }
 
     return transcriptArray.join(" ");
@@ -128,7 +128,6 @@ export class SpeechRecognitionService {
 
       if (this.interimTranscript) {
         this.#transcriptHistory = [this.interimTranscript];
-        this.#lastResult = undefined;
       }
 
       this.#recognition?.stop();
