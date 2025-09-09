@@ -1,0 +1,740 @@
+{
+  "browser": "Chrome version 139.0.7258.155 (Official Build) (x86_64)",
+  "operatingSystem": "macOS Monterey version 12.7.6",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36",
+  "events": [
+    {
+      "eventName": "start"
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": "ROM"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": "Romans 3"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": "Romans 3:2"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " for"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " for all"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " all I've"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " all I've Sinn"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " I've Sinn"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " I've sinned"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " sinned and"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " sinned and fall"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " sinned and fall short"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " and fall short"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " fall short"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " short of"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " of"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " of the"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " of the GL"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " of the glory"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " the glory of"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " the glory of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " glory of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short of the glory"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short of the glory of"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " for all I've sinned and fall short of the glory of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " ROM"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " Romans 3"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " 3:2"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.8999999761581421,
+            "transcript": " Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0.009999999776482582,
+            "transcript": " 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0.9719774127006531,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9632548689842224,
+            "transcript": " for all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9710338711738586,
+            "transcript": " Romans 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "end"
+    }
+  ]
+}

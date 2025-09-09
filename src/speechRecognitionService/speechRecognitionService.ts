@@ -1,7 +1,7 @@
 import {
   SPEECH_RECOGNITION_STATES,
   type SpeechRecognitionStates,
-} from "./constants";
+} from "../constants";
 
 const {
   INITIAL,
@@ -16,30 +16,31 @@ export class SpeechRecognitionService {
   finalTranscript?: string;
   #transcriptHistory: string[];
   state: SpeechRecognitionStates;
-  #recognition?: SpeechRecognition;
+  recognition: SpeechRecognition;
   #lastResult?: SpeechRecognitionResultList;
+  #allEvents?: {
+    eventName: string;
+    value?: unknown;
+  }[];
   #resolveListener?: (value: string) => void;
   #rejectListener?: (reason: string) => void;
 
   constructor() {
     this.state = INITIAL;
     this.#transcriptHistory = [];
+    this.#allEvents = [];
 
-    try {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      this.#recognition = new SpeechRecognition();
-      this.#recognition.continuous = true;
-      this.#recognition.lang = "en-US";
-      this.#recognition.interimResults = true;
-      this.#recognition.maxAlternatives = 1;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    this.recognition = new SpeechRecognition();
+    this.recognition.continuous = true;
+    this.recognition.lang = "en-US";
+    this.recognition.interimResults = true;
+    this.recognition.maxAlternatives = 1;
 
-      this.#recognition?.addEventListener("start", this.#onStart.bind(this));
-      this.#recognition?.addEventListener("result", this.#onResult.bind(this));
-      this.#recognition?.addEventListener("end", this.#onEnd.bind(this));
-    } catch (error) {
-      console.error("Unable to use the SpeechRecognition API", error);
-    }
+    this.recognition.onstart = this.#onStart.bind(this);
+    this.recognition.onresult = this.#onResult.bind(this);
+    this.recognition.onend = this.#onEnd.bind(this);
   }
 
   listen() {
@@ -50,20 +51,14 @@ export class SpeechRecognitionService {
       this.#resolveListener = resolve;
       this.#rejectListener = reject;
 
-      this.#recognition?.start();
       this.state = WAITING_FOR_MICROPHONE_ACCESS;
+      this.recognition.start();
     });
   }
 
   stop() {
-    this.#recognition?.stop();
-
-    if (this.state === WAITING_FOR_MICROPHONE_ACCESS) {
-      this.state = REJECTED;
-      return;
-    }
-
-    this.state = RESOLVED;
+    this.state = this.state === LISTENING ? RESOLVED : REJECTED;
+    this.recognition.stop();
   }
 
   #resetState() {
@@ -82,13 +77,6 @@ export class SpeechRecognitionService {
       if (isAndroid() && confidence === 0) {
         continue;
       }
-      console.log({
-        label: "getTranscriptAsText",
-        isAndroid: isAndroid(),
-        confidence,
-        transcriptHistory: this.#transcriptHistory,
-        transcriptArray: transcriptArray,
-      });
 
       transcriptArray.push(transcript.trim());
     }
@@ -108,30 +96,41 @@ export class SpeechRecognitionService {
   }
 
   #onStart() {
+    this.#allEvents?.push({
+      eventName: "start",
+    });
     this.state = LISTENING;
   }
 
   #onResult(event: SpeechRecognitionEvent) {
+    this.#allEvents?.push({
+      eventName: "result",
+      value: Array.from(event.results).map((result) => {
+        return Array.from(result).map(({ confidence, transcript }) => {
+          return {
+            confidence,
+            transcript,
+          };
+        });
+      }),
+    });
     this.interimTranscript = this.#getTranscriptAsText(event.results);
     this.#lastResult = event.results;
   }
 
   #onEnd() {
+    this.#allEvents?.push({
+      eventName: "end",
+    });
+
     // restart for android chrome which can abruptly end early
     if (isAndroid() && this.state === LISTENING) {
-      console.log({
-        label: "onEnd",
-        isAndroid: isAndroid(),
-        transcriptHistory: this.#transcriptHistory,
-        interimTranscript: this.interimTranscript,
-      });
-
       if (this.interimTranscript) {
         this.#transcriptHistory = [this.interimTranscript];
       }
 
-      this.#recognition?.stop();
-      this.#recognition?.start();
+      this.recognition.stop();
+      this.recognition.start();
       return;
     }
 
@@ -143,11 +142,23 @@ export class SpeechRecognitionService {
       if (this.#resolveListener) {
         this.#resolveListener(this.finalTranscript);
       }
+
+      console.log(this.getEventsReport());
+      this.#allEvents = [];
     } else {
       if (this.#rejectListener) {
         this.#rejectListener("Failed to get final transcript");
       }
     }
+  }
+
+  getEventsReport() {
+    const report = {
+      userAgent: window.navigator.userAgent,
+      events: this.#allEvents,
+    };
+
+    return JSON.stringify(report);
   }
 }
 
