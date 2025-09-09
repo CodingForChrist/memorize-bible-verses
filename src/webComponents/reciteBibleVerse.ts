@@ -4,14 +4,14 @@ import {
   type SpeechRecognitionStates,
 } from "../constants";
 
-import { SpeechRecognitionService } from "../speechRecognitionService";
+import { SpeechRecognitionService } from "../speechRecognitionService/speechRecognitionService";
 import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
 import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../types";
 
 export class ReciteBibleVerse extends HTMLElement {
-  speechRecognitionService: SpeechRecognitionService;
+  speechRecognitionService?: SpeechRecognitionService;
   #speechTranscript?: string;
 
   constructor() {
@@ -20,8 +20,11 @@ export class ReciteBibleVerse extends HTMLElement {
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(this.#styleElement);
     shadowRoot.appendChild(this.#containerElements);
-
-    this.speechRecognitionService = new SpeechRecognitionService();
+    try {
+      this.speechRecognitionService = new SpeechRecognitionService();
+    } catch (error) {
+      console.error("Unable to use the SpeechRecognition API", error);
+    }
   }
 
   static get observedAttributes() {
@@ -131,7 +134,7 @@ export class ReciteBibleVerse extends HTMLElement {
 
     if (
       ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
-        this.speechRecognitionService.state,
+        this.speechRecognitionService!.state,
       )
     ) {
       this.#showLoadingSpinner();
@@ -142,12 +145,12 @@ export class ReciteBibleVerse extends HTMLElement {
 
       const intervalForPrintingInterimResults = setInterval(() => {
         this.#printSpeechRecognitionInterimResults(
-          this.speechRecognitionService.interimTranscript,
+          this.speechRecognitionService!.interimTranscript,
         );
       }, 100);
 
       try {
-        const finalTranscript = await this.speechRecognitionService.listen();
+        const finalTranscript = await this.speechRecognitionService!.listen();
         this.speechTranscript = finalTranscript;
         clearInterval(intervalForPrintingInterimResults);
         this.#printSpeechRecognitionInterimResults(finalTranscript);
@@ -190,7 +193,7 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #stopRecordingButtonClick() {
-    this.speechRecognitionService.stop();
+    this.speechRecognitionService!.stop();
     this.#hideLoadingSpinner();
     this.#showTryAgainButton();
   }
