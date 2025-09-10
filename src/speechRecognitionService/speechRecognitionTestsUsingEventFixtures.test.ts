@@ -18,7 +18,8 @@ import {
 import { SpeechRecognitionService } from "./speechRecognitionService";
 
 import eventsFixtureChromeMacOS from "./testFixtures/eventsFixtureChromeMacOS.json";
-import eventsFixtureSafariMacOS from "./testFixtures/eventFixtureSafariMacOS.json";
+import eventsFixtureSafariMacOS from "./testFixtures/eventsFixtureSafariMacOS.json";
+import eventsFixtureChromeAndroid from "./testFixtures/eventsFixtureChromeAndroid.json";
 
 type TestFixture = {
   browser: string;
@@ -75,6 +76,11 @@ describe("speech recognition events", () => {
       "Safari on MacOS",
       "Romans 323 for all have sinned and fall short of the glory of God Romans 323",
       eventsFixtureSafariMacOS,
+    ],
+    [
+      "Chrome on Android",
+      "Romans 3:23 all have sinned and fall short of the glory of God Romans 3:23",
+      eventsFixtureChromeAndroid,
     ],
   ];
 

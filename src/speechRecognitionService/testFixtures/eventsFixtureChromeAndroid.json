@@ -1,0 +1,2177 @@
+{
+  "browser": "Chrome version 140.0.7339.51",
+  "operatingSystem": "Android 15 AUMI AI OS 3.2",
+  "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+  "events": [
+    {
+      "eventName": "start"
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans 3:23"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9721954464912415,
+            "transcript": "Romans 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "end"
+    },
+    {
+      "eventName": "start"
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory of"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory of"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "all have sinned and fall short of the glory of God"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9322680830955505,
+            "transcript": "all have sinned and fall short of the glory of God"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "end"
+    },
+    {
+      "eventName": "start"
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "result",
+      "value": [
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": ""
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0,
+            "transcript": "Romans"
+          }
+        ],
+        [
+          {
+            "confidence": 0.9625681638717651,
+            "transcript": "Romans 3:23"
+          }
+        ]
+      ]
+    },
+    {
+      "eventName": "end"
+    },
+    {
+      "eventName": "start"
+    },
+    {
+      "eventName": "end"
+    }
+  ]
+}
