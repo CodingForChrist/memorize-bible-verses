@@ -18,7 +18,7 @@ import {
 import { SpeechRecognitionService } from "./speechRecognitionService";
 
 import eventsFixtureChromeMacOS from "./testFixtures/eventsFixtureChromeMacOS.json";
-import eventsFixtureSafariMacOS from "./testFixtures/eventFixtureSafariMacOS.json";
+import eventsFixtureSafariMacOS from "./testFixtures/eventsFixtureSafariMacOS.json";
 
 type TestFixture = {
   browser: string;
