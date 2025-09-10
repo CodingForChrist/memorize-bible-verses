@@ -143,7 +143,7 @@ export class SpeechRecognitionService {
         this.#resolveListener(this.finalTranscript);
       }
 
-      console.log(this.getEventsReport());
+      // console.log(this.getEventsReport());
       this.#allEvents = [];
     } else {
       if (this.#rejectListener) {
