@@ -108,15 +108,18 @@ export class ReciteBibleVerse extends HTMLElement {
     this.speechTranscript = "";
 
     if (!this.#hasSupportForSpeechRecognition()) {
-      return this.#renderErrorMessage(
-        "Your browser does not support the Web Speech API. Please try another browser like Chrome or Safari.",
-      );
+      return this.#renderAlertMessage({
+        type: "danger",
+        message:
+          "Your browser does not support the Web Speech API. Please try another browser like Chrome or Safari.",
+      });
     }
 
     if (!this.verseReference) {
-      return this.#renderErrorMessage(
-        "Go back to Step 1 and select a bible verse.",
-      );
+      return this.#renderAlertMessage({
+        type: "danger",
+        message: "Go back to Step 1 and select a bible verse.",
+      });
     }
 
     this.#initialContentContainerElement.innerHTML = `
@@ -167,7 +170,10 @@ export class ReciteBibleVerse extends HTMLElement {
         this.#printSpeechRecognitionInterimResults(finalTranscript);
       } catch (_error) {
         this.#hideLoadingSpinner();
-        this.#renderErrorMessage("Failed to use microphone input");
+        this.#renderAlertMessage({
+          type: "danger",
+          message: "Failed to use microphone input",
+        });
         this.#showTryAgainButton();
         this.#interimResultsParagraphElement.innerText = "";
         clearInterval(intervalForPrintingInterimResults);
@@ -225,14 +231,17 @@ export class ReciteBibleVerse extends HTMLElement {
       });
   }
 
-  #renderErrorMessage(message: string) {
-    const alertErrorElement = document.createElement("alert-error");
-    alertErrorElement.innerHTML = `
-      <span slot="alert-error-message">${message}</span>
+  #renderAlertMessage({ type, message }: { type: string; message: string }) {
+    // remove existing alert message
+    this.shadowRoot!.querySelector(`alert-message[type="${type}"]`)?.remove();
+
+    const alertMessageElement = document.createElement("alert-message");
+    alertMessageElement.setAttribute("type", type);
+    alertMessageElement.innerHTML = `
+      <span slot="alert-message">${message}</span>
     `;
 
-    this.#initialContentContainerElement.innerHTML = "";
-    this.#initialContentContainerElement.appendChild(alertErrorElement);
+    this.#initialContentContainerElement.appendChild(alertMessageElement);
   }
 
   get #containerElements() {
@@ -296,9 +305,6 @@ export class ReciteBibleVerse extends HTMLElement {
       }
       branded-button .icon {
         margin-right: 0.25rem;
-      }
-      alert-error {
-        text-align: left;
       }
       #button-record,
       #button-stop,

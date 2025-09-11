@@ -155,9 +155,6 @@ export class BibleVerseDropDownList extends HTMLElement {
       border-color: var(--color-primary-mint-cream);
       outline: 1px solid var(--color-gray);
     }
-    bible-verse-fetch-result {
-      margin-top: 3rem;
-    }
     `;
     styleElement.textContent = css;
     return styleElement;

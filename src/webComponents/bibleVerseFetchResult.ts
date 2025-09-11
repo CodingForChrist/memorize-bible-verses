@@ -47,7 +47,7 @@ export class BibleVerseFetchResult extends HTMLElement {
   }
 
   get #alertErrorElement() {
-    return this.shadowRoot!.querySelector("alert-error");
+    return this.shadowRoot!.querySelector('alert-message[type="danger"]');
   }
 
   get selectedBibleVerse(): BibleVerse | undefined {
@@ -172,11 +172,13 @@ export class BibleVerseFetchResult extends HTMLElement {
 
   #renderErrorMessage(message: string) {
     this.#removeResultElements();
-    const alertErrorElement = document.createElement("alert-error");
-    alertErrorElement.innerHTML = `
-      <span slot="alert-error-message">${message}</span>
+
+    const alertMessageElement = document.createElement("alert-message");
+    alertMessageElement.setAttribute("type", "danger");
+    alertMessageElement.innerHTML = `
+      <span slot="alert-message">${message}</span>
     `;
-    this.shadowRoot!.appendChild(alertErrorElement);
+    this.shadowRoot!.appendChild(alertMessageElement);
   }
 
   // TODO: figure out the correct way to use this
@@ -197,10 +199,8 @@ export class BibleVerseFetchResult extends HTMLElement {
     :host {
       display: block;
     }
-    alert-error {
-      margin-top: 2rem;
-    }
-    bible-verse-blockquote {
+    bible-verse-blockquote,
+    alert-message {
       margin: 3rem 0 2rem;
     }
     ${scriptureStyles}

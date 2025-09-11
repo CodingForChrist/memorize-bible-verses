@@ -224,11 +224,15 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    const alertErrorElement = document.createElement("alert-error");
-    alertErrorElement.innerHTML = `
-      <span slot="alert-error-message">${message}</span>
+    // remove existing alert message
+    this.shadowRoot!.querySelector('alert-message[type="danger"]')?.remove();
+
+    const alertMessageElement = document.createElement("alert-message");
+    alertMessageElement.setAttribute("type", "danger");
+    alertMessageElement.innerHTML = `
+      <span slot="alert-message">${message}</span>
     `;
-    this.shadowRoot!.appendChild(alertErrorElement);
+    this.shadowRoot!.appendChild(alertMessageElement);
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
