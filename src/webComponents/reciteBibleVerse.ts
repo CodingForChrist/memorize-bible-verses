@@ -45,8 +45,10 @@ export class ReciteBibleVerse extends HTMLElement {
     ) as HTMLDivElement;
   }
 
-  get #alertErrorElement() {
-    return this.#initialContentContainerElement.querySelector("alert-error");
+  get #recordButtonElement() {
+    return this.#initialContentContainerElement.querySelector<HTMLButtonElement>(
+      "#button-record",
+    );
   }
 
   get #resultsContainerElement() {
@@ -118,9 +120,11 @@ export class ReciteBibleVerse extends HTMLElement {
     }
 
     this.#initialContentContainerElement.innerHTML = `
-      <h2>${this.verseReference}</h2>
       <branded-button id="button-record" type="button" brand="secondary">
-        <span slot="button-text">&#9679; RECORD</span>
+        <span slot="button-text">
+          <span class="icon">&#9679;</span>
+          <span class="text-content">Record</span>
+        </span>
       </branded-button>
     `;
 
@@ -139,9 +143,16 @@ export class ReciteBibleVerse extends HTMLElement {
     ) {
       this.#showLoadingSpinner();
       this.#showStopButton();
-      this.#initialContentContainerElement
-        .querySelector("#button-record")
-        ?.scrollIntoView();
+
+      const recordButtonTextContent =
+        this.#recordButtonElement?.querySelector<HTMLSpanElement>(
+          ".text-content",
+        );
+
+      if (this.#recordButtonElement && recordButtonTextContent) {
+        recordButtonTextContent.innerText = "Recording In Progress";
+        this.#recordButtonElement.scrollIntoView();
+      }
 
       const intervalForPrintingInterimResults = setInterval(() => {
         this.#printSpeechRecognitionInterimResults(
@@ -167,7 +178,10 @@ export class ReciteBibleVerse extends HTMLElement {
   #showStopButton() {
     this.#recordingControlsContainerElement.innerHTML = `
       <branded-button id="button-stop" type="button" brand="secondary">
-        <span slot="button-text">&#9632; Stop</span>
+        <span slot="button-text">
+          <span class="icon">&#9632;</span>
+          <span class="text-content">Stop</span>
+        </span>
       </branded-button>
     `;
 
@@ -186,14 +200,14 @@ export class ReciteBibleVerse extends HTMLElement {
     this.#recordingControlsContainerElement
       .querySelector("#button-try-again")!
       .addEventListener("click", () => {
-        this.#interimResultsParagraphElement.innerText = "";
-        this.#alertErrorElement?.remove();
+        this.#renderInitialContent();
         this.#recordVoiceButtonClick();
       });
   }
 
   #stopRecordingButtonClick() {
     this.speechRecognitionService!.stop();
+    this.#recordButtonElement?.remove();
     this.#hideLoadingSpinner();
     this.#showTryAgainButton();
   }
@@ -280,11 +294,8 @@ export class ReciteBibleVerse extends HTMLElement {
       branded-button {
         min-width: 7rem;
       }
-      h2 {
-        margin-top: 0;
-        margin-bottom: 2rem;
-        font-size: 1.5rem;
-        font-weight: 400;
+      branded-button .icon {
+        margin-right: 0.25rem;
       }
       alert-error {
         text-align: left;

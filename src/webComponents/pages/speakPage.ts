@@ -34,6 +34,13 @@ export class SpeakPage extends BasePage {
     return this.shadowRoot!.querySelector("recite-bible-verse") as HTMLElement;
   }
 
+  #updateVerseReferenceHeading(verseReference: string) {
+    const container = this.shadowRoot!.querySelector(
+      "#verse-reference-heading-container",
+    ) as HTMLElement;
+    container.innerHTML = `<h2>${verseReference}</h2>`;
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -47,6 +54,7 @@ export class SpeakPage extends BasePage {
         </span>
 
         <span slot="page-content">
+          <div id="verse-reference-heading-container"></div>
           <recite-bible-verse></recite-bible-verse>
         </span>
 
@@ -63,6 +71,13 @@ export class SpeakPage extends BasePage {
     const css = `
       p {
         margin: 1rem 0;
+      }
+      h2 {
+        margin-top: 0;
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+        font-weight: 400;
+        text-align: center;
       }
     `;
     styleElement.textContent = css;
@@ -92,6 +107,10 @@ export class SpeakPage extends BasePage {
       if (name === attributeName) {
         this.#reciteBibleVerseElement?.setAttribute(attributeName, newValue);
       }
+    }
+
+    if (name === "verse-reference" && newValue) {
+      this.#updateVerseReferenceHeading(newValue);
     }
   }
 }

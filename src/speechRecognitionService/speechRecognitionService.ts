@@ -7,6 +7,7 @@ const {
   INITIAL,
   WAITING_FOR_MICROPHONE_ACCESS,
   LISTENING,
+  AUDIOEND,
   RESOLVED,
   REJECTED,
 } = SPEECH_RECOGNITION_STATES;
@@ -57,7 +58,7 @@ export class SpeechRecognitionService {
   }
 
   stop() {
-    this.state = this.state === LISTENING ? RESOLVED : REJECTED;
+    this.state = AUDIOEND;
     this.recognition.stop();
   }
 
@@ -83,7 +84,7 @@ export class SpeechRecognitionService {
 
     if (isAndroid()) {
       if (
-        this.state === RESOLVED &&
+        this.state === AUDIOEND &&
         this.#transcriptHistory[0].endsWith(transcriptArray[0])
       ) {
         transcriptArray = [...this.#transcriptHistory];
@@ -134,7 +135,7 @@ export class SpeechRecognitionService {
       return;
     }
 
-    if (this.state === RESOLVED && this.#lastResult) {
+    if (this.state === AUDIOEND && this.#lastResult) {
       const transcript = this.#getTranscriptAsText(this.#lastResult);
       this.interimTranscript = transcript;
       this.finalTranscript = transcript;
@@ -142,6 +143,7 @@ export class SpeechRecognitionService {
       if (this.#resolveListener) {
         this.#resolveListener(this.finalTranscript);
       }
+      this.state = RESOLVED;
 
       // console.log(this.getEventsReport());
       this.#allEvents = [];
@@ -149,6 +151,7 @@ export class SpeechRecognitionService {
       if (this.#rejectListener) {
         this.#rejectListener("Failed to get final transcript");
       }
+      this.state = REJECTED;
     }
   }
 

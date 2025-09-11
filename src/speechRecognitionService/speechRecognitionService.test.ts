@@ -10,6 +10,9 @@ import {
 import { SpeechRecognition as SpeechRecognitionMock } from "corti";
 
 import { SpeechRecognitionService } from "./speechRecognitionService";
+import { SPEECH_RECOGNITION_STATES } from "../constants";
+
+const { LISTENING, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
 
 beforeAll(() => {
   vi.stubGlobal("SpeechRecognition", SpeechRecognitionMock);
@@ -34,6 +37,7 @@ describe("listen()", () => {
   });
 
   test("should successfully resolve the promise and return the transcript", async () => {
+    expect(speechRecognitionService.state).toBe(LISTENING);
     say("Romans 3:23 for all have sinned");
     expect(speechRecognitionService.interimTranscript).toBe(
       "Romans 3:23 for all have sinned",
@@ -48,6 +52,7 @@ describe("listen()", () => {
     expect(finalTranscript).toBe(
       "Romans 3:23 for all have sinned and fall short of the glory of God Romans 3:23",
     );
+    expect(speechRecognitionService.state).toBe(RESOLVED);
   });
 
   test("should reject the promise if no results are received", async () => {
@@ -55,5 +60,6 @@ describe("listen()", () => {
     await expect(async () => {
       await listenPromise;
     }).rejects.toThrowError("Failed to get final transcript");
+    expect(speechRecognitionService.state).toBe(REJECTED);
   });
 });
