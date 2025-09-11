@@ -56,6 +56,7 @@ describe("listen()", () => {
   });
 
   test("should reject the promise if no results are received", async () => {
+    expect(speechRecognitionService.state).toBe(LISTENING);
     speechRecognitionService.stop();
     await expect(async () => {
       await listenPromise;
