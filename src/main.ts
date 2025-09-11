@@ -5,7 +5,7 @@ import "./webComponents/appStateProvider";
 
 // shared components
 import "./webComponents/loadingSpinner";
-import "./webComponents/alertError";
+import "./webComponents/alertMessage";
 import "./webComponents/bibleVerseBlockquote";
 import "./webComponents/brandedButton";
 

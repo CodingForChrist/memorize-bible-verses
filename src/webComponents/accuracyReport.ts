@@ -161,11 +161,12 @@ export class AccuracyReport extends HTMLElement {
   }
 
   #renderErrorMessage(message: string) {
-    const alertErrorElement = document.createElement("alert-error");
-    alertErrorElement.innerHTML = `
-      <span slot="alert-error-message">${message}</span>
+    const alertMessageElement = document.createElement("alert-message");
+    alertMessageElement.setAttribute("type", "danger");
+    alertMessageElement.innerHTML = `
+      <span slot="alert-message">${message}</span>
     `;
-    this.#reportContainerElement.appendChild(alertErrorElement);
+    this.#reportContainerElement.appendChild(alertMessageElement);
   }
 
   get #containerElement() {
