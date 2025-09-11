@@ -45,12 +45,6 @@ export class ReciteBibleVerse extends HTMLElement {
     ) as HTMLDivElement;
   }
 
-  get #recordButtonElement() {
-    return this.#initialContentContainerElement.querySelector<HTMLButtonElement>(
-      "#button-record",
-    );
-  }
-
   get #resultsContainerElement() {
     return this.shadowRoot!.querySelector(
       "#results-container",
@@ -147,15 +141,15 @@ export class ReciteBibleVerse extends HTMLElement {
       this.#showLoadingSpinner();
       this.#showStopButton();
 
-      const recordButtonTextContent =
-        this.#recordButtonElement?.querySelector<HTMLSpanElement>(
-          ".text-content",
-        );
+      this.#initialContentContainerElement.scrollIntoView();
+      this.#initialContentContainerElement
+        .querySelector("#button-record")
+        ?.remove();
 
-      if (this.#recordButtonElement && recordButtonTextContent) {
-        recordButtonTextContent.innerText = "Recording In Progress";
-        this.#recordButtonElement.scrollIntoView();
-      }
+      this.#renderAlertMessage({
+        type: "info",
+        message: "Recording in progress",
+      });
 
       const intervalForPrintingInterimResults = setInterval(() => {
         this.#printSpeechRecognitionInterimResults(
@@ -168,6 +162,11 @@ export class ReciteBibleVerse extends HTMLElement {
         this.speechTranscript = finalTranscript;
         clearInterval(intervalForPrintingInterimResults);
         this.#printSpeechRecognitionInterimResults(finalTranscript);
+
+        this.#renderAlertMessage({
+          type: "success",
+          message: "Recording complete!",
+        });
       } catch (_error) {
         this.#hideLoadingSpinner();
         this.#renderAlertMessage({
@@ -213,7 +212,6 @@ export class ReciteBibleVerse extends HTMLElement {
 
   #stopRecordingButtonClick() {
     this.speechRecognitionService!.stop();
-    this.#recordButtonElement?.remove();
     this.#hideLoadingSpinner();
     this.#showTryAgainButton();
   }
@@ -232,8 +230,8 @@ export class ReciteBibleVerse extends HTMLElement {
   }
 
   #renderAlertMessage({ type, message }: { type: string; message: string }) {
-    // remove existing alert message
-    this.shadowRoot!.querySelector(`alert-message[type="${type}"]`)?.remove();
+    // clear container content
+    this.#initialContentContainerElement.innerHTML = "";
 
     const alertMessageElement = document.createElement("alert-message");
     alertMessageElement.setAttribute("type", type);
