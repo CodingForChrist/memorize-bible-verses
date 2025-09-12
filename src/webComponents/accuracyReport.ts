@@ -198,6 +198,9 @@ export class AccuracyReport extends HTMLElement {
       td:first-child {
         padding-right: 2rem;
       }
+      bible-verse-blockquote .scripture-styles {
+        color: var(--color-gray);
+      }
       ${scriptureStyles}
     `;
     styleElement.textContent = css;
