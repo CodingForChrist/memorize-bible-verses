@@ -17,17 +17,6 @@ export const CUSTOM_EVENTS = {
 
 export type CustomEvents = keyof typeof CUSTOM_EVENTS;
 
-export const SPEECH_RECOGNITION_STATES = {
-  INITIAL: "INITIAL",
-  WAITING_FOR_MICROPHONE_ACCESS: "WAITING_FOR_MICROPHONE_ACCESS",
-  LISTENING: "LISTENING",
-  AUDIOEND: "AUDIOEND",
-  RESOLVED: "RESOLVED",
-  REJECTED: "REJECTED",
-} as const;
-
-export type SpeechRecognitionStates = keyof typeof SPEECH_RECOGNITION_STATES;
-
 export const MEMORIZE_BIBLE_VERSES_API_BASE_URL =
   import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
   "https://memorize-bible-verses-api-server.fly.dev";

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { normalizeSpeechRecognitionInput } from "./normalizeSpeechRecognitionInput";
+import { autoCorrectSpeechRecognitionInput } from "./autoCorrectSpokenBibleVerse";
 
-describe("normalizeSpeechRecognitionInput()", () => {
+describe("autoCorrectSpeechRecognitionInput()", () => {
   test("should add missing colon between chapter and verse number for a single verse", () => {
     const transcript =
       "Genesis 11 In the beginning God created the heavens and the earth Genesis 11";
@@ -10,7 +10,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "Genesis 1:1 In the beginning God created the heavens and the earth Genesis 1:1";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: "Genesis 1:1",
         verseText: expectedOutput,
@@ -25,7 +25,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "Galatians 5:22-23 But the fruit of the Spirit is love joy peace patience kindness goodness faithfulness gentleness and self control against such things there is no law Galatians 5:22-23";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: "Galatians 5:22-23",
         verseText: expectedOutput,
@@ -40,7 +40,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "Genesis 1:1 In the beginning God created the heavens and the earth Genesis 1:1";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: "Genesis 1:1",
         verseText: expectedOutput,
@@ -55,7 +55,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "Psalm 23:1-2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters Psalm 23:1-2";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: "Psalm 23:1-2",
         verseText: expectedOutput,
@@ -70,7 +70,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "2 Corinthians 5:7 For we walk by faith not by sight 2 Corinthians 5:7";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: "2 Corinthians 5:7",
         verseText: expectedOutput,
@@ -85,7 +85,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "Genesis 1:1-2 In the beginning God created the heavens and the earth Now the earth was formless and void and darkness was over the surface of the deep and the Spirit of God was hovering over the surface of the waters Genesis 1:1-2";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: "Genesis 1:1-2",
         verseText: expectedOutput,
@@ -98,7 +98,7 @@ describe("normalizeSpeechRecognitionInput()", () => {
       "Psalm 23:1-2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters Psalm 23:1-2";
 
     expect(
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript: transcript2,
         verseReference: "Psalm 23:1-2",
         verseText: expectedOutput2,

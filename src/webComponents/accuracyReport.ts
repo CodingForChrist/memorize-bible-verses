@@ -1,10 +1,10 @@
 import {
   convertBibleVerseToText,
   removeExtraContentFromBibleVerse,
-} from "../formatBibleVerseFromApi";
+} from "../services/formatApiResponse";
 import { scriptureStyles } from "../sharedStyles";
-import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
-import { getTextDifferenceForBibleVerse } from "../textDifferenceForBibleVerse";
+import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
+import { getTextDifferenceForBibleVerse } from "../services/compareBibleVerses";
 
 export class AccuracyReport extends HTMLElement {
   constructor() {
@@ -87,7 +87,7 @@ export class AccuracyReport extends HTMLElement {
     // add reference and strip out html characters
     const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
-    const improvedRecitedBibleVerse = normalizeSpeechRecognitionInput({
+    const improvedRecitedBibleVerse = autoCorrectSpeechRecognitionInput({
       transcript: this.recitedBibleVerse,
       verseReference: this.verseReference,
       verseText,

@@ -1,7 +1,7 @@
 import {
   removeExtraContentFromBibleVerse,
-  normalizeBookNameInVerseReference,
-} from "../formatBibleVerseFromApi";
+  standardizeBookNameInVerseReference,
+} from "../services/formatApiResponse";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
@@ -108,7 +108,7 @@ export class BibleVerseFetchResult extends HTMLElement {
 
     return {
       id,
-      reference: normalizeBookNameInVerseReference(reference),
+      reference: standardizeBookNameInVerseReference(reference),
       content: removeExtraContentFromBibleVerse(content, options),
       verseCount,
     };
