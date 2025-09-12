@@ -130,6 +130,37 @@ export class ReciteBibleVerse extends HTMLElement {
       .addEventListener("click", this.#recordVoiceButtonClick.bind(this));
   }
 
+  #updateSpeechRecognitionAlertMessage() {
+    const state = this.speechRecognitionService!.state;
+    const { LISTENING, WAITING_FOR_MICROPHONE_ACCESS, RESOLVED, REJECTED } =
+      SPEECH_RECOGNITION_STATES;
+
+    if (state === WAITING_FOR_MICROPHONE_ACCESS) {
+      return this.#renderAlertMessage({
+        type: "info",
+        message: "Waiting for microphone access",
+      });
+    }
+    if (state === LISTENING) {
+      return this.#renderAlertMessage({
+        type: "info",
+        message: "Recording in progress",
+      });
+    }
+    if (state === RESOLVED) {
+      return this.#renderAlertMessage({
+        type: "success",
+        message: "Recording complete!",
+      });
+    }
+    if (state === REJECTED) {
+      return this.#renderAlertMessage({
+        type: "danger",
+        message: "Failed to use microphone input",
+      });
+    }
+  }
+
   async #recordVoiceButtonClick() {
     const { INITIAL, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
 
@@ -150,11 +181,7 @@ export class ReciteBibleVerse extends HTMLElement {
         this.#printSpeechRecognitionInterimResults(
           this.speechRecognitionService!.interimTranscript,
         );
-
-        this.#renderAlertMessage({
-          type: "info",
-          message: `Recording in progress ${this.speechRecognitionService!.state}`,
-        });
+        this.#updateSpeechRecognitionAlertMessage();
       }, 100);
 
       try {
@@ -162,17 +189,10 @@ export class ReciteBibleVerse extends HTMLElement {
         this.speechTranscript = finalTranscript;
         clearInterval(intervalForPrintingInterimResults);
         this.#printSpeechRecognitionInterimResults(finalTranscript);
-
-        this.#renderAlertMessage({
-          type: "success",
-          message: "Recording complete!",
-        });
+        this.#updateSpeechRecognitionAlertMessage();
       } catch (_error) {
         this.#hideLoadingSpinner();
-        this.#renderAlertMessage({
-          type: "danger",
-          message: "Failed to use microphone input",
-        });
+        this.#updateSpeechRecognitionAlertMessage();
         this.#showTryAgainButton();
         this.#interimResultsParagraphElement.innerText = "";
         clearInterval(intervalForPrintingInterimResults);
