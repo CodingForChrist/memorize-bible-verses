@@ -204,6 +204,9 @@ export class BibleVerseFetchResult extends HTMLElement {
     alert-message {
       margin: 3rem 0 2rem;
     }
+    bible-verse-blockquote .scripture-styles {
+      color: var(--color-gray);
+    }
     ${scriptureStyles}
     `;
     styleElement.textContent = css;
