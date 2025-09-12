@@ -1,3 +1,5 @@
+import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
+
 import {
   removeExtraContentFromBibleVerse,
   standardizeBookNameInVerseReference,
@@ -8,7 +10,6 @@ import {
   MEMORIZE_BIBLE_VERSES_API_BASE_URL,
   type LoadingStates,
 } from "../constants";
-import { scriptureStyles } from "../sharedStyles";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
 
