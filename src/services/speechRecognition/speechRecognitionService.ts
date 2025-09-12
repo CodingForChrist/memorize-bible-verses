@@ -159,7 +159,7 @@ export class SpeechRecognitionService {
       }
       this.state = RESOLVED;
 
-      console.log(this.getEventsReport());
+      // console.log(this.getEventsReport());
       this.#allEvents = [];
     } else {
       if (this.#rejectListener) {
