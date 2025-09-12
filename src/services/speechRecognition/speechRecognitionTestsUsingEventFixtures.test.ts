@@ -20,6 +20,8 @@ import { SpeechRecognitionService } from "./speechRecognitionService";
 import eventsFixtureChromeMacOS from "./testFixtures/eventsFixtureChromeMacOS.json";
 import eventsFixtureSafariMacOS from "./testFixtures/eventsFixtureSafariMacOS.json";
 import eventsFixtureChromeAndroid from "./testFixtures/eventsFixtureChromeAndroid.json";
+import eventsFixtureSafariIOS from "./testFixtures/eventsFixtureSafariIOS.json";
+import eventsFixtureChromeIOS from "./testFixtures/eventsFixtureChromeIOS.json";
 
 type TestFixture = {
   browser: string;
@@ -81,6 +83,16 @@ describe("speech recognition events", () => {
       "Chrome on Android",
       "Romans 3:23 all have sinned and fall short of the glory of God Romans 3:23",
       eventsFixtureChromeAndroid,
+    ],
+    [
+      "Safari on iOS",
+      "Romans 323 for all have sinned and fall short of the glory of God Romans 323",
+      eventsFixtureSafariIOS,
+    ],
+    [
+      "Chrome on iOS",
+      "Romans 323 for all have sinned and fall short of the glory of God Romans 323",
+      eventsFixtureChromeIOS,
     ],
   ];
 
