@@ -64,8 +64,16 @@ export class SpeechRecognitionService {
   }
 
   stop() {
-    this.state = AUDIOEND;
-    this.recognition.stop();
+    if (this.state === LISTENING) {
+      this.state = AUDIOEND;
+      this.recognition.stop();
+    } else if (this.state === WAITING_FOR_MICROPHONE_ACCESS) {
+      this.state = REJECTED;
+      this.recognition.stop();
+      if (this.#rejectListener) {
+        this.#rejectListener("Failed to get microphone access");
+      }
+    }
   }
 
   #resetState() {
