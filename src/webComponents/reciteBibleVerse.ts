@@ -155,7 +155,6 @@ export class ReciteBibleVerse extends HTMLElement {
           type: "info",
           message: `Recording in progress ${this.speechRecognitionService!.state}`,
         });
-
       }, 100);
 
       try {
