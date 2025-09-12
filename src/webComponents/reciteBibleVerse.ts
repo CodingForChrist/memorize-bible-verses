@@ -146,15 +146,15 @@ export class ReciteBibleVerse extends HTMLElement {
         .querySelector("#button-record")
         ?.remove();
 
-      this.#renderAlertMessage({
-        type: "info",
-        message: "Recording in progress",
-      });
-
       const intervalForPrintingInterimResults = setInterval(() => {
         this.#printSpeechRecognitionInterimResults(
           this.speechRecognitionService!.interimTranscript,
         );
+
+        this.#renderAlertMessage({
+          type: "info",
+          message: `Recording in progress ${this.speechRecognitionService!.state}`,
+        });
       }, 100);
 
       try {
