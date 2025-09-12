@@ -9,8 +9,10 @@ import {
 } from "vitest";
 import { SpeechRecognition as SpeechRecognitionMock } from "corti";
 
-import { SpeechRecognitionService } from "./speechRecognitionService";
-import { SPEECH_RECOGNITION_STATES } from "../constants";
+import {
+  SpeechRecognitionService,
+  SPEECH_RECOGNITION_STATES,
+} from "./speechRecognitionService";
 
 const { LISTENING, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
 

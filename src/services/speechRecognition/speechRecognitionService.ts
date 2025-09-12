@@ -1,7 +1,13 @@
-import {
-  SPEECH_RECOGNITION_STATES,
-  type SpeechRecognitionStates,
-} from "../constants";
+export const SPEECH_RECOGNITION_STATES = {
+  INITIAL: "INITIAL",
+  WAITING_FOR_MICROPHONE_ACCESS: "WAITING_FOR_MICROPHONE_ACCESS",
+  LISTENING: "LISTENING",
+  AUDIOEND: "AUDIOEND",
+  RESOLVED: "RESOLVED",
+  REJECTED: "REJECTED",
+} as const;
+
+export type SpeechRecognitionStates = keyof typeof SPEECH_RECOGNITION_STATES;
 
 const {
   INITIAL,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { getTextDifferenceForBibleVerse } from "./textDifferenceForBibleVerse";
+import { getTextDifferenceForBibleVerse } from "./compareBibleVerses";
 
 describe("getTextDifferenceForBibleVerse()", () => {
   test("should ignore punctuation differences", () => {

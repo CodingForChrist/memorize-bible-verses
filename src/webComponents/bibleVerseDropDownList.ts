@@ -2,7 +2,7 @@ import {
   getOldTestamentVerseReferences,
   getNewTestamentVerseReferences,
   sortBibleVerseReferences,
-} from "../bibleVerseReferenceHelper";
+} from "../services/sortBibleVerses";
 
 export class BibleVerseDropDownList extends HTMLElement {
   #selectedVerseReference?: string;

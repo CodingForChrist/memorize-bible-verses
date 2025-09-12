@@ -1,12 +1,12 @@
+import { CUSTOM_EVENTS } from "../constants";
+
 import {
-  CUSTOM_EVENTS,
+  SpeechRecognitionService,
   SPEECH_RECOGNITION_STATES,
   type SpeechRecognitionStates,
-} from "../constants";
-
-import { SpeechRecognitionService } from "../speechRecognitionService/speechRecognitionService";
-import { convertBibleVerseToText } from "../formatBibleVerseFromApi";
-import { normalizeSpeechRecognitionInput } from "../normalizeSpeechRecognitionInput";
+} from "../services/speechRecognition";
+import { convertBibleVerseToText } from "../services/formatApiResponse";
+import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../types";
 
@@ -222,7 +222,7 @@ export class ReciteBibleVerse extends HTMLElement {
     }
 
     this.#interimResultsParagraphElement.innerText =
-      normalizeSpeechRecognitionInput({
+      autoCorrectSpeechRecognitionInput({
         transcript,
         verseReference: this.verseReference,
         verseText: convertBibleVerseToText(this.verseContent),
