@@ -24,6 +24,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "diff": "^8.0.2"
+    "diff": "^8.0.2",
+    "scripture-styles": "^1.6.0"
   }
 }

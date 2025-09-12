@@ -1,8 +1,10 @@
+import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
+
 import {
   convertBibleVerseToText,
   removeExtraContentFromBibleVerse,
 } from "../services/formatApiResponse";
-import { scriptureStyles } from "../sharedStyles";
+
 import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
 import { getTextDifferenceForBibleVerse } from "../services/compareBibleVerses";
 
