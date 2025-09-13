@@ -137,7 +137,7 @@ export class ReciteBibleVerse extends HTMLElement {
 
     if (state === WAITING_FOR_MICROPHONE_ACCESS) {
       return this.#renderAlertMessage({
-        type: "info",
+        type: "warning",
         message: "Waiting for microphone access",
       });
     }
@@ -182,7 +182,7 @@ export class ReciteBibleVerse extends HTMLElement {
           this.speechRecognitionService!.interimTranscript,
         );
         this.#updateSpeechRecognitionAlertMessage();
-      }, 100);
+      }, 200);
 
       try {
         const finalTranscript = await this.speechRecognitionService!.listen();
