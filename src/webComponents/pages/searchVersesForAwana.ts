@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-export class SearchVersesForAwanaSparksPage extends BasePage {
+export class SearchVersesForAwanaPage extends BasePage {
   constructor() {
     super();
 
@@ -14,7 +14,7 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
   }
 
   get pageTitle() {
-    return "︎Verses for Awana Sparks (grades K-2) | Memorize Bible Verses";
+    return "︎Verses for Awana Club for Kids | Memorize Bible Verses";
   }
 
   get #bibleTranslationDropDownListElement() {
@@ -29,8 +29,39 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
     ) as HTMLElement;
   }
 
+  // https://store.awana.org/product/tt-mission-discovery-of-grace-kids-handbook
+  get #awanaBookDiscoveryOfGraceBibleVerses() {
+    return [
+      "Psalm 9:10",
+      "Romans 8:38-39",
+      "Deuteronomy 7:9",
+      "2 Peter 3:9",
+      "Romans 8:28",
+      "2 Timothy 1:9",
+      "John 3:17",
+      "1 John 4:9",
+      "Mark 12:30",
+      "Psalm 25:4",
+      "Romans 12:2",
+      "Matthew 28:19-20",
+      "Luke 19:38",
+      "Mark 10:45",
+      "Luke 22:41-42",
+      "Ephesians 5:2",
+      "Matthew 28:6",
+      "1 Peter 5:10",
+      "Acts 1:8",
+      "Galatians 5:14",
+      "Psalm 16:11",
+      "2 Thessalonians 3:16",
+      "Ephesians 2:10",
+      "Colossians 1:10",
+      "1 Timothy 6:11",
+      "Galatians 5:22-23",
+    ];
+  }
   // https://store.awana.org/product/sparks-wingrunner-handbook
-  get awanaBookWingRunnerBibleVerses() {
+  get #awanaBookWingRunnerBibleVerses() {
     return [
       "John 3:16",
       "1 John 4:14",
@@ -67,18 +98,22 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
 
   get #containerElement() {
     const divElement = document.createElement("div");
+    const verses = [
+      ...this.#awanaBookDiscoveryOfGraceBibleVerses,
+      ...this.#awanaBookWingRunnerBibleVerses,
+    ].join(",");
     divElement.innerHTML = `
       <verse-text-page-template>
         <span slot="page-heading">Search</span>
 
         <span slot="page-description">
-          <p>Pick and practice a verse for Awana Sparks.</p>
+          <p>Pick and practice a verse for Awana.</p>
           <p>When you have the verse memorized go to Step 2.</p>
         </span>
 
         <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list verses="${this.awanaBookWingRunnerBibleVerses.join(",")}"></bible-verse-drop-down-list>
+          <bible-verse-drop-down-list verses="${verses}"></bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -117,7 +152,7 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
         nextPage: "speak-page",
-        previousPage: "search-verses-for-awana-sparks-page",
+        previousPage: "search-verses-for-awana-page",
       }),
     );
   }
@@ -125,7 +160,7 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    for (const attributeName of SearchVersesForAwanaSparksPage.observedAttributes) {
+    for (const attributeName of SearchVersesForAwanaPage.observedAttributes) {
       if (name === attributeName) {
         this.#bibleTranslationDropDownListElement?.setAttribute(
           attributeName,
@@ -141,6 +176,6 @@ export class SearchVersesForAwanaSparksPage extends BasePage {
 }
 
 window.customElements.define(
-  "search-verses-for-awana-sparks-page",
-  SearchVersesForAwanaSparksPage,
+  "search-verses-for-awana-page",
+  SearchVersesForAwanaPage,
 );
