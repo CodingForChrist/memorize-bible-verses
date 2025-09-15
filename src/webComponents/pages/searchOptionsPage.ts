@@ -25,19 +25,38 @@ export class SearchOptionsPage extends BasePage {
       <p>Choose to memorize verses from the options below.</p>
 
       <div class="buttons-container">
-        <branded-button id="button-awana-truth-and-training" type="button">
-          <span slot="button-text">Awana Truth and Training</span>
+        <branded-button
+          id="button-verse-of-the-day"
+          class="button-color-blue-green"
+          type="button">
+          <span slot="button-text">Verse of the Day</span>
         </branded-button>
-        <branded-button id="button-awana-sparks" type="button">
-          <span slot="button-text">Awana Sparks</span>
-        </branded-button>
-        <branded-button id="button-share-the-gospel" type="button">
+
+        <branded-button
+          id="button-share-the-gospel"
+          class="button-color-bright-pink"
+          type="button">
           <span slot="button-text">Share the Gospel</span>
         </branded-button>
-        <branded-button id="button-psalm-23" type="button">
+
+        <branded-button
+          id="button-psalm-23"
+          class="button-color-ut-orange"
+          type="button">
           <span slot="button-text">Psalm 23</span>
         </branded-button>
-        <branded-button id="button-power-user" type="button">
+
+        <branded-button
+          id="button-awana-truth-and-training"
+          class="button-color-jade"
+          type="button">
+          <span slot="button-text">Awana Club for Kids</span>
+        </branded-button>
+
+        <branded-button
+          id="button-power-user"
+          class="button-color-cerulean"
+          type="button">
           <span slot="button-text">Power User: Choose Your Verses</span>
         </branded-button>
       </div>
@@ -92,44 +111,43 @@ export class SearchOptionsPage extends BasePage {
         font-family: var(--font-heading);
         margin-bottom: 1.25rem;
       }
-
-      #button-awana-truth-and-training {
+      .button-color-blue-green {
         --primary-background-color: var(--color-secondary-blue-green);
         --primary-box-shadow-color-rgb: var(--color-secondary-blue-green-rgb);
         --primary-background-color-hover: var(--color-secondary-blue-green-darker-one);
         --primary-border-color-hover: var(--color-secondary-blue-green-darker-two);
       }
-      #button-awana-sparks {
+      .button-color-bright-pink {
         --primary-background-color: var(--color-primary-bright-pink);
         --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
         --primary-background-color-hover: var(--color-primary-bright-pink-darker-one);
         --primary-border-color-hover: var(--color-primary-bright-pink-darker-two);
       }
-      #button-share-the-gospel {
+      .button-color-ut-orange {
         --primary-background-color: var(--color-secondary-ut-orange);
         --primary-box-shadow-color-rgb: var(--color-secondary-ut-orange-rgb);
         --primary-background-color-hover: var(--color-secondary-ut-orange-darker-one);
         --primary-border-color-hover: var(--color-secondary-ut-orange-darker-two);
       }
-      #button-psalm-23 {
+      .button-color-jade {
         --primary-background-color: var(--color-secondary-jade);
         --primary-box-shadow-color-rgb: var(--color-secondary-jade-rgb);
         --primary-background-color-hover: var(--color-secondary-jade-darker-one);
         --primary-border-color-hover: var(--color-secondary-jade-darker-two);
       }
-      #button-power-user {
+      .button-color-cerulean {
         --primary-background-color: var(--color-secondary-cerulean);
         --primary-box-shadow-color-rgb: var(--color-secondary-cerulean-rgb);
         --primary-background-color-hover: var(--color-secondary-cerulean-darker-one);
         --primary-border-color-hover: var(--color-secondary-cerulean-darker-two);
       }
       .page-navigation {
-        margin: 2rem 0;
+        margin: 6rem 0 2rem;
         display: flex;
         justify-content: space-between;
 
         @media (width >= 28rem) {
-          margin: 2rem 1rem;
+          margin: 6rem 1rem 2rem;
         }
       }
       .page-navigation branded-button {
@@ -142,6 +160,14 @@ export class SearchOptionsPage extends BasePage {
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.shadowRoot!.querySelector(
+      "#button-verse-of-the-day",
+    )?.addEventListener("click", () =>
+      this.navigateToPage({
+        nextPage: "search-verse-of-the-day-page",
+      }),
+    );
 
     this.shadowRoot!.querySelector(
       "#button-awana-truth-and-training",

@@ -14,6 +14,7 @@ import "./webComponents/bibleTranslationDropDownList";
 import "./webComponents/bibleVerseDropDownList";
 import "./webComponents/bibleVerseSearchForm";
 import "./webComponents/bibleVerseFetchResult";
+import "./webComponents/bibleVerseOfTheDayFetchResult";
 import "./webComponents/bibleVerseAdvancedSearch";
 
 // step 2 component
@@ -29,6 +30,7 @@ import "./webComponents/pages/searchOptionsPage";
 import "./webComponents/pages/searchVersesForAwanaTruthAndTrainingPage";
 import "./webComponents/pages/searchVersesForAwanaSparksPage";
 import "./webComponents/pages/searchVersesForSharingTheGospelPage";
+import "./webComponents/pages/searchVerseOfTheDayPage";
 import "./webComponents/pages/searchPsalm23Page";
 import "./webComponents/pages/searchAdvancedPage";
 import "./webComponents/pages/speakPage";

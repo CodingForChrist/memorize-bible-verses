@@ -20,6 +20,7 @@ export class AppStateProvider extends HTMLElement {
       this.querySelector("search-verses-for-awana-truth-and-training-page"),
       this.querySelector("search-verses-for-awana-sparks-page"),
       this.querySelector("search-verses-for-sharing-the-gospel-page"),
+      this.querySelector("search-verse-of-the-day-page"),
       this.querySelector("search-psalm-23-page"),
       this.querySelector("search-advanced-page"),
       this.querySelector("score-page"),
@@ -63,13 +64,14 @@ export class AppStateProvider extends HTMLElement {
       this.querySelector("search-verses-for-awana-truth-and-training-page"),
       this.querySelector("search-verses-for-awana-sparks-page"),
       this.querySelector("search-verses-for-sharing-the-gospel-page"),
+      this.querySelector("search-verse-of-the-day-page"),
       this.querySelector("search-psalm-23-page"),
       this.querySelector("search-advanced-page"),
       this.querySelector("speak-page"),
       this.querySelector("score-page"),
     ]) {
       if (!element) {
-        return;
+        continue;
       }
       const isVisible = element === this.querySelector(nextPage);
       element.setAttribute("is-visible", String(isVisible));
