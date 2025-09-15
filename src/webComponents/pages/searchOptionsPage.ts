@@ -47,7 +47,7 @@ export class SearchOptionsPage extends BasePage {
         </branded-button>
 
         <branded-button
-          id="button-awana-truth-and-training"
+          id="button-awana"
           class="button-color-jade"
           type="button">
           <span slot="button-text">Awana Club for Kids</span>
@@ -169,19 +169,11 @@ export class SearchOptionsPage extends BasePage {
       }),
     );
 
-    this.shadowRoot!.querySelector(
-      "#button-awana-truth-and-training",
-    )?.addEventListener("click", () =>
-      this.navigateToPage({
-        nextPage: "search-verses-for-awana-truth-and-training-page",
-      }),
-    );
-
-    this.shadowRoot!.querySelector("#button-awana-sparks")?.addEventListener(
+    this.shadowRoot!.querySelector("#button-awana")?.addEventListener(
       "click",
       () =>
         this.navigateToPage({
-          nextPage: "search-verses-for-awana-sparks-page",
+          nextPage: "search-verses-for-awana-page",
         }),
     );
 
