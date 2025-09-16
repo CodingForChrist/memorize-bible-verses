@@ -150,7 +150,7 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
         {
           method: "POST",
           body: JSON.stringify({
-            date: new Date().toISOString(),
+            date: toISOStringWithTimezone(new Date()),
           }),
           headers: {
             "Content-Type": "application/json",
@@ -257,6 +257,26 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       }
     }
   }
+}
+
+function toISOStringWithTimezone(date: Date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+
+  const timezoneOffsetMinutes = date.getTimezoneOffset();
+  const offsetSign = timezoneOffsetMinutes > 0 ? "-" : "+";
+  const offsetHours = Math.floor(Math.abs(timezoneOffsetMinutes) / 60)
+    .toString()
+    .padStart(2, "0");
+  const offsetMinutes = (Math.abs(timezoneOffsetMinutes) % 60)
+    .toString()
+    .padStart(2, "0");
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${offsetSign}${offsetHours}:${offsetMinutes}`;
 }
 
 window.customElements.define(
