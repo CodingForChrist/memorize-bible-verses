@@ -33,6 +33,16 @@ export class SearchVerseOfTheDayPage extends BasePage {
     ) as HTMLElement;
   }
 
+  get #dateForToday() {
+    const date = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  }
+
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
@@ -40,7 +50,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
         <span slot="page-heading">Search</span>
 
         <span slot="page-description">
-          <p>Practice memorizing the verse of the day.</p>
+          <p>Practice memorizing the verse of the day for ${this.#dateForToday}.</p>
           <p>When you have it memorized go to Step 2.</p>
         </span>
 
