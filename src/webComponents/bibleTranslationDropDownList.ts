@@ -13,27 +13,33 @@ import type {
 const supportedBibles = [
   {
     id: "b8ee27bcd1cae43a-01",
-    label: "NASB 1995 (New American Standard Bible)",
+    labelShort: "NASB 1995",
+    labelLong: "NASB 1995 (New American Standard Bible)",
   },
   {
     id: "a761ca71e0b3ddcf-01",
-    label: "NASB 2020 (New American Standard Bible)",
+    labelShort: "NASB 2020",
+    labelLong: "NASB 2020 (New American Standard Bible)",
   },
   {
     id: "bba9f40183526463-01",
-    label: "BSB (Berean Standard Bible)",
+    labelShort: "BSB",
+    labelLong: "BSB (Berean Standard Bible)",
   },
   {
     id: "de4e12af7f28f599-02",
-    label: "KJV (King James Version)",
+    labelShort: "KJV",
+    labelLong: "KJV (King James Version)",
   },
   {
     id: "06125adad2d5898a-01",
-    label: "ASV (American Standard Version)",
+    labelShort: "ASV",
+    labelLong: "ASV (American Standard Version)",
   },
   {
     id: "9879dbb7cfe39e4d-04",
-    label: "WEB (World English Bible)",
+    labelShort: "WEB",
+    labelLong: "WEB (World English Bible)",
   },
 ];
 
@@ -140,14 +146,14 @@ export class BibleTranslationDropDownList extends HTMLElement {
     }
   }
 
-  #getSelectOptionText(id: string) {
+  #getSelectOptionById(id: string) {
     const supportedBible = supportedBibles.find(
       (supportedBible) => supportedBible.id === id,
     );
     if (!supportedBible) {
       throw new Error("Failed to find the supported bible by id");
     }
-    return supportedBible.label;
+    return supportedBible;
   }
 
   #renderSelectElement() {
@@ -156,7 +162,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
       <select name="select-bible-translation">
       ${BibleTranslationDropDownList.bibleTranslations.map(
         ({ id }) =>
-          `<option value="${id}">${this.#getSelectOptionText(id)}</option>`,
+          `<option value="${id}">${this.#getSelectOptionById(id).labelShort}</option>`,
       )}
       </select>
       `;
@@ -175,6 +181,22 @@ export class BibleTranslationDropDownList extends HTMLElement {
       );
     };
 
+    selectElement.onfocus = () => {
+      for (const optionElement of selectElement.options) {
+        optionElement.textContent = this.#getSelectOptionById(
+          optionElement.value,
+        ).labelLong;
+      }
+    };
+
+    selectElement.onblur = () => {
+      for (const optionElement of selectElement.options) {
+        optionElement.textContent = this.#getSelectOptionById(
+          optionElement.value,
+        ).labelShort;
+      }
+    };
+
     this.shadowRoot!.appendChild(divContainerElement);
   }
 
@@ -191,21 +213,20 @@ export class BibleTranslationDropDownList extends HTMLElement {
         display: block;
         width: 100%;
         margin: 0;
-        padding: 0;
+        padding: 0.5rem 2.5rem 0.5rem 0.75rem;
         background-color: var(--color-primary-mint-cream);
-        border: 0;
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
         print-color-adjust: exact;
         appearance: none;
-      }
-      select:focus {
-        padding: 0.5rem 2.5rem 0.5rem 0.75rem;
-        border: 1px solid var(--color-primary-mint-cream);
-        border-radius: 1.5rem;
-        outline: 1px solid var(--color-gray);
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
         background-position: right 0.5rem center;
         background-repeat: no-repeat;
         background-size: 1.5em 1.5em;
+      }
+      select:focus {
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
       }
     `;
     styleElement.textContent = css;
