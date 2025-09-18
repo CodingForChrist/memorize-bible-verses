@@ -60,7 +60,11 @@ export class InstructionsPage extends BasePage {
       header img {
         margin-top: 0.75rem;
         margin-bottom: 1.5rem;
-        width: 12rem;
+        width: 10rem;
+
+        @media (width >= 20rem) {
+          width: 12rem;
+        }
 
         @media (width >= 40rem) {
           margin-bottom: 2rem;
