@@ -170,10 +170,16 @@ export class BibleTranslationDropDownList extends HTMLElement {
       'select[name="select-bible-translation"]',
     ) as HTMLSelectElement;
 
-    selectElement.value = defaultBible.id;
-    this.selectedBibleTranslation = this.#findBibleTranslationById(
-      defaultBible.id,
-    );
+    const bibleIdAttribute = this.getAttribute("bible-id");
+
+    if (bibleIdAttribute) {
+      selectElement.value = bibleIdAttribute;
+    } else {
+      selectElement.value = defaultBible.id;
+      this.selectedBibleTranslation = this.#findBibleTranslationById(
+        defaultBible.id,
+      );
+    }
 
     selectElement.onchange = () => {
       this.selectedBibleTranslation = this.#findBibleTranslationById(
@@ -269,7 +275,9 @@ export class BibleTranslationDropDownList extends HTMLElement {
       this.#bibleTranslationSelectElement &&
       oldValue !== newValue
     ) {
-      return (this.#bibleTranslationSelectElement.value = newValue);
+      this.#selectedBibleTranslation = this.#findBibleTranslationById(newValue);
+      this.#bibleTranslationSelectElement.value = newValue;
+      return;
     }
 
     // wait for bibles to finish loading before rendering
