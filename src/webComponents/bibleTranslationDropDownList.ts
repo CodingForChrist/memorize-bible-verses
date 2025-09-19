@@ -47,7 +47,7 @@ const supportedBibles = [
 const defaultBible = supportedBibles[0];
 
 export class BibleTranslationDropDownList extends HTMLElement {
-  #selectedBibleTranslation?: BibleTranslation;
+  selectedBibleTranslation?: BibleTranslation;
   static bibleTranslations: BibleTranslation[] = [];
 
   constructor() {
@@ -59,24 +59,6 @@ export class BibleTranslationDropDownList extends HTMLElement {
 
   static get observedAttributes() {
     return ["is-visible", "loading-state", "bible-id"];
-  }
-
-  get selectedBibleTranslation(): BibleTranslation | undefined {
-    return this.#selectedBibleTranslation;
-  }
-
-  set selectedBibleTranslation(value: BibleTranslation) {
-    this.#selectedBibleTranslation = value;
-    const eventUpdateSelectedBibleTranslation =
-      new CustomEvent<CustomEventUpdateBibleTranslation>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
-        {
-          detail: { bibleTranslation: value },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventUpdateSelectedBibleTranslation);
   }
 
   get isVisible() {
@@ -107,7 +89,47 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   get #bibleTranslationSelectElement() {
-    return this.shadowRoot!.querySelector("select") as HTMLSelectElement;
+    return this.shadowRoot!.querySelector<HTMLSelectElement>("select");
+  }
+
+  #sendEventForSelectedBibleTranslation() {
+    if (!this.selectedBibleTranslation) {
+      return;
+    }
+    const eventUpdateSelectedBibleTranslation =
+      new CustomEvent<CustomEventUpdateBibleTranslation>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
+        {
+          detail: { bibleTranslation: this.selectedBibleTranslation },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventUpdateSelectedBibleTranslation);
+  }
+
+  #findBibleTranslationById(bibleId: string) {
+    const bibleTranslation =
+      BibleTranslationDropDownList.bibleTranslations.find(
+        (bibleTranslation) => bibleTranslation.id === bibleId,
+      );
+    if (!bibleTranslation) {
+      throw new Error("Failed to find the bible translation by id");
+    }
+    return bibleTranslation;
+  }
+
+  #setDefaultBibleTranslation() {
+    const bibleIdAttribute = this.getAttribute("bible-id");
+    if (bibleIdAttribute) {
+      this.selectedBibleTranslation =
+        this.#findBibleTranslationById(bibleIdAttribute);
+    } else {
+      this.selectedBibleTranslation = this.#findBibleTranslationById(
+        defaultBible.id,
+      );
+      this.#sendEventForSelectedBibleTranslation();
+    }
   }
 
   async #fetchBibles() {
@@ -157,51 +179,51 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   #renderSelectElement() {
+    this.#setDefaultBibleTranslation();
+
     const divContainerElement = document.createElement("div");
+    const hostElementWidth = this.shadowRoot?.host.clientWidth ?? 0;
+    const shouldDisplayShortLabel = hostElementWidth < 375;
+
     divContainerElement.innerHTML = `
       <select name="select-bible-translation">
-      ${BibleTranslationDropDownList.bibleTranslations.map(
-        ({ id }) =>
-          `<option value="${id}">${this.#getSelectOptionById(id).labelShort}</option>`,
-      )}
+      ${BibleTranslationDropDownList.bibleTranslations.map(({ id }) => {
+        const { labelLong, labelShort } = this.#getSelectOptionById(id);
+        const label = shouldDisplayShortLabel ? labelShort : labelLong;
+        return `<option value="${id}">${label}</option>`;
+      })}
       </select>
       `;
     const selectElement = divContainerElement.querySelector(
       'select[name="select-bible-translation"]',
     ) as HTMLSelectElement;
 
-    const bibleIdAttribute = this.getAttribute("bible-id");
-
-    if (bibleIdAttribute) {
-      selectElement.value = bibleIdAttribute;
-    } else {
-      selectElement.value = defaultBible.id;
-      this.selectedBibleTranslation = this.#findBibleTranslationById(
-        defaultBible.id,
-      );
-    }
+    selectElement.value = this.selectedBibleTranslation!.id;
 
     selectElement.onchange = () => {
       this.selectedBibleTranslation = this.#findBibleTranslationById(
         selectElement.value,
       );
+      this.#sendEventForSelectedBibleTranslation();
     };
 
-    selectElement.onfocus = () => {
-      for (const optionElement of selectElement.options) {
-        optionElement.textContent = this.#getSelectOptionById(
-          optionElement.value,
-        ).labelLong;
-      }
-    };
+    if (shouldDisplayShortLabel) {
+      selectElement.onfocus = () => {
+        for (const optionElement of selectElement.options) {
+          optionElement.textContent = this.#getSelectOptionById(
+            optionElement.value,
+          ).labelLong;
+        }
+      };
 
-    selectElement.onblur = () => {
-      for (const optionElement of selectElement.options) {
-        optionElement.textContent = this.#getSelectOptionById(
-          optionElement.value,
-        ).labelShort;
-      }
-    };
+      selectElement.onblur = () => {
+        for (const optionElement of selectElement.options) {
+          optionElement.textContent = this.#getSelectOptionById(
+            optionElement.value,
+          ).labelShort;
+        }
+      };
+    }
 
     this.shadowRoot!.appendChild(divContainerElement);
   }
@@ -239,17 +261,6 @@ export class BibleTranslationDropDownList extends HTMLElement {
     return styleElement;
   }
 
-  #findBibleTranslationById(bibleId: string) {
-    const bibleTranslation =
-      BibleTranslationDropDownList.bibleTranslations.find(
-        (bibleTranslation) => bibleTranslation.id === bibleId,
-      );
-    if (!bibleTranslation) {
-      throw new Error("Failed to find the bible translation by id");
-    }
-    return bibleTranslation;
-  }
-
   #renderErrorMessage(message: string) {
     // remove existing alert message
     this.shadowRoot!.querySelector('alert-message[type="danger"]')?.remove();
@@ -275,7 +286,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
       this.#bibleTranslationSelectElement &&
       oldValue !== newValue
     ) {
-      this.#selectedBibleTranslation = this.#findBibleTranslationById(newValue);
+      this.selectedBibleTranslation = this.#findBibleTranslationById(newValue);
       this.#bibleTranslationSelectElement.value = newValue;
       return;
     }
