@@ -46,6 +46,10 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
   #renderSearchForm() {
     this.#searchFormContainerElement.innerHTML = "";
     const searchFormElement = document.createElement("bible-verse-search-form");
+    searchFormElement.setAttribute(
+      "verse-reference",
+      this.selectedVerseReference,
+    );
     this.#searchFormContainerElement.appendChild(searchFormElement);
 
     window.addEventListener(
