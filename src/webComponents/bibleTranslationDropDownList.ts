@@ -10,41 +10,7 @@ import type {
   CustomEventUpdateBibleTranslation,
 } from "../types";
 
-const supportedBibles = [
-  {
-    id: "b8ee27bcd1cae43a-01",
-    labelShort: "NASB 1995",
-    labelLong: "NASB 1995 (New American Standard Bible)",
-  },
-  {
-    id: "a761ca71e0b3ddcf-01",
-    labelShort: "NASB 2020",
-    labelLong: "NASB 2020 (New American Standard Bible)",
-  },
-  {
-    id: "bba9f40183526463-01",
-    labelShort: "BSB",
-    labelLong: "BSB (Berean Standard Bible)",
-  },
-  {
-    id: "de4e12af7f28f599-02",
-    labelShort: "KJV",
-    labelLong: "KJV (King James Version)",
-  },
-  {
-    id: "06125adad2d5898a-01",
-    labelShort: "ASV",
-    labelLong: "ASV (American Standard Version)",
-  },
-  {
-    id: "9879dbb7cfe39e4d-04",
-    labelShort: "WEB",
-    labelLong: "WEB (World English Bible)",
-  },
-];
-
-// default to NASB 1995
-const defaultBible = supportedBibles[0];
+import bibleTranslations from "../data/bibleTranslations.json";
 
 export class BibleTranslationDropDownList extends HTMLElement {
   selectedBibleTranslation?: BibleTranslation;
@@ -108,6 +74,20 @@ export class BibleTranslationDropDownList extends HTMLElement {
     window.dispatchEvent(eventUpdateSelectedBibleTranslation);
   }
 
+  #findBibleTranslationByAbbreviationLocal(abbreviationLocal: string) {
+    const bibleTranslation =
+      BibleTranslationDropDownList.bibleTranslations.find(
+        (bibleTranslation) =>
+          bibleTranslation.abbreviationLocal === abbreviationLocal,
+      );
+    if (!bibleTranslation) {
+      throw new Error(
+        "Failed to find the bible translation by abbreviationLocal",
+      );
+    }
+    return bibleTranslation;
+  }
+
   #findBibleTranslationById(bibleId: string) {
     const bibleTranslation =
       BibleTranslationDropDownList.bibleTranslations.find(
@@ -125,9 +105,13 @@ export class BibleTranslationDropDownList extends HTMLElement {
       this.selectedBibleTranslation =
         this.#findBibleTranslationById(bibleIdAttribute);
     } else {
-      this.selectedBibleTranslation = this.#findBibleTranslationById(
-        defaultBible.id,
-      );
+      const url = new URL(window.location.href);
+      const bibleTranslationFromQueryString =
+        url.searchParams.get("bible-translation") || "NASB 1995";
+      this.selectedBibleTranslation =
+        this.#findBibleTranslationByAbbreviationLocal(
+          bibleTranslationFromQueryString,
+        );
       this.#sendEventForSelectedBibleTranslation();
     }
   }
@@ -147,7 +131,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
           method: "POST",
           body: JSON.stringify({
             language: "eng",
-            ids: supportedBibles.map(({ id }) => id).toString(),
+            ids: bibleTranslations.map(({ id }) => id).toString(),
             includeFullDetails: true,
           }),
           headers: {
@@ -169,8 +153,8 @@ export class BibleTranslationDropDownList extends HTMLElement {
   }
 
   #getSelectOptionById(id: string) {
-    const supportedBible = supportedBibles.find(
-      (supportedBible) => supportedBible.id === id,
+    const supportedBible = bibleTranslations.find(
+      (bibleTranslation) => bibleTranslation.id === id,
     );
     if (!supportedBible) {
       throw new Error("Failed to find the supported bible by id");

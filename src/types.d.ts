@@ -17,6 +17,7 @@ export type BibleVerse = {
 export type PageNavigation = {
   nextPage: string;
   previousPage?: string;
+  bibleTranslation?: string;
 };
 
 export type CustomEventUpdateBibleTranslation = {

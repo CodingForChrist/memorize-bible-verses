@@ -11,25 +11,36 @@ import type {
 } from "../types";
 
 export class AppStateProvider extends HTMLElement {
-  #updateChildrenWithBibleTranslation({
-    id,
-    name,
-    abbreviationLocal,
-  }: BibleTranslation) {
-    for (const element of [
+  get #webComponentPageElements() {
+    return [
+      this.querySelector("instructions-page"),
+      this.querySelector("search-options-page"),
       this.querySelector("search-verse-of-the-day-page"),
       this.querySelector("search-verses-for-sharing-the-gospel-page"),
       this.querySelector("search-psalm-23-page"),
       this.querySelector("search-verses-for-awana-page"),
       this.querySelector("search-advanced-page"),
+      this.querySelector("speak-page"),
       this.querySelector("score-page"),
-    ]) {
+    ];
+  }
+
+  #updateChildrenWithBibleTranslation({
+    id,
+    name,
+    abbreviationLocal,
+  }: BibleTranslation) {
+    for (const element of this.#webComponentPageElements) {
       if (element) {
         element.setAttribute("bible-id", id);
         element.setAttribute("bible-name", name);
         element.setAttribute("bible-abbreviation-local", abbreviationLocal);
       }
     }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("bible-translation", abbreviationLocal);
+    history.replaceState({}, "", url);
   }
 
   #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
@@ -56,18 +67,12 @@ export class AppStateProvider extends HTMLElement {
     }
   }
 
-  #updatePageNavigation({ previousPage, nextPage }: PageNavigation) {
-    for (const element of [
-      this.querySelector("instructions-page"),
-      this.querySelector("search-options-page"),
-      this.querySelector("search-verse-of-the-day-page"),
-      this.querySelector("search-verses-for-sharing-the-gospel-page"),
-      this.querySelector("search-psalm-23-page"),
-      this.querySelector("search-verses-for-awana-page"),
-      this.querySelector("search-advanced-page"),
-      this.querySelector("speak-page"),
-      this.querySelector("score-page"),
-    ]) {
+  #updatePageNavigation({
+    previousPage,
+    nextPage,
+    bibleTranslation,
+  }: PageNavigation) {
+    for (const element of this.#webComponentPageElements) {
       if (!element) {
         continue;
       }
@@ -79,11 +84,12 @@ export class AppStateProvider extends HTMLElement {
     }
 
     const url = new URL(window.location.href);
-    if (url.searchParams.has("page-name")) {
-      url.searchParams.set("page-name", nextPage);
-    } else {
-      url.searchParams.append("page-name", nextPage);
+    url.searchParams.set("page-name", nextPage);
+
+    if (bibleTranslation) {
+      url.searchParams.set("bible-translation", bibleTranslation);
     }
+
     history.pushState({}, "", url);
     window.scrollTo(0, 0);
   }
@@ -91,7 +97,9 @@ export class AppStateProvider extends HTMLElement {
   #navigateToPageBasedOnURLParam() {
     const url = new URL(window.location.href);
     const nextPage = url.searchParams.get("page-name") || "instructions-page";
-    this.#updatePageNavigation({ nextPage });
+    const bibleTranslation =
+      url.searchParams.get("bible-translation") || "NASB 1995";
+    this.#updatePageNavigation({ nextPage, bibleTranslation });
   }
 
   connectedCallback() {
