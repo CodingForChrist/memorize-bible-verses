@@ -166,14 +166,10 @@ export class BibleTranslationDropDownList extends HTMLElement {
     this.#setDefaultBibleTranslation();
 
     const divContainerElement = document.createElement("div");
-    const hostElementWidth = this.shadowRoot?.host.clientWidth ?? 0;
-    const shouldDisplayShortLabel = hostElementWidth < 375;
-
     divContainerElement.innerHTML = `
       <select name="select-bible-translation">
       ${BibleTranslationDropDownList.bibleTranslations.map(({ id }) => {
-        const { labelLong, labelShort } = this.#getSelectOptionById(id);
-        const label = shouldDisplayShortLabel ? labelShort : labelLong;
+        const { label } = this.#getSelectOptionById(id);
         return `<option value="${id}">${label}</option>`;
       })}
       </select>
@@ -191,24 +187,6 @@ export class BibleTranslationDropDownList extends HTMLElement {
       this.#sendEventForSelectedBibleTranslation();
     };
 
-    if (shouldDisplayShortLabel) {
-      selectElement.onfocus = () => {
-        for (const optionElement of selectElement.options) {
-          optionElement.textContent = this.#getSelectOptionById(
-            optionElement.value,
-          ).labelLong;
-        }
-      };
-
-      selectElement.onblur = () => {
-        for (const optionElement of selectElement.options) {
-          optionElement.textContent = this.#getSelectOptionById(
-            optionElement.value,
-          ).labelShort;
-        }
-      };
-    }
-
     this.shadowRoot!.appendChild(divContainerElement);
   }
 
@@ -220,6 +198,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
       }
       select {
         font: inherit;
+        font-size: 80%;
         color: inherit;
         line-height: 1.5rem;
         display: block;
@@ -235,6 +214,16 @@ export class BibleTranslationDropDownList extends HTMLElement {
         background-position: right 0.5rem center;
         background-repeat: no-repeat;
         background-size: 1.5em 1.5em;
+
+        @media (width >= 24rem) {
+          font-size: 85%;
+        }
+        @media (width >= 28rem) {
+          font-size: 90%;
+        }
+        @media (width >= 32rem) {
+          font-size: 100%;
+        }
       }
       select:focus {
         border-color: var(--color-primary-mint-cream);

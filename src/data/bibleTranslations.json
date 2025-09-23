@@ -2,37 +2,31 @@
   {
     "id": "b8ee27bcd1cae43a-01",
     "abbreviationLocal": "NASB 1995",
-    "labelShort": "NASB 1995",
-    "labelLong": "NASB 1995 (New American Standard Bible)"
+    "label": "NASB 1995 (New American Standard Bible)"
   },
   {
     "id": "a761ca71e0b3ddcf-01",
     "abbreviationLocal": "NASB",
-    "labelShort": "NASB 2020",
-    "labelLong": "NASB 2020 (New American Standard Bible)"
+    "label": "NASB 2020 (New American Standard Bible)"
   },
   {
     "id": "bba9f40183526463-01",
     "abbreviationLocal": "BSB",
-    "labelShort": "BSB",
-    "labelLong": "BSB (Berean Standard Bible)"
+    "label": "BSB (Berean Standard Bible)"
   },
   {
     "id": "de4e12af7f28f599-02",
     "abbreviationLocal": "KJV",
-    "labelShort": "KJV",
-    "labelLong": "KJV (King James Version)"
+    "label": "KJV (King James Version)"
   },
   {
     "id": "06125adad2d5898a-01",
     "abbreviationLocal": "ASV",
-    "labelShort": "ASV",
-    "labelLong": "ASV (American Standard Version)"
+    "label": "ASV (American Standard Version)"
   },
   {
     "id": "9879dbb7cfe39e4d-04",
     "abbreviationLocal": "WEB",
-    "labelShort": "WEB",
-    "labelLong": "WEB (World English Bible)"
+    "label": "WEB (World English Bible)"
   }
 ]
