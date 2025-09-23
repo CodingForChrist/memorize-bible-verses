@@ -204,7 +204,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
         display: block;
         width: 100%;
         margin: 0;
-        padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
         background-color: var(--color-primary-mint-cream);
         border: 1px solid var(--color-light-gray);
         border-radius: 1.5rem;

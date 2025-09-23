@@ -13,8 +13,6 @@ export class ScorePage extends BasePage {
     return [
       ...BasePage.observedAttributes,
       "bible-id",
-      "bible-name",
-      "bible-abbreviation-local",
       "verse-id",
       "verse-reference",
       "verse-content",
