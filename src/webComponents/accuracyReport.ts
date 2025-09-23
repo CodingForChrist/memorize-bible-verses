@@ -8,6 +8,8 @@ import {
 import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
 import { getTextDifferenceForBibleVerse } from "../services/compareBibleVerses";
 
+import bibleTranslations from "../data/bibleTranslations.json";
+
 export class AccuracyReport extends HTMLElement {
   constructor() {
     super();
@@ -27,12 +29,8 @@ export class AccuracyReport extends HTMLElement {
     ) as HTMLDivElement;
   }
 
-  get bibleName() {
-    return this.getAttribute("bible-name");
-  }
-
-  get BibleAbbreviationLocal() {
-    return this.getAttribute("bible-abbreviation-local");
+  get bibleId() {
+    return this.getAttribute("bible-id");
   }
 
   get verseReference() {
@@ -45,6 +43,16 @@ export class AccuracyReport extends HTMLElement {
 
   get recitedBibleVerse() {
     return this.getAttribute("recited-bible-verse");
+  }
+
+  #findBibleTranslationById(bibleId: string) {
+    const bibleTranslation = bibleTranslations.find(
+      (bibleTranslation) => bibleTranslation.id === bibleId,
+    );
+    if (!bibleTranslation) {
+      throw new Error("Failed to find the bible translation by id");
+    }
+    return bibleTranslation;
   }
 
   #calculateGrade({
@@ -80,7 +88,12 @@ export class AccuracyReport extends HTMLElement {
   #renderReport() {
     this.#reportContainerElement.innerHTML = "";
 
-    if (!this.verseReference || !this.verseContent || !this.recitedBibleVerse) {
+    if (
+      !this.bibleId ||
+      !this.verseReference ||
+      !this.verseContent ||
+      !this.recitedBibleVerse
+    ) {
       return this.#renderErrorMessage(
         "Unable to display report. Complete Step 1 and Step 2 first.",
       );
@@ -124,7 +137,7 @@ export class AccuracyReport extends HTMLElement {
           <tr>
             <td>Bible</td>
             <td>
-              ${this.bibleName} (${this.BibleAbbreviationLocal})
+              ${this.#findBibleTranslationById(this.bibleId).abbreviationLocal}
             </td>
           </tr>
           <tr>

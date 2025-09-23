@@ -27,14 +27,11 @@ export class AppStateProvider extends HTMLElement {
 
   #updateChildrenWithBibleTranslation({
     id,
-    name,
     abbreviationLocal,
   }: BibleTranslation) {
     for (const element of this.#webComponentPageElements) {
       if (element) {
         element.setAttribute("bible-id", id);
-        element.setAttribute("bible-name", name);
-        element.setAttribute("bible-abbreviation-local", abbreviationLocal);
       }
     }
 
