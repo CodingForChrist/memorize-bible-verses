@@ -96,12 +96,28 @@ export class SearchVersesForAwanaPage extends BasePage {
     ];
   }
 
-  get #containerElement() {
-    const divElement = document.createElement("div");
-    const verses = [
+  get #allBibleVerses() {
+    return [
       ...this.#awanaBookDiscoveryOfGraceBibleVerses,
       ...this.#awanaBookWingRunnerBibleVerses,
-    ].join(",");
+    ];
+  }
+
+  get #selectedVerseFromQueryString() {
+    const url = new URL(window.location.href);
+    const verseReferenceFromQueryString =
+      url.searchParams.get("verse-reference");
+
+    if (
+      verseReferenceFromQueryString &&
+      this.#allBibleVerses.includes(verseReferenceFromQueryString)
+    ) {
+      return verseReferenceFromQueryString;
+    }
+  }
+
+  get #containerElement() {
+    const divElement = document.createElement("div");
     divElement.innerHTML = `
       <verse-text-page-template>
         <span slot="page-heading">Search</span>
@@ -113,7 +129,7 @@ export class SearchVersesForAwanaPage extends BasePage {
 
         <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list verses="${verses}"></bible-verse-drop-down-list>
+          <bible-verse-drop-down-list verses="${this.#allBibleVerses.join(",")}"></bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -155,6 +171,13 @@ export class SearchVersesForAwanaPage extends BasePage {
         previousPage: "search-verses-for-awana-page",
       }),
     );
+
+    if (this.#selectedVerseFromQueryString) {
+      this.#bibleVerseDropDownListElement?.setAttribute(
+        "selected-verse",
+        this.#selectedVerseFromQueryString,
+      );
+    }
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
