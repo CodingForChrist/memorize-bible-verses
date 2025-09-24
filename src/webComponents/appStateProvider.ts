@@ -51,6 +51,10 @@ export class AppStateProvider extends HTMLElement {
         element.setAttribute("verse-content", content);
       }
     }
+
+    const url = new URL(window.location.href);
+    url.searchParams.set("verse-reference", reference);
+    history.replaceState({}, "", url);
   }
 
   #updateChildrenWithRecitedBibleVerse(recitedBibleVerse: string) {
