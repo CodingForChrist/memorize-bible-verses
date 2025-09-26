@@ -165,18 +165,19 @@ export class BibleTranslationDropDownList extends HTMLElement {
   #renderSelectElement() {
     this.#setDefaultBibleTranslation();
 
-    const divContainerElement = document.createElement("div");
-    divContainerElement.innerHTML = `
-      <select name="select-bible-translation">
-      ${BibleTranslationDropDownList.bibleTranslations.map(({ id }) => {
-        const { label } = this.#getSelectOptionById(id);
-        return `<option value="${id}">${label}</option>`;
-      })}
-      </select>
-      `;
-    const selectElement = divContainerElement.querySelector(
-      'select[name="select-bible-translation"]',
-    ) as HTMLSelectElement;
+    const selectElement = document.createElement("select");
+    selectElement.name = "select-bible-translation";
+
+    for (const { id } of BibleTranslationDropDownList.bibleTranslations) {
+      const { label } = this.#getSelectOptionById(id);
+      const optionElement = document.createElement("option");
+      optionElement.value = id;
+      optionElement.textContent = label;
+      if (label.length > 36) {
+        optionElement.classList.add("label-long");
+      }
+      selectElement.appendChild(optionElement);
+    }
 
     selectElement.value = this.selectedBibleTranslation!.id;
 
@@ -187,7 +188,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
       this.#sendEventForSelectedBibleTranslation();
     };
 
-    this.shadowRoot!.appendChild(divContainerElement);
+    this.shadowRoot!.appendChild(selectElement);
   }
 
   get #styleElement() {
@@ -198,7 +199,6 @@ export class BibleTranslationDropDownList extends HTMLElement {
       }
       select {
         font: inherit;
-        font-size: 80%;
         color: inherit;
         line-height: 1.5rem;
         display: block;
@@ -214,6 +214,13 @@ export class BibleTranslationDropDownList extends HTMLElement {
         background-position: right 0.5rem center;
         background-repeat: no-repeat;
         background-size: 1.5em 1.5em;
+      }
+      select:focus {
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
+      }
+      select:has(option.label-long:checked) {
+        font-size: 80%;
 
         @media (width >= 24rem) {
           font-size: 85%;
@@ -224,10 +231,6 @@ export class BibleTranslationDropDownList extends HTMLElement {
         @media (width >= 32rem) {
           font-size: 100%;
         }
-      }
-      select:focus {
-        border-color: var(--color-primary-mint-cream);
-        outline: 1px solid var(--color-gray);
       }
     `;
     styleElement.textContent = css;
