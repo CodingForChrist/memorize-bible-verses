@@ -5,12 +5,14 @@ import {
   type LoadingStates,
 } from "../constants";
 
+import { router } from "../services/router";
+
+import bibleTranslations from "../data/bibleTranslations.json";
+
 import type {
   BibleTranslation,
   CustomEventUpdateBibleTranslation,
 } from "../types";
-
-import bibleTranslations from "../data/bibleTranslations.json";
 
 export class BibleTranslationDropDownList extends HTMLElement {
   selectedBibleTranslation?: BibleTranslation;
@@ -105,9 +107,8 @@ export class BibleTranslationDropDownList extends HTMLElement {
       this.selectedBibleTranslation =
         this.#findBibleTranslationById(bibleIdAttribute);
     } else {
-      const url = new URL(window.location.href);
       const bibleTranslationFromQueryString =
-        url.searchParams.get("bible-translation") || "NASB 1995";
+        router.getParam("translation") || "NASB 1995";
       this.selectedBibleTranslation =
         this.#findBibleTranslationByAbbreviationLocal(
           bibleTranslationFromQueryString,

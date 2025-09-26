@@ -18,6 +18,7 @@ export type PageNavigation = {
   nextPage: string;
   previousPage?: string;
   bibleTranslation?: string;
+  shouldUpdateBrowserHistory?: boolean;
 };
 
 export type CustomEventUpdateBibleTranslation = {

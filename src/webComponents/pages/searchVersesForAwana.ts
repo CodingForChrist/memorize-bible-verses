@@ -1,5 +1,7 @@
 import { BasePage } from "./basePage";
 
+import { router } from "../../services/router";
+
 export class SearchVersesForAwanaPage extends BasePage {
   constructor() {
     super();
@@ -104,9 +106,7 @@ export class SearchVersesForAwanaPage extends BasePage {
   }
 
   get #selectedVerseFromQueryString() {
-    const url = new URL(window.location.href);
-    const verseReferenceFromQueryString =
-      url.searchParams.get("verse-reference");
+    const verseReferenceFromQueryString = router.getParam("verse");
 
     if (
       verseReferenceFromQueryString &&
