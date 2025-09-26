@@ -1,4 +1,5 @@
 import { CUSTOM_EVENTS } from "../constants";
+import { router } from "../services/router";
 
 import type {
   BibleTranslation,
@@ -35,9 +36,12 @@ export class AppStateProvider extends HTMLElement {
       }
     }
 
-    const url = new URL(window.location.href);
-    url.searchParams.set("bible-translation", abbreviationLocal);
-    history.replaceState({}, "", url);
+    router.setParams({
+      params: {
+        translation: abbreviationLocal,
+      },
+      shouldUpdateBrowserHistory: false,
+    });
   }
 
   #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
@@ -52,9 +56,12 @@ export class AppStateProvider extends HTMLElement {
       }
     }
 
-    const url = new URL(window.location.href);
-    url.searchParams.set("verse-reference", reference);
-    history.replaceState({}, "", url);
+    router.setParams({
+      params: {
+        verse: reference,
+      },
+      shouldUpdateBrowserHistory: false,
+    });
   }
 
   #updateChildrenWithRecitedBibleVerse(recitedBibleVerse: string) {
@@ -72,6 +79,7 @@ export class AppStateProvider extends HTMLElement {
     previousPage,
     nextPage,
     bibleTranslation,
+    shouldUpdateBrowserHistory = true,
   }: PageNavigation) {
     for (const element of this.#webComponentPageElements) {
       if (!element) {
@@ -84,23 +92,15 @@ export class AppStateProvider extends HTMLElement {
       }
     }
 
-    const url = new URL(window.location.href);
-    url.searchParams.set("page-name", nextPage);
+    router.setParams({
+      params: {
+        page: nextPage,
+        translation: bibleTranslation,
+      },
+      shouldUpdateBrowserHistory,
+    });
 
-    if (bibleTranslation) {
-      url.searchParams.set("bible-translation", bibleTranslation);
-    }
-
-    history.pushState({}, "", url);
     window.scrollTo(0, 0);
-  }
-
-  #navigateToPageBasedOnURLParam() {
-    const url = new URL(window.location.href);
-    const nextPage = url.searchParams.get("page-name") || "instructions-page";
-    const bibleTranslation =
-      url.searchParams.get("bible-translation") || "NASB 1995";
-    this.#updatePageNavigation({ nextPage, bibleTranslation });
   }
 
   connectedCallback() {
@@ -144,12 +144,12 @@ export class AppStateProvider extends HTMLElement {
       },
     );
 
-    addEventListener("popstate", () => {
-      this.#navigateToPageBasedOnURLParam();
+    // Initial page navigation
+    router.navigateToPageBasedOnURLParam({
+      shouldUpdateBrowserHistory: true,
     });
 
-    window.history.scrollRestoration = "manual";
-    this.#navigateToPageBasedOnURLParam();
+    router.setupPopStateListenerForBrowserHistory();
   }
 }
 
