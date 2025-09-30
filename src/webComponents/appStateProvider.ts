@@ -99,8 +99,25 @@ export class AppStateProvider extends HTMLElement {
       },
       shouldUpdateBrowserHistory,
     });
+  }
 
-    window.scrollTo(0, 0);
+  #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
+    // fallback for browsers that don't support the View Transition API
+    if (!document.startViewTransition) {
+      this.#updatePageNavigation(pageNavigation);
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // View Transition API
+    const transition = document.startViewTransition(() =>
+      this.#updatePageNavigation(pageNavigation),
+    );
+
+    transition.ready.then(() => {
+      // scroll to the top of the page
+      window.scrollTo({ top: 0, behavior: "instant" });
+    });
   }
 
   connectedCallback() {
@@ -142,16 +159,7 @@ export class AppStateProvider extends HTMLElement {
           return;
         }
 
-        // fallback for browsers that don't support the View Transition API
-        if (!document.startViewTransition) {
-          this.#updatePageNavigation(pageNavigation);
-          return;
-        }
-
-        // View Transition API
-        document.startViewTransition(() =>
-          this.#updatePageNavigation(pageNavigation),
-        );
+        this.#viewTransitionForPageNavigation(pageNavigation);
       },
     );
 
