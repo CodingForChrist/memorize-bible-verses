@@ -138,9 +138,20 @@ export class AppStateProvider extends HTMLElement {
       CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
       (event: CustomEventInit<CustomEventNavigateToPage>) => {
         const pageNavigation = event.detail?.pageNavigation;
-        if (pageNavigation !== undefined) {
-          this.#updatePageNavigation(pageNavigation);
+        if (!pageNavigation) {
+          return;
         }
+
+        // fallback for browsers that don't support the View Transition API
+        if (!document.startViewTransition) {
+          this.#updatePageNavigation(pageNavigation);
+          return;
+        }
+
+        // View Transition API
+        document.startViewTransition(() =>
+          this.#updatePageNavigation(pageNavigation),
+        );
       },
     );
 
