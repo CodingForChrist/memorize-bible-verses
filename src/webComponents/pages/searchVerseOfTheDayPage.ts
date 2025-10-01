@@ -123,6 +123,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
       input[type="date"] {
         font: inherit;
         color: inherit;
+        text-align: left;
         line-height: 1.5rem;
         box-sizing: border-box;
         width: 100%;
