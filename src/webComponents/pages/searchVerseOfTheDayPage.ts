@@ -131,6 +131,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
         border-radius: 1.5rem;
         margin-bottom: 2rem;
         padding: 0.5rem 0.75rem;
+        -webkit-appearance: none;
       }
       input[type="date"]:focus {
         border-color: var(--color-primary-mint-cream);
