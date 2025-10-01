@@ -53,12 +53,12 @@ describe("formatDate()", () => {
     expect(formattedDate).toBe("2025-12-25");
   });
 
-  test("should format to MMMM DD, YYYY", () => {
+  test("should format to dddd, MMMM D, YYYY", () => {
     const formattedDate = formatDate(
       new Date("2025-12-25T23:38:04-06:00"),
-      "MMMM DD, YYYY",
+      "dddd, MMMM D, YYYY",
     );
-    expect(formattedDate).toBe("December 25, 2025");
+    expect(formattedDate).toBe("Thursday, December 25, 2025");
   });
 
   test("should format to ISO8601", () => {

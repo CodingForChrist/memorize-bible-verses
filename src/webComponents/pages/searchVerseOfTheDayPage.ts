@@ -57,7 +57,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
 
     this.#pageHeadingDateElement.innerText = formatDate(
       this.dateForVerseOfTheDay,
-      "MMMM DD, YYYY",
+      "dddd, MMMM D, YYYY",
     );
 
     this.#bibleVerseOfTheDayFetchResultElement.setAttribute(
@@ -70,7 +70,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
     const dateShortFormat = formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD");
     const dateLongFormat = formatDate(
       this.dateForVerseOfTheDay,
-      "MMMM DD, YYYY",
+      "dddd, MMMM D, YYYY",
     );
 
     const divElement = document.createElement("div");
@@ -81,9 +81,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
         <span slot="page-description">
           <p>Practice memorizing the verse of the day for
             <br>
-            <span id="page-heading-date">
-              ${dateLongFormat}
-            </span>.
+            <span id="page-heading-date">${dateLongFormat}</span>.
           </p>
           <p>When you have it memorized go to Step 2.</p>
         </span>

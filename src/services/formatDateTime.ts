@@ -14,13 +14,13 @@ export function parseDate(value: string, format: "YYYY-MM-DD"): Date {
 
 export function formatDate(
   value: Date,
-  format: "YYYY-MM-DD" | "MMMM DD, YYYY" | "ISO8601",
+  format: "YYYY-MM-DD" | "dddd, MMMM D, YYYY" | "ISO8601",
 ): string {
   if (format === "YYYY-MM-DD") {
     return formatDateToShortDateFormat(value);
   }
 
-  if (format === "MMMM DD, YYYY") {
+  if (format === "dddd, MMMM D, YYYY") {
     return formatDateToLongDateFormat(value);
   }
 
@@ -44,6 +44,7 @@ function formatDateToLongDateFormat(date: Date) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    weekday: "long",
   };
 
   return date.toLocaleDateString("en-US", options);
