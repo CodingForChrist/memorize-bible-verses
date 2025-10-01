@@ -123,8 +123,8 @@ export class SearchVerseOfTheDayPage extends BasePage {
       input[type="date"] {
         font: inherit;
         color: inherit;
-        text-align: left;
         line-height: 1.5rem;
+        text-align: left;
         box-sizing: border-box;
         width: 100%;
         background-color: var(--color-primary-mint-cream);
@@ -137,6 +137,9 @@ export class SearchVerseOfTheDayPage extends BasePage {
       input[type="date"]:focus {
         border-color: var(--color-primary-mint-cream);
         outline: 1px solid var(--color-gray);
+      }
+      input[type="date"]::-webkit-date-and-time-value {
+        text-align: left;
       }
     `;
     styleElement.textContent = css;
