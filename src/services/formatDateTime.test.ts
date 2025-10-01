@@ -5,6 +5,7 @@ import {
   beforeAll,
   afterAll,
   beforeEach,
+  afterEach,
   vi,
 } from "vitest";
 
@@ -22,6 +23,11 @@ const mockSystemTime = "2025-01-30 06:15:00";
 
 beforeEach(() => {
   vi.setSystemTime(new Date(mockSystemTime));
+  vi.stubEnv("TZ", "America/Chicago");
+});
+
+afterEach(() => {
+  vi.unstubAllEnvs();
 });
 
 describe("parseDate()", () => {
