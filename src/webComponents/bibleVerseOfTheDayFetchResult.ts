@@ -4,6 +4,7 @@ import {
   removeExtraContentFromBibleVerse,
   standardizeBookNameInVerseReference,
 } from "../services/formatApiResponse";
+import { parseDate, formatDate } from "../services/formatDateTime";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
@@ -24,7 +25,7 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["loading-state", "bible-id", "is-visible"];
+    return ["loading-state", "bible-id", "is-visible", "date"];
   }
 
   get bibleId() {
@@ -33,6 +34,13 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
 
   get isVisible() {
     return this.getAttribute("is-visible") === "true";
+  }
+
+  get date() {
+    const dateAttributeValue = this.getAttribute("date");
+    if (dateAttributeValue) {
+      return parseDate(dateAttributeValue, "YYYY-MM-DD");
+    }
   }
 
   get #headingElement() {
@@ -138,9 +146,11 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
   }
 
   async #fetchVerseOfTheDay() {
-    if (!this.bibleId) {
+    if (!this.bibleId || !this.date) {
       return;
     }
+
+    const dateISOStringWithTimezoneOffset = formatDate(this.date, "ISO8601");
 
     try {
       this.loadingState = LOADING_STATES.PENDING;
@@ -150,7 +160,7 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
         {
           method: "POST",
           body: JSON.stringify({
-            date: toISOStringWithTimezone(new Date()),
+            date: dateISOStringWithTimezoneOffset,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -247,7 +257,7 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       }
     }
 
-    if (name === "bible-id" && oldValue !== newValue) {
+    if (["bible-id", "date"].includes(name) && oldValue !== newValue) {
       this.#removeResultElements();
       if (this.isVisible) {
         return this.#fetchVerseOfTheDay();
@@ -257,26 +267,6 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       }
     }
   }
-}
-
-function toISOStringWithTimezone(date: Date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const seconds = date.getSeconds().toString().padStart(2, "0");
-
-  const timezoneOffsetMinutes = date.getTimezoneOffset();
-  const offsetSign = timezoneOffsetMinutes > 0 ? "-" : "+";
-  const offsetHours = Math.floor(Math.abs(timezoneOffsetMinutes) / 60)
-    .toString()
-    .padStart(2, "0");
-  const offsetMinutes = (Math.abs(timezoneOffsetMinutes) % 60)
-    .toString()
-    .padStart(2, "0");
-
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${offsetSign}${offsetHours}:${offsetMinutes}`;
 }
 
 window.customElements.define(

@@ -1,8 +1,13 @@
 import { BasePage } from "./basePage";
+import { parseDate, formatDate } from "../../services/formatDateTime";
 
 export class SearchVerseOfTheDayPage extends BasePage {
+  #dateForVerseOfTheDay: Date;
+
   constructor() {
     super();
+
+    this.#dateForVerseOfTheDay = new Date();
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(this.#containerElement);
@@ -33,30 +38,69 @@ export class SearchVerseOfTheDayPage extends BasePage {
     ) as HTMLElement;
   }
 
-  get #dateForToday() {
-    const date = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return date.toLocaleDateString("en-US", options);
+  get #pageHeadingDateElement() {
+    return this.shadowRoot!.querySelector("#page-heading-date") as HTMLElement;
+  }
+
+  get #inputDateElement() {
+    return this.shadowRoot!.querySelector(
+      "#date-picker-for-verse-of-the-day",
+    ) as HTMLInputElement;
+  }
+
+  get dateForVerseOfTheDay() {
+    return this.#dateForVerseOfTheDay;
+  }
+
+  set dateForVerseOfTheDay(value: Date) {
+    this.#dateForVerseOfTheDay = value;
+
+    this.#pageHeadingDateElement.innerText = formatDate(
+      this.dateForVerseOfTheDay,
+      "MMMM DD, YYYY",
+    );
+
+    this.#bibleVerseOfTheDayFetchResultElement.setAttribute(
+      "date",
+      formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD"),
+    );
   }
 
   get #containerElement() {
+    const dateShortFormat = formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD");
+    const dateLongFormat = formatDate(
+      this.dateForVerseOfTheDay,
+      "MMMM DD, YYYY",
+    );
+
     const divElement = document.createElement("div");
     divElement.innerHTML = `
       <verse-text-page-template>
         <span slot="page-heading">Search</span>
 
         <span slot="page-description">
-          <p>Practice memorizing the verse of the day for ${this.#dateForToday}.</p>
+          <p>Practice memorizing the verse of the day for
+            <br>
+            <span id="page-heading-date">
+              ${dateLongFormat}
+            </span>.
+          </p>
           <p>When you have it memorized go to Step 2.</p>
         </span>
 
         <span slot="page-content">
+          <input
+            type="date"
+            id="date-picker-for-verse-of-the-day"
+            name="date-picker-for-verse-of-the-day"
+            value="${dateShortFormat}"
+            min="2025-01-01"
+            max="2026-12-31"
+          />
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-of-the-day-fetch-result></bible-verse-of-the-day-fetch-result>
+          <bible-verse-of-the-day-fetch-result
+            date="${dateShortFormat}">
+          </bible-verse-of-the-day-fetch-result>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -75,6 +119,22 @@ export class SearchVerseOfTheDayPage extends BasePage {
       }
       bible-verse-of-the-day-fetch-result {
         margin-top: 2rem;
+      }
+      input[type="date"] {
+        font: inherit;
+        color: inherit;
+        line-height: 1.5rem;
+        box-sizing: border-box;
+        width: 100%;
+        background-color: var(--color-primary-mint-cream);
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 0.5rem 0.75rem;
+      }
+      input[type="date"]:focus {
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
       }
     `;
     styleElement.textContent = css;
@@ -98,6 +158,26 @@ export class SearchVerseOfTheDayPage extends BasePage {
         previousPage: "search-verse-of-the-day-page",
       }),
     );
+
+    this.#inputDateElement.addEventListener("click", () => {
+      if (this.#inputDateElement.showPicker) {
+        return this.#inputDateElement.showPicker();
+      }
+
+      // fallback for browsers that don't support showPicker()
+      this.#inputDateElement.focus();
+    });
+
+    this.#inputDateElement.addEventListener("change", () => {
+      if (!this.#inputDateElement.value) {
+        return;
+      }
+
+      this.dateForVerseOfTheDay = parseDate(
+        this.#inputDateElement.value,
+        "YYYY-MM-DD",
+      );
+    });
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
