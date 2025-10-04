@@ -1,5 +1,10 @@
 import { BasePage } from "./basePage";
-import { parseDate, formatDate } from "../../services/formatDateTime";
+import {
+  parseDate,
+  formatDate,
+  addDays,
+  subtractDays,
+} from "../../services/dateTimeUtility";
 
 export class SearchVerseOfTheDayPage extends BasePage {
   #dateForVerseOfTheDay: Date;
@@ -87,14 +92,18 @@ export class SearchVerseOfTheDayPage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <input
-            type="date"
-            id="date-picker-for-verse-of-the-day"
-            name="date-picker-for-verse-of-the-day"
-            value="${dateShortFormat}"
-            min="2025-01-01"
-            max="2026-12-31"
-          />
+          <div class="date-picker-container">
+            ${this.#chevronLeftIcon}
+            <input
+              type="date"
+              id="date-picker-for-verse-of-the-day"
+              name="date-picker-for-verse-of-the-day"
+              value="${dateShortFormat}"
+              min="2025-01-01"
+              max="2026-12-31"
+            />
+            ${this.#chevronRightIcon}
+          </div>
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
           <bible-verse-of-the-day-fetch-result
             date="${dateShortFormat}">
@@ -107,6 +116,26 @@ export class SearchVerseOfTheDayPage extends BasePage {
     `;
 
     return divElement;
+  }
+
+  get #chevronLeftIcon() {
+    // chevron-left from https://heroicons.com/
+    return `
+      <svg xmlns="http://www.w3.org/2000/svg" id="chevron-left-icon" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+      </svg>
+    `;
+  }
+
+  get #chevronRightIcon() {
+    // chevron-right from https://heroicons.com/
+    return `
+      <svg xmlns="http://www.w3.org/2000/svg" id="chevron-right-icon" fill="none"
+        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+      </svg>
+    `;
   }
 
   get #styleElement() {
@@ -122,13 +151,12 @@ export class SearchVerseOfTheDayPage extends BasePage {
         font: inherit;
         color: inherit;
         line-height: 1.5rem;
-        text-align: left;
+        text-align: center;
         box-sizing: border-box;
         width: 100%;
         background-color: var(--color-primary-mint-cream);
         border: 1px solid var(--color-light-gray);
         border-radius: 1.5rem;
-        margin-bottom: 2rem;
         padding: 0.5rem 0.75rem;
         -webkit-appearance: none;
       }
@@ -137,7 +165,21 @@ export class SearchVerseOfTheDayPage extends BasePage {
         outline: 1px solid var(--color-gray);
       }
       input[type="date"]::-webkit-date-and-time-value {
-        text-align: left;
+        text-align: center;
+      }
+      .date-picker-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .date-picker-container svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        padding: 0 0.25rem;
+        margin: 0 0.75rem;
+        flex-shrink: 0;
+        cursor: pointer;
       }
     `;
     styleElement.textContent = css;
@@ -162,15 +204,6 @@ export class SearchVerseOfTheDayPage extends BasePage {
       }),
     );
 
-    this.#inputDateElement.addEventListener("click", () => {
-      if (this.#inputDateElement.showPicker) {
-        return this.#inputDateElement.showPicker();
-      }
-
-      // fallback for browsers that don't support showPicker()
-      this.#inputDateElement.focus();
-    });
-
     this.#inputDateElement.addEventListener("change", () => {
       if (!this.#inputDateElement.value) {
         return;
@@ -181,6 +214,28 @@ export class SearchVerseOfTheDayPage extends BasePage {
         "YYYY-MM-DD",
       );
     });
+
+    this.shadowRoot!.querySelector("#chevron-left-icon")?.addEventListener(
+      "click",
+      () => {
+        this.dateForVerseOfTheDay = subtractDays(this.dateForVerseOfTheDay, 1);
+        this.#inputDateElement.value = formatDate(
+          this.dateForVerseOfTheDay,
+          "YYYY-MM-DD",
+        );
+      },
+    );
+
+    this.shadowRoot!.querySelector("#chevron-right-icon")?.addEventListener(
+      "click",
+      () => {
+        this.dateForVerseOfTheDay = addDays(this.dateForVerseOfTheDay, 1);
+        this.#inputDateElement.value = formatDate(
+          this.dateForVerseOfTheDay,
+          "YYYY-MM-DD",
+        );
+      },
+    );
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {

@@ -4,7 +4,7 @@ import {
   removeExtraContentFromBibleVerse,
   standardizeBookNameInVerseReference,
 } from "../services/formatApiResponse";
-import { parseDate, formatDate } from "../services/formatDateTime";
+import { parseDate, formatDate } from "../services/dateTimeUtility";
 import {
   LOADING_STATES,
   CUSTOM_EVENTS,
