@@ -9,7 +9,12 @@ import {
   vi,
 } from "vitest";
 
-import { parseDate, formatDate } from "./formatDateTime";
+import {
+  parseDate,
+  formatDate,
+  addDays,
+  subtractDays,
+} from "./dateTimeUtility";
 
 beforeAll(() => {
   vi.useFakeTimers();
@@ -67,5 +72,41 @@ describe("formatDate()", () => {
       "ISO8601",
     );
     expect(formattedDate).toBe("2025-12-25T23:38:04-06:00");
+  });
+});
+
+describe("addDays()", () => {
+  test("should add one day to first day of the month", () => {
+    const firstDayOfMonth = parseDate("2025-01-01", "YYYY-MM-DD");
+    const secondDayOfMonth = addDays(firstDayOfMonth, 1);
+
+    expect(formatDate(firstDayOfMonth, "YYYY-MM-DD")).toBe("2025-01-01");
+    expect(formatDate(secondDayOfMonth, "YYYY-MM-DD")).toBe("2025-01-02");
+  });
+
+  test("should add one day to the last day of the month", () => {
+    const lastDayOfMonth = parseDate("2025-01-31", "YYYY-MM-DD");
+    const firstDayOfNextMonth = addDays(lastDayOfMonth, 1);
+
+    expect(formatDate(lastDayOfMonth, "YYYY-MM-DD")).toBe("2025-01-31");
+    expect(formatDate(firstDayOfNextMonth, "YYYY-MM-DD")).toBe("2025-02-01");
+  });
+});
+
+describe("addDays()", () => {
+  test("should subtract one day from the first day of the month", () => {
+    const firstDayOfMonth = parseDate("2025-01-01", "YYYY-MM-DD");
+    const lastDayOfPreviousMonth = subtractDays(firstDayOfMonth, 1);
+
+    expect(formatDate(firstDayOfMonth, "YYYY-MM-DD")).toBe("2025-01-01");
+    expect(formatDate(lastDayOfPreviousMonth, "YYYY-MM-DD")).toBe("2024-12-31");
+  });
+
+  test("should subtract one day from the last day of the month", () => {
+    const lastDayOfMonth = parseDate("2025-01-31", "YYYY-MM-DD");
+    const secondToLastDayOfMonth = subtractDays(lastDayOfMonth, 1);
+
+    expect(formatDate(lastDayOfMonth, "YYYY-MM-DD")).toBe("2025-01-31");
+    expect(formatDate(secondToLastDayOfMonth, "YYYY-MM-DD")).toBe("2025-01-30");
   });
 });
