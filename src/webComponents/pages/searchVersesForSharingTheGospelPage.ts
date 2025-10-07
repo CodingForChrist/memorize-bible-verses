@@ -45,8 +45,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       nonActiveButtonElement.classList.remove("active");
     }
     buttonElement.classList.add("active");
-
-    this.shadowRoot!.querySelector("ol")?.scrollIntoView();
+    buttonElement.closest("li")?.scrollIntoView();
   }
 
   get #containerElement() {
@@ -64,24 +63,30 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
           <ol>
             <li>
               All have sinned
-              <p class="verse-container">
+              <div class="verse-container">
                 <button type="button">Romans 3:23</button>
                 <button type="button">Romans 6:23</button>
-              </p>
+                <button type="button">Ecclesiastes 7:20</button>
+                <button type="button">Isaiah 53:6</button>
+              </div>
             </li>
             <li>
               Jesus paid the penalty for our sins
-              <p class="verse-container">
+              <div class="verse-container">
                 <button type="button">Romans 5:8</button>
                 <button type="button">2 Corinthians 5:21</button>
-              </p>
+                <button type="button">1 Peter 3:18</button>
+                <button type="button">1 John 4:19</button>
+              </div>
             </li>
             <li>
               Believe in Jesus and be saved
-              <p class="verse-container">
+              <div class="verse-container">
                 <button type="button">Ephesians 2:8-9</button>
                 <button type="button">John 3:16-17</button>
-              </p>
+                <button type="button">John 14:6</button>
+                <button type="button">Romans 10:9</button>
+              </div>
             </li>
           </ol>
 
@@ -117,19 +122,19 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         min-height: 26rem;
       }
       .verse-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 0.25rem;
+        margin: 0.5rem 0;
         margin-left: -1rem;
-        margin-top: 0.25rem;
       }
       .verse-container button {
         all: unset;
         color: var(--color-primary-bright-pink);
         text-decoration: underline;
         cursor: pointer;
-        padding: 0.25rem 0;
-      }
-      .verse-container button:first-child {
-        padding-left: 1rem;
-        padding-right: 0.5rem;
+        padding: 0.25rem 1rem;
+        border: 1px solid transparent;
       }
       .verse-container button:hover,
       .verse-container button:focus,
@@ -142,7 +147,6 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         border-radius: 1.5rem;
         background-color: var(--color-primary-bright-pink);
         color: var(--color-primary-mint-cream);
-        padding: 0.25rem 1rem;
       }
       .verse-container button:hover {
         background-color: var(--color-primary-bright-pink-darker-one);
