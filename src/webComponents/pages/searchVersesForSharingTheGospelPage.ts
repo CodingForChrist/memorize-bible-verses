@@ -133,8 +133,9 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         color: var(--color-primary-bright-pink);
         text-decoration: underline;
         cursor: pointer;
-        padding: 0.25rem 1rem;
+        padding: 0.25rem;
         border: 1px solid transparent;
+        text-align: center;
       }
       .verse-container button:hover,
       .verse-container button:focus,
