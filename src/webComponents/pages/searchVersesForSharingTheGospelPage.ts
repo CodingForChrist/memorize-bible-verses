@@ -125,17 +125,25 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
         display: grid;
         grid-template-columns: 1fr 1fr;
         row-gap: 0.25rem;
-        margin: 0.5rem 0;
-        margin-left: -1rem;
+        margin: 0.25rem 0 0.75rem -1rem;
+        font-size: 85%;
+
+        @media (width >= 28rem) {
+          font-size: 90%;
+        }
+
+        @media (width >= 32rem) {
+          font-size: 100%;
+        }
       }
       .verse-container button {
         all: unset;
         color: var(--color-primary-bright-pink);
         text-decoration: underline;
         cursor: pointer;
-        padding: 0.25rem;
+        padding: 0.25rem 1rem;
         border: 1px solid transparent;
-        text-align: center;
+        text-align: left;
       }
       .verse-container button:hover,
       .verse-container button:focus,

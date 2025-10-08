@@ -63,7 +63,11 @@ export class VerseTextPageTemplate extends HTMLElement {
         }
       }
       .page-description {
-        margin: 0 2.5rem 1rem;
+        margin: 0 1.5rem 1rem;
+
+        @media (width >= 28rem) {
+          margin: 0 2.5rem 1rem;
+        }
       }
       .search-container {
         background-color: var(--color-primary-mint-cream);

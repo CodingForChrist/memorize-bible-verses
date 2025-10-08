@@ -85,7 +85,6 @@ export class SearchVerseOfTheDayPage extends BasePage {
 
         <span slot="page-description">
           <p>Practice memorizing the verse of the day for
-            <br>
             <span id="page-heading-date">${dateLongFormat}</span>.
           </p>
           <p>When you have it memorized go to Step 2.</p>
