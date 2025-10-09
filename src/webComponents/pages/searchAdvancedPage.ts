@@ -59,6 +59,7 @@ export class SearchAdvancedPage extends BasePage {
     const css = `
       p {
         margin: 1rem 0;
+        text-wrap: balance;
       }
       bible-translation-drop-down-list {
         margin-bottom: 1.5rem;

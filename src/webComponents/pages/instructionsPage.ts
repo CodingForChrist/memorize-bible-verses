@@ -49,7 +49,7 @@ export class InstructionsPage extends BasePage {
       :host {
         margin: 1rem auto;
         text-align: center;
-        max-width: 28rem;
+        max-width: 24rem;
         padding: 0 2.5rem;
         display: block;
       }
@@ -70,11 +70,6 @@ export class InstructionsPage extends BasePage {
           margin-bottom: 2rem;
           width: 14rem;
         }
-
-        @media (width >= 64rem) {
-          margin-bottom: 2.25rem;
-          width: 16rem;
-        }
       }
       h2 {
         font-family: var(--font-heading);
@@ -89,6 +84,7 @@ export class InstructionsPage extends BasePage {
       p {
         margin-top: 0;
         margin-bottom: 2rem;
+        text-wrap: balance;
       }
       branded-button {
         margin-top: 1rem;

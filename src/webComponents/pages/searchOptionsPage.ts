@@ -95,6 +95,7 @@ export class SearchOptionsPage extends BasePage {
       }
       p {
         margin: 0 2.5rem 1rem;
+        text-wrap: balance;
       }
       .buttons-container {
         margin-top: 2rem;

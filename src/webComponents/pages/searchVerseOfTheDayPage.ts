@@ -142,6 +142,7 @@ export class SearchVerseOfTheDayPage extends BasePage {
     const css = `
       p {
         margin: 1rem 0;
+        text-wrap: balance;
       }
       bible-verse-of-the-day-fetch-result {
         margin-top: 2rem;
