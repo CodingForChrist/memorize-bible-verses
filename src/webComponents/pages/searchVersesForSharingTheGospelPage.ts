@@ -113,6 +113,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
       }
       p {
         margin: 1rem 0;
+        text-wrap: balance;
       }
       ol {
         margin: 0 0 2rem;

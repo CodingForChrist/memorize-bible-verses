@@ -148,6 +148,7 @@ export class SearchVersesForAwanaPage extends BasePage {
       }
       p {
         margin: 1rem 0;
+        text-wrap: balance;
       }
     `;
     styleElement.textContent = css;

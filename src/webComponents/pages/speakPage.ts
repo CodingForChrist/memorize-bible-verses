@@ -71,6 +71,7 @@ export class SpeakPage extends BasePage {
     const css = `
       p {
         margin: 1rem 0;
+        text-wrap: balance;
       }
       h2 {
         margin-top: 0;

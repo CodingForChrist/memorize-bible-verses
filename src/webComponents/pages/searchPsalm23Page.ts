@@ -62,6 +62,7 @@ export class SearchPsalm23Page extends BasePage {
     const css = `
       p {
         margin: 1rem 0;
+        text-wrap: balance;
       }
     `;
     styleElement.textContent = css;
