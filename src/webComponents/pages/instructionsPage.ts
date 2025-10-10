@@ -58,7 +58,6 @@ export class InstructionsPage extends BasePage {
       }
 
       header img {
-        margin-top: 0.75rem;
         margin-bottom: 1.5rem;
         width: 10rem;
 
