@@ -1,5 +1,15 @@
 [
   {
+    "id": "bba9f40183526463-01",
+    "abbreviationLocal": "BSB",
+    "label": "BSB - Berean Standard Bible"
+  },
+  {
+    "id": "de4e12af7f28f599-02",
+    "abbreviationLocal": "KJV",
+    "label": "KJV - King James Version"
+  },
+  {
     "id": "b8ee27bcd1cae43a-01",
     "abbreviationLocal": "NASB 1995",
     "label": "NASB 1995 - New American Standard Bible"
@@ -10,14 +20,9 @@
     "label": "NASB 2020 - New American Standard Bible"
   },
   {
-    "id": "bba9f40183526463-01",
-    "abbreviationLocal": "BSB",
-    "label": "BSB - Berean Standard Bible"
-  },
-  {
-    "id": "de4e12af7f28f599-02",
-    "abbreviationLocal": "KJV",
-    "label": "KJV - King James Version"
+    "id": "63097d2a0a2f7db3-01",
+    "abbreviationLocal": "NKJV",
+    "label": "NKJV - New King James Version"
   },
   {
     "id": "06125adad2d5898a-01",
