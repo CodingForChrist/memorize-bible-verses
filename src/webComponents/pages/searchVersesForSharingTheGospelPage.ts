@@ -76,7 +76,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
                 <button type="button">Romans 5:8</button>
                 <button type="button">2 Corinthians 5:21</button>
                 <button type="button">1 Peter 3:18</button>
-                <button type="button">1 John 4:19</button>
+                <button type="button">Romans 5:19</button>
               </div>
             </li>
             <li>
@@ -107,9 +107,6 @@ export class SearchVersesForSharingTheGospelPage extends BasePage {
     const css = `
       bible-translation-drop-down-list {
         margin-bottom: 1.5rem;
-      }
-      bible-verse-fetch-result {
-        margin: 3rem 0 1.5rem;
       }
       p {
         margin: 1rem 0;

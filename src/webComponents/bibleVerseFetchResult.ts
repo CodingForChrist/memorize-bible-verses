@@ -220,7 +220,10 @@ export class BibleVerseFetchResult extends HTMLElement {
     }
     bible-verse-blockquote,
     alert-message {
-      margin: 3rem 0 2rem;
+      margin-top: 3rem;
+    }
+    alert-message {
+      margin-bottom: 2rem;
     }
     bible-verse-blockquote .scripture-styles {
       color: var(--color-gray);

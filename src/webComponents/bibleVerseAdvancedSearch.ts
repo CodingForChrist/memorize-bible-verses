@@ -79,9 +79,6 @@ export class BibleVerseAdvancedSearch extends HTMLElement {
     :host {
       display: block;
     }
-    bible-verse-fetch-result {
-      margin: 3rem 0 1.5rem;
-    }
     `;
     styleElement.textContent = css;
     return styleElement;
