@@ -9,6 +9,7 @@ export type BibleTranslation = {
 
 export type BibleVerse = {
   id: string;
+  bibleId: string;
   reference: string;
   content: string;
   verseCount: number;

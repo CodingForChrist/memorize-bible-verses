@@ -1,3 +1,5 @@
+import bibleTranslations from "../data/bibleTranslations.json";
+
 export class BibleVerseBlockquote extends HTMLElement {
   constructor() {
     super();
@@ -7,6 +9,38 @@ export class BibleVerseBlockquote extends HTMLElement {
 
     shadowRoot.appendChild(this.#styleElement);
     shadowRoot.appendChild(templateContent.cloneNode(true));
+  }
+
+  get shouldDisplayCitation() {
+    return this.getAttribute("display-citation") === "true" && this.bibleId;
+  }
+
+  get bibleId() {
+    return this.getAttribute("bible-id");
+  }
+
+  #renderCitation() {
+    const bibleTranslation = bibleTranslations.find(
+      (translation) => translation.id === this.bibleId,
+    );
+
+    if (!bibleTranslation) {
+      return;
+    }
+
+    const { text, link } = bibleTranslation.citation;
+
+    const paragraphElement = document.createElement("p");
+    paragraphElement.className = "citation";
+    paragraphElement.innerText = text;
+
+    if (link) {
+      paragraphElement.innerHTML += `
+        <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
+      `;
+    }
+
+    this.shadowRoot!.appendChild(paragraphElement);
   }
 
   get #templateElement() {
@@ -34,9 +68,29 @@ export class BibleVerseBlockquote extends HTMLElement {
         padding: 0;
         margin: 0;
       }
+      .citation {
+        font-size: 60%;
+        margin-top: 3rem;
+        margin-bottom: 0;
+      }
+      a {
+        color: var(--color-primary-bright-pink);
+      }
+      a:hover {
+        color: var(--color-primary-bright-pink-darker-one);
+      }
+      a:visited {
+        color: var(--color-primary-bright-pink-darker-two);
+      }
     `;
     styleElement.textContent = css;
     return styleElement;
+  }
+
+  connectedCallback() {
+    if (this.shouldDisplayCitation) {
+      this.#renderCitation();
+    }
   }
 }
 

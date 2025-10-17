@@ -2,36 +2,62 @@
   {
     "id": "bba9f40183526463-01",
     "abbreviationLocal": "BSB",
-    "label": "BSB - Berean Standard Bible"
+    "label": "BSB - Berean Standard Bible",
+    "citation": {
+      "text": "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain.",
+      "link": "https://berean.bible/"
+    }
   },
   {
     "id": "de4e12af7f28f599-02",
     "abbreviationLocal": "KJV",
-    "label": "KJV - King James Version"
+    "label": "KJV - King James Version",
+    "citation": {
+      "text": "King James Version (KJV) Public Domain"
+    }
   },
   {
     "id": "b8ee27bcd1cae43a-01",
     "abbreviationLocal": "NASB 1995",
-    "label": "NASB 1995 - New American Standard Bible"
+    "label": "NASB 1995 - New American Standard Bible",
+    "citation": {
+      "text": "New American Standard Bible®, Copyright © 1995, The Lockman Foundation. All rights reserved.",
+      "link": "https://www.lockman.org/"
+    }
   },
   {
     "id": "a761ca71e0b3ddcf-01",
     "abbreviationLocal": "NASB",
-    "label": "NASB 2020 - New American Standard Bible"
+    "label": "NASB 2020 - New American Standard Bible",
+    "citation": {
+      "text": "New American Standard Bible® 2020, Copyright © 2020, The Lockman Foundation. All rights reserved.",
+      "link": "https://www.lockman.org/"
+    }
   },
   {
     "id": "63097d2a0a2f7db3-01",
     "abbreviationLocal": "NKJV",
-    "label": "NKJV - New King James Version"
+    "label": "NKJV - New King James Version",
+    "citation": {
+      "text": "New King James Version®, Copyright © 1982, Thomas Nelson. All rights reserved.",
+      "link": "https://www.harpercollins.com/"
+    }
   },
   {
     "id": "06125adad2d5898a-01",
     "abbreviationLocal": "ASV",
-    "label": "ASV - American Standard Version"
+    "label": "ASV - American Standard Version",
+    "citation": {
+      "text": "American Standard Version (ASV) Public Domain"
+    }
   },
   {
     "id": "9879dbb7cfe39e4d-04",
     "abbreviationLocal": "WEB",
-    "label": "WEB - World English Bible"
+    "label": "WEB - World English Bible",
+    "citation": {
+      "text": "World English Bible (WEB) Public Domain",
+      "link": "https://worldenglish.bible/"
+    }
   }
 ]
