@@ -59,7 +59,6 @@ export class BibleVerseBlockquote extends HTMLElement {
     const css = `
       :host {
         display: block;
-        margin: 1rem 0;
         font-size: 1.25rem;
       }
       blockquote {
