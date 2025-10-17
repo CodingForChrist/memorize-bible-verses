@@ -103,7 +103,13 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
     this.shadowRoot!.querySelector("loading-spinner")?.remove();
   }
 
-  #formatBibleVerse({ id, reference, content, verseCount }: BibleVerse) {
+  #formatBibleVerse({
+    id,
+    bibleId,
+    reference,
+    content,
+    verseCount,
+  }: BibleVerse) {
     const options = {
       shouldRemoveSectionHeadings: true,
       shouldRemoveFootnotes: true,
@@ -113,6 +119,7 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
 
     return {
       id,
+      bibleId,
       reference: standardizeBookNameInVerseReference(reference),
       content: removeExtraContentFromBibleVerse(content, options),
       verseCount,
@@ -133,12 +140,18 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       this.selectedBibleVerse!.reference;
     this.shadowRoot!.appendChild(verseReferenceHeadingElement);
 
+    const { bibleId, content } = this.selectedBibleVerse!;
+
     const bibleVerseBlockquoteElement = document.createElement(
       "bible-verse-blockquote",
     );
+
+    bibleVerseBlockquoteElement.setAttribute("display-citation", "true");
+    bibleVerseBlockquoteElement.setAttribute("bible-id", bibleId ?? "");
+
     bibleVerseBlockquoteElement.innerHTML = `
       <span class="scripture-styles" slot="bible-verse-content">
-        ${this.selectedBibleVerse!.content}
+        ${content}
       </span>
     `;
 
@@ -171,8 +184,15 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       const json = await response.json();
 
       if (response.ok && json?.data?.content) {
-        const { id, reference, content, verseCount } = json.data as BibleVerse;
-        this.selectedBibleVerse = { id, reference, content, verseCount };
+        const { id, bibleId, reference, content, verseCount } =
+          json.data as BibleVerse;
+        this.selectedBibleVerse = {
+          id,
+          bibleId,
+          reference,
+          content,
+          verseCount,
+        };
         this.loadingState = LOADING_STATES.RESOLVED;
         // this.#renderTrackingPixel(json.meta.fumsToken);
       } else {
