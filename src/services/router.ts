@@ -65,7 +65,7 @@ class Router {
   navigateToPageBasedOnURLParam({ shouldUpdateBrowserHistory = false }) {
     const pageNavigation: PageNavigation = {
       nextPage: this.getParam("page") || "instructions-page",
-      bibleTranslation: this.getParam("translation") || "NASB 1995",
+      bibleTranslation: this.getParam("translation") || "NKJV",
       shouldUpdateBrowserHistory,
     };
 
