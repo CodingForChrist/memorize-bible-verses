@@ -108,7 +108,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
         this.#findBibleTranslationById(bibleIdAttribute);
     } else {
       const bibleTranslationFromQueryString =
-        router.getParam("translation") || "NASB 1995";
+        router.getParam("translation") || "NKJV";
       this.selectedBibleTranslation =
         this.#findBibleTranslationByAbbreviationLocal(
           bibleTranslationFromQueryString,
