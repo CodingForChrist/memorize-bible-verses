@@ -184,14 +184,13 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       const json = await response.json();
 
       if (response.ok && json?.data?.content) {
-        const { id, bibleId, reference, content, verseCount } =
-          json.data as BibleVerse;
+        const { id, bibleId, content, verseCount } = json.data as BibleVerse;
         this.selectedBibleVerse = {
           id,
           bibleId,
-          reference,
           content,
           verseCount,
+          reference: json.verseReference,
         };
         this.loadingState = LOADING_STATES.RESOLVED;
         // this.#renderTrackingPixel(json.meta.fumsToken);
