@@ -44,6 +44,15 @@
     }
   },
   {
+    "id": "d6e14a625393b4da-01",
+    "abbreviationLocal": "NLT",
+    "label": "NLT - New Living Translation",
+    "citation": {
+      "text": "Holy Bible, New Living Translation, Copyright © 2014, Tyndale House Publishers. All rights reserved.",
+      "link": "https://www.tyndale.com/"
+    }
+  },
+  {
     "id": "06125adad2d5898a-01",
     "abbreviationLocal": "ASV",
     "label": "ASV - American Standard Version",
