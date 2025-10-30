@@ -7,7 +7,7 @@ import {
 
 import { router } from "../services/router";
 
-import bibleTranslations from "../data/bibleTranslations.json";
+import localBibleTranslations from "../data/bibleTranslations.json";
 
 import type {
   BibleTranslation,
@@ -132,7 +132,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
           method: "POST",
           body: JSON.stringify({
             language: "eng",
-            ids: bibleTranslations.map(({ id }) => id).toString(),
+            ids: localBibleTranslations.map(({ id }) => id).toString(),
             includeFullDetails: true,
           }),
           headers: {
@@ -153,14 +153,23 @@ export class BibleTranslationDropDownList extends HTMLElement {
     }
   }
 
-  #getSelectOptionById(id: string) {
-    const supportedBible = bibleTranslations.find(
-      (bibleTranslation) => bibleTranslation.id === id,
+  #getSortedBibleTranslationsWithLabels() {
+    const bibleTranslationsWithLabels =
+      BibleTranslationDropDownList.bibleTranslations.map((bibleTranslation) => {
+        const supportedBible = localBibleTranslations.find(
+          ({ id }) => bibleTranslation.id === id,
+        );
+        if (!supportedBible) {
+          throw new Error("Failed to find the supported bible by id");
+        }
+        return {
+          ...bibleTranslation,
+          label: supportedBible.label,
+        };
+      });
+    return bibleTranslationsWithLabels.sort((a, b) =>
+      a.label.localeCompare(b.label),
     );
-    if (!supportedBible) {
-      throw new Error("Failed to find the supported bible by id");
-    }
-    return supportedBible;
   }
 
   #renderSelectElement() {
@@ -169,8 +178,7 @@ export class BibleTranslationDropDownList extends HTMLElement {
     const selectElement = document.createElement("select");
     selectElement.name = "select-bible-translation";
 
-    for (const { id } of BibleTranslationDropDownList.bibleTranslations) {
-      const { label } = this.#getSelectOptionById(id);
+    for (const { id, label } of this.#getSortedBibleTranslationsWithLabels()) {
       const optionElement = document.createElement("option");
       optionElement.value = id;
       optionElement.textContent = label;
