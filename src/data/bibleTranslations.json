@@ -68,5 +68,41 @@
       "text": "World English Bible (WEB) Public Domain",
       "link": "https://worldenglish.bible/"
     }
+  },
+  {
+    "id": "78a9f6124f344018-01",
+    "abbreviationLocal": "NLT",
+    "label": "NIV - New International Version",
+    "citation": {
+      "text": "The Holy Bible, New International Version® NIV® Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.® Used by Permission of Biblica, Inc.® All rights reserved worldwide.",
+      "link": "https://www.biblica.com/"
+    }
+  },
+  {
+    "id": "a556c5305ee15c3f-01",
+    "abbreviationLocal": "CSB",
+    "label": "CSB - Christian Standard Bible",
+    "citation": {
+      "text": "Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. All rights reserved.",
+      "link": "https://www.bhpublishinggroup.com/"
+    }
+  },
+  {
+    "id": "555fef9a6cb31151-01",
+    "abbreviationLocal": "CEV",
+    "label": "CEV - Contemporary English Version",
+    "citation": {
+      "text": "Contemporary English Version, Second Edition CEV® Copyright © 2006 American Bible Society. All rights reserved.",
+      "link": "https://www.americanbible.org/"
+    }
+  },
+  {
+    "id": "61fd76eafa1577c2-02",
+    "abbreviationLocal": "GNT",
+    "label": "GNT - Good News Translation",
+    "citation": {
+      "text": "Good News Translation in Today’s English Version- Second Edition Copyright, Copyright © 1992 American Bible Society. All rights reserved.",
+      "link": "https://www.americanbible.org/"
+    }
   }
 ]
