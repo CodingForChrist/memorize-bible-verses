@@ -5,8 +5,6 @@ type GetTextDifferenceForBibleVerseOptions = {
   recitedBibleVerseText: string;
 };
 
-const punctuationCharacters = [".", ";", ",", "!", "¶", "“"];
-
 export function getTextDifferenceForBibleVerse({
   originalBibleVerseText,
   recitedBibleVerseText,
@@ -22,27 +20,39 @@ export function getTextDifferenceForBibleVerse({
   let wordCount = 0;
   let errorCount = 0;
 
-  for (const part of difference) {
+  for (const [index, part] of difference.entries()) {
     // green for additions, red for deletions
     let color = "transparent";
+    const textWithoutPunctuation = removePunctuationFromText(part.value.trim());
+    const partCount = textWithoutPunctuation.split(" ").length;
 
-    const isPunctuation = punctuationCharacters.includes(part.value.trim());
+    if (textWithoutPunctuation === "") {
+      continue;
+    }
 
-    if (part.added && !isPunctuation) {
+    if (part.added) {
       color = colorGreen;
-      errorCount += getWordCountWithoutPunctuation(part.value);
+      errorCount += partCount;
     }
 
     if (part.removed) {
       color = colorRed;
-      errorCount += getWordCountWithoutPunctuation(part.value);
+      errorCount += partCount;
     }
 
-    wordCount += part.count;
+    // do not count words that are not in the actual verse
+    if (part.removed === false) {
+      wordCount += partCount;
+    }
 
     const span = document.createElement("span");
     span.style.backgroundColor = color;
-    span.appendChild(document.createTextNode(part.value));
+
+    const isLastPart = index === difference.length - 1;
+    const textToAppend = isLastPart
+      ? textWithoutPunctuation
+      : textWithoutPunctuation + " ";
+    span.appendChild(document.createTextNode(textToAppend));
     divElement.appendChild(span);
   }
 
@@ -53,12 +63,20 @@ export function getTextDifferenceForBibleVerse({
   };
 }
 
-function getWordCountWithoutPunctuation(partValue: string) {
-  let updatedPartValue = partValue.trim();
+function removePunctuationFromText(text: string) {
+  const punctuationCharacters = [".", ";", ",", "!", "¶", "“"];
+  const hasLettersOrNumbersRegex = /[a-zA-Z0-9]/;
+
+  // return empty string when text is only punctuation
+  if (hasLettersOrNumbersRegex.test(text) === false) {
+    return "";
+  }
+
+  let updatedText = text;
   for (const punctuationCharacter of punctuationCharacters) {
-    if (updatedPartValue.includes(punctuationCharacter)) {
-      updatedPartValue.replaceAll(punctuationCharacter, "");
+    if (updatedText.includes(punctuationCharacter)) {
+      updatedText = updatedText.replaceAll(punctuationCharacter, "");
     }
   }
-  return updatedPartValue.split(" ").length;
+  return updatedText;
 }

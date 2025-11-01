@@ -14,7 +14,21 @@ describe("getTextDifferenceForBibleVerse()", () => {
     ).toEqual(
       expect.objectContaining({
         errorCount: 0,
-        wordCount: 36,
+        wordCount: 27,
+      }),
+    );
+
+    expect(
+      getTextDifferenceForBibleVerse({
+        originalBibleVerseText:
+          "John 14:6 Jesus said to him, “I am the way, the truth, and the life. No one comes to the Father except through Me. John 14:6",
+        recitedBibleVerseText:
+          "John 14:6 Jesus said to him I am the way the truth and the life No one comes to the Father except through Me John 14:6",
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        errorCount: 0,
+        wordCount: 26,
       }),
     );
 
@@ -28,7 +42,7 @@ describe("getTextDifferenceForBibleVerse()", () => {
     ).toEqual(
       expect.objectContaining({
         errorCount: 0,
-        wordCount: 39,
+        wordCount: 30,
       }),
     );
   });
@@ -47,7 +61,22 @@ describe("getTextDifferenceForBibleVerse()", () => {
     ).toEqual(
       expect.objectContaining({
         errorCount: 6,
-        wordCount: 38,
+        wordCount: 27,
+      }),
+    );
+
+    expect(
+      getTextDifferenceForBibleVerse({
+        originalBibleVerseText:
+          "John 14:6 Jesus said to him, “I am the way, the truth, and the life. No one comes to the Father except through Me. John 14:6",
+        // added "and"
+        recitedBibleVerseText:
+          "John 14:6 Jesus said to him I am the way and the truth and the life No one comes to the Father except through Me John 14:6",
+      }),
+    ).toEqual(
+      expect.objectContaining({
+        errorCount: 1,
+        wordCount: 26,
       }),
     );
   });
