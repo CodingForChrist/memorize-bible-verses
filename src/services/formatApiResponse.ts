@@ -60,6 +60,7 @@ function removeSectionHeadings(element: Element) {
     "s3",
     "s4",
     "d",
+    "cl",
   ];
 
   for (const cssClass of cssClasses) {

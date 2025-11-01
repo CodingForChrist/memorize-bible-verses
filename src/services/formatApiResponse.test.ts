@@ -22,6 +22,15 @@ describe("removeExtraContentFromBibleVerse()", () => {
     ).toBe(
       '<p class="q">The L<span class="sc">ord</span> is my shepherd,</p><p data-vid="PSA 23:1" class="q">I will not be in need.</p>',
     );
+
+    // NIV
+    expect(
+      removeExtraContentFromBibleVerse(
+        '<p class="cl">Psalm 23</p><p class="d">A psalm of David.</p><p class="q1"><span data-number="1" data-sid="PSA 23:1" class="v">1</span>The <span class="nd">Lord</span> is my shepherd, I lack nothing.</p>',
+      ),
+    ).toBe(
+      '<p class="q1">The <span class="nd">Lord</span> is my shepherd, I lack nothing.</p>',
+    );
   });
 
   test("should remove title, notes, and verse numbers from multiple verses", () => {
