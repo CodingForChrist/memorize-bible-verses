@@ -1,6 +1,7 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 
-export class SpeakPage extends BasePage {
+export class SpeakVerseFromMemoryPage extends BasePage {
   constructor() {
     super();
 
@@ -31,7 +32,10 @@ export class SpeakPage extends BasePage {
   }
 
   get previousPage() {
-    return this.getAttribute("previous-page") ?? "search-advanced-page";
+    return (
+      this.getAttribute("previous-page") ??
+      WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE
+    );
   }
 
   #renderDynamicContent() {
@@ -71,7 +75,7 @@ export class SpeakPage extends BasePage {
         .querySelector("#button-fallback")
         ?.addEventListener("click", () =>
           this.navigateToPage({
-            nextPage: "type-verse-from-memory-page",
+            nextPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
             previousPage: this.previousPage,
           }),
         );
@@ -156,8 +160,8 @@ export class SpeakPage extends BasePage {
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
-        nextPage: "score-page",
-        previousPage: "speak-page",
+        nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
+        previousPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
       }),
     );
   }
@@ -171,4 +175,7 @@ export class SpeakPage extends BasePage {
   }
 }
 
-window.customElements.define("speak-page", SpeakPage);
+window.customElements.define(
+  WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+  SpeakVerseFromMemoryPage,
+);

@@ -1,4 +1,4 @@
-import { CUSTOM_EVENTS } from "../constants";
+import { CUSTOM_EVENTS, WEB_COMPONENT_PAGES } from "../constants";
 import { router } from "../services/router";
 
 import type {
@@ -14,17 +14,17 @@ import type {
 export class AppStateProvider extends HTMLElement {
   get #webComponentPageElements() {
     return [
-      this.querySelector("instructions-page"),
-      this.querySelector("search-options-page"),
-      this.querySelector("search-verse-of-the-day-page"),
-      this.querySelector("search-verses-for-sharing-the-gospel-page"),
-      this.querySelector("search-psalm-23-page"),
-      this.querySelector("search-verses-for-awana-page"),
-      this.querySelector("search-advanced-page"),
-      this.querySelector("speak-page"),
-      this.querySelector("type-verse-from-memory-page"),
-      this.querySelector("score-page"),
-    ];
+      WEB_COMPONENT_PAGES.INSTRUCTIONS_PAGE,
+      WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+      WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE,
+      WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+      WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE,
+      WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
+      WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+      WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
+      WEB_COMPONENT_PAGES.SCORE_PAGE,
+    ].map((pageName) => document.querySelector(pageName));
   }
 
   #updateChildrenWithBibleTranslation({
@@ -47,9 +47,9 @@ export class AppStateProvider extends HTMLElement {
 
   #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
     for (const element of [
-      this.querySelector("speak-page"),
-      this.querySelector("type-verse-from-memory-page"),
-      this.querySelector("score-page"),
+      this.querySelector(WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE),
+      this.querySelector(WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE),
+      this.querySelector(WEB_COMPONENT_PAGES.SCORE_PAGE),
     ]) {
       if (element) {
         element.setAttribute("verse-id", id);
@@ -67,7 +67,9 @@ export class AppStateProvider extends HTMLElement {
   }
 
   #updateChildrenWithRecitedBibleVerse(recitedBibleVerse: string) {
-    const accuracyReportElement = this.querySelector("score-page");
+    const accuracyReportElement = this.querySelector(
+      WEB_COMPONENT_PAGES.SCORE_PAGE,
+    );
 
     if (accuracyReportElement) {
       accuracyReportElement.setAttribute(

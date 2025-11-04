@@ -1,4 +1,5 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 
 export class ScorePage extends BasePage {
   constructor() {
@@ -26,7 +27,10 @@ export class ScorePage extends BasePage {
   }
 
   get previousPage() {
-    return this.getAttribute("previous-page") ?? "speak-page";
+    return (
+      this.getAttribute("previous-page") ??
+      WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE
+    );
   }
 
   get #accuracyReportElement() {
@@ -68,7 +72,7 @@ export class ScorePage extends BasePage {
 
   #navigateToNextPage() {
     // do a full page redirect to clear out state
-    window.location.href = "/memorize-bible-verses/?page=search-options-page";
+    window.location.href = `/memorize-bible-verses/?page=${WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE}`;
   }
 
   connectedCallback() {
@@ -98,4 +102,4 @@ export class ScorePage extends BasePage {
   }
 }
 
-window.customElements.define("score-page", ScorePage);
+window.customElements.define(WEB_COMPONENT_PAGES.SCORE_PAGE, ScorePage);
