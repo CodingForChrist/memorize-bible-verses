@@ -22,6 +22,7 @@ export class AppStateProvider extends HTMLElement {
       this.querySelector("search-verses-for-awana-page"),
       this.querySelector("search-advanced-page"),
       this.querySelector("speak-page"),
+      this.querySelector("type-verse-from-memory-page"),
       this.querySelector("score-page"),
     ];
   }
@@ -47,6 +48,7 @@ export class AppStateProvider extends HTMLElement {
   #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
     for (const element of [
       this.querySelector("speak-page"),
+      this.querySelector("type-verse-from-memory-page"),
       this.querySelector("score-page"),
     ]) {
       if (element) {
@@ -85,9 +87,10 @@ export class AppStateProvider extends HTMLElement {
       if (!element) {
         continue;
       }
-      const isVisible = element === this.querySelector(nextPage);
-      element.setAttribute("is-visible", String(isVisible));
-      if (previousPage) {
+
+      const isActivePage = element === this.querySelector(nextPage);
+      element.setAttribute("is-visible", String(isActivePage));
+      if (isActivePage && previousPage) {
         element.setAttribute("previous-page", previousPage);
       }
     }

@@ -19,6 +19,7 @@ import "./webComponents/bibleVerseAdvancedSearch";
 
 // step 2 component
 import "./webComponents/reciteBibleVerse";
+import "./webComponents/typeBibleVerseFromMemory";
 
 // step 3 component
 import "./webComponents/accuracyReport";
@@ -33,4 +34,5 @@ import "./webComponents/pages/searchVerseOfTheDayPage";
 import "./webComponents/pages/searchPsalm23Page";
 import "./webComponents/pages/searchAdvancedPage";
 import "./webComponents/pages/speakPage";
+import "./webComponents/pages/typeVerseFromMemoryPage";
 import "./webComponents/pages/scorePage";
