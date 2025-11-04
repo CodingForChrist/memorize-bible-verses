@@ -91,30 +91,11 @@ export class ReciteBibleVerse extends HTMLElement {
     window.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 
-  #hasSupportForSpeechRecognition() {
-    return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
-  }
-
   #renderInitialContent() {
     // clear out existing content
     this.#interimResultsParagraphElement.innerText = "";
     this.#recordingControlsContainerElement.innerHTML = "";
     this.speechTranscript = "";
-
-    if (!this.#hasSupportForSpeechRecognition()) {
-      return this.#renderAlertMessage({
-        type: "danger",
-        message:
-          "Your browser does not support the Web Speech API. Please try another browser like Chrome or Safari.",
-      });
-    }
-
-    if (!this.verseReference) {
-      return this.#renderAlertMessage({
-        type: "danger",
-        message: "Go back to Step 1 and select a bible verse.",
-      });
-    }
 
     this.#initialContentContainerElement.innerHTML = `
       <branded-button id="button-record" type="button" brand="secondary">

@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-export class SpeakPage extends BasePage {
+export class TypeVerseFromMemoryPage extends BasePage {
   constructor() {
     super();
 
@@ -22,12 +22,8 @@ export class SpeakPage extends BasePage {
     return this.getAttribute("verse-reference");
   }
 
-  get verseContent() {
-    return this.getAttribute("verse-content");
-  }
-
   get pageTitle() {
-    return `Speak ${this.verseReference ?? ""} | Memorize Bible Verses`;
+    return `Type ${this.verseReference ?? ""} | Memorize Bible Verses`;
   }
 
   get previousPage() {
@@ -43,7 +39,7 @@ export class SpeakPage extends BasePage {
       return;
     }
 
-    if (!this.verseReference || !this.verseContent) {
+    if (!this.verseReference) {
       dynamicPageContentContainerElement.innerHTML = `
         <alert-message type="danger">
           <span slot="alert-message">Go back to Step 1 and select a bible verse.</span>
@@ -52,57 +48,23 @@ export class SpeakPage extends BasePage {
       return;
     }
 
-    if (!this.#hasSupportForSpeechRecognition) {
-      dynamicPageContentContainerElement.innerHTML = `
-        <h2>${this.verseReference}</h2>
-        <alert-message type="danger">
-          <span slot="alert-message">
-          Your browser does not support the Web Speech API.
-          Please try another browser like Chrome or Safari.
-          </span>
-        </alert-message>
-        <branded-button brand="secondary" id="button-fallback">
-          <span slot="button-text">Click here to type in the verse instead
-          </span>
-        </branded-button>
-      `;
-
-      dynamicPageContentContainerElement
-        .querySelector("#button-fallback")
-        ?.addEventListener("click", () =>
-          this.navigateToPage({
-            nextPage: "type-verse-from-memory-page",
-            previousPage: this.previousPage,
-          }),
-        );
-
-      return;
-    }
-
     dynamicPageContentContainerElement.innerHTML = `
-      <h2>${this.verseReference}</h2>
-      <recite-bible-verse
-        verse-reference="${this.verseReference}"
-        verse-content="${this.verseContent}"
-        >
-      </recite-bible-verse>
-    `;
-  }
-
-  get #hasSupportForSpeechRecognition() {
-    return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+        <h2>${this.verseReference}</h2>
+        <type-bible-verse-from-memory
+          verse-reference="${this.verseReference}">
+        </type-bible-verse-from-memory>
+      `;
   }
 
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.innerHTML = `
       <verse-text-page-template>
-        <span slot="page-heading">Speak</span>
+        <span slot="page-heading">Type</span>
 
         <span slot="page-description">
-          <p>When you are ready, press Record. Speak the entire verse clearly and slowly—then press stop.
-          Don't worry if you make a mistake, you can record again.</p>
-          <p>Once you have a recording you like go to Step 3 and get your score.</p>
+          <p>Type in the verse below from memory.</p>
+          <p>When you are finished go to Step 3.</p>
         </span>
 
         <span slot="page-content">
@@ -131,11 +93,6 @@ export class SpeakPage extends BasePage {
         font-weight: 400;
         text-align: center;
       }
-      #button-fallback {
-        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-        margin-top: 3rem;
-        width: 100%;
-      }
     `;
     styleElement.textContent = css;
     return styleElement;
@@ -157,7 +114,7 @@ export class SpeakPage extends BasePage {
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
         nextPage: "score-page",
-        previousPage: "speak-page",
+        previousPage: "type-verse-from-memory-page",
       }),
     );
   }
@@ -165,10 +122,13 @@ export class SpeakPage extends BasePage {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (["verse-reference", "verse-content"].includes(name) && newValue) {
+    if (name === "verse-reference" && newValue) {
       this.#renderDynamicContent();
     }
   }
 }
 
-window.customElements.define("speak-page", SpeakPage);
+window.customElements.define(
+  "type-verse-from-memory-page",
+  TypeVerseFromMemoryPage,
+);

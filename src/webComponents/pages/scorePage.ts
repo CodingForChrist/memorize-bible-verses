@@ -25,6 +25,10 @@ export class ScorePage extends BasePage {
     return `Score ${verseReference} | Memorize Bible Verses`;
   }
 
+  get previousPage() {
+    return this.getAttribute("previous-page") ?? "speak-page";
+  }
+
   get #accuracyReportElement() {
     return this.shadowRoot!.querySelector("accuracy-report") as HTMLElement;
   }
@@ -73,7 +77,7 @@ export class ScorePage extends BasePage {
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({ nextPage: "speak-page" }),
+      this.navigateToPage({ nextPage: this.previousPage }),
     );
 
     this.shadowRoot!.querySelector(
