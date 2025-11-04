@@ -1,4 +1,5 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 
 export class SearchOptionsPage extends BasePage {
   constructor() {
@@ -166,7 +167,7 @@ export class SearchOptionsPage extends BasePage {
       "#button-verse-of-the-day",
     )?.addEventListener("click", () =>
       this.navigateToPage({
-        nextPage: "search-verse-of-the-day-page",
+        nextPage: WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE,
       }),
     );
 
@@ -174,7 +175,7 @@ export class SearchOptionsPage extends BasePage {
       "click",
       () =>
         this.navigateToPage({
-          nextPage: "search-verses-for-awana-page",
+          nextPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
         }),
     );
 
@@ -182,7 +183,7 @@ export class SearchOptionsPage extends BasePage {
       "#button-share-the-gospel",
     )?.addEventListener("click", () =>
       this.navigateToPage({
-        nextPage: "search-verses-for-sharing-the-gospel-page",
+        nextPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
       }),
     );
 
@@ -190,25 +191,37 @@ export class SearchOptionsPage extends BasePage {
       "click",
       () =>
         this.navigateToPage({
-          nextPage: "search-psalm-23-page",
+          nextPage: WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE,
         }),
     );
 
     this.shadowRoot!.querySelector("#button-power-user")?.addEventListener(
       "click",
-      () => this.navigateToPage({ nextPage: "search-advanced-page" }),
+      () =>
+        this.navigateToPage({
+          nextPage: WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+        }),
     );
 
     this.shadowRoot!.querySelector("#button-back")?.addEventListener(
       "click",
-      () => this.navigateToPage({ nextPage: "instructions-page" }),
+      () =>
+        this.navigateToPage({
+          nextPage: WEB_COMPONENT_PAGES.INSTRUCTIONS_PAGE,
+        }),
     );
 
     this.shadowRoot!.querySelector("#button-forward")?.addEventListener(
       "click",
-      () => this.navigateToPage({ nextPage: "search-advanced-page" }),
+      () =>
+        this.navigateToPage({
+          nextPage: WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+        }),
     );
   }
 }
 
-window.customElements.define("search-options-page", SearchOptionsPage);
+window.customElements.define(
+  WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+  SearchOptionsPage,
+);

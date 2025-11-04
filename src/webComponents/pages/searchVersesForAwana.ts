@@ -1,5 +1,5 @@
 import { BasePage } from "./basePage";
-
+import { WEB_COMPONENT_PAGES } from "../../constants";
 import { router } from "../../services/router";
 
 export class SearchVersesForAwanaPage extends BasePage {
@@ -161,15 +161,17 @@ export class SearchVersesForAwanaPage extends BasePage {
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({ nextPage: "search-options-page" }),
+      this.navigateToPage({
+        nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+      }),
     );
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
-        nextPage: "speak-page",
-        previousPage: "search-verses-for-awana-page",
+        nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+        previousPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
       }),
     );
 
@@ -200,6 +202,6 @@ export class SearchVersesForAwanaPage extends BasePage {
 }
 
 window.customElements.define(
-  "search-verses-for-awana-page",
+  WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
   SearchVersesForAwanaPage,
 );

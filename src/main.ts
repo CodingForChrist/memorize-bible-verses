@@ -33,6 +33,6 @@ import "./webComponents/pages/searchVersesForSharingTheGospelPage";
 import "./webComponents/pages/searchVerseOfTheDayPage";
 import "./webComponents/pages/searchPsalm23Page";
 import "./webComponents/pages/searchAdvancedPage";
-import "./webComponents/pages/speakPage";
+import "./webComponents/pages/speakVerseFromMemoryPage";
 import "./webComponents/pages/typeVerseFromMemoryPage";
 import "./webComponents/pages/scorePage";

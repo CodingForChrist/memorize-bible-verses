@@ -1,4 +1,4 @@
-import { CUSTOM_EVENTS } from "../constants";
+import { CUSTOM_EVENTS, WEB_COMPONENT_PAGES } from "../constants";
 
 import type { CustomEventNavigateToPage, PageNavigation } from "../types";
 
@@ -64,7 +64,7 @@ class Router {
 
   navigateToPageBasedOnURLParam({ shouldUpdateBrowserHistory = false }) {
     const pageNavigation: PageNavigation = {
-      nextPage: this.getParam("page") || "instructions-page",
+      nextPage: this.getParam("page") || WEB_COMPONENT_PAGES.INSTRUCTIONS_PAGE,
       bibleTranslation: this.getParam("translation") || "NKJV",
       shouldUpdateBrowserHistory,
     };

@@ -1,4 +1,5 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 import logoURL from "../../images/logo.svg";
 
 export class InstructionsPage extends BasePage {
@@ -99,9 +100,15 @@ export class InstructionsPage extends BasePage {
 
     this.shadowRoot!.querySelector("branded-button")?.addEventListener(
       "click",
-      () => this.navigateToPage({ nextPage: "search-options-page" }),
+      () =>
+        this.navigateToPage({
+          nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+        }),
     );
   }
 }
 
-window.customElements.define("instructions-page", InstructionsPage);
+window.customElements.define(
+  WEB_COMPONENT_PAGES.INSTRUCTIONS_PAGE,
+  InstructionsPage,
+);

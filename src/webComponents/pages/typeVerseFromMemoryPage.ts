@@ -1,4 +1,5 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 
 export class TypeVerseFromMemoryPage extends BasePage {
   constructor() {
@@ -27,7 +28,10 @@ export class TypeVerseFromMemoryPage extends BasePage {
   }
 
   get previousPage() {
-    return this.getAttribute("previous-page") ?? "search-advanced-page";
+    return (
+      this.getAttribute("previous-page") ??
+      WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE
+    );
   }
 
   #renderDynamicContent() {
@@ -113,8 +117,8 @@ export class TypeVerseFromMemoryPage extends BasePage {
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
-        nextPage: "score-page",
-        previousPage: "type-verse-from-memory-page",
+        nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
+        previousPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
       }),
     );
   }
@@ -129,6 +133,6 @@ export class TypeVerseFromMemoryPage extends BasePage {
 }
 
 window.customElements.define(
-  "type-verse-from-memory-page",
+  WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
   TypeVerseFromMemoryPage,
 );

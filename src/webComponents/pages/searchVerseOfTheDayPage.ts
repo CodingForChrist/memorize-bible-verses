@@ -1,4 +1,5 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 import {
   parseDate,
   formatDate,
@@ -192,15 +193,17 @@ export class SearchVerseOfTheDayPage extends BasePage {
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({ nextPage: "search-options-page" }),
+      this.navigateToPage({
+        nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+      }),
     );
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
-        nextPage: "speak-page",
-        previousPage: "search-verse-of-the-day-page",
+        nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+        previousPage: WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE,
       }),
     );
 
@@ -257,6 +260,6 @@ export class SearchVerseOfTheDayPage extends BasePage {
 }
 
 window.customElements.define(
-  "search-verse-of-the-day-page",
+  WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE,
   SearchVerseOfTheDayPage,
 );

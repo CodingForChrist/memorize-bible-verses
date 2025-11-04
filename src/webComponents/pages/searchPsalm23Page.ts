@@ -1,4 +1,5 @@
 import { BasePage } from "./basePage";
+import { WEB_COMPONENT_PAGES } from "../../constants";
 
 export class SearchPsalm23Page extends BasePage {
   constructor() {
@@ -75,15 +76,17 @@ export class SearchPsalm23Page extends BasePage {
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({ nextPage: "search-options-page" }),
+      this.navigateToPage({
+        nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+      }),
     );
 
     this.shadowRoot!.querySelector(
       "verse-text-page-template",
     )?.addEventListener("page-navigation-forward-button-click", () =>
       this.navigateToPage({
-        nextPage: "speak-page",
-        previousPage: "search-psalm-23-page",
+        nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+        previousPage: WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE,
       }),
     );
   }
@@ -106,4 +109,7 @@ export class SearchPsalm23Page extends BasePage {
   }
 }
 
-window.customElements.define("search-psalm-23-page", SearchPsalm23Page);
+window.customElements.define(
+  WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE,
+  SearchPsalm23Page,
+);
