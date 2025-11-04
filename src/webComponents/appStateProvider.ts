@@ -52,7 +52,6 @@ export class AppStateProvider extends HTMLElement {
       this.querySelector(WEB_COMPONENT_PAGES.SCORE_PAGE),
     ]) {
       if (element) {
-        element.setAttribute("verse-id", id);
         element.setAttribute("verse-reference", reference);
         element.setAttribute("verse-content", content);
       }
