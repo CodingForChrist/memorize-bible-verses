@@ -45,7 +45,7 @@ export class AppStateProvider extends HTMLElement {
     });
   }
 
-  #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
+  #updateChildrenWithBibleVerse({ reference, content }: BibleVerse) {
     for (const element of [
       this.querySelector(WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE),
       this.querySelector(WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE),
