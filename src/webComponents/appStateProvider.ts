@@ -45,14 +45,13 @@ export class AppStateProvider extends HTMLElement {
     });
   }
 
-  #updateChildrenWithBibleVerse({ id, reference, content }: BibleVerse) {
+  #updateChildrenWithBibleVerse({ reference, content }: BibleVerse) {
     for (const element of [
       this.querySelector(WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE),
       this.querySelector(WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE),
       this.querySelector(WEB_COMPONENT_PAGES.SCORE_PAGE),
     ]) {
       if (element) {
-        element.setAttribute("verse-id", id);
         element.setAttribute("verse-reference", reference);
         element.setAttribute("verse-content", content);
       }

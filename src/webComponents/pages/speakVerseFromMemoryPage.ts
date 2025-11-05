@@ -11,12 +11,7 @@ export class SpeakVerseFromMemoryPage extends BasePage {
   }
 
   static get observedAttributes() {
-    return [
-      ...BasePage.observedAttributes,
-      "verse-id",
-      "verse-reference",
-      "verse-content",
-    ];
+    return [...BasePage.observedAttributes, "verse-reference", "verse-content"];
   }
 
   get verseReference() {
