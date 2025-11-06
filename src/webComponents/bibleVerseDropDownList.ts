@@ -150,7 +150,7 @@ export class BibleVerseDropDownList extends HTMLElement {
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === "bible-id" && oldValue !== newValue) {
+    if (name === "bible-id" && newValue && oldValue !== newValue) {
       this.#renderSelect();
     }
 

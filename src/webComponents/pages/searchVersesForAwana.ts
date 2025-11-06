@@ -1,35 +1,27 @@
-import { BasePage } from "./basePage";
+import { LitElement, css, html } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+
+import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
 import { router } from "../../services/router";
 
-export class SearchVersesForAwanaPage extends BasePage {
-  constructor() {
-    super();
+@customElement(WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE)
+export class SearchVersesForAwanaPage extends BasePage(LitElement) {
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#containerElement);
-    shadowRoot.appendChild(this.#styleElement);
-  }
+  pageTitle = "Verses for Awana Club for Kids";
 
-  static get observedAttributes() {
-    return [...BasePage.observedAttributes, "bible-id"];
-  }
-
-  get pageTitle() {
-    return "︎Verses for Awana Club for Kids | Memorize Bible Verses";
-  }
-
-  get #bibleTranslationDropDownListElement() {
-    return this.shadowRoot!.querySelector(
-      "bible-translation-drop-down-list",
-    ) as HTMLElement;
-  }
-
-  get #bibleVerseDropDownListElement() {
-    return this.shadowRoot!.querySelector(
-      "bible-verse-drop-down-list",
-    ) as HTMLElement;
-  }
+  static styles = css`
+    bible-translation-drop-down-list {
+      margin-bottom: 1.5rem;
+    }
+    p {
+      margin: 1rem 0;
+      text-wrap: balance;
+    }
+  `;
 
   // https://store.awana.org/product/tt-mission-discovery-of-grace-kids-handbook
   get #awanaBookDiscoveryOfGraceBibleVerses() {
@@ -116,10 +108,12 @@ export class SearchVersesForAwanaPage extends BasePage {
     }
   }
 
-  get #containerElement() {
-    const divElement = document.createElement("div");
-    divElement.innerHTML = `
-      <verse-text-page-template>
+  render() {
+    return html`
+      <verse-text-page-template
+        @page-navigation-back-button-click=${this.#handleBackButtonClick}
+        @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
+      >
         <span slot="page-heading">Search</span>
 
         <span slot="page-description">
@@ -128,80 +122,32 @@ export class SearchVersesForAwanaPage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <bible-translation-drop-down-list></bible-translation-drop-down-list>
-          <bible-verse-drop-down-list verses="${this.#allBibleVerses.join(",")}"></bible-verse-drop-down-list>
+          <bible-translation-drop-down-list
+            bible-id="${this.bibleId}"
+            is-visible="${this.visible}"
+          ></bible-translation-drop-down-list>
+          <bible-verse-drop-down-list
+            verses="${this.#allBibleVerses.join(",")}"
+            selected-verse=${this.#selectedVerseFromQueryString}
+            bible-id="${this.bibleId}"
+            is-visible="${this.visible}"
+          ></bible-verse-drop-down-list>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
         <span slot="page-navigation-forward-button">Step 2 &gt;</span>
       </verse-text-page-template>
     `;
-
-    return divElement;
   }
 
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const css = `
-      bible-translation-drop-down-list {
-        margin-bottom: 1.5rem;
-      }
-      p {
-        margin: 1rem 0;
-        text-wrap: balance;
-      }
-    `;
-    styleElement.textContent = css;
-    return styleElement;
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE });
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.shadowRoot!.querySelector(
-      "verse-text-page-template",
-    )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({
-        nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
-      }),
-    );
-
-    this.shadowRoot!.querySelector(
-      "verse-text-page-template",
-    )?.addEventListener("page-navigation-forward-button-click", () =>
-      this.navigateToPage({
-        nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
-        previousPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
-      }),
-    );
-
-    if (this.#selectedVerseFromQueryString) {
-      this.#bibleVerseDropDownListElement?.setAttribute(
-        "selected-verse",
-        this.#selectedVerseFromQueryString,
-      );
-    }
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    super.attributeChangedCallback(name, oldValue, newValue);
-
-    for (const attributeName of SearchVersesForAwanaPage.observedAttributes) {
-      if (name === attributeName) {
-        this.#bibleTranslationDropDownListElement?.setAttribute(
-          attributeName,
-          newValue,
-        );
-        this.#bibleVerseDropDownListElement?.setAttribute(
-          attributeName,
-          newValue,
-        );
-      }
-    }
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
+    });
   }
 }
-
-window.customElements.define(
-  WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
-  SearchVersesForAwanaPage,
-);

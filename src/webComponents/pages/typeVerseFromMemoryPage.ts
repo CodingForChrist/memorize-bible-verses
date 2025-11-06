@@ -1,64 +1,69 @@
-import { BasePage } from "./basePage";
+import { LitElement, css, html } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+
+import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
 
-export class TypeVerseFromMemoryPage extends BasePage {
-  constructor() {
-    super();
+import type { PropertyValues } from "lit";
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#containerElement);
-    shadowRoot.appendChild(this.#styleElement);
-  }
+@customElement(WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE)
+export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
 
-  static get observedAttributes() {
-    return [...BasePage.observedAttributes, "verse-reference", "verse-content"];
-  }
+  pageTitle = "Type";
 
-  get verseReference() {
-    return this.getAttribute("verse-reference");
-  }
-
-  get pageTitle() {
-    return `Type ${this.verseReference ?? ""} | Memorize Bible Verses`;
-  }
-
-  get previousPage() {
-    return (
-      this.getAttribute("previous-page") ??
-      WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE
-    );
-  }
-
-  #renderDynamicContent() {
-    const dynamicPageContentContainerElement = this.shadowRoot!.querySelector(
-      "#dynamic-page-content-container",
-    );
-
-    if (!dynamicPageContentContainerElement) {
-      return;
+  static styles = css`
+    p {
+      margin: 1rem 0;
+      text-wrap: balance;
     }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      font-weight: 400;
+      text-align: center;
+    }
+  `;
 
+  get #previousPage() {
+    return this.previousPage ?? WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE;
+  }
+
+  #renderAlert() {
     if (!this.verseReference) {
-      dynamicPageContentContainerElement.innerHTML = `
+      return html`
         <alert-message type="danger">
-          <span slot="alert-message">Go back to Step 1 and select a bible verse.</span>
+          <span slot="alert-message"
+            >Go back to Step 1 and select a bible verse.</span
+          >
         </alert-message>
       `;
-      return;
     }
 
-    dynamicPageContentContainerElement.innerHTML = `
-        <h2>${this.verseReference}</h2>
-        <type-bible-verse-from-memory
-          verse-reference="${this.verseReference}">
-        </type-bible-verse-from-memory>
-      `;
+    return null;
   }
 
-  get #containerElement() {
-    const divElement = document.createElement("div");
-    divElement.innerHTML = `
-      <verse-text-page-template>
+  #renderTypeBibleVerseFromMemoryComponent() {
+    if (!this.verseReference) {
+      return null;
+    }
+
+    return html`
+      <h2>${this.verseReference}</h2>
+      <type-bible-verse-from-memory verse-reference="${this.verseReference}">
+      </type-bible-verse-from-memory>
+    `;
+  }
+
+  render() {
+    return html`
+      <verse-text-page-template
+        @page-navigation-back-button-click=${this.#handleBackButtonClick}
+        @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
+      >
         <span slot="page-heading">Type</span>
 
         <span slot="page-description">
@@ -67,67 +72,35 @@ export class TypeVerseFromMemoryPage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <span id="dynamic-page-content-container"></span>
+          ${this.#renderAlert()}
+          ${this.#renderTypeBibleVerseFromMemoryComponent()}
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
         <span slot="page-navigation-forward-button">Step 3 &gt;</span>
       </verse-text-page-template>
     `;
-
-    return divElement;
   }
 
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const css = `
-      p {
-        margin: 1rem 0;
-        text-wrap: balance;
-      }
-      h2 {
-        margin-top: 0;
-        margin-bottom: 2rem;
-        font-size: 1.5rem;
-        font-weight: 400;
-        text-align: center;
-      }
-    `;
-    styleElement.textContent = css;
-    return styleElement;
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: this.#previousPage });
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.#renderDynamicContent();
-
-    this.shadowRoot!.querySelector(
-      "verse-text-page-template",
-    )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({ nextPage: this.previousPage }),
-    );
-
-    this.shadowRoot!.querySelector(
-      "verse-text-page-template",
-    )?.addEventListener("page-navigation-forward-button-click", () =>
-      this.navigateToPage({
-        nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
-        previousPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
-      }),
-    );
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
+      previousPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
+    });
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    super.attributeChangedCallback(name, oldValue, newValue);
+  willUpdate(changedProperties: PropertyValues<this>) {
+    console.log({
+      page: "typeVerse",
+      changedProperties,
+    });
 
-    if (name === "verse-reference" && newValue) {
-      this.#renderDynamicContent();
+    if (changedProperties.has("verseReference")) {
+      this.pageTitle = `Type ${this.verseReference ?? ""}`;
     }
   }
 }
-
-window.customElements.define(
-  WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
-  TypeVerseFromMemoryPage,
-);

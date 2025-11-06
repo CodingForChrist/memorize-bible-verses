@@ -94,9 +94,7 @@ export class AccuracyReport extends HTMLElement {
       !this.verseContent ||
       !this.recitedBibleVerse
     ) {
-      return this.#renderErrorMessage(
-        "Unable to display report. Complete Step 1 and Step 2 first.",
-      );
+      return;
     }
 
     // add reference and strip out html characters
@@ -175,15 +173,6 @@ export class AccuracyReport extends HTMLElement {
     this.#reportContainerElement.appendChild(divElement);
   }
 
-  #renderErrorMessage(message: string) {
-    const alertMessageElement = document.createElement("alert-message");
-    alertMessageElement.setAttribute("type", "danger");
-    alertMessageElement.innerHTML = `
-      <span slot="alert-message">${message}</span>
-    `;
-    this.#reportContainerElement.appendChild(alertMessageElement);
-  }
-
   get #containerElement() {
     const divElement = document.createElement("div");
     divElement.id = "report-container";
@@ -224,10 +213,7 @@ export class AccuracyReport extends HTMLElement {
     this.#renderReport();
   }
 
-  attributeChangedCallback(name: string) {
-    if (name !== "recited-bible-verse") {
-      return;
-    }
+  attributeChangedCallback() {
     this.#renderReport();
   }
 }
