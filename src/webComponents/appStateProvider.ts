@@ -90,7 +90,13 @@ export class AppStateProvider extends HTMLElement {
       }
 
       const isActivePage = element === this.querySelector(nextPage);
-      element.setAttribute("is-visible", String(isActivePage));
+
+      if (isActivePage) {
+        element.setAttribute("visible", "");
+      } else {
+        element.removeAttribute("visible");
+      }
+
       if (isActivePage && previousPage) {
         element.setAttribute("previous-page", previousPage);
       }

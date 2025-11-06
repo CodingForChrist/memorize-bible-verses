@@ -1,45 +1,87 @@
-import { BasePage } from "./basePage";
+import { LitElement, css, html } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+
+import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
 
-export class ScorePage extends BasePage {
-  constructor() {
-    super();
+import type { PropertyValues } from "lit";
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#containerElement);
-    shadowRoot.appendChild(this.#styleElement);
-  }
+@customElement(WEB_COMPONENT_PAGES.SCORE_PAGE)
+export class ScorePage extends BasePage(LitElement) {
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
 
-  static get observedAttributes() {
-    return [
-      ...BasePage.observedAttributes,
-      "bible-id",
-      "verse-reference",
-      "verse-content",
-      "recited-bible-verse",
-    ];
-  }
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
 
-  get pageTitle() {
-    const verseReference = this.getAttribute("verse-reference") ?? "";
-    return `Score ${verseReference} | Memorize Bible Verses`;
-  }
+  @property({ attribute: "verse-content", reflect: true })
+  verseContent?: string;
 
-  get previousPage() {
+  @property({ attribute: "recited-bible-verse", reflect: true })
+  recitedBibleVerse?: string;
+
+  pageTitle = "Score";
+
+  static styles = css`
+    p {
+      margin: 1rem 0;
+    }
+  `;
+
+  get #previousPage() {
     return (
       this.getAttribute("previous-page") ??
       WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE
     );
   }
 
-  get #accuracyReportElement() {
-    return this.shadowRoot!.querySelector("accuracy-report") as HTMLElement;
+  #renderAlert() {
+    if (
+      !this.bibleId ||
+      !this.verseReference ||
+      !this.verseContent ||
+      !this.recitedBibleVerse
+    ) {
+      return html`
+        <alert-message type="danger">
+          <span slot="alert-message"
+            >Unable to display report. Complete Step 1 and Step 2 first.</span
+          >
+        </alert-message>
+      `;
+    }
+
+    return null;
   }
 
-  get #containerElement() {
-    const divElement = document.createElement("div");
-    divElement.innerHTML = `
-      <verse-text-page-template>
+  #renderAccuracyReportComponent() {
+    if (
+      !this.bibleId ||
+      !this.verseReference ||
+      !this.verseContent ||
+      !this.recitedBibleVerse
+    ) {
+      return null;
+    }
+
+    return html`
+      <accuracy-report
+        bible-id="${this.bibleId}"
+        verse-reference="${this.verseReference}"
+        verse-content="${this.verseContent}"
+        recited-bible-verse="${this.recitedBibleVerse}"
+      >
+      </accuracy-report>
+    `;
+  }
+
+  render() {
+    return html`
+      <verse-text-page-template
+        @page-navigation-back-button-click=${this.#handleBackButtonClick}
+        @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
+      >
         <span slot="page-heading">Score</span>
 
         <span slot="page-description">
@@ -47,58 +89,27 @@ export class ScorePage extends BasePage {
         </span>
 
         <span slot="page-content">
-          <accuracy-report></accuracy-report>
+          ${this.#renderAlert()} ${this.#renderAccuracyReportComponent()}
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
         <span slot="page-navigation-forward-button">New Verse</span>
       </verse-text-page-template>
     `;
-
-    return divElement;
   }
 
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const css = `
-      p {
-        margin: 1rem 0;
-      }
-    `;
-    styleElement.textContent = css;
-    return styleElement;
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: this.#previousPage });
   }
 
-  #navigateToNextPage() {
+  #handleForwardButtonClick() {
     // do a full page redirect to clear out state
     window.location.href = `/memorize-bible-verses/?page=${WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE}`;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.shadowRoot!.querySelector(
-      "verse-text-page-template",
-    )?.addEventListener("page-navigation-back-button-click", () =>
-      this.navigateToPage({ nextPage: this.previousPage }),
-    );
-
-    this.shadowRoot!.querySelector(
-      "verse-text-page-template",
-    )?.addEventListener("page-navigation-forward-button-click", () =>
-      this.#navigateToNextPage(),
-    );
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    super.attributeChangedCallback(name, oldValue, newValue);
-
-    for (const attributeName of ScorePage.observedAttributes) {
-      if (name === attributeName) {
-        this.#accuracyReportElement?.setAttribute(attributeName, newValue);
-      }
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("verseReference")) {
+      this.pageTitle = `Score ${this.verseReference ?? ""}`;
     }
   }
 }
-
-window.customElements.define(WEB_COMPONENT_PAGES.SCORE_PAGE, ScorePage);
