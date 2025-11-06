@@ -94,11 +94,6 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
-    console.log({
-      page: "typeVerse",
-      changedProperties,
-    });
-
     if (changedProperties.has("verseReference")) {
       this.pageTitle = `Type ${this.verseReference ?? ""}`;
     }
