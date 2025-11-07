@@ -1,131 +1,74 @@
-import {
-  LOADING_STATES,
-  CUSTOM_EVENTS,
-  MEMORIZE_BIBLE_VERSES_API_BASE_URL,
-  type LoadingStates,
-} from "../constants";
+import { LitElement, css, html, type PropertyValues } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+import { Task } from "@lit/task";
 
 import { router } from "../services/router";
-
 import localBibleTranslations from "../data/bibleTranslations.json";
+
+import {
+  CUSTOM_EVENTS,
+  MEMORIZE_BIBLE_VERSES_API_BASE_URL,
+} from "../constants";
 
 import type {
   BibleTranslation,
   CustomEventUpdateBibleTranslation,
 } from "../types";
 
-export class BibleTranslationDropDownList extends HTMLElement {
-  selectedBibleTranslation?: BibleTranslation;
+@customElement("bible-translation-drop-down-list")
+export class BibleTranslationDropDownList extends LitElement {
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId: string = this.#defaultBibleId;
+
+  @property({ type: Boolean, reflect: true })
+  visible: boolean = false;
+
   static bibleTranslations: BibleTranslation[] = [];
 
-  constructor() {
-    super();
-
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#styleElement);
-  }
-
-  static get observedAttributes() {
-    return ["is-visible", "loading-state", "bible-id"];
-  }
-
-  get isVisible() {
-    return this.getAttribute("is-visible") === "true";
-  }
-
-  get loadingState() {
-    return this.getAttribute("loading-state") as LoadingStates;
-  }
-
-  set loadingState(value: LoadingStates) {
-    if (value === LOADING_STATES.PENDING) {
-      this.#showLoadingSpinner();
-    } else {
-      this.#hideLoadingSpinner();
+  static styles = css`
+    :host {
+      display: block;
     }
-
-    this.setAttribute("loading-state", value);
-  }
-
-  #showLoadingSpinner() {
-    const loadingSpinnerElement = document.createElement("loading-spinner");
-    this.shadowRoot!.appendChild(loadingSpinnerElement);
-  }
-
-  #hideLoadingSpinner() {
-    this.shadowRoot!.querySelector("loading-spinner")?.remove();
-  }
-
-  get #bibleTranslationSelectElement() {
-    return this.shadowRoot!.querySelector<HTMLSelectElement>("select");
-  }
-
-  #sendEventForSelectedBibleTranslation() {
-    if (!this.selectedBibleTranslation) {
-      return;
+    select {
+      font: inherit;
+      color: inherit;
+      line-height: 1.5rem;
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0.5rem 2rem 0.5rem 0.75rem;
+      background-color: var(--color-primary-mint-cream);
+      border: 1px solid var(--color-light-gray);
+      border-radius: 1.5rem;
+      print-color-adjust: exact;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
     }
-    const eventUpdateSelectedBibleTranslation =
-      new CustomEvent<CustomEventUpdateBibleTranslation>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
-        {
-          detail: { bibleTranslation: this.selectedBibleTranslation },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventUpdateSelectedBibleTranslation);
-  }
-
-  #findBibleTranslationByAbbreviationLocal(abbreviationLocal: string) {
-    const bibleTranslation =
-      BibleTranslationDropDownList.bibleTranslations.find(
-        (bibleTranslation) =>
-          bibleTranslation.abbreviationLocal === abbreviationLocal,
-      );
-    if (!bibleTranslation) {
-      throw new Error(
-        "Failed to find the bible translation by abbreviationLocal",
-      );
+    select:focus {
+      border-color: var(--color-primary-mint-cream);
+      outline: 1px solid var(--color-gray);
     }
-    return bibleTranslation;
-  }
+    select:has(option.label-long:checked) {
+      font-size: 80%;
 
-  #findBibleTranslationById(bibleId: string) {
-    const bibleTranslation =
-      BibleTranslationDropDownList.bibleTranslations.find(
-        (bibleTranslation) => bibleTranslation.id === bibleId,
-      );
-    if (!bibleTranslation) {
-      throw new Error("Failed to find the bible translation by id");
+      @media (width >= 24rem) {
+        font-size: 85%;
+      }
+      @media (width >= 28rem) {
+        font-size: 90%;
+      }
+      @media (width >= 32rem) {
+        font-size: 100%;
+      }
     }
-    return bibleTranslation;
-  }
+  `;
 
-  #setDefaultBibleTranslation() {
-    const bibleIdAttribute = this.getAttribute("bible-id");
-    if (bibleIdAttribute) {
-      this.selectedBibleTranslation =
-        this.#findBibleTranslationById(bibleIdAttribute);
-    } else {
-      const bibleTranslationFromQueryString =
-        router.getParam("translation") || "NKJV";
-      this.selectedBibleTranslation =
-        this.#findBibleTranslationByAbbreviationLocal(
-          bibleTranslationFromQueryString,
-        );
-      this.#sendEventForSelectedBibleTranslation();
-    }
-  }
-
-  async #fetchBibles() {
-    // avoid making a fetch call when results are already loaded
-    if (BibleTranslationDropDownList.bibleTranslations.length) {
-      this.loadingState = LOADING_STATES.RESOLVED;
-      return;
-    }
-
-    try {
-      this.loadingState = LOADING_STATES.PENDING;
+  #bibleTranslationTask = new Task(this, {
+    task: async () => {
       const response = await fetch(
         `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles`,
         {
@@ -141,160 +84,140 @@ export class BibleTranslationDropDownList extends HTMLElement {
           },
         },
       );
-      const json = await response.json();
-      if (response.ok && json.data.length) {
-        BibleTranslationDropDownList.bibleTranslations = json.data;
-        this.loadingState = LOADING_STATES.RESOLVED;
-      } else {
-        throw new Error("Failed to load Bibles");
-      }
-    } catch (_error) {
-      this.loadingState = LOADING_STATES.REJECTED;
-    }
-  }
-
-  #getSortedBibleTranslationsWithLabels() {
-    const bibleTranslationsWithLabels =
-      BibleTranslationDropDownList.bibleTranslations.map((bibleTranslation) => {
-        const supportedBible = localBibleTranslations.find(
-          ({ id }) => bibleTranslation.id === id,
+      if (!response.ok) {
+        throw new Error(
+          `Invalid status code returned when fetching bibles: ${response.status}`,
         );
-        if (!supportedBible) {
+      }
+
+      try {
+        const json = await response.json();
+        const enhancedBibleData = this.#validateAndEnhanceBibleData(json);
+        BibleTranslationDropDownList.bibleTranslations = enhancedBibleData;
+        this.#sendEventForSelectedBibleTranslation(this.bibleId);
+        return enhancedBibleData;
+      } catch (error) {
+        throw new Error(`Invalid data returned when fetching bibles: ${error}`);
+      }
+    },
+    args: () => [],
+    autoRun: false,
+  });
+
+  #validateAndEnhanceBibleData(bibleData: any) {
+    if (!Array.isArray(bibleData.data)) {
+      throw new Error("expected data to be an array");
+    }
+
+    const enhancedBibleData: BibleTranslation[] = bibleData.data.map(
+      (bible: BibleTranslation) => {
+        const foundLocalBibleTranslation = localBibleTranslations.find(
+          ({ id }) => bible.id === id,
+        );
+        if (!foundLocalBibleTranslation) {
           throw new Error("Failed to find the supported bible by id");
         }
         return {
-          ...bibleTranslation,
-          label: supportedBible.label,
+          ...bible,
+          customLabel: foundLocalBibleTranslation.label,
         };
-      });
-    return bibleTranslationsWithLabels.sort((a, b) =>
-      a.label.localeCompare(b.label),
+      },
+    );
+
+    return enhancedBibleData.sort((a, b) =>
+      a.customLabel.localeCompare(b.customLabel),
     );
   }
 
   #renderSelectElement() {
-    this.#setDefaultBibleTranslation();
+    return html`
+      <select
+        .value="${this.bibleId}"
+        @change=${this.#handleSelectElementChange}
+      >
+        ${BibleTranslationDropDownList.bibleTranslations.map(
+          ({ id, customLabel }) => html`
+            <option .value=${id} ?selected=${id === this.bibleId}>
+              ${customLabel}
+            </option>
+          `,
+        )}
+      </select>
+    `;
+  }
 
-    const selectElement = document.createElement("select");
-    selectElement.name = "select-bible-translation";
-
-    for (const { id, label } of this.#getSortedBibleTranslationsWithLabels()) {
-      const optionElement = document.createElement("option");
-      optionElement.value = id;
-      optionElement.textContent = label;
-      if (label.length > 36) {
-        optionElement.classList.add("label-long");
-      }
-      selectElement.appendChild(optionElement);
+  render() {
+    if (!this.visible) {
+      return null;
     }
 
-    selectElement.value = this.selectedBibleTranslation!.id;
-
-    selectElement.onchange = () => {
-      this.selectedBibleTranslation = this.#findBibleTranslationById(
-        selectElement.value,
-      );
-      this.#sendEventForSelectedBibleTranslation();
-    };
-
-    this.shadowRoot!.appendChild(selectElement);
-  }
-
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const css = `
-      :host {
-        display: block;
-      }
-      select {
-        font: inherit;
-        color: inherit;
-        line-height: 1.5rem;
-        display: block;
-        width: 100%;
-        margin: 0;
-        padding: 0.5rem 2rem 0.5rem 0.75rem;
-        background-color: var(--color-primary-mint-cream);
-        border: 1px solid var(--color-light-gray);
-        border-radius: 1.5rem;
-        print-color-adjust: exact;
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-        background-position: right 0.5rem center;
-        background-repeat: no-repeat;
-        background-size: 1.5em 1.5em;
-      }
-      select:focus {
-        border-color: var(--color-primary-mint-cream);
-        outline: 1px solid var(--color-gray);
-      }
-      select:has(option.label-long:checked) {
-        font-size: 80%;
-
-        @media (width >= 24rem) {
-          font-size: 85%;
-        }
-        @media (width >= 28rem) {
-          font-size: 90%;
-        }
-        @media (width >= 32rem) {
-          font-size: 100%;
-        }
-      }
-    `;
-    styleElement.textContent = css;
-    return styleElement;
-  }
-
-  #renderErrorMessage(message: string) {
-    // remove existing alert message
-    this.shadowRoot!.querySelector('alert-message[type="danger"]')?.remove();
-
-    const alertMessageElement = document.createElement("alert-message");
-    alertMessageElement.setAttribute("type", "danger");
-    alertMessageElement.innerHTML = `
-      <span slot="alert-message">${message}</span>
-    `;
-    this.shadowRoot!.appendChild(alertMessageElement);
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (
-      name === "is-visible" &&
-      newValue === "true" &&
-      !this.#bibleTranslationSelectElement
-    ) {
-      return this.#fetchBibles();
+    if (BibleTranslationDropDownList.bibleTranslations.length) {
+      return this.#renderSelectElement();
     }
-    if (
-      name === "bible-id" &&
-      this.#bibleTranslationSelectElement &&
-      oldValue !== newValue
-    ) {
-      this.selectedBibleTranslation = this.#findBibleTranslationById(newValue);
-      this.#bibleTranslationSelectElement.value = newValue;
+
+    return this.#bibleTranslationTask.render({
+      pending: () => html`<loading-spinner></loading-spinner>`,
+      complete: () => this.#renderSelectElement(),
+      error: () => html`
+        <alert-message type="danger">
+          <span slot="alert-message"
+            >Failed to load Bibles. Please try again later.</span
+          >
+        </alert-message>
+      `,
+    });
+  }
+
+  updated(changedProperties: PropertyValues<this>) {
+    if (!changedProperties.has("visible")) {
       return;
     }
 
-    // wait for bibles to finish loading before rendering
     if (
-      name === "loading-state" &&
-      this.loadingState === LOADING_STATES.RESOLVED
+      this.visible &&
+      !BibleTranslationDropDownList.bibleTranslations.length
     ) {
-      return this.#renderSelectElement();
-    }
-    if (
-      name === "loading-state" &&
-      this.loadingState === LOADING_STATES.REJECTED
-    ) {
-      return this.#renderErrorMessage(
-        "Failed to load Bibles. Please try again later.",
-      );
+      this.#bibleTranslationTask.run();
     }
   }
-}
 
-window.customElements.define(
-  "bible-translation-drop-down-list",
-  BibleTranslationDropDownList,
-);
+  #handleSelectElementChange(event: Event) {
+    this.bibleId = (event.target as HTMLSelectElement).value;
+    this.#sendEventForSelectedBibleTranslation(this.bibleId);
+  }
+
+  get #defaultBibleId() {
+    const abbreviation = router.getParam("translation") || "NKJV";
+    const localBibleTranslation = localBibleTranslations.find(
+      (bibleTranslation) => bibleTranslation.abbreviationLocal === abbreviation,
+    );
+
+    if (!localBibleTranslation) {
+      throw new Error("Failed to find the bible translation by abbreviation");
+    }
+    return localBibleTranslation.id;
+  }
+
+  #sendEventForSelectedBibleTranslation(bibleId: string) {
+    const bibleTranslation =
+      BibleTranslationDropDownList.bibleTranslations.find(
+        (bibleTranslation) => bibleTranslation.id === bibleId,
+      );
+    if (!bibleTranslation) {
+      throw new Error("Failed to find the bible translation by id");
+    }
+
+    const eventUpdateSelectedBibleTranslation =
+      new CustomEvent<CustomEventUpdateBibleTranslation>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
+        {
+          detail: {
+            bibleTranslation,
+          },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventUpdateSelectedBibleTranslation);
+  }
+}
