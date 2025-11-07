@@ -1,30 +1,29 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { Task } from "@lit/task";
 
+import { fetchBibleTranslationsWithCache } from "../services/api";
 import { router } from "../services/router";
 import localBibleTranslations from "../data/bibleTranslations.json";
 
-import {
-  CUSTOM_EVENTS,
-  MEMORIZE_BIBLE_VERSES_API_BASE_URL,
-} from "../constants";
+import { CUSTOM_EVENTS } from "../constants";
 
 import type {
   BibleTranslation,
   CustomEventUpdateBibleTranslation,
 } from "../types";
 
+type BibleTranslationWithCustomLabel = BibleTranslation & {
+  customLabel: string;
+};
+
 @customElement("bible-translation-drop-down-list")
 export class BibleTranslationDropDownList extends LitElement {
   @property({ attribute: "bible-id", reflect: true })
   bibleId: string = this.#defaultBibleId;
 
-  @property({ type: Boolean, reflect: true })
-  visible: boolean = false;
-
-  static bibleTranslations: BibleTranslation[] = [];
+  bibleTranslations: BibleTranslationWithCustomLabel[] = [];
 
   static styles = css`
     :host {
@@ -69,39 +68,20 @@ export class BibleTranslationDropDownList extends LitElement {
 
   #bibleTranslationTask = new Task(this, {
     task: async () => {
-      const response = await fetch(
-        `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            language: "eng",
-            ids: localBibleTranslations.map(({ id }) => id).toString(),
-            includeFullDetails: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "Application-User-Id": "memorize_bible_verses_web_app",
-          },
-        },
-      );
-      if (!response.ok) {
-        throw new Error(
-          `Invalid status code returned when fetching bibles: ${response.status}`,
-        );
-      }
-
       try {
-        const json = await response.json();
-        const enhancedBibleData = this.#validateAndEnhanceBibleData(json);
-        BibleTranslationDropDownList.bibleTranslations = enhancedBibleData;
+        const bibleData = await fetchBibleTranslationsWithCache({
+          language: "eng",
+          ids: localBibleTranslations.map(({ id }) => id).toString(),
+          includeFullDetails: true,
+        });
+        this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
         this.#sendEventForSelectedBibleTranslation(this.bibleId);
-        return enhancedBibleData;
+        return this.bibleTranslations;
       } catch (error) {
-        throw new Error(`Invalid data returned when fetching bibles: ${error}`);
+        throw new Error(`Error fetching bibles: ${error}`);
       }
     },
     args: () => [],
-    autoRun: false,
   });
 
   #validateAndEnhanceBibleData(bibleData: any) {
@@ -109,8 +89,8 @@ export class BibleTranslationDropDownList extends LitElement {
       throw new Error("expected data to be an array");
     }
 
-    const enhancedBibleData: BibleTranslation[] = bibleData.data.map(
-      (bible: BibleTranslation) => {
+    const enhancedBibleData: BibleTranslationWithCustomLabel[] =
+      bibleData.data.map((bible: BibleTranslation) => {
         const foundLocalBibleTranslation = localBibleTranslations.find(
           ({ id }) => bible.id === id,
         );
@@ -121,8 +101,7 @@ export class BibleTranslationDropDownList extends LitElement {
           ...bible,
           customLabel: foundLocalBibleTranslation.label,
         };
-      },
-    );
+      });
 
     return enhancedBibleData.sort((a, b) =>
       a.customLabel.localeCompare(b.customLabel),
@@ -135,7 +114,7 @@ export class BibleTranslationDropDownList extends LitElement {
         .value="${this.bibleId}"
         @change=${this.#handleSelectElementChange}
       >
-        ${BibleTranslationDropDownList.bibleTranslations.map(
+        ${this.bibleTranslations.map(
           ({ id, customLabel }) => html`
             <option .value=${id} ?selected=${id === this.bibleId}>
               ${customLabel}
@@ -147,11 +126,7 @@ export class BibleTranslationDropDownList extends LitElement {
   }
 
   render() {
-    if (!this.visible) {
-      return null;
-    }
-
-    if (BibleTranslationDropDownList.bibleTranslations.length) {
+    if (this.bibleTranslations.length) {
       return this.#renderSelectElement();
     }
 
@@ -166,19 +141,6 @@ export class BibleTranslationDropDownList extends LitElement {
         </alert-message>
       `,
     });
-  }
-
-  updated(changedProperties: PropertyValues<this>) {
-    if (!changedProperties.has("visible")) {
-      return;
-    }
-
-    if (
-      this.visible &&
-      !BibleTranslationDropDownList.bibleTranslations.length
-    ) {
-      this.#bibleTranslationTask.run();
-    }
   }
 
   #handleSelectElementChange(event: Event) {
@@ -199,10 +161,9 @@ export class BibleTranslationDropDownList extends LitElement {
   }
 
   #sendEventForSelectedBibleTranslation(bibleId: string) {
-    const bibleTranslation =
-      BibleTranslationDropDownList.bibleTranslations.find(
-        (bibleTranslation) => bibleTranslation.id === bibleId,
-      );
+    const bibleTranslation = this.bibleTranslations.find(
+      (bibleTranslation) => bibleTranslation.id === bibleId,
+    );
     if (!bibleTranslation) {
       throw new Error("Failed to find the bible translation by id");
     }
