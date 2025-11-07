@@ -1,11 +1,10 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { when } from "lit/directives/when.js";
 
 import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
-
-import type { PropertyValues } from "lit";
 
 @customElement(WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE)
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
@@ -35,10 +34,6 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
       width: 100%;
     }
   `;
-
-  get #previousPage() {
-    return this.previousPage ?? WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE;
-  }
 
   get #hasSupportForSpeechRecognition() {
     return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
@@ -70,7 +65,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
           @click=${() =>
             this.navigateToPage({
               nextPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
-              previousPage: this.#previousPage,
+              previousPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
             })}
         >
           <span slot="button-text">
@@ -81,24 +76,6 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
     }
 
     return null;
-  }
-
-  #renderReciteBibleVerseComponent() {
-    if (
-      !this.verseReference ||
-      !this.verseContent ||
-      !this.#hasSupportForSpeechRecognition
-    ) {
-      return null;
-    }
-
-    return html`
-      <h2>${this.verseReference}</h2>
-      <recite-bible-verse
-        verse-reference="${this.verseReference}"
-        verse-content="${this.verseContent}"
-      ></recite-bible-verse>
-    `;
   }
 
   render() {
@@ -121,7 +98,19 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
         </span>
 
         <span slot="page-content">
-          ${this.#renderAlert()} ${this.#renderReciteBibleVerseComponent()}
+          ${when(
+            this.verseReference &&
+              this.verseContent &&
+              this.#hasSupportForSpeechRecognition,
+            () => html`
+              <h2>${this.verseReference}</h2>
+              <recite-bible-verse
+                verse-reference="${this.verseReference}"
+                verse-content="${this.verseContent}"
+              ></recite-bible-verse>
+            `,
+            () => this.#renderAlert(),
+          )}
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -131,7 +120,9 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: this.#previousPage });
+    this.navigateToPage({
+      nextPage: this.previousPage ?? WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+    });
   }
 
   #handleForwardButtonClick() {

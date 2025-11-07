@@ -103,10 +103,11 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             bible-id=${this.bibleId || nothing}
             ?visible=${this.visible}
           ></bible-translation-drop-down-list>
+
           <bible-verse-of-the-day-fetch-result
-            date="${dateShortFormat}"
-            bible-id="${this.bibleId}"
-            is-visible="${this.visible}"
+            date=${dateShortFormat}
+            bible-id=${this.bibleId}
+            is-visible=${this.visible}
           >
           </bible-verse-of-the-day-fetch-result>
         </span>

@@ -103,6 +103,15 @@ export class SearchOptionsPage extends BasePage(LitElement) {
   `;
 
   render() {
+    const {
+      SEARCH_VERSE_OF_THE_DAY_PAGE,
+      SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+      SEARCH_PSALM_23_PAGE,
+      SEARCH_VERSES_FOR_AWANA_PAGE,
+      SEARCH_ADVANCED_PAGE,
+      INSTRUCTIONS_PAGE,
+    } = WEB_COMPONENT_PAGES;
+
     return html`
       <h1>Search</h1>
 
@@ -114,7 +123,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           type="button"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE,
+              nextPage: SEARCH_VERSE_OF_THE_DAY_PAGE,
             })}
         >
           <span slot="button-text">Verse of the Day</span>
@@ -125,8 +134,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           type="button"
           @click=${() =>
             this.navigateToPage({
-              nextPage:
-                WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+              nextPage: SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
             })}
         >
           <span slot="button-text">Share the Gospel</span>
@@ -137,7 +145,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           type="button"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE,
+              nextPage: SEARCH_PSALM_23_PAGE,
             })}
         >
           <span slot="button-text">Psalm 23</span>
@@ -148,7 +156,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           type="button"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
+              nextPage: SEARCH_VERSES_FOR_AWANA_PAGE,
             })}
         >
           <span slot="button-text">Awana Club for Kids</span>
@@ -159,7 +167,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           type="button"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+              nextPage: SEARCH_ADVANCED_PAGE,
             })}
         >
           <span slot="button-text">Power User: Choose Your Verses</span>
@@ -172,7 +180,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           brand="secondary"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.INSTRUCTIONS_PAGE,
+              nextPage: INSTRUCTIONS_PAGE,
             })}
         >
           <span slot="button-text">&lt; Back</span>
@@ -181,7 +189,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           type="button"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+              nextPage: SEARCH_ADVANCED_PAGE,
             })}
         >
           <span slot="button-text">Step 1 &gt;</span>

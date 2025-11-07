@@ -37,11 +37,12 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
             bible-id=${this.bibleId || nothing}
             ?visible=${this.visible}
           ></bible-translation-drop-down-list>
+
           <bible-verse-fetch-result
             verse-reference="Psalm 23:1-6"
             should-display-section-headings="true"
-            bible-id="${this.bibleId}"
-            is-visible="${this.visible}"
+            bible-id=${this.bibleId}
+            is-visible=${this.visible}
           ></bible-verse-fetch-result>
         </span>
 

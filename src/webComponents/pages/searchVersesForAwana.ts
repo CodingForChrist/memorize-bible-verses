@@ -126,11 +126,12 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
             bible-id=${this.bibleId || nothing}
             ?visible=${this.visible}
           ></bible-translation-drop-down-list>
+
           <bible-verse-drop-down-list
-            verses="${this.#allBibleVerses.join(",")}"
+            verses=${this.#allBibleVerses.join(",")}
             selected-verse=${this.#selectedVerseFromQueryString}
-            bible-id="${this.bibleId}"
-            is-visible="${this.visible}"
+            bible-id=${this.bibleId}
+            is-visible=${this.visible}
           ></bible-verse-drop-down-list>
         </span>
 
