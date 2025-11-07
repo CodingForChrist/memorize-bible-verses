@@ -5,6 +5,7 @@ export type BibleTranslation = {
   abbreviation: string;
   abbreviationLocal: string;
   description: string;
+  customLabel: string;
 };
 
 export type BibleVerse = {
