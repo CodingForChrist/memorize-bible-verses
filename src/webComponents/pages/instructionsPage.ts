@@ -58,7 +58,7 @@ export class InstructionsPage extends BasePage(LitElement) {
   render() {
     return html`
       <header>
-        <img src="${logoURL}" alt="Memorize Bible Verses" />
+        <img src=${logoURL} alt="Memorize Bible Verses" />
       </header>
       <h2>Search</h2>
       <p>

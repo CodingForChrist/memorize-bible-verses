@@ -44,9 +44,10 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
             bible-id=${this.bibleId || nothing}
             ?visible=${this.visible}
           ></bible-translation-drop-down-list>
+
           <bible-verse-advanced-search
-            bible-id="${this.bibleId}"
-            is-visible="${this.visible}"
+            bible-id=${this.bibleId}
+            is-visible=${this.visible}
           ></bible-verse-advanced-search>
         </span>
 

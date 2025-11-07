@@ -1,9 +1,7 @@
-import { LitElement } from "lit";
+import { LitElement, type PropertyValues } from "lit";
 import { property } from "lit/decorators/property.js";
 
 import { CUSTOM_EVENTS } from "../../constants";
-
-import type { PropertyValues } from "lit";
 import type { CustomEventNavigateToPage, PageNavigation } from "../../types";
 
 type Constructor<T> = new (...args: any[]) => T;

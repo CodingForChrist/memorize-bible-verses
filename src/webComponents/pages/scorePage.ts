@@ -1,11 +1,10 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { when } from "lit/directives/when.js";
 
 import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
-
-import type { PropertyValues } from "lit";
 
 @customElement(WEB_COMPONENT_PAGES.SCORE_PAGE)
 export class ScorePage extends BasePage(LitElement) {
@@ -29,53 +28,6 @@ export class ScorePage extends BasePage(LitElement) {
     }
   `;
 
-  get #previousPage() {
-    return (
-      this.getAttribute("previous-page") ??
-      WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE
-    );
-  }
-
-  #renderAlert() {
-    if (
-      !this.bibleId ||
-      !this.verseReference ||
-      !this.verseContent ||
-      !this.recitedBibleVerse
-    ) {
-      return html`
-        <alert-message type="danger">
-          <span slot="alert-message"
-            >Unable to display report. Complete Step 1 and Step 2 first.</span
-          >
-        </alert-message>
-      `;
-    }
-
-    return null;
-  }
-
-  #renderAccuracyReportComponent() {
-    if (
-      !this.bibleId ||
-      !this.verseReference ||
-      !this.verseContent ||
-      !this.recitedBibleVerse
-    ) {
-      return null;
-    }
-
-    return html`
-      <accuracy-report
-        bible-id="${this.bibleId}"
-        verse-reference="${this.verseReference}"
-        verse-content="${this.verseContent}"
-        recited-bible-verse="${this.recitedBibleVerse}"
-      >
-      </accuracy-report>
-    `;
-  }
-
   render() {
     return html`
       <verse-text-page-template
@@ -89,7 +41,28 @@ export class ScorePage extends BasePage(LitElement) {
         </span>
 
         <span slot="page-content">
-          ${this.#renderAlert()} ${this.#renderAccuracyReportComponent()}
+          ${when(
+            this.bibleId &&
+              this.verseReference &&
+              this.verseContent &&
+              this.recitedBibleVerse,
+            () =>
+              html` <accuracy-report
+                bible-id=${this.bibleId}
+                verse-reference=${this.verseReference}
+                verse-content=${this.verseContent}
+                recited-bible-verse=${this.recitedBibleVerse}
+              >
+              </accuracy-report>`,
+            () => html`
+              <alert-message type="danger">
+                <span slot="alert-message"
+                  >Unable to display report. Complete Step 1 and Step 2
+                  first.</span
+                >
+              </alert-message>
+            `,
+          )}
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -99,7 +72,10 @@ export class ScorePage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: this.#previousPage });
+    this.navigateToPage({
+      nextPage:
+        this.previousPage ?? WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+    });
   }
 
   #handleForwardButtonClick() {

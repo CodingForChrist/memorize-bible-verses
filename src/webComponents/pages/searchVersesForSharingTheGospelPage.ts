@@ -151,10 +151,11 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
             bible-id=${this.bibleId || nothing}
             ?visible=${this.visible}
           ></bible-translation-drop-down-list>
+
           <bible-verse-fetch-result
-            verse-reference="${this.verseReference}"
-            bible-id="${this.bibleId}"
-            is-visible="${this.visible}"
+            verse-reference=${this.verseReference}
+            bible-id=${this.bibleId}
+            is-visible=${this.visible}
           ></bible-verse-fetch-result>
         </div>
 
@@ -166,7 +167,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
 
   #handleVerseButtonClick(event: Event) {
     const selectedButtonElement = event.target as HTMLButtonElement;
-    this.verseReference = selectedButtonElement.innerText;
+    this.verseReference = selectedButtonElement.innerText.trim();
     selectedButtonElement.closest("li")?.scrollIntoView();
   }
 
