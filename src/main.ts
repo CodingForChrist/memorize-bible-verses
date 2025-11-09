@@ -11,11 +11,8 @@ import "./webComponents/brandedButton";
 
 // step 1 components
 import "./webComponents/bibleTranslationDropDownList";
-import "./webComponents/bibleVerseDropDownList";
-import "./webComponents/bibleVerseSearchForm";
 import "./webComponents/bibleVerseFetchResult";
 import "./webComponents/bibleVerseOfTheDayFetchResult";
-import "./webComponents/bibleVerseAdvancedSearch";
 
 // step 2 component
 import "./webComponents/reciteBibleVerse";

@@ -1,27 +1,41 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
 import { router } from "../../services/router";
+import { formSelectStyles } from "../sharedStyles";
+
+import {
+  getOldTestamentVerseReferences,
+  getNewTestamentVerseReferences,
+  sortBibleVerseReferences,
+} from "../../services/sortBibleVerses";
 
 @customElement(WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE)
 export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
 
+  @state()
+  selectedBibleVerse = this.#selectedVerseFromQueryString;
+
   pageTitle = "Verses for Awana Club for Kids";
 
-  static styles = css`
-    bible-translation-drop-down-list {
-      margin-bottom: 1.5rem;
-    }
-    p {
-      margin: 1rem 0;
-      text-wrap: balance;
-    }
-  `;
+  static styles = [
+    formSelectStyles,
+    css`
+      bible-translation-drop-down-list {
+        margin-bottom: 1.5rem;
+      }
+      p {
+        margin: 1rem 0;
+        text-wrap: balance;
+      }
+    `,
+  ];
 
   // https://store.awana.org/product/tt-mission-discovery-of-grace-kids-handbook
   get #awanaBookDiscoveryOfGraceBibleVerses() {
@@ -97,6 +111,20 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
     ];
   }
 
+  get #versesFromOldTestament() {
+    const oldTestamentVerses = getOldTestamentVerseReferences(
+      this.#allBibleVerses,
+    );
+    return sortBibleVerseReferences(oldTestamentVerses);
+  }
+
+  get #versesFromNewTestament() {
+    const newTestamentVerses = getNewTestamentVerseReferences(
+      this.#allBibleVerses,
+    );
+    return sortBibleVerseReferences(newTestamentVerses);
+  }
+
   get #selectedVerseFromQueryString() {
     const verseReferenceFromQueryString = router.getParam("verse");
 
@@ -106,6 +134,49 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
     ) {
       return verseReferenceFromQueryString;
     }
+  }
+
+  #renderBibleVerseSelect() {
+    if (!this.bibleId) {
+      return null;
+    }
+
+    return html`
+      <select
+        .value="${this.selectedBibleVerse}"
+        @change=${this.#handleBibleVerseSelectElementChange}
+        autofocus
+      >
+        <option disabled value="default" ?selected=${!this.selectedBibleVerse}>
+          -- select a verse --
+        </option>
+        <optgroup label="Old Testament">
+          ${this.#versesFromOldTestament.map(
+            (verse) => html`
+              <option
+                .value=${verse}
+                ?selected=${verse === this.selectedBibleVerse}
+              >
+                ${verse}
+              </option>
+            `,
+          )}
+        </optgroup>
+
+        <optgroup label="New Testament">
+          ${this.#versesFromNewTestament.map(
+            (verse) => html`
+              <option
+                .value=${verse}
+                ?selected=${verse === this.selectedBibleVerse}
+              >
+                ${verse}
+              </option>
+            `,
+          )}
+        </optgroup>
+      </select>
+    `;
   }
 
   render() {
@@ -123,16 +194,16 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
 
         <span slot="page-content">
           <bible-translation-drop-down-list
-            bible-id=${this.bibleId || nothing}
-            ?visible=${this.visible}
+            bible-id=${this.bibleId}
           ></bible-translation-drop-down-list>
 
-          <bible-verse-drop-down-list
-            verses=${this.#allBibleVerses.join(",")}
-            selected-verse=${this.#selectedVerseFromQueryString}
+          ${this.#renderBibleVerseSelect()}
+
+          <bible-verse-fetch-result
             bible-id=${this.bibleId}
-            is-visible=${this.visible}
-          ></bible-verse-drop-down-list>
+            verse-reference=${this.selectedBibleVerse}
+            ?visible=${this.visible}
+          ></bible-verse-fetch-result>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -150,5 +221,9 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
       nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
       previousPage: WEB_COMPONENT_PAGES.SEARCH_VERSES_FOR_AWANA_PAGE,
     });
+  }
+
+  #handleBibleVerseSelectElementChange(event: Event) {
+    this.selectedBibleVerse = (event.target as HTMLSelectElement).value;
   }
 }
