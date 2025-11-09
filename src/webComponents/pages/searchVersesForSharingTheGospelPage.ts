@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -148,14 +148,13 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
           </ol>
 
           <bible-translation-drop-down-list
-            bible-id=${this.bibleId || nothing}
-            ?visible=${this.visible}
+            bible-id=${this.bibleId}
           ></bible-translation-drop-down-list>
 
           <bible-verse-fetch-result
             verse-reference=${this.verseReference}
             bible-id=${this.bibleId}
-            is-visible=${this.visible}
+            ?visible=${this.visible}
           ></bible-verse-fetch-result>
         </div>
 

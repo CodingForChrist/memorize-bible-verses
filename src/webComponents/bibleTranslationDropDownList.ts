@@ -5,6 +5,7 @@ import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
 import { router } from "../services/router";
+import { formSelectStyles } from "./sharedStyles";
 import localBibleTranslations from "../data/bibleTranslations.json";
 
 import { CUSTOM_EVENTS } from "../constants";
@@ -25,46 +26,27 @@ export class BibleTranslationDropDownList extends LitElement {
 
   bibleTranslations: BibleTranslationWithCustomLabel[] = [];
 
-  static styles = css`
-    :host {
-      display: block;
-    }
-    select {
-      font: inherit;
-      color: inherit;
-      line-height: 1.5rem;
-      display: block;
-      width: 100%;
-      margin: 0;
-      padding: 0.5rem 2rem 0.5rem 0.75rem;
-      background-color: var(--color-primary-mint-cream);
-      border: 1px solid var(--color-light-gray);
-      border-radius: 1.5rem;
-      print-color-adjust: exact;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='oklch(55.1%25 0.027 264.364)' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-      background-position: right 0.5rem center;
-      background-repeat: no-repeat;
-      background-size: 1.5em 1.5em;
-    }
-    select:focus {
-      border-color: var(--color-primary-mint-cream);
-      outline: 1px solid var(--color-gray);
-    }
-    select:has(option.label-long:checked) {
-      font-size: 80%;
+  static styles = [
+    formSelectStyles,
+    css`
+      :host {
+        display: block;
+      }
+      select:has(option.label-long:checked) {
+        font-size: 80%;
 
-      @media (width >= 24rem) {
-        font-size: 85%;
+        @media (width >= 24rem) {
+          font-size: 85%;
+        }
+        @media (width >= 28rem) {
+          font-size: 90%;
+        }
+        @media (width >= 32rem) {
+          font-size: 100%;
+        }
       }
-      @media (width >= 28rem) {
-        font-size: 90%;
-      }
-      @media (width >= 32rem) {
-        font-size: 100%;
-      }
-    }
-  `;
+    `,
+  ];
 
   #bibleTranslationTask = new Task(this, {
     task: async () => {
@@ -136,7 +118,7 @@ export class BibleTranslationDropDownList extends LitElement {
       error: () => html`
         <alert-message type="danger">
           <span slot="alert-message"
-            >Failed to load Bibles. Please try again later.</span
+            >Failed to load bibles. Please try again later.</span
           >
         </alert-message>
       `,

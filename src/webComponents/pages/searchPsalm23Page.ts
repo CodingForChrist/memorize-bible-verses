@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
@@ -34,15 +34,14 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
 
         <span slot="page-content">
           <bible-translation-drop-down-list
-            bible-id=${this.bibleId || nothing}
-            ?visible=${this.visible}
+            bible-id=${this.bibleId}
           ></bible-translation-drop-down-list>
 
           <bible-verse-fetch-result
             verse-reference="Psalm 23:1-6"
             should-display-section-headings="true"
             bible-id=${this.bibleId}
-            is-visible=${this.visible}
+            ?visible=${this.visible}
           ></bible-verse-fetch-result>
         </span>
 

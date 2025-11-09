@@ -1,111 +1,86 @@
-import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
+import { LitElement, css, html, unsafeCSS } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+import { Task } from "@lit/task";
 
-import {
-  removeExtraContentFromBibleVerse,
-  standardizeBookNameInVerseReference,
-} from "../services/formatApiResponse";
-import {
-  LOADING_STATES,
-  CUSTOM_EVENTS,
-  MEMORIZE_BIBLE_VERSES_API_BASE_URL,
-  type LoadingStates,
-} from "../constants";
+import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
+import { fetchBibleVerseWithCache } from "../services/api";
+import { removeExtraContentFromBibleVerse } from "../services/formatApiResponse";
+
+import { CUSTOM_EVENTS } from "../constants";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
 
-export class BibleVerseFetchResult extends HTMLElement {
-  #selectedBibleVerse?: BibleVerse;
+@customElement("bible-verse-fetch-result")
+export class BibleVerseFetchResult extends LitElement {
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
 
-  constructor() {
-    super();
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#styleElement);
-  }
+  @property({
+    type: Boolean,
+    reflect: true,
+  })
+  visible: boolean = false;
 
-  static get observedAttributes() {
-    return ["loading-state", "bible-id", "verse-reference", "is-visible"];
-  }
+  @property({
+    type: Boolean,
+    attribute: "should-display-section-headings",
+    reflect: true,
+  })
+  shouldDisplaySectionHeadings: boolean = false;
 
-  get bibleId() {
-    return this.getAttribute("bible-id");
-  }
+  static styles = [
+    unsafeCSS(scriptureStyles),
+    css`
+      :host {
+        display: block;
+      }
+      bible-verse-blockquote,
+      alert-message {
+        margin-top: 3rem;
+      }
+      alert-message {
+        margin-bottom: 2rem;
+      }
+      bible-verse-blockquote .scripture-styles {
+        color: var(--color-gray);
+      }
+    `,
+  ];
 
-  get verseReference() {
-    return this.getAttribute("verse-reference");
-  }
+  #bibleVerseTask = new Task(this, {
+    task: async ([bibleId, verseReference]) => {
+      if (!bibleId || !verseReference || !this.visible) {
+        return null;
+      }
 
-  get isVisible() {
-    return this.getAttribute("is-visible") === "true";
-  }
+      try {
+        const verseBibleData = await fetchBibleVerseWithCache({
+          bibleId,
+          verseReference,
+        });
+        const enhancedBibleVerseData =
+          this.#validateAndEnhanceVerseData(verseBibleData);
+        this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
+        return enhancedBibleVerseData;
+      } catch (error) {
+        throw new Error(`Error fetching bible verse: ${error}`);
+      }
+    },
+    args: () => [this.bibleId, this.verseReference, this.visible],
+  });
 
-  get shouldDisplaySectionHeadings() {
-    return this.getAttribute("should-display-section-headings") === "true";
-  }
-
-  get #bibleVerseBlockquoteElement() {
-    return this.shadowRoot!.querySelector("bible-verse-blockquote");
-  }
-
-  get #alertErrorElement() {
-    return this.shadowRoot!.querySelector('alert-message[type="danger"]');
-  }
-
-  get selectedBibleVerse(): BibleVerse | undefined {
-    return this.#selectedBibleVerse;
-  }
-
-  set selectedBibleVerse(value: BibleVerse) {
-    this.#selectedBibleVerse = this.#formatBibleVerse(value);
-    this.#sendEventForSelectedBibleVerse();
-  }
-
-  get loadingState() {
-    return this.getAttribute("loading-state") as LoadingStates;
-  }
-
-  set loadingState(value: LoadingStates) {
-    if (value === LOADING_STATES.PENDING) {
-      this.#showLoadingSpinner();
-    } else {
-      this.#hideLoadingSpinner();
+  #validateAndEnhanceVerseData(verseData: any) {
+    if (typeof verseData.data !== "object") {
+      throw new Error("expected data to be an object");
     }
 
-    this.setAttribute("loading-state", value);
-  }
+    const { id, bibleId, content, verseCount } = verseData.data as BibleVerse;
 
-  #sendEventForSelectedBibleVerse() {
-    if (!this.selectedBibleVerse) {
-      return;
-    }
-    const eventUpdateSelectedBible =
-      new CustomEvent<CustomEventUpdateBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
-        {
-          detail: { bibleVerse: this.selectedBibleVerse },
-          bubbles: true,
-          composed: true,
-        },
-      );
-    window.dispatchEvent(eventUpdateSelectedBible);
-  }
-
-  #showLoadingSpinner() {
-    const loadingSpinnerElement = document.createElement("loading-spinner");
-    this.shadowRoot!.appendChild(loadingSpinnerElement);
-  }
-
-  #hideLoadingSpinner() {
-    this.shadowRoot!.querySelector("loading-spinner")?.remove();
-  }
-
-  #formatBibleVerse({
-    id,
-    bibleId,
-    reference,
-    content,
-    verseCount,
-  }: BibleVerse) {
     const options = {
       shouldRemoveSectionHeadings: !this.shouldDisplaySectionHeadings,
       shouldRemoveFootnotes: true,
@@ -116,165 +91,53 @@ export class BibleVerseFetchResult extends HTMLElement {
     return {
       id,
       bibleId,
-      reference: standardizeBookNameInVerseReference(reference),
+      reference: this.verseReference!,
       content: removeExtraContentFromBibleVerse(content, options),
       verseCount,
     };
   }
 
-  #removeResultElements() {
-    this.#bibleVerseBlockquoteElement?.remove();
-    this.#alertErrorElement?.remove();
-  }
-
-  #renderSelectedBibleVerse() {
-    this.#removeResultElements();
-
-    const { bibleId, content } = this.selectedBibleVerse!;
-
-    const bibleVerseBlockquoteElement = document.createElement(
-      "bible-verse-blockquote",
-    );
-    bibleVerseBlockquoteElement.setAttribute("display-citation", "true");
-    bibleVerseBlockquoteElement.setAttribute("bible-id", bibleId ?? "");
-    bibleVerseBlockquoteElement.innerHTML = `
-      <span class="scripture-styles" slot="bible-verse-content">
-        ${content}
-      </span>
-    `;
-
-    this.shadowRoot!.append(bibleVerseBlockquoteElement);
-  }
-
-  async #fetchVerseReference() {
+  render() {
     if (!this.bibleId || !this.verseReference) {
-      return;
+      return null;
     }
 
-    try {
-      this.loadingState = LOADING_STATES.PENDING;
+    return this.#bibleVerseTask.render({
+      pending: () => html`<loading-spinner></loading-spinner>`,
+      complete: (verseData) =>
+        verseData === null
+          ? null
+          : html`
+              <bible-verse-blockquote
+                display-citation="true"
+                bible-id=${this.bibleId}
+              >
+                <span class="scripture-styles" slot="bible-verse-content">
+                  ${unsafeHTML(verseData.content)}
+                </span>
+                ></bible-verse-blockquote
+              >
+            `,
+      error: (error) => html`
+        <alert-message type="danger">
+          <span slot="alert-message"
+            >Failed to load bible verse. Please try again later. ${error}</span
+          >
+        </alert-message>
+      `,
+    });
+  }
 
-      const response = await fetch(
-        `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles/${this.bibleId}/passages/verse-reference`,
+  #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
+    const eventUpdateSelectedBible =
+      new CustomEvent<CustomEventUpdateBibleVerse>(
+        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
         {
-          method: "POST",
-          body: JSON.stringify({
-            verseReference: this.verseReference,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "Application-User-Id": "memorize_bible_verses_web_app",
-          },
+          detail: { bibleVerse },
+          bubbles: true,
+          composed: true,
         },
       );
-      const json = await response.json();
-
-      if (response.ok && json?.data?.content) {
-        const { id, bibleId, content, verseCount } = json.data as BibleVerse;
-        this.selectedBibleVerse = {
-          id,
-          bibleId,
-          content,
-          verseCount,
-          reference: this.verseReference,
-        };
-        this.loadingState = LOADING_STATES.RESOLVED;
-        // this.#renderTrackingPixel(json.meta.fumsToken);
-      } else {
-        throw new Error("Failed to find the verse");
-      }
-    } catch (_error) {
-      this.loadingState = LOADING_STATES.REJECTED;
-    }
-  }
-
-  #renderErrorMessage(message: string) {
-    this.#removeResultElements();
-
-    const alertMessageElement = document.createElement("alert-message");
-    alertMessageElement.setAttribute("type", "danger");
-    alertMessageElement.innerHTML = `
-      <span slot="alert-message">${message}</span>
-    `;
-    this.shadowRoot!.appendChild(alertMessageElement);
-  }
-
-  // TODO: figure out the correct way to use this
-  // #renderTrackingPixel(fumsToken: string) {
-  //   const imageElement = document.createElement("img");
-  //   imageElement.width = 1;
-  //   imageElement.height = 1;
-  //   imageElement.style.width = "0";
-  //   imageElement.style.height = "0";
-  //   imageElement.src = `https://d3btgtzu3ctdwx.cloudfront.net/nf1?t=${fumsToken}`;
-
-  //   this.shadowRoot!.appendChild(imageElement);
-  // }
-
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const css = `
-    :host {
-      display: block;
-    }
-    bible-verse-blockquote,
-    alert-message {
-      margin-top: 3rem;
-    }
-    alert-message {
-      margin-bottom: 2rem;
-    }
-    bible-verse-blockquote .scripture-styles {
-      color: var(--color-gray);
-    }
-    ${scriptureStyles}
-    `;
-    styleElement.textContent = css;
-    return styleElement;
-  }
-
-  async connectedCallback() {
-    await this.#fetchVerseReference();
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (this.loadingState === LOADING_STATES.PENDING) {
-      // ignore changes while fetch call is pending
-      return;
-    }
-
-    if (name === "is-visible" && newValue === "true") {
-      if (this.selectedBibleVerse) {
-        return this.#sendEventForSelectedBibleVerse();
-      } else {
-        return this.#fetchVerseReference();
-      }
-    }
-
-    if (name === "loading-state") {
-      if (newValue === LOADING_STATES.RESOLVED) {
-        return this.#renderSelectedBibleVerse();
-      }
-      if (newValue === LOADING_STATES.REJECTED) {
-        return this.#renderErrorMessage(
-          "Failed to find the bible verse reference. Please try another search.",
-        );
-      }
-    }
-
-    if (
-      ["verse-reference", "bible-id"].includes(name) &&
-      oldValue !== newValue
-    ) {
-      this.#removeResultElements();
-      if (this.isVisible) {
-        return this.#fetchVerseReference();
-      } else {
-        this.loadingState = LOADING_STATES.INITIAL;
-        this.#selectedBibleVerse = undefined;
-      }
-    }
+    window.dispatchEvent(eventUpdateSelectedBible);
   }
 }
-
-window.customElements.define("bible-verse-fetch-result", BibleVerseFetchResult);
