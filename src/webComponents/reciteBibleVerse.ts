@@ -253,7 +253,12 @@ export class ReciteBibleVerse extends LitElement {
     }
 
     this.speechRecognitionService!.listen().then((finalTranscript) => {
-      this.finalTranscript = finalTranscript;
+      this.finalTranscript = autoCorrectSpeechRecognitionInput({
+        transcript: finalTranscript,
+        verseReference: this.verseReference!,
+        verseText: convertBibleVerseToText(this.verseContent!),
+      });
+
       this.#sendEventForRecitedBibleVerse(finalTranscript);
     });
   }

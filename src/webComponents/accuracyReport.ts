@@ -1,49 +1,53 @@
+import { LitElement, css, html, unsafeCSS } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
-import {
-  convertBibleVerseToText,
-  removeExtraContentFromBibleVerse,
-} from "../services/formatApiResponse";
-
-import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
+import { convertBibleVerseToText } from "../services/formatApiResponse";
 import { getTextDifferenceForBibleVerse } from "../services/compareBibleVerses";
 
 import bibleTranslations from "../data/bibleTranslations.json";
 
-export class AccuracyReport extends HTMLElement {
-  constructor() {
-    super();
+@customElement("accuracy-report")
+export class AccuracyReport extends LitElement {
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#containerElement);
-    shadowRoot.appendChild(this.#styleElement);
-  }
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
 
-  static get observedAttributes() {
-    return ["recited-bible-verse"];
-  }
+  @property({ attribute: "verse-content", reflect: true })
+  verseContent?: string;
 
-  get #reportContainerElement() {
-    return this.shadowRoot!.querySelector(
-      "#report-container",
-    ) as HTMLDivElement;
-  }
+  @property({ attribute: "recited-bible-verse", reflect: true })
+  recitedBibleVerse?: string;
 
-  get bibleId() {
-    return this.getAttribute("bible-id");
-  }
-
-  get verseReference() {
-    return this.getAttribute("verse-reference");
-  }
-
-  get verseContent() {
-    return this.getAttribute("verse-content");
-  }
-
-  get recitedBibleVerse() {
-    return this.getAttribute("recited-bible-verse");
-  }
+  static styles = [
+    unsafeCSS(scriptureStyles),
+    css`
+      :host {
+        display: block;
+      }
+      table {
+        table-layout: auto;
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+      }
+      td {
+        border-bottom: 1px solid var(--color-light-gray);
+        padding: 1rem 0;
+      }
+      td:first-child {
+        padding-right: 2rem;
+      }
+      bible-verse-blockquote .scripture-styles {
+        color: var(--color-gray);
+      }
+    `,
+  ];
 
   #findBibleTranslationById(bibleId: string) {
     const bibleTranslation = bibleTranslations.find(
@@ -85,36 +89,23 @@ export class AccuracyReport extends HTMLElement {
     };
   }
 
-  #renderReport() {
-    this.#reportContainerElement.innerHTML = "";
-
+  render() {
     if (
       !this.bibleId ||
       !this.verseReference ||
       !this.verseContent ||
       !this.recitedBibleVerse
     ) {
-      return;
+      return null;
     }
 
     // add reference and strip out html characters
     const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
-    const improvedRecitedBibleVerse = autoCorrectSpeechRecognitionInput({
-      transcript: this.recitedBibleVerse,
-      verseReference: this.verseReference,
-      verseText,
-    });
-
-    console.log({
-      recitedBibleVerse: this.recitedBibleVerse,
-      improvedRecitedBibleVerse,
-    });
-
     const { textDifferenceDivContainer, errorCount, wordCount } =
       getTextDifferenceForBibleVerse({
         originalBibleVerseText: verseText,
-        recitedBibleVerseText: improvedRecitedBibleVerse,
+        recitedBibleVerseText: this.recitedBibleVerse,
       });
 
     const { percentage, gradeLetter } = this.#calculateGrade({
@@ -122,15 +113,12 @@ export class AccuracyReport extends HTMLElement {
       errorCount,
     });
 
-    const divElement = document.createElement("div");
-    divElement.innerHTML = `
+    return html`
       <table>
         <tbody>
           <tr>
             <td>Grade</td>
-            <td>
-              ${gradeLetter} (${percentage}%)
-            </td>
+            <td>${gradeLetter} (${percentage}%)</td>
           </tr>
           <tr>
             <td>Bible</td>
@@ -140,82 +128,28 @@ export class AccuracyReport extends HTMLElement {
           </tr>
           <tr>
             <td>Verse Reference</td>
-            <td>
-              ${this.verseReference}
-            </td>
+            <td>${this.verseReference}</td>
           </tr>
           <tr>
             <td>Actual Verse</td>
             <td>
               <bible-verse-blockquote>
                 <span class="scripture-styles" slot="bible-verse-content">
-                  ${removeExtraContentFromBibleVerse(this.verseContent)}
-                 </span>
+                  ${unsafeHTML(this.verseContent)}
+                </span>
               </bible-verse-blockquote>
             </td>
           </tr>
           <tr>
             <td>Recited Verse</td>
-            <td>
-              ${improvedRecitedBibleVerse}
-            </td>
+            <td>${this.recitedBibleVerse}</td>
           </tr>
           <tr>
             <td>Text Difference</td>
-            <td>
-              ${textDifferenceDivContainer.innerHTML}
-            </td>
+            <td>${unsafeHTML(textDifferenceDivContainer.innerHTML)}</td>
           </tr>
         </tbody>
       </table>
     `;
-
-    this.#reportContainerElement.appendChild(divElement);
-  }
-
-  get #containerElement() {
-    const divElement = document.createElement("div");
-    divElement.id = "report-container";
-    return divElement;
-  }
-
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const colorGray400 = "oklch(70.4% .04 256.788)";
-
-    const css = `
-      :host {
-        display: block;
-      }
-      table {
-        table-layout: auto;
-        text-indent: 0;
-        border-color: inherit;
-        border-collapse: collapse;
-      }
-      td {
-        border-bottom: 1px solid ${colorGray400};
-        padding: 1rem 0;
-      }
-      td:first-child {
-        padding-right: 2rem;
-      }
-      bible-verse-blockquote .scripture-styles {
-        color: var(--color-gray);
-      }
-      ${scriptureStyles}
-    `;
-    styleElement.textContent = css;
-    return styleElement;
-  }
-
-  connectedCallback() {
-    this.#renderReport();
-  }
-
-  attributeChangedCallback() {
-    this.#renderReport();
   }
 }
-
-window.customElements.define("accuracy-report", AccuracyReport);
