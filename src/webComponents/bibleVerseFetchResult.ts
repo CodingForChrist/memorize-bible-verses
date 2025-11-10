@@ -120,9 +120,7 @@ export class BibleVerseFetchResult extends LitElement {
             `,
       error: (error) => html`
         <alert-message type="danger">
-          <span slot="alert-message"
-            >Failed to load bible verse. Please try again later. ${error}</span
-          >
+          Failed to load bible verse. Please try again later. ${error}
         </alert-message>
       `,
     });

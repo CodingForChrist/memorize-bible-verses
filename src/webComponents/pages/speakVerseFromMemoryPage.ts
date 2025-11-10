@@ -5,6 +5,7 @@ import { when } from "lit/directives/when.js";
 
 import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
+import { ButtonStyles } from "../sharedStyles";
 
 @customElement(WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE)
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
@@ -16,24 +17,27 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
   pageTitle = "Speak";
 
-  static styles = css`
-    p {
-      margin: 1rem 0;
-      text-wrap: balance;
-    }
-    h2 {
-      margin-top: 0;
-      margin-bottom: 2rem;
-      font-size: 1.5rem;
-      font-weight: 400;
-      text-align: center;
-    }
-    #button-fallback {
-      --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-      margin-top: 3rem;
-      width: 100%;
-    }
-  `;
+  static styles = [
+    ButtonStyles,
+    css`
+      p {
+        margin: 1rem 0;
+        text-wrap: balance;
+      }
+      h2 {
+        margin-top: 0;
+        margin-bottom: 2rem;
+        font-size: 1.5rem;
+        font-weight: 400;
+        text-align: center;
+      }
+      #button-fallback {
+        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+        margin-top: 3rem;
+        width: 100%;
+      }
+    `,
+  ];
 
   get #hasSupportForSpeechRecognition() {
     return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
@@ -43,9 +47,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
     if (!this.verseReference || !this.verseContent) {
       return html`
         <alert-message type="danger">
-          <span slot="alert-message"
-            >Go back to Step 1 and select a bible verse.</span
-          >
+          Go back to Step 1 and select a bible verse.</span
         </alert-message>
       `;
     }
@@ -54,24 +56,21 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
       return html`
         <h2>${this.verseReference}</h2>
         <alert-message type="danger">
-          <span slot="alert-message">
-            Your browser does not support the Web Speech API. Please try another
-            browser like Chrome or Safari.
-          </span>
+          Your browser does not support the Web Speech API. Please try another
+          browser like Chrome or Safari.
         </alert-message>
-        <branded-button
+        <button
+          type="button"
           id="button-fallback"
-          brand="secondary"
+          class="secondary"
           @click=${() =>
             this.navigateToPage({
               nextPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
               previousPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
             })}
         >
-          <span slot="button-text">
-            Click here to type in the verse instead
-          </span>
-        </branded-button>
+          Click here to type in the verse instead
+        </button>
       `;
     }
 

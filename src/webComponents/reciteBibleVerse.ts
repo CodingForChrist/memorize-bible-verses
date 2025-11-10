@@ -1,329 +1,297 @@
+import { LitElement, css, html, type PropertyValues } from "lit";
+import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
+import { state } from "lit/decorators/state.js";
+import { choose } from "lit/directives/choose.js";
+import { live } from "lit/directives/live.js";
+
 import { CUSTOM_EVENTS } from "../constants";
 
 import {
   SpeechRecognitionService,
   SPEECH_RECOGNITION_STATES,
+  SPEECH_RECOGNITION_CUSTOM_EVENTS,
   type SpeechRecognitionStates,
 } from "../services/speechRecognition";
 import { convertBibleVerseToText } from "../services/formatApiResponse";
 import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
+import { ButtonStyles } from "./sharedStyles";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../types";
 
-export class ReciteBibleVerse extends HTMLElement {
+@customElement("recite-bible-verse")
+export class ReciteBibleVerse extends LitElement {
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
+
+  @property({ attribute: "verse-content", reflect: true })
+  verseContent?: string;
+
+  @state()
+  speechRecognitionState: SpeechRecognitionStates =
+    SPEECH_RECOGNITION_STATES.INITIAL;
+
+  @state()
+  interimTranscript: string = "";
+
+  @state()
+  finalTranscript: string = "";
+
   speechRecognitionService?: SpeechRecognitionService;
-  #speechTranscript?: string;
 
   constructor() {
     super();
 
-    const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(this.#styleElement);
-    shadowRoot.appendChild(this.#containerElements);
     try {
       this.speechRecognitionService = new SpeechRecognitionService();
     } catch (error) {
+      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
       console.error("Unable to use the SpeechRecognition API", error);
     }
   }
 
-  static get observedAttributes() {
-    return ["verse-reference"];
+  static styles = [
+    ButtonStyles,
+    css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+      }
+      .button-container {
+        text-align: center;
+      }
+      .transcript-container {
+        margin: 2rem 0;
+        min-height: 8rem;
+      }
+      button {
+        min-width: 7rem;
+        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+      }
+      button .icon {
+        margin-right: 0.25rem;
+      }
+    `,
+  ];
+
+  render() {
+    if (!this.verseReference || !this.verseContent) {
+      return null;
+    }
+
+    const {
+      INITIAL,
+      LISTENING,
+      WAITING_FOR_MICROPHONE_ACCESS,
+      AUDIOEND,
+      RESOLVED,
+      REJECTED,
+    } = SPEECH_RECOGNITION_STATES;
+
+    return html` ${choose(this.speechRecognitionState, [
+      [
+        INITIAL,
+        () =>
+          html`<div class="button-container">
+            <button
+              type="button"
+              class="secondary"
+              @click=${this.#handleRecordButtonClick}
+            >
+              <span class="icon">&#9679;</span>
+              <span class="text-content">Record</span>
+            </button>
+          </div>`,
+      ],
+      [
+        WAITING_FOR_MICROPHONE_ACCESS,
+        () =>
+          html`<alert-message type="warning">
+              Waiting for microphone access
+            </alert-message>
+            <loading-spinner></loading-spinner>
+            <div class="button-container">
+              <button
+                type="button"
+                class="secondary"
+                @click=${this.#handleStopButtonClick}
+              >
+                <span class="icon">&#9632;</span>
+                <span class="text-content">Stop</span>
+              </button>
+            </div>`,
+      ],
+      [
+        LISTENING,
+        () =>
+          html`<alert-message type="info">
+              Recording in progress
+            </alert-message>
+            <div class="transcript-container">
+              <p>${this.interimTranscript}</p>
+              <loading-spinner></loading-spinner>
+            </div>
+            <div class="button-container">
+              <button
+                type="button"
+                class="secondary"
+                @click=${this.#handleStopButtonClick}
+              >
+                <span class="icon">&#9632;</span>
+                <span class="text-content">Stop</span>
+              </button>
+            </div>`,
+      ],
+      [
+        AUDIOEND,
+        () =>
+          html`<alert-message type="info"> Finalizing recording </alert-message>
+            <div class="transcript-container">
+              <p>${this.interimTranscript}</p>
+              <loading-spinner></loading-spinner>
+            </div>
+            <div class="button-container">
+              <button
+                type="button"
+                class="secondary"
+                @click=${this.#handleRecordButtonClick}
+              >
+                <span class="text-content">Try Again</span>
+              </button>
+            </div>`,
+      ],
+      [
+        RESOLVED,
+        () =>
+          html`<alert-message type="success">
+              Recording complete!
+            </alert-message>
+            <div class="transcript-container">
+              <p
+                contenteditable="plaintext-only"
+                .innerText=${live(this.finalTranscript)}
+                @focusout=${this.#handleFinalTranscriptFocusOut}
+              ></p>
+            </div>
+            <div class="button-container">
+              <button
+                type="button"
+                class="secondary"
+                @click=${this.#handleRecordButtonClick}
+              >
+                <span class="text-content">Try Again</span>
+              </button>
+            </div>`,
+      ],
+      [
+        REJECTED,
+        () =>
+          html`<alert-message type="danger">
+            Failed to use microphone input
+          </alert-message>`,
+      ],
+    ])}`;
   }
 
-  get verseReference() {
-    return this.getAttribute("verse-reference");
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.speechRecognitionService?.addEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_STATE,
+      this.#handleSpeechRecognitionStateEvent,
+    );
+    this.speechRecognitionService?.addEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_INTERIM_TRANSCRIPT,
+      this.#handleSpeechRecognitionInterimTranscriptEvent,
+    );
   }
 
-  get verseContent() {
-    return this.getAttribute("verse-content");
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.speechRecognitionService?.removeEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_STATE,
+      this.#handleSpeechRecognitionStateEvent,
+    );
+    this.speechRecognitionService?.removeEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_INTERIM_TRANSCRIPT,
+      this.#handleSpeechRecognitionInterimTranscriptEvent,
+    );
   }
 
-  get #initialContentContainerElement() {
-    return this.shadowRoot!.querySelector(
-      "#initial-content-container",
-    ) as HTMLDivElement;
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("verseReference")) {
+      this.#resetState();
+    }
   }
 
-  get #resultsContainerElement() {
-    return this.shadowRoot!.querySelector(
-      "#results-container",
-    ) as HTMLDivElement;
+  #resetState() {
+    this.interimTranscript = "";
+    this.finalTranscript = "";
+    this.speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
   }
 
-  get #recordingControlsContainerElement() {
-    return this.shadowRoot!.querySelector(
-      "#recording-controls-container",
-    ) as HTMLDivElement;
+  #handleRecordButtonClick() {
+    this.#resetState();
+
+    if (window.scrollY < 200) {
+      this.scrollIntoView();
+    }
+
+    this.speechRecognitionService!.listen().then((finalTranscript) => {
+      this.finalTranscript = finalTranscript;
+      this.#sendEventForRecitedBibleVerse(finalTranscript);
+    });
   }
 
-  get #interimResultsParagraphElement() {
-    return this.#resultsContainerElement.querySelector(
-      "#transcript-pararaph",
-    ) as HTMLParagraphElement;
+  #handleStopButtonClick() {
+    this.speechRecognitionService!.stop();
   }
 
-  #showLoadingSpinner() {
-    const loadingSpinnerElement = document.createElement("loading-spinner");
-    this.#resultsContainerElement.appendChild(loadingSpinnerElement);
+  #handleFinalTranscriptFocusOut(event: FocusEvent) {
+    const target = event.target as HTMLParagraphElement;
+    if (!target?.innerText || target.innerText === this.finalTranscript) {
+      return;
+    }
+
+    this.finalTranscript = target.innerText;
+    this.#sendEventForRecitedBibleVerse(this.finalTranscript);
   }
 
-  #hideLoadingSpinner() {
-    this.#resultsContainerElement.querySelector("loading-spinner")?.remove();
-  }
+  #handleSpeechRecognitionStateEvent = (
+    event: CustomEventInit<{ state: SpeechRecognitionStates }>,
+  ) => {
+    const speechRecognitionState = event.detail?.state;
+    if (speechRecognitionState) {
+      this.speechRecognitionState = speechRecognitionState;
+    }
+  };
 
-  get speechTranscript(): string | undefined {
-    return this.#speechTranscript;
-  }
+  #handleSpeechRecognitionInterimTranscriptEvent = (
+    event: CustomEventInit<{ interimTranscript: string }>,
+  ) => {
+    const interimTranscript = event.detail?.interimTranscript;
+    if (interimTranscript && this.verseReference && this.verseContent) {
+      this.interimTranscript = autoCorrectSpeechRecognitionInput({
+        transcript: interimTranscript,
+        verseReference: this.verseReference,
+        verseText: convertBibleVerseToText(this.verseContent),
+      });
+    }
+  };
 
-  set speechTranscript(value: string) {
-    this.#speechTranscript = value;
-
+  #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
     const eventUpdateRecitedBibleVerse =
       new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
         CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
         {
-          detail: { recitedBibleVerse: this.#speechTranscript },
+          detail: { recitedBibleVerse },
           bubbles: true,
           composed: true,
         },
       );
     window.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
-
-  #renderInitialContent() {
-    // clear out existing content
-    this.#interimResultsParagraphElement.innerText = "";
-    this.#recordingControlsContainerElement.innerHTML = "";
-    this.speechTranscript = "";
-
-    this.#initialContentContainerElement.innerHTML = `
-      <branded-button id="button-record" type="button" brand="secondary">
-        <span slot="button-text">
-          <span class="icon">&#9679;</span>
-          <span class="text-content">Record</span>
-        </span>
-      </branded-button>
-    `;
-
-    this.#initialContentContainerElement
-      .querySelector("#button-record")!
-      .addEventListener("click", this.#recordVoiceButtonClick.bind(this));
-  }
-
-  #updateSpeechRecognitionAlertMessage() {
-    const state = this.speechRecognitionService!.state;
-    const { LISTENING, WAITING_FOR_MICROPHONE_ACCESS, RESOLVED, REJECTED } =
-      SPEECH_RECOGNITION_STATES;
-
-    if (state === WAITING_FOR_MICROPHONE_ACCESS) {
-      return this.#renderAlertMessage({
-        type: "warning",
-        message: "Waiting for microphone access",
-      });
-    }
-    if (state === LISTENING) {
-      return this.#renderAlertMessage({
-        type: "info",
-        message: "Recording in progress",
-      });
-    }
-    if (state === RESOLVED) {
-      return this.#renderAlertMessage({
-        type: "success",
-        message: "Recording complete!",
-      });
-    }
-    if (state === REJECTED) {
-      return this.#renderAlertMessage({
-        type: "danger",
-        message: "Failed to use microphone input",
-      });
-    }
-  }
-
-  async #recordVoiceButtonClick() {
-    const { INITIAL, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
-
-    if (
-      ([INITIAL, RESOLVED, REJECTED] as SpeechRecognitionStates[]).includes(
-        this.speechRecognitionService!.state,
-      )
-    ) {
-      this.#showLoadingSpinner();
-      this.#showStopButton();
-
-      this.#initialContentContainerElement.scrollIntoView();
-      this.#initialContentContainerElement
-        .querySelector("#button-record")
-        ?.remove();
-
-      const intervalForPrintingInterimResults = setInterval(() => {
-        this.#printSpeechRecognitionInterimResults(
-          this.speechRecognitionService!.interimTranscript,
-        );
-        this.#updateSpeechRecognitionAlertMessage();
-      }, 200);
-
-      try {
-        const finalTranscript = await this.speechRecognitionService!.listen();
-        this.speechTranscript = finalTranscript;
-        clearInterval(intervalForPrintingInterimResults);
-        this.#printSpeechRecognitionInterimResults(finalTranscript);
-        this.#updateSpeechRecognitionAlertMessage();
-      } catch (_error) {
-        this.#hideLoadingSpinner();
-        this.#updateSpeechRecognitionAlertMessage();
-        this.#showTryAgainButton();
-        this.#interimResultsParagraphElement.innerText = "";
-        clearInterval(intervalForPrintingInterimResults);
-      }
-    }
-  }
-
-  #showStopButton() {
-    this.#recordingControlsContainerElement.innerHTML = `
-      <branded-button id="button-stop" type="button" brand="secondary">
-        <span slot="button-text">
-          <span class="icon">&#9632;</span>
-          <span class="text-content">Stop</span>
-        </span>
-      </branded-button>
-    `;
-
-    this.#recordingControlsContainerElement
-      .querySelector("#button-stop")!
-      .addEventListener("click", this.#stopRecordingButtonClick.bind(this));
-  }
-
-  #showTryAgainButton() {
-    this.#recordingControlsContainerElement.innerHTML = `
-      <branded-button id="button-try-again" type="button" brand="secondary">
-        <span slot="button-text">Try Again</span>
-      </branded-button>
-    `;
-
-    this.#recordingControlsContainerElement
-      .querySelector("#button-try-again")!
-      .addEventListener("click", () => {
-        this.#renderInitialContent();
-        this.#recordVoiceButtonClick();
-      });
-  }
-
-  #stopRecordingButtonClick() {
-    this.speechRecognitionService!.stop();
-    this.#hideLoadingSpinner();
-    this.#showTryAgainButton();
-  }
-
-  #printSpeechRecognitionInterimResults(transcript?: string) {
-    if (!transcript || !this.verseReference || !this.verseContent) {
-      return;
-    }
-
-    this.#interimResultsParagraphElement.innerText =
-      autoCorrectSpeechRecognitionInput({
-        transcript,
-        verseReference: this.verseReference,
-        verseText: convertBibleVerseToText(this.verseContent),
-      });
-  }
-
-  #renderAlertMessage({ type, message }: { type: string; message: string }) {
-    // clear container content
-    this.#initialContentContainerElement.innerHTML = "";
-
-    const alertMessageElement = document.createElement("alert-message");
-    alertMessageElement.setAttribute("type", type);
-    alertMessageElement.innerHTML = `
-      <span slot="alert-message">${message}</span>
-    `;
-
-    this.#initialContentContainerElement.appendChild(alertMessageElement);
-  }
-
-  get #containerElements() {
-    const divElement = document.createElement("div");
-    divElement.id = "parent-container";
-    divElement.innerHTML = `
-      <div id="initial-content-container"></div>
-      <div id="results-container"></div>
-      <div id="recording-controls-container"></div>
-    `;
-
-    divElement
-      .querySelector("#results-container")
-      ?.appendChild(this.#editableTranscriptParagraphElement);
-
-    return divElement;
-  }
-
-  get #editableTranscriptParagraphElement() {
-    const paragraphElement = document.createElement("p");
-    paragraphElement.id = "transcript-pararaph";
-    paragraphElement.setAttribute("contenteditable", "plaintext-only");
-
-    let shouldFireChange = false;
-
-    paragraphElement.addEventListener("input", () => {
-      shouldFireChange = true;
-    });
-
-    paragraphElement.addEventListener("focusout", () => {
-      if (shouldFireChange) {
-        this.speechTranscript = paragraphElement.innerText;
-        shouldFireChange = false;
-      }
-    });
-
-    return paragraphElement;
-  }
-
-  get #styleElement() {
-    const styleElement = document.createElement("style");
-    const css = `
-      #parent-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-      }
-      #initial-content-container {
-        text-align: center;
-      }
-      #results-container {
-        margin: 2rem 0;
-        min-height: 10rem;
-      }
-      #recording-controls-container {
-        text-align: center;
-      }
-      branded-button {
-        min-width: 7rem;
-      }
-      branded-button .icon {
-        margin-right: 0.25rem;
-      }
-      #button-record,
-      #button-stop,
-      #button-try-again {
-        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-      }
-    `;
-    styleElement.textContent = css;
-    return styleElement;
-  }
-
-  connectedCallback() {
-    this.#renderInitialContent();
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === "verse-reference" && oldValue !== newValue) {
-      return this.#renderInitialContent();
-    }
-  }
 }
-
-window.customElements.define("recite-bible-verse", ReciteBibleVerse);

@@ -9,6 +9,14 @@ export const SPEECH_RECOGNITION_STATES = {
 
 export type SpeechRecognitionStates = keyof typeof SPEECH_RECOGNITION_STATES;
 
+export const SPEECH_RECOGNITION_CUSTOM_EVENTS = {
+  UPDATE_STATE: "UPDATE_STATE",
+  UPDATE_INTERIM_TRANSCRIPT: "UPDATE_INTERIM_TRANSCRIPT",
+} as const;
+
+export type SpeechRecognitionCustomEvents =
+  keyof typeof SPEECH_RECOGNITION_CUSTOM_EVENTS;
+
 const {
   INITIAL,
   WAITING_FOR_MICROPHONE_ACCESS,
@@ -18,11 +26,11 @@ const {
   REJECTED,
 } = SPEECH_RECOGNITION_STATES;
 
-export class SpeechRecognitionService {
-  interimTranscript?: string;
+export class SpeechRecognitionService extends EventTarget {
   finalTranscript?: string;
+  #interimTranscript: string;
   #transcriptHistory: string[];
-  state: SpeechRecognitionStates;
+  #state: SpeechRecognitionStates;
   recognition: SpeechRecognition;
   #lastResult?: SpeechRecognitionResultList;
   #allEvents?: {
@@ -33,7 +41,10 @@ export class SpeechRecognitionService {
   #rejectListener?: (reason: string) => void;
 
   constructor() {
-    this.state = INITIAL;
+    super();
+
+    this.#state = INITIAL;
+    this.#interimTranscript = "";
     this.#transcriptHistory = [];
     this.#allEvents = [];
 
@@ -48,6 +59,41 @@ export class SpeechRecognitionService {
     this.recognition.onstart = this.#onStart.bind(this);
     this.recognition.onresult = this.#onResult.bind(this);
     this.recognition.onend = this.#onEnd.bind(this);
+  }
+
+  get state() {
+    return this.#state;
+  }
+
+  set state(value: SpeechRecognitionStates) {
+    this.#state = value;
+
+    const eventUpdateState = new CustomEvent<{
+      state: SpeechRecognitionStates;
+    }>(SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_STATE, {
+      detail: { state: value },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateState);
+  }
+
+  get interimTranscript() {
+    return this.#interimTranscript;
+  }
+
+  set interimTranscript(value: string) {
+    this.#interimTranscript = value;
+
+    const eventUpdateState = new CustomEvent<{ interimTranscript: string }>(
+      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_INTERIM_TRANSCRIPT,
+      {
+        detail: { interimTranscript: value },
+        bubbles: true,
+        composed: true,
+      },
+    );
+    this.dispatchEvent(eventUpdateState);
   }
 
   listen() {
@@ -80,6 +126,7 @@ export class SpeechRecognitionService {
     this.#transcriptHistory = [];
     this.interimTranscript = "";
     this.finalTranscript = "";
+    this.#lastResult = undefined;
     this.state = INITIAL;
   }
 

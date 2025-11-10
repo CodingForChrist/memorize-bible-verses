@@ -117,9 +117,7 @@ export class BibleTranslationDropDownList extends LitElement {
       complete: () => this.#renderSelectElement(),
       error: () => html`
         <alert-message type="danger">
-          <span slot="alert-message"
-            >Failed to load bibles. Please try again later.</span
-          >
+          Failed to load bibles. Please try again later.
         </alert-message>
       `,
     });
