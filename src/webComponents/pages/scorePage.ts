@@ -56,10 +56,7 @@ export class ScorePage extends BasePage(LitElement) {
               </accuracy-report>`,
             () => html`
               <alert-message type="danger">
-                <span slot="alert-message"
-                  >Unable to display report. Complete Step 1 and Step 2
-                  first.</span
-                >
+                Unable to display report. Complete Step 1 and Step 2 first.
               </alert-message>
             `,
           )}

@@ -5,6 +5,7 @@ import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
+import { ButtonStyles } from "../sharedStyles";
 
 @customElement(WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE)
 export class SearchAdvancedPage extends BasePage(LitElement) {
@@ -17,53 +18,56 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   #textInput = "";
   pageTitle = "Advanced Search";
 
-  static styles = css`
-    p {
-      margin: 1rem 0;
-      text-wrap: balance;
-    }
-    bible-translation-drop-down-list {
-      margin-bottom: 1.5rem;
-    }
-    label {
-      display: block;
-    }
-    label small {
-      font-size: 0.75rem;
-      line-height: calc(1.25 / 0.875);
-    }
-    form {
-      display: flex;
-      gap: 0.25rem;
-      margin-top: 0.25rem;
-    }
-    input {
-      font: inherit;
-      color: inherit;
-      line-height: 1.5rem;
-      flex: 1;
-      width: 100%;
-      padding: 0.5rem 0.75rem;
-      background-color: var(--color-primary-mint-cream);
-      border: 1px solid var(--color-light-gray);
-      border-radius: 1.5rem;
-    }
-    input:focus,
-    input:active {
-      border-color: var(--color-primary-mint-cream);
-      outline: 1px solid var(--color-gray);
-    }
-    input:-webkit-autofill,
-    input:-webkit-autofill:focus {
-      transition:
-        background-color 0s 600000s,
-        color 0s 600000s !important;
-    }
-    branded-button[type="submit"] {
-      --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-      min-width: 5rem;
-    }
-  `;
+  static styles = [
+    ButtonStyles,
+    css`
+      p {
+        margin: 1rem 0;
+        text-wrap: balance;
+      }
+      bible-translation-drop-down-list {
+        margin-bottom: 1.5rem;
+      }
+      label {
+        display: block;
+      }
+      label small {
+        font-size: 0.75rem;
+        line-height: calc(1.25 / 0.875);
+      }
+      form {
+        display: flex;
+        gap: 0.25rem;
+        margin-top: 0.25rem;
+      }
+      input {
+        font: inherit;
+        color: inherit;
+        line-height: 1.5rem;
+        flex: 1;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background-color: var(--color-primary-mint-cream);
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
+      }
+      input:focus,
+      input:active {
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
+      }
+      input:-webkit-autofill,
+      input:-webkit-autofill:focus {
+        transition:
+          background-color 0s 600000s,
+          color 0s 600000s !important;
+      }
+      button[type="submit"] {
+        --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+        min-width: 5rem;
+      }
+    `,
+  ];
 
   #renderSearchForm() {
     if (!this.bibleId) {
@@ -78,14 +82,13 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
       <form @submit=${this.#handleFormSubmit}>
         <input
           type="text"
+          name="verse-reference-input"
           .value=${this.#textInput}
           @input=${this.#handleTextInput}
           required
           autofocus
         />
-        <branded-button type="submit">
-          <span slot="button-text">Search</span>
-        </branded-button>
+        <button type="submit" class="primary">Search</button>
       </form>
     `;
   }

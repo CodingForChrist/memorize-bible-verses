@@ -7,7 +7,6 @@ import "./webComponents/appStateProvider";
 import "./webComponents/loadingSpinner";
 import "./webComponents/alertMessage";
 import "./webComponents/bibleVerseBlockquote";
-import "./webComponents/brandedButton";
 
 // step 1 components
 import "./webComponents/bibleTranslationDropDownList";

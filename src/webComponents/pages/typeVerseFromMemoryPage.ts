@@ -52,9 +52,7 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
             `,
             () => html`
               <alert-message type="danger">
-                <span slot="alert-message"
-                  >Go back to Step 1 and select a bible verse.</span
-                >
+                Go back to Step 1 and select a bible verse.
               </alert-message>
             `,
           )}

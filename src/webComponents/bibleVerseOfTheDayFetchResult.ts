@@ -207,9 +207,7 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
 
     const alertMessageElement = document.createElement("alert-message");
     alertMessageElement.setAttribute("type", "danger");
-    alertMessageElement.innerHTML = `
-      <span slot="alert-message">${message}</span>
-    `;
+    alertMessageElement.innerText = message;
     this.shadowRoot!.appendChild(alertMessageElement);
   }
 
