@@ -59,11 +59,14 @@ export class ReciteBibleVerse extends LitElement {
         justify-content: space-between;
         height: 100%;
       }
+      alert-message {
+        margin-bottom: 2rem;
+      }
       .button-container {
         text-align: center;
       }
       .transcript-container {
-        margin: 2rem 0;
+        margin-bottom: 2rem;
         min-height: 8rem;
       }
       button {
@@ -189,8 +192,17 @@ export class ReciteBibleVerse extends LitElement {
         REJECTED,
         () =>
           html`<alert-message type="danger">
-            Failed to use microphone input
-          </alert-message>`,
+              Failed to use microphone input
+            </alert-message>
+            <div class="button-container">
+              <button
+                type="button"
+                class="secondary"
+                @click=${this.#handleRecordButtonClick}
+              >
+                <span class="text-content">Try Again</span>
+              </button>
+            </div>`,
       ],
     ])}`;
   }
