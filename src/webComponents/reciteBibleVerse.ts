@@ -259,7 +259,7 @@ export class ReciteBibleVerse extends LitElement {
         verseText: convertBibleVerseToText(this.verseContent!),
       });
 
-      this.#sendEventForRecitedBibleVerse(finalTranscript);
+      this.#sendEventForRecitedBibleVerse(this.finalTranscript);
     });
   }
 
