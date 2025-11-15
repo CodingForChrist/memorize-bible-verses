@@ -6,7 +6,11 @@ import { Task } from "@lit/task";
 import { fetchBibleTranslationsWithCache } from "../services/api";
 import { router } from "../services/router";
 import { formSelectStyles } from "./sharedStyles";
-import localBibleTranslations from "../data/bibleTranslations.json";
+import {
+  getAllBibleTranslations,
+  findBibleTranslationByAbbreviation,
+  findBibleTranslationById,
+} from "../data/bibleTranslationModel";
 
 import { CUSTOM_EVENTS } from "../constants";
 
@@ -53,7 +57,9 @@ export class BibleTranslationDropDownList extends LitElement {
       try {
         const bibleData = await fetchBibleTranslationsWithCache({
           language: "eng",
-          ids: localBibleTranslations.map(({ id }) => id).toString(),
+          ids: getAllBibleTranslations()
+            .map(({ id }) => id)
+            .toString(),
           includeFullDetails: true,
         });
         this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
@@ -73,15 +79,10 @@ export class BibleTranslationDropDownList extends LitElement {
 
     const enhancedBibleData: BibleTranslationWithCustomLabel[] =
       bibleData.data.map((bible: BibleTranslation) => {
-        const foundLocalBibleTranslation = localBibleTranslations.find(
-          ({ id }) => bible.id === id,
-        );
-        if (!foundLocalBibleTranslation) {
-          throw new Error("Failed to find the supported bible by id");
-        }
+        const { label } = findBibleTranslationById(bible.id);
         return {
           ...bible,
-          customLabel: foundLocalBibleTranslation.label,
+          customLabel: label,
         };
       });
 
@@ -130,14 +131,7 @@ export class BibleTranslationDropDownList extends LitElement {
 
   get #defaultBibleId() {
     const abbreviation = router.getParam("translation") || "NKJV";
-    const localBibleTranslation = localBibleTranslations.find(
-      (bibleTranslation) => bibleTranslation.abbreviationLocal === abbreviation,
-    );
-
-    if (!localBibleTranslation) {
-      throw new Error("Failed to find the bible translation by abbreviation");
-    }
-    return localBibleTranslation.id;
+    return findBibleTranslationByAbbreviation(abbreviation).id;
   }
 
   #sendEventForSelectedBibleTranslation(bibleId: string) {

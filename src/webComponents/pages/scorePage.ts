@@ -1,10 +1,17 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
+import { LitElement, css, html, unsafeCSS, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { query } from "lit/decorators/query.js";
 import { when } from "lit/directives/when.js";
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+
+import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
 import { BasePage } from "./basePageMixin";
 import { WEB_COMPONENT_PAGES } from "../../constants";
+import { convertBibleVerseToText } from "../../services/formatApiResponse";
+import { findBibleTranslationById } from "../../data/bibleTranslationModel";
+import type { ScoreRecitedBibleVerse } from "../scoreRecitedBibleVerse";
 
 @customElement(WEB_COMPONENT_PAGES.SCORE_PAGE)
 export class ScorePage extends BasePage(LitElement) {
@@ -20,13 +27,95 @@ export class ScorePage extends BasePage(LitElement) {
   @property({ attribute: "recited-bible-verse", reflect: true })
   recitedBibleVerse?: string;
 
+  @query("score-recited-bible-verse")
+  scoreRecitedBibleVerse?: ScoreRecitedBibleVerse;
+
   pageTitle = "Score";
 
-  static styles = css`
-    p {
-      margin: 1rem 0;
+  static styles = [
+    unsafeCSS(scriptureStyles),
+    css`
+      :host {
+        display: block;
+      }
+      p {
+        margin: 1rem 0;
+      }
+      table {
+        table-layout: auto;
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+      }
+      td {
+        border-bottom: 1px solid var(--color-light-gray);
+        padding: 1rem 0;
+      }
+      td:first-child {
+        padding-right: 2rem;
+      }
+      bible-verse-blockquote .scripture-styles {
+        color: var(--color-gray);
+      }
+    `,
+  ];
+
+  #renderReport() {
+    if (
+      !this.bibleId ||
+      !this.verseReference ||
+      !this.verseContent ||
+      !this.recitedBibleVerse
+    ) {
+      return null;
     }
-  `;
+
+    // add reference and strip out html characters
+    const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
+
+    const { abbreviationLocal } = findBibleTranslationById(this.bibleId);
+    const { letter, percentage } = this.scoreRecitedBibleVerse?.grade ?? {};
+
+    return html`<table>
+      <tbody>
+        <tr>
+          <td>Grade</td>
+          <td>${letter} (${percentage}%)</td>
+        </tr>
+        <tr>
+          <td>Bible</td>
+          <td>${abbreviationLocal}</td>
+        </tr>
+        <tr>
+          <td>Verse Reference</td>
+          <td>${this.verseReference}</td>
+        </tr>
+        <tr>
+          <td>Actual Verse</td>
+          <td>
+            <bible-verse-blockquote>
+              <span class="scripture-styles" slot="bible-verse-content">
+                ${unsafeHTML(this.verseContent)}
+              </span>
+            </bible-verse-blockquote>
+          </td>
+        </tr>
+        <tr>
+          <td>Recited Verse</td>
+          <td>${this.recitedBibleVerse}</td>
+        </tr>
+        <tr>
+          <td>Text Difference</td>
+          <td>
+            <score-recited-bible-verse
+              original-bible-verse-text=${verseText}
+              recited-bible-verse-text=${this.recitedBibleVerse}
+            ></score-recited-bible-verse>
+          </td>
+        </tr>
+      </tbody>
+    </table>`;
+  }
 
   render() {
     return html`
@@ -46,14 +135,7 @@ export class ScorePage extends BasePage(LitElement) {
               this.verseReference &&
               this.verseContent &&
               this.recitedBibleVerse,
-            () =>
-              html` <accuracy-report
-                bible-id=${this.bibleId}
-                verse-reference=${this.verseReference}
-                verse-content=${this.verseContent}
-                recited-bible-verse=${this.recitedBibleVerse}
-              >
-              </accuracy-report>`,
+            () => this.#renderReport(),
             () => html`
               <alert-message type="danger">
                 Unable to display report. Complete Step 1 and Step 2 first.

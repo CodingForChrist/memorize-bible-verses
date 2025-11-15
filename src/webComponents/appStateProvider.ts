@@ -66,15 +66,10 @@ export class AppStateProvider extends HTMLElement {
   }
 
   #updateChildrenWithRecitedBibleVerse(recitedBibleVerse: string) {
-    const accuracyReportElement = this.querySelector(
-      WEB_COMPONENT_PAGES.SCORE_PAGE,
-    );
+    const scorePageElement = this.querySelector(WEB_COMPONENT_PAGES.SCORE_PAGE);
 
-    if (accuracyReportElement) {
-      accuracyReportElement.setAttribute(
-        "recited-bible-verse",
-        recitedBibleVerse,
-      );
+    if (scorePageElement) {
+      scorePageElement.setAttribute("recited-bible-verse", recitedBibleVerse);
     }
   }
 

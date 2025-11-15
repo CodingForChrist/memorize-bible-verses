@@ -18,7 +18,7 @@ import "./webComponents/reciteBibleVerse";
 import "./webComponents/typeBibleVerseFromMemory";
 
 // step 3 component
-import "./webComponents/accuracyReport";
+import "./webComponents/scoreRecitedBibleVerse";
 
 // pages
 import "./webComponents/pages/verseTextPageTemplate";
