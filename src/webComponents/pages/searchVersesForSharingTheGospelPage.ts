@@ -88,7 +88,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
       return html`
         <button
           type="button"
-          class="${classMap(classes)}"
+          class=${classMap(classes)}
           @click=${this.#handleVerseButtonClick}
         >
           ${verse}

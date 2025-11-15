@@ -1,4 +1,4 @@
-import bibleTranslations from "../data/bibleTranslations.json";
+import { findBibleTranslationById } from "../data/bibleTranslationModel";
 
 export class BibleVerseBlockquote extends HTMLElement {
   constructor() {
@@ -20,15 +20,13 @@ export class BibleVerseBlockquote extends HTMLElement {
   }
 
   #renderCitation() {
-    const bibleTranslation = bibleTranslations.find(
-      (translation) => translation.id === this.bibleId,
-    );
-
-    if (!bibleTranslation) {
+    if (!this.bibleId) {
       return;
     }
 
-    const { text, link } = bibleTranslation.citation;
+    const {
+      citation: { text, link },
+    } = findBibleTranslationById(this.bibleId);
 
     const paragraphElement = document.createElement("p");
     paragraphElement.className = "citation";
