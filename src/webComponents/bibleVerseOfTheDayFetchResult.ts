@@ -146,11 +146,11 @@ export class BibleVerseOfTheDayFetchResult extends HTMLElement {
       "bible-verse-blockquote",
     );
 
-    bibleVerseBlockquoteElement.setAttribute("display-citation", "true");
+    bibleVerseBlockquoteElement.setAttribute("display-citation", "");
     bibleVerseBlockquoteElement.setAttribute("bible-id", bibleId ?? "");
 
     bibleVerseBlockquoteElement.innerHTML = `
-      <span class="scripture-styles" slot="bible-verse-content">
+      <span class="scripture-styles">
         ${content}
       </span>
     `;

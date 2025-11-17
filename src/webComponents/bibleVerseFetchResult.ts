@@ -109,14 +109,13 @@ export class BibleVerseFetchResult extends LitElement {
           ? null
           : html`
               <bible-verse-blockquote
-                display-citation="true"
                 bible-id=${this.bibleId}
+                display-citation=${true}
               >
-                <span class="scripture-styles" slot="bible-verse-content">
+                <span class="scripture-styles">
                   ${unsafeHTML(verseData.content)}
                 </span>
-                ></bible-verse-blockquote
-              >
+              </bible-verse-blockquote>
             `,
       error: (error) => html`
         <alert-message type="danger">
