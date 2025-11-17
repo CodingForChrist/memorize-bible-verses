@@ -15,7 +15,6 @@ import "./webComponents/bibleVerseOfTheDayFetchResult";
 
 // step 2 component
 import "./webComponents/reciteBibleVerse";
-import "./webComponents/typeBibleVerseFromMemory";
 
 // step 3 component
 import "./webComponents/scoreRecitedBibleVerse";

@@ -4,13 +4,16 @@ import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { WEB_COMPONENT_PAGES, CUSTOM_EVENTS } from "../../constants";
+
+import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
 @customElement(WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE)
 export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
 
+  #textareaInput = "";
   pageTitle = "Type";
 
   static styles = css`
@@ -25,7 +28,35 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
       font-weight: 400;
       text-align: center;
     }
+    textarea {
+      font: inherit;
+      color: inherit;
+      width: 100%;
+      padding: 1rem;
+      background-color: var(--color-primary-mint-cream);
+      border: 1px solid var(--color-light-gray);
+      border-radius: 1.5rem;
+      box-sizing: border-box;
+    }
+    textarea:focus,
+    textarea:active {
+      border-color: var(--color-primary-mint-cream);
+      outline: 1px solid var(--color-gray);
+    }
   `;
+
+  #renderTextArea() {
+    const placeholderText = `Type in ${this.verseReference ?? "the verse reference"} from memory...`;
+
+    return html`
+      <textarea
+        rows="5"
+        placeholder=${placeholderText}
+        .value=${this.#textareaInput}
+        @input=${this.#handleTextareaInput}
+      ></textarea>
+    `;
+  }
 
   render() {
     return html`
@@ -45,10 +76,7 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
             this.verseReference,
             () => html`
               <h2>${this.verseReference}</h2>
-              <type-bible-verse-from-memory
-                verse-reference=${this.verseReference}
-              >
-              </type-bible-verse-from-memory>
+              ${this.#renderTextArea()}
             `,
             () => html`
               <alert-message type="danger">
@@ -71,15 +99,35 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
   }
 
   #handleForwardButtonClick() {
+    this.#sendEventForRecitedBibleVerse();
+
     this.navigateToPage({
       nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
       previousPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
     });
   }
 
+  #handleTextareaInput(event: FocusEvent) {
+    this.#textareaInput = (event.target as HTMLTextAreaElement).value;
+  }
+
+  #sendEventForRecitedBibleVerse() {
+    const eventUpdateRecitedBibleVerse =
+      new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
+        CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
+        {
+          detail: { recitedBibleVerse: this.#textareaInput },
+          bubbles: true,
+          composed: true,
+        },
+      );
+    window.dispatchEvent(eventUpdateRecitedBibleVerse);
+  }
+
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("verseReference")) {
       this.pageTitle = `Type ${this.verseReference ?? ""}`;
+      this.#textareaInput = "";
     }
   }
 }
