@@ -94,7 +94,7 @@ export class ScorePage extends BasePage(LitElement) {
           <td>Actual Verse</td>
           <td>
             <bible-verse-blockquote>
-              <span class="scripture-styles" slot="bible-verse-content">
+              <span class="scripture-styles">
                 ${unsafeHTML(this.verseContent)}
               </span>
             </bible-verse-blockquote>
