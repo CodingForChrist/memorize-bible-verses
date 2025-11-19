@@ -4,11 +4,9 @@ import { property } from "lit/decorators/property.js";
 import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
-import { router } from "../services/router";
 import { formSelectStyles } from "./sharedStyles";
 import {
   getAllBibleTranslations,
-  findBibleTranslationByAbbreviation,
   findBibleTranslationById,
 } from "../data/bibleTranslationModel";
 
@@ -26,7 +24,7 @@ type BibleTranslationWithCustomLabel = BibleTranslation & {
 @customElement("bible-translation-drop-down-list")
 export class BibleTranslationDropDownList extends LitElement {
   @property({ attribute: "bible-id", reflect: true })
-  bibleId: string = this.#defaultBibleId;
+  bibleId?: string;
 
   bibleTranslations: BibleTranslationWithCustomLabel[] = [];
 
@@ -63,8 +61,6 @@ export class BibleTranslationDropDownList extends LitElement {
           includeFullDetails: true,
         });
         this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
-        this.#sendEventForSelectedBibleTranslation(this.bibleId);
-        return this.bibleTranslations;
       } catch (error) {
         throw new Error(`Error fetching bibles: ${error}`);
       }
@@ -91,31 +87,23 @@ export class BibleTranslationDropDownList extends LitElement {
     );
   }
 
-  #renderSelectElement() {
-    return html`
-      <select
-        .value="${this.bibleId}"
-        @change=${this.#handleSelectElementChange}
-      >
-        ${this.bibleTranslations.map(
-          ({ id, customLabel }) => html`
-            <option .value=${id} ?selected=${id === this.bibleId}>
-              ${customLabel}
-            </option>
-          `,
-        )}
-      </select>
-    `;
-  }
-
   render() {
-    if (this.bibleTranslations.length) {
-      return this.#renderSelectElement();
-    }
-
     return this.#bibleTranslationTask.render({
       pending: () => html`<loading-spinner></loading-spinner>`,
-      complete: () => this.#renderSelectElement(),
+      complete: () => html`
+        <select
+          .value="${this.bibleId}"
+          @change=${this.#handleSelectElementChange}
+        >
+          ${this.bibleTranslations.map(
+            ({ id, customLabel }) => html`
+              <option .value=${id} ?selected=${id === this.bibleId}>
+                ${customLabel}
+              </option>
+            `,
+          )}
+        </select>
+      `,
       error: () => html`
         <alert-message type="danger">
           Failed to load bibles. Please try again later.
@@ -126,17 +114,8 @@ export class BibleTranslationDropDownList extends LitElement {
 
   #handleSelectElementChange(event: Event) {
     this.bibleId = (event.target as HTMLSelectElement).value;
-    this.#sendEventForSelectedBibleTranslation(this.bibleId);
-  }
-
-  get #defaultBibleId() {
-    const abbreviation = router.getParam("translation") || "NKJV";
-    return findBibleTranslationByAbbreviation(abbreviation).id;
-  }
-
-  #sendEventForSelectedBibleTranslation(bibleId: string) {
     const bibleTranslation = this.bibleTranslations.find(
-      (bibleTranslation) => bibleTranslation.id === bibleId,
+      (bibleTranslation) => bibleTranslation.id === this.bibleId,
     );
     if (!bibleTranslation) {
       throw new Error("Failed to find the bible translation by id");

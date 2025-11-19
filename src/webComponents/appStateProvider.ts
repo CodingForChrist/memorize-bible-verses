@@ -1,5 +1,6 @@
 import { CUSTOM_EVENTS, WEB_COMPONENT_PAGES } from "../constants";
 import { router } from "../services/router";
+import { findBibleTranslationByAbbreviation } from "../data/bibleTranslationModel";
 
 import type {
   BibleTranslation,
@@ -30,7 +31,7 @@ export class AppStateProvider extends HTMLElement {
   #updateChildrenWithBibleTranslation({
     id,
     abbreviationLocal,
-  }: BibleTranslation) {
+  }: Pick<BibleTranslation, "id" | "abbreviationLocal">) {
     for (const element of this.#webComponentPageElements) {
       if (element) {
         element.setAttribute("bible-id", id);
@@ -174,6 +175,12 @@ export class AppStateProvider extends HTMLElement {
     });
 
     router.setupPopStateListenerForBrowserHistory();
+
+    // set initial bible translation
+    const { id, abbreviationLocal } = findBibleTranslationByAbbreviation(
+      router.getParam("translation") || "NKJV",
+    );
+    this.#updateChildrenWithBibleTranslation({ id, abbreviationLocal });
   }
 }
 
