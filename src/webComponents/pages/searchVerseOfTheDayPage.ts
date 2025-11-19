@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
@@ -100,14 +100,14 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             ${this.#chevronRightIcon}
           </div>
           <bible-translation-drop-down-list
-            bible-id=${this.bibleId || nothing}
+            bible-id=${this.bibleId}
             ?visible=${this.visible}
           ></bible-translation-drop-down-list>
 
           <bible-verse-of-the-day-fetch-result
             date=${dateShortFormat}
             bible-id=${this.bibleId}
-            is-visible=${this.visible}
+            ?visible=${this.visible}
           >
           </bible-verse-of-the-day-fetch-result>
         </span>

@@ -1,5 +1,12 @@
-import { MEMORIZE_BIBLE_VERSES_API_BASE_URL } from "../constants";
 import type { BibleTranslation, BibleVerse } from "../types";
+
+const API_BASE_URL =
+  import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
+  "https://memorize-bible-verses-api-server.fly.dev";
+
+const APPLICATION_USER_ID =
+  import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_APPLICATION_USER_ID ??
+  "memorize_bible_verses_web_app";
 
 const cache = new Map<string, Promise<Response>>();
 
@@ -40,7 +47,7 @@ export async function fetchBibleTranslationsWithCache({
   ids,
   includeFullDetails,
 }: FetchBibleTranslationsOptions) {
-  const url = `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles`;
+  const url = `${API_BASE_URL}/api/v1/bibles`;
   const cacheKey = createCacheKey({
     url,
     options: { language, ids, includeFullDetails },
@@ -64,7 +71,7 @@ export async function fetchBibleTranslationsWithCache({
     }),
     headers: {
       "Content-Type": "application/json",
-      "Application-User-Id": "memorize_bible_verses_web_app",
+      "Application-User-Id": APPLICATION_USER_ID,
     },
   });
 
@@ -95,7 +102,7 @@ export async function fetchBibleVerseWithCache({
   bibleId,
   verseReference,
 }: FetchBibleVerseOptions) {
-  const url = `${MEMORIZE_BIBLE_VERSES_API_BASE_URL}/api/v1/bibles/${bibleId}/passages/verse-reference`;
+  const url = `${API_BASE_URL}/api/v1/bibles/${bibleId}/passages/verse-reference`;
   const cacheKey = createCacheKey({
     url,
     options: { verseReference },
@@ -115,7 +122,7 @@ export async function fetchBibleVerseWithCache({
     }),
     headers: {
       "Content-Type": "application/json",
-      "Application-User-Id": "memorize_bible_verses_web_app",
+      "Application-User-Id": APPLICATION_USER_ID,
     },
   });
 
@@ -128,5 +135,59 @@ export async function fetchBibleVerseWithCache({
   } catch (error) {
     cache.delete(cacheKey);
     throw new Error(`failed to fetch bible verse: ${error}`);
+  }
+}
+
+type FetchBibleVerseOfTheDayOptions = {
+  bibleId: string;
+  // ISO8601 date with timezone offset
+  date: string;
+};
+
+type FetchBibleVerseOfTheDayResponseBody = {
+  data: BibleVerse;
+};
+
+export async function fetchBibleVerseOfTheDayWithCache({
+  bibleId,
+  date,
+}: FetchBibleVerseOfTheDayOptions) {
+  const url = `${API_BASE_URL}/api/v1/bibles/${bibleId}/verse-of-the-day`;
+  const cacheKey = createCacheKey({
+    url,
+    options: { date },
+  });
+  const cacheResult = cache.get(cacheKey);
+
+  if (cacheResult) {
+    return resolveResponseToJSON<FetchBibleVerseOfTheDayResponseBody>(
+      cacheResult,
+    );
+  }
+
+  let responsePromise: Promise<Response>;
+
+  responsePromise = fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      date,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "Application-User-Id": APPLICATION_USER_ID,
+    },
+  });
+
+  cache.set(cacheKey, responsePromise);
+
+  try {
+    const data =
+      await resolveResponseToJSON<FetchBibleVerseOfTheDayResponseBody>(
+        responsePromise,
+      );
+    return data;
+  } catch (error) {
+    cache.delete(cacheKey);
+    throw new Error(`failed to fetch verse of the day: ${error}`);
   }
 }

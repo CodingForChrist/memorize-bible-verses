@@ -1,12 +1,3 @@
-export const LOADING_STATES = {
-  INITIAL: "INITIAL",
-  PENDING: "PENDING",
-  RESOLVED: "RESOLVED",
-  REJECTED: "REJECTED",
-} as const;
-
-export type LoadingStates = keyof typeof LOADING_STATES;
-
 export const CUSTOM_EVENTS = {
   UPDATE_BIBLE_TRANSLATION: "UPDATE_BIBLE_TRANSLATION",
   UPDATE_BIBLE_VERSE: "UPDATE_BIBLE_VERSE",
@@ -31,7 +22,3 @@ export const WEB_COMPONENT_PAGES = {
 } as const;
 
 export type WebComponentPages = keyof typeof WEB_COMPONENT_PAGES;
-
-export const MEMORIZE_BIBLE_VERSES_API_BASE_URL =
-  import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
-  "https://memorize-bible-verses-api-server.fly.dev";
