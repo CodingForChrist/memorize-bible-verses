@@ -309,6 +309,6 @@ export class ReciteBibleVerse extends LitElement {
           composed: true,
         },
       );
-    window.dispatchEvent(eventUpdateRecitedBibleVerse);
+    this.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 }

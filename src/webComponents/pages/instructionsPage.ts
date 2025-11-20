@@ -2,11 +2,11 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 import { ButtonStyles } from "../sharedStyles";
 import logoURL from "../../images/logo.svg";
 
-@customElement(WEB_COMPONENT_PAGES.INSTRUCTIONS_PAGE)
+@customElement("instructions-page")
 export class InstructionsPage extends BasePage(LitElement) {
   pageTitle = "︎Instructions";
 
@@ -80,7 +80,7 @@ export class InstructionsPage extends BasePage(LitElement) {
         class="primary"
         @click=${() =>
           this.navigateToPage({
-            nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE,
+            nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE,
           })}
       >
         Get Started

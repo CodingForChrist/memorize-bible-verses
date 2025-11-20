@@ -20,12 +20,6 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
   @property({ reflect: true })
   date?: string;
 
-  @property({
-    type: Boolean,
-    reflect: true,
-  })
-  visible: boolean = false;
-
   static styles = [
     unsafeCSS(scriptureStyles),
     css`
@@ -42,12 +36,17 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
       bible-verse-blockquote .scripture-styles {
         color: var(--color-gray);
       }
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        text-align: center;
+      }
     `,
   ];
 
   #bibleVerseOfTheDayTask = new Task(this, {
     task: async ([bibleId, date]) => {
-      if (!bibleId || !date || !this.visible) {
+      if (!bibleId || !date) {
         return null;
       }
 
@@ -68,7 +67,7 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
         throw new Error(`Error fetching verse of the day: ${error}`);
       }
     },
-    args: () => [this.bibleId, this.date, this.visible],
+    args: () => [this.bibleId, this.date],
   });
 
   #validateAndEnhanceVerseData(verseData: any) {
@@ -106,6 +105,7 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
         verseData === null
           ? null
           : html`
+              <h2>${verseData.reference}</h2>
               <bible-verse-blockquote
                 bible-id=${this.bibleId}
                 display-citation=${true}
@@ -133,6 +133,6 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
           composed: true,
         },
       );
-    window.dispatchEvent(eventUpdateSelectedBible);
+    this.dispatchEvent(eventUpdateSelectedBible);
   }
 }

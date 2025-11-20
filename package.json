@@ -24,9 +24,11 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@lit-labs/router": "^0.1.4",
     "@lit/task": "^1.0.3",
     "diff": "^8.0.2",
     "lit": "^3.3.1",
-    "scripture-styles": "^1.6.0"
+    "scripture-styles": "^1.6.0",
+    "urlpattern-polyfill": "^10.1.0"
   }
 }

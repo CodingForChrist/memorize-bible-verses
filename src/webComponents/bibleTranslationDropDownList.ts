@@ -1,12 +1,13 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators/property.js";
+import { state } from "lit/decorators/state.js";
 import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
 import { formSelectStyles } from "./sharedStyles";
 import {
   getAllBibleTranslations,
+  findBibleTranslationByAbbreviation,
   findBibleTranslationById,
 } from "../data/bibleTranslationModel";
 
@@ -23,8 +24,8 @@ type BibleTranslationWithCustomLabel = BibleTranslation & {
 
 @customElement("bible-translation-drop-down-list")
 export class BibleTranslationDropDownList extends LitElement {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
+  @state()
+  bibleId: string = this.#defaultBibleId;
 
   bibleTranslations: BibleTranslationWithCustomLabel[] = [];
 
@@ -53,14 +54,16 @@ export class BibleTranslationDropDownList extends LitElement {
   #bibleTranslationTask = new Task(this, {
     task: async () => {
       try {
+        const ids = getAllBibleTranslations()
+          .map(({ id }) => id)
+          .toString();
         const bibleData = await fetchBibleTranslationsWithCache({
           language: "eng",
-          ids: getAllBibleTranslations()
-            .map(({ id }) => id)
-            .toString(),
           includeFullDetails: true,
+          ids,
         });
         this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
+        this.#sendEventForSelectedBibleTranslation();
       } catch (error) {
         throw new Error(`Error fetching bibles: ${error}`);
       }
@@ -112,8 +115,20 @@ export class BibleTranslationDropDownList extends LitElement {
     });
   }
 
+  get #defaultBibleId() {
+    const abbreviation =
+      new URL(window.location.href).searchParams.get("translation") || "NKJV";
+
+    const { id } = findBibleTranslationByAbbreviation(abbreviation);
+    return id;
+  }
+
   #handleSelectElementChange(event: Event) {
     this.bibleId = (event.target as HTMLSelectElement).value;
+    this.#sendEventForSelectedBibleTranslation();
+  }
+
+  #sendEventForSelectedBibleTranslation() {
     const bibleTranslation = this.bibleTranslations.find(
       (bibleTranslation) => bibleTranslation.id === this.bibleId,
     );
@@ -132,6 +147,6 @@ export class BibleTranslationDropDownList extends LitElement {
           composed: true,
         },
       );
-    window.dispatchEvent(eventUpdateSelectedBibleTranslation);
+    this.dispatchEvent(eventUpdateSelectedBibleTranslation);
   }
 }

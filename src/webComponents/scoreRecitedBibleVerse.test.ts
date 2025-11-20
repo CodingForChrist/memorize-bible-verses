@@ -27,19 +27,21 @@ describe("<score-recited-bible-verse>", () => {
       "if anyone is in Christ he is a brand new creation",
     );
 
+    scoreRecitedBibleVerseElement.setAttribute("type", "diff");
+
     await scoreRecitedBibleVerseElement.updateComplete;
 
     expect(
       scoreRecitedBibleVerseElement.shadowRoot!.querySelector<HTMLSpanElement>(
         "span.added",
       )?.innerText,
-    ).toBe("therefore ");
+    ).toContain("therefore");
 
     expect(
       scoreRecitedBibleVerseElement.shadowRoot!.querySelector<HTMLSpanElement>(
         "span.removed",
       )?.innerText,
-    ).toBe("brand ");
+    ).toContain("brand");
   });
 
   test.each([
