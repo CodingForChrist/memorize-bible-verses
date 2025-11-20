@@ -154,6 +154,7 @@ export class AppStateProvider extends LitElement {
         const bibleVerse = event.detail?.bibleVerse;
         if (bibleVerse) {
           this.selectedBibleVerse = bibleVerse;
+          this.recitedBibleVerse = undefined;
           history.replaceState({}, "", this.#getURLWithQueryParams());
         }
       },
