@@ -3,10 +3,10 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 import { ButtonStyles } from "../sharedStyles";
 
-@customElement(WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE)
+@customElement("search-options-page")
 export class SearchOptionsPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
@@ -123,7 +123,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       SEARCH_VERSES_FOR_AWANA_PAGE,
       SEARCH_ADVANCED_PAGE,
       INSTRUCTIONS_PAGE,
-    } = WEB_COMPONENT_PAGES;
+    } = PAGE_URLS;
 
     return html`
       <h1>Search</h1>

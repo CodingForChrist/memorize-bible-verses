@@ -3,9 +3,9 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 
-@customElement(WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE)
+@customElement("search-psalm-23-page")
 export class SearchPsalm23Page extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
@@ -33,15 +33,12 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
         </span>
 
         <span slot="page-content">
-          <bible-translation-drop-down-list
-            bible-id=${this.bibleId}
-          ></bible-translation-drop-down-list>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
 
           <bible-verse-fetch-result
             verse-reference="Psalm 23:1-6"
             should-display-section-headings="true"
             bible-id=${this.bibleId}
-            ?visible=${this.visible}
           ></bible-verse-fetch-result>
         </span>
 
@@ -52,13 +49,13 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: WEB_COMPONENT_PAGES.SEARCH_PSALM_23_PAGE,
+      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_URLS.SEARCH_PSALM_23_PAGE,
     });
   }
 }

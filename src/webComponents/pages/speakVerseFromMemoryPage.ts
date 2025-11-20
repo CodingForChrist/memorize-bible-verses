@@ -4,10 +4,10 @@ import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 import { ButtonStyles } from "../sharedStyles";
 
-@customElement(WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE)
+@customElement("speak-verse-from-memory-page")
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
@@ -65,8 +65,8 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
           class="secondary"
           @click=${() =>
             this.navigateToPage({
-              nextPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
-              previousPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+              nextPage: PAGE_URLS.TYPE_VERSE_FROM_MEMORY_PAGE,
+              previousPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
             })}
         >
           Click here to type in the verse instead
@@ -120,14 +120,14 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+      nextPage: this.previousPage ?? PAGE_URLS.SEARCH_ADVANCED_PAGE,
     });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
-      previousPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      nextPage: PAGE_URLS.SCORE_PAGE,
+      previousPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
     });
   }
 

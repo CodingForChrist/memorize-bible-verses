@@ -8,12 +8,12 @@ import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 import { convertBibleVerseToText } from "../../services/formatApiResponse";
 import { findBibleTranslationById } from "../../data/bibleTranslationModel";
 import type { ScoreRecitedBibleVerse } from "../scoreRecitedBibleVerse";
 
-@customElement(WEB_COMPONENT_PAGES.SCORE_PAGE)
+@customElement("score-page")
 export class ScorePage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
@@ -74,13 +74,18 @@ export class ScorePage extends BasePage(LitElement) {
     const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
 
     const { abbreviationLocal } = findBibleTranslationById(this.bibleId);
-    const { letter, percentage } = this.scoreRecitedBibleVerse?.grade ?? {};
 
     return html`<table>
       <tbody>
         <tr>
           <td>Grade</td>
-          <td>${letter} (${percentage}%)</td>
+          <td>
+            <score-recited-bible-verse
+              type="grade"
+              original-bible-verse-text=${verseText}
+              recited-bible-verse-text=${this.recitedBibleVerse}
+            ></score-recited-bible-verse>
+          </td>
         </tr>
         <tr>
           <td>Bible</td>
@@ -108,6 +113,7 @@ export class ScorePage extends BasePage(LitElement) {
           <td>Text Difference</td>
           <td>
             <score-recited-bible-verse
+              type="diff"
               original-bible-verse-text=${verseText}
               recited-bible-verse-text=${this.recitedBibleVerse}
             ></score-recited-bible-verse>
@@ -152,14 +158,14 @@ export class ScorePage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage:
-        this.previousPage ?? WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      nextPage: this.previousPage ?? PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
     });
   }
 
   #handleForwardButtonClick() {
-    // do a full page redirect to clear out state
-    window.location.href = `/memorize-bible-verses/?page=${WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE}`;
+    this.navigateToPage({
+      nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE,
+    });
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

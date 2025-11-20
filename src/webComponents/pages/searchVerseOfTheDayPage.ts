@@ -3,14 +3,14 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 import {
   formatDate,
   addDays,
   subtractDays,
 } from "../../services/dateTimeUtility";
 
-@customElement(WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE)
+@customElement("search-verse-of-the-day-page")
 export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
@@ -99,15 +99,11 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             />
             ${this.#chevronRightIcon}
           </div>
-          <bible-translation-drop-down-list
-            bible-id=${this.bibleId}
-            ?visible=${this.visible}
-          ></bible-translation-drop-down-list>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
 
           <bible-verse-of-the-day-fetch-result
             date=${dateShortFormat}
             bible-id=${this.bibleId}
-            ?visible=${this.visible}
           >
           </bible-verse-of-the-day-fetch-result>
         </span>
@@ -177,13 +173,13 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: WEB_COMPONENT_PAGES.SEARCH_VERSE_OF_THE_DAY_PAGE,
+      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_URLS.SEARCH_VERSE_OF_THE_DAY_PAGE,
     });
   }
 }

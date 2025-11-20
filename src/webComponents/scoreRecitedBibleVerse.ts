@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
-import { state } from "lit/decorators/state.js";
 import { classMap } from "lit/directives/class-map.js";
 import { diffWords } from "diff";
 
@@ -13,10 +12,10 @@ export class ScoreRecitedBibleVerse extends LitElement {
   @property({ attribute: "recited-bible-verse-text", reflect: true })
   recitedBibleVerseText?: string;
 
-  @state()
-  wordCount: number = 0;
+  @property({ reflect: true })
+  type: "grade" | "diff" = "diff";
 
-  @state()
+  wordCount: number = 0;
   errorCount: number = 0;
 
   static styles = css`
@@ -67,53 +66,74 @@ export class ScoreRecitedBibleVerse extends LitElement {
       return null;
     }
 
-    this.wordCount = 0;
-    this.errorCount = 0;
+    const { wordCount, errorCount, differenceParts } = compareVerses({
+      originalBibleVerseText: this.originalBibleVerseText,
+      recitedBibleVerseText: this.recitedBibleVerseText,
+    });
 
-    const difference = diffWords(
-      this.recitedBibleVerseText,
-      this.originalBibleVerseText,
-      {
-        ignoreCase: true,
-      },
-    );
+    this.wordCount = wordCount;
+    this.errorCount = errorCount;
 
-    return html`
-      <div>
-        ${difference.map((part, index) => {
-          const textWithoutPunctuation = removePunctuationFromText(
-            part.value.trim(),
-          );
+    if (this.type === "grade") {
+      return html`${this.grade.letter} (${this.grade.percentage}%)`;
+    }
 
-          if (textWithoutPunctuation === "") {
-            return null;
-          }
-
-          const partCount = textWithoutPunctuation.split(" ").length;
-          const finalText =
-            index === difference.length - 1
-              ? textWithoutPunctuation
-              : textWithoutPunctuation + " ";
-
-          const classes = {
-            added: part.added,
-            removed: part.removed,
-          };
-
-          // do not count words that are not in the actual verse
-          if (part.removed === false) {
-            this.wordCount += partCount;
-          }
-
-          if (part.added || part.removed) {
-            this.errorCount += partCount;
-          }
-
-          return html`<span class=${classMap(classes)}>${finalText}</span>`;
-        })}
-      </div>
-    `;
+    return html`${differenceParts.map(({ text, added, removed }) => {
+      return html`<span class=${classMap({ added, removed })}> ${text} </span>`;
+    })}`;
   }
+}
+
+function compareVerses({
+  originalBibleVerseText,
+  recitedBibleVerseText,
+}: {
+  originalBibleVerseText: string;
+  recitedBibleVerseText: string;
+}) {
+  const result = {
+    wordCount: 0,
+    errorCount: 0,
+    differenceParts: [] as { text: string; added: boolean; removed: boolean }[],
+  };
+
+  if (!originalBibleVerseText || !recitedBibleVerseText) {
+    return result;
+  }
+
+  const difference = diffWords(recitedBibleVerseText, originalBibleVerseText, {
+    ignoreCase: true,
+  });
+
+  for (const [index, part] of difference.entries()) {
+    const textWithoutPunctuation = removePunctuationFromText(part.value.trim());
+
+    if (textWithoutPunctuation === "") {
+      continue;
+    }
+
+    const partCount = textWithoutPunctuation.split(" ").length;
+    const finalText =
+      index === difference.length - 1
+        ? textWithoutPunctuation
+        : textWithoutPunctuation + " ";
+
+    // do not count words that are not in the actual verse
+    if (part.removed === false) {
+      result.wordCount += partCount;
+    }
+
+    if (part.added || part.removed) {
+      result.errorCount += partCount;
+    }
+
+    result.differenceParts.push({
+      text: finalText,
+      added: part.added,
+      removed: part.removed,
+    });
+  }
+  return result;
 }
 
 function removePunctuationFromText(text: string) {

@@ -4,11 +4,11 @@ import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES, CUSTOM_EVENTS } from "../../constants";
+import { PAGE_URLS, CUSTOM_EVENTS } from "../../constants";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
-@customElement(WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE)
+@customElement("type-verse-from-memory-page")
 export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
@@ -94,7 +94,7 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+      nextPage: this.previousPage ?? PAGE_URLS.SEARCH_ADVANCED_PAGE,
     });
   }
 
@@ -102,8 +102,8 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
     this.#sendEventForRecitedBibleVerse();
 
     this.navigateToPage({
-      nextPage: WEB_COMPONENT_PAGES.SCORE_PAGE,
-      previousPage: WEB_COMPONENT_PAGES.TYPE_VERSE_FROM_MEMORY_PAGE,
+      nextPage: PAGE_URLS.SCORE_PAGE,
+      previousPage: PAGE_URLS.TYPE_VERSE_FROM_MEMORY_PAGE,
     });
   }
 
@@ -121,7 +121,7 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
           composed: true,
         },
       );
-    window.dispatchEvent(eventUpdateRecitedBibleVerse);
+    this.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

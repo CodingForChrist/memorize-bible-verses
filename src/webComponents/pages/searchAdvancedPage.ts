@@ -4,10 +4,10 @@ import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "./basePageMixin";
-import { WEB_COMPONENT_PAGES } from "../../constants";
+import { PAGE_URLS } from "../../constants";
 import { ButtonStyles } from "../sharedStyles";
 
-@customElement(WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE)
+@customElement("search-advanced-page")
 export class SearchAdvancedPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
@@ -111,16 +111,13 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
         </span>
 
         <span slot="page-content">
-          <bible-translation-drop-down-list
-            bible-id=${this.bibleId}
-          ></bible-translation-drop-down-list>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
 
           ${this.#renderSearchForm()}
 
           <bible-verse-fetch-result
             bible-id=${this.bibleId}
             verse-reference=${this.verseReference}
-            ?visible=${this.visible}
           ></bible-verse-fetch-result>
         </span>
 
@@ -131,13 +128,13 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: WEB_COMPONENT_PAGES.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: WEB_COMPONENT_PAGES.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: WEB_COMPONENT_PAGES.SEARCH_ADVANCED_PAGE,
+      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_URLS.SEARCH_ADVANCED_PAGE,
     });
   }
 

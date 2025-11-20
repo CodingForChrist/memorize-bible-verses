@@ -22,12 +22,6 @@ export class BibleVerseFetchResult extends LitElement {
 
   @property({
     type: Boolean,
-    reflect: true,
-  })
-  visible: boolean = false;
-
-  @property({
-    type: Boolean,
     attribute: "should-display-section-headings",
     reflect: true,
   })
@@ -54,7 +48,7 @@ export class BibleVerseFetchResult extends LitElement {
 
   #bibleVerseTask = new Task(this, {
     task: async ([bibleId, verseReference]) => {
-      if (!bibleId || !verseReference || !this.visible) {
+      if (!bibleId || !verseReference) {
         return null;
       }
 
@@ -71,7 +65,7 @@ export class BibleVerseFetchResult extends LitElement {
         throw new Error(`Error fetching bible verse: ${error}`);
       }
     },
-    args: () => [this.bibleId, this.verseReference, this.visible],
+    args: () => [this.bibleId, this.verseReference],
   });
 
   #validateAndEnhanceVerseData(verseData: any) {
@@ -135,6 +129,6 @@ export class BibleVerseFetchResult extends LitElement {
           composed: true,
         },
       );
-    window.dispatchEvent(eventUpdateSelectedBible);
+    this.dispatchEvent(eventUpdateSelectedBible);
   }
 }
