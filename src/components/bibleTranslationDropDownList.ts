@@ -4,6 +4,7 @@ import { state } from "lit/decorators/state.js";
 import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
+import { getStateFromURL } from "../services/router";
 import { formSelectStyles } from "./sharedStyles";
 import {
   getAllBibleTranslations,
@@ -11,7 +12,7 @@ import {
   findBibleTranslationById,
 } from "../data/bibleTranslationModel";
 
-import { CUSTOM_EVENTS } from "../constants";
+import { CUSTOM_EVENT } from "../constants";
 
 import type {
   BibleTranslation,
@@ -116,8 +117,7 @@ export class BibleTranslationDropDownList extends LitElement {
   }
 
   get #defaultBibleId() {
-    const abbreviation =
-      new URL(window.location.href).searchParams.get("translation") || "NKJV";
+    const abbreviation = getStateFromURL()?.translation || "NKJV";
 
     const { id } = findBibleTranslationByAbbreviation(abbreviation);
     return id;
@@ -138,7 +138,7 @@ export class BibleTranslationDropDownList extends LitElement {
 
     const eventUpdateSelectedBibleTranslation =
       new CustomEvent<CustomEventUpdateBibleTranslation>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
+        CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION,
         {
           detail: {
             bibleTranslation,

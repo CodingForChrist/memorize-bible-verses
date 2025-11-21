@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 import { ButtonStyles } from "../../components/sharedStyles";
 
 @customElement("search-options-page")
@@ -123,7 +123,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       SEARCH_VERSES_FOR_AWANA_PAGE,
       SEARCH_ADVANCED_PAGE,
       INSTRUCTIONS_PAGE,
-    } = PAGE_URLS;
+    } = PAGE_NAME;
 
     return html`
       <h1>Search</h1>

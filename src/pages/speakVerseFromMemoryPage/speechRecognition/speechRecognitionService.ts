@@ -1,4 +1,4 @@
-export const SPEECH_RECOGNITION_STATES = {
+export const SPEECH_RECOGNITION_STATE = {
   INITIAL: "INITIAL",
   WAITING_FOR_MICROPHONE_ACCESS: "WAITING_FOR_MICROPHONE_ACCESS",
   LISTENING: "LISTENING",
@@ -7,15 +7,16 @@ export const SPEECH_RECOGNITION_STATES = {
   REJECTED: "REJECTED",
 } as const;
 
-export type SpeechRecognitionStates = keyof typeof SPEECH_RECOGNITION_STATES;
+export type SpeechRecognitionState =
+  (typeof SPEECH_RECOGNITION_STATE)[keyof typeof SPEECH_RECOGNITION_STATE];
 
-export const SPEECH_RECOGNITION_CUSTOM_EVENTS = {
+export const SPEECH_RECOGNITION_CUSTOM_EVENT = {
   UPDATE_STATE: "UPDATE_STATE",
   UPDATE_INTERIM_TRANSCRIPT: "UPDATE_INTERIM_TRANSCRIPT",
 } as const;
 
-export type SpeechRecognitionCustomEvents =
-  keyof typeof SPEECH_RECOGNITION_CUSTOM_EVENTS;
+export type SpeechRecognitionCustomEvent =
+  (typeof SPEECH_RECOGNITION_CUSTOM_EVENT)[keyof typeof SPEECH_RECOGNITION_CUSTOM_EVENT];
 
 const {
   INITIAL,
@@ -24,13 +25,13 @@ const {
   AUDIOEND,
   RESOLVED,
   REJECTED,
-} = SPEECH_RECOGNITION_STATES;
+} = SPEECH_RECOGNITION_STATE;
 
 export class SpeechRecognitionService extends EventTarget {
   finalTranscript?: string;
   #interimTranscript: string;
   #transcriptHistory: string[];
-  #state: SpeechRecognitionStates;
+  #state: SpeechRecognitionState;
   recognition: SpeechRecognition;
   #lastResult?: SpeechRecognitionResultList;
   #allEvents?: {
@@ -65,12 +66,12 @@ export class SpeechRecognitionService extends EventTarget {
     return this.#state;
   }
 
-  set state(value: SpeechRecognitionStates) {
+  set state(value: SpeechRecognitionState) {
     this.#state = value;
 
     const eventUpdateState = new CustomEvent<{
-      state: SpeechRecognitionStates;
-    }>(SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_STATE, {
+      state: SpeechRecognitionState;
+    }>(SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE, {
       detail: { state: value },
       bubbles: true,
       composed: true,
@@ -86,7 +87,7 @@ export class SpeechRecognitionService extends EventTarget {
     this.#interimTranscript = value;
 
     const eventUpdateState = new CustomEvent<{ interimTranscript: string }>(
-      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_INTERIM_TRANSCRIPT,
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
       {
         detail: { interimTranscript: value },
         bubbles: true,

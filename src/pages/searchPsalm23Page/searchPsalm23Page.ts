@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 
 @customElement("search-psalm-23-page")
 export class SearchPsalm23Page extends BasePage(LitElement) {
@@ -49,13 +49,13 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_URLS.SEARCH_PSALM_23_PAGE,
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.SEARCH_PSALM_23_PAGE,
     });
   }
 }

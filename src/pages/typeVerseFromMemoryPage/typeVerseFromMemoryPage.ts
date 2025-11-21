@@ -4,7 +4,7 @@ import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS, CUSTOM_EVENTS } from "../../constants";
+import { PAGE_NAME, CUSTOM_EVENT } from "../../constants";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
@@ -94,7 +94,7 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? PAGE_URLS.SEARCH_ADVANCED_PAGE,
+      nextPage: this.previousPage ?? PAGE_NAME.SEARCH_ADVANCED_PAGE,
     });
   }
 
@@ -102,8 +102,8 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
     this.#sendEventForRecitedBibleVerse();
 
     this.navigateToPage({
-      nextPage: PAGE_URLS.SCORE_PAGE,
-      previousPage: PAGE_URLS.TYPE_VERSE_FROM_MEMORY_PAGE,
+      nextPage: PAGE_NAME.SCORE_PAGE,
+      previousPage: PAGE_NAME.TYPE_VERSE_FROM_MEMORY_PAGE,
     });
   }
 
@@ -114,7 +114,7 @@ export class TypeVerseFromMemoryPage extends BasePage(LitElement) {
   #sendEventForRecitedBibleVerse() {
     const eventUpdateRecitedBibleVerse =
       new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
+        CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
         {
           detail: { recitedBibleVerse: this.#textareaInput },
           bubbles: true,
