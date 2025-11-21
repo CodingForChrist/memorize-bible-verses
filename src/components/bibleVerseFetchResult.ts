@@ -6,7 +6,10 @@ import { Task } from "@lit/task";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 import { fetchBibleVerseWithCache } from "../services/api";
-import { removeExtraContentFromBibleVerse } from "../services/formatApiResponse";
+import {
+  removeExtraContentFromBibleVerse,
+  standardizeVerseReference,
+} from "../services/formatApiResponse";
 
 import { CUSTOM_EVENTS } from "../constants";
 
@@ -73,7 +76,8 @@ export class BibleVerseFetchResult extends LitElement {
       throw new Error("expected data to be an object");
     }
 
-    const { id, bibleId, content, verseCount } = verseData.data as BibleVerse;
+    const { id, bibleId, reference, content, verseCount } =
+      verseData.data as BibleVerse;
 
     const options = {
       shouldRemoveSectionHeadings: !this.shouldDisplaySectionHeadings,
@@ -85,7 +89,7 @@ export class BibleVerseFetchResult extends LitElement {
     return {
       id,
       bibleId,
-      reference: this.verseReference!,
+      reference: standardizeVerseReference(reference),
       content: removeExtraContentFromBibleVerse(content, options),
       verseCount,
     };
