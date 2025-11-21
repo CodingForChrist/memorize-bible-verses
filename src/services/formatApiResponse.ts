@@ -114,14 +114,29 @@ export function convertBibleVerseToText(htmlContentString: string) {
   return textArray.join(" ");
 }
 
-export function standardizeBookNameInVerseReference(verseReference: string) {
+export function standardizeVerseReference(verseReference: string) {
+  let updatedVerseReference = verseReference.trim();
+
   // the singular version "Psalm" is used for displaying references (ex: Psalm 23)
   // but the data structure for a verse reference always uses "Psalms"
   // this code handles that difference to make sure they match
-  if (verseReference.startsWith("Psalms")) {
-    const psalmVerseReference = verseReference.replace("Psalms", "Psalm");
-    return psalmVerseReference;
+  if (updatedVerseReference.startsWith("Psalms")) {
+    updatedVerseReference = verseReference.replace("Psalms", "Psalm");
   }
 
-  return verseReference;
+  // the New King James Version (NKJV) uses roman numerals for book numbers
+  // replace roman numbers with numbers
+  const romanNumeralMap = {
+    I: "1",
+    II: "2",
+    III: "3",
+  };
+
+  for (const [key, value] of Object.entries(romanNumeralMap)) {
+    if (updatedVerseReference.startsWith(`${key} `)) {
+      updatedVerseReference = verseReference.replace(`${key} `, `${value} `);
+    }
+  }
+
+  return updatedVerseReference;
 }
