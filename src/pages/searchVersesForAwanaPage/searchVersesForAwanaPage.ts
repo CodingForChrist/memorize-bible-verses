@@ -19,7 +19,7 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   bibleId?: string;
 
   @state()
-  selectedBibleVerse = this.#selectedVerseFromQueryString;
+  selectedBibleVerse = this.#verseReferenceFromQueryString;
 
   pageTitle = "Verses for Awana Club for Kids";
 
@@ -124,16 +124,13 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
     return sortBibleVerseReferences(newTestamentVerses);
   }
 
-  get #selectedVerseFromQueryString() {
-    const verseReferenceFromQueryString = new URL(
-      window.location.href,
-    ).searchParams.get("verse");
+  get #verseReferenceFromQueryString() {
+    const verseReference = new URL(window.location.href).searchParams.get(
+      "verse",
+    );
 
-    if (
-      verseReferenceFromQueryString &&
-      this.#allBibleVerses.includes(verseReferenceFromQueryString)
-    ) {
-      return verseReferenceFromQueryString;
+    if (verseReference && this.#allBibleVerses.includes(verseReference)) {
+      return verseReference;
     }
   }
 

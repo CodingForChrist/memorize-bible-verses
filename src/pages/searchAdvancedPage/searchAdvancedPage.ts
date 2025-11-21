@@ -13,9 +13,9 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   bibleId?: string;
 
   @state()
-  verseReference = "";
+  verseReference = this.#verseReferenceFromQueryString;
 
-  #textInput = "";
+  #textInput = this.verseReference;
   pageTitle = "Advanced Search";
 
   static styles = [
@@ -145,5 +145,13 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   #handleFormSubmit(event: Event) {
     event.preventDefault();
     this.verseReference = this.#textInput;
+  }
+
+  get #verseReferenceFromQueryString() {
+    const verseReference = new URL(window.location.href).searchParams.get(
+      "verse",
+    );
+
+    return verseReference ?? "";
   }
 }
