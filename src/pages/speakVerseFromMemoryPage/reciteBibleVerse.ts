@@ -5,19 +5,19 @@ import { state } from "lit/decorators/state.js";
 import { choose } from "lit/directives/choose.js";
 import { live } from "lit/directives/live.js";
 
-import { CUSTOM_EVENTS } from "../constants";
+import { CUSTOM_EVENTS } from "../../constants";
 
 import {
   SpeechRecognitionService,
   SPEECH_RECOGNITION_STATES,
   SPEECH_RECOGNITION_CUSTOM_EVENTS,
   type SpeechRecognitionStates,
-} from "../services/speechRecognition";
-import { convertBibleVerseToText } from "../services/formatApiResponse";
-import { autoCorrectSpeechRecognitionInput } from "../services/autoCorrectSpokenBibleVerse";
-import { ButtonStyles } from "./sharedStyles";
+} from "./speechRecognition";
+import { convertBibleVerseToText } from "../../services/formatApiResponse";
+import { autoCorrectSpeechRecognitionInput } from "./autoCorrectSpokenBibleVerse";
+import { ButtonStyles } from "../../components/sharedStyles";
 
-import type { CustomEventUpdateRecitedBibleVerse } from "../types";
+import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
 @customElement("recite-bible-verse")
 export class ReciteBibleVerse extends LitElement {

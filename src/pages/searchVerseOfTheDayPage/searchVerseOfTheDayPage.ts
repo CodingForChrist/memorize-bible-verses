@@ -2,13 +2,9 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS } from "../../constants";
-import {
-  formatDate,
-  addDays,
-  subtractDays,
-} from "../../services/dateTimeUtility";
+import { formatDate, addDays, subtractDays } from "./dateTimeUtility";
 
 @customElement("search-verse-of-the-day-page")
 export class SearchVerseOfTheDayPage extends BasePage(LitElement) {

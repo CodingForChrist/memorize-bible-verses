@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { classMap } from "lit/directives/class-map.js";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS } from "../../constants";
 
 @customElement("search-verses-for-sharing-the-gospel-page")

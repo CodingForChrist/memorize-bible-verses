@@ -3,15 +3,15 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS } from "../../constants";
-import { formSelectStyles } from "../sharedStyles";
+import { formSelectStyles } from "../../components/sharedStyles";
 
 import {
   getOldTestamentVerseReferences,
   getNewTestamentVerseReferences,
   sortBibleVerseReferences,
-} from "../../services/sortBibleVerses";
+} from "./sortBibleVerses";
 
 @customElement("search-verses-for-awana-page")
 export class SearchVersesForAwanaPage extends BasePage(LitElement) {

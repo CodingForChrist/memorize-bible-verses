@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS, CUSTOM_EVENTS } from "../../constants";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../../types";

@@ -1,4 +1,4 @@
-import { parseVerseReferenceIntoParts } from "./parseBibleVerseReference";
+import { parseVerseReferenceIntoParts } from "../../services/parseBibleVerseReference";
 
 type AutoCorrectSpeechRecognitionInputOptions = {
   transcript: string;

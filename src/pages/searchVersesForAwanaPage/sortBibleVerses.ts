@@ -1,5 +1,5 @@
-import { parseVerseReferenceIntoParts } from "./parseBibleVerseReference";
-import { oldTestament, newTestament } from "../data/bibleBooks.json";
+import { parseVerseReferenceIntoParts } from "../../services/parseBibleVerseReference";
+import { oldTestament, newTestament } from "../../data/bibleBooks.json";
 
 export function getOldTestamentVerseReferences(verseReferences: string[]) {
   const oldTestamentVerses = verseReferences.filter((verseReferences) => {
