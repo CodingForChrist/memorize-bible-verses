@@ -125,14 +125,11 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   }
 
   get #verseReferenceFromQueryString() {
-    const verseReference = new URL(
-      window.location.href,
-    ).searchParams.get("verse");
+    const verseReference = new URL(window.location.href).searchParams.get(
+      "verse",
+    );
 
-    if (
-      verseReference &&
-      this.#allBibleVerses.includes(verseReference)
-    ) {
+    if (verseReference && this.#allBibleVerses.includes(verseReference)) {
       return verseReference;
     }
   }
