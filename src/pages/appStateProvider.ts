@@ -29,6 +29,9 @@ export class AppStateProvider extends LitElement {
   @state()
   recitedBibleVerse?: string;
 
+  @state()
+  previousPage?: string;
+
   static styles = css`
     *,
     ::before,
@@ -95,6 +98,7 @@ export class AppStateProvider extends LitElement {
         html`<speak-verse-from-memory-page
           verse-reference=${this.selectedBibleVerse?.reference || nothing}
           verse-content=${this.selectedBibleVerse?.content || nothing}
+          previous-page=${this.previousPage || nothing}
         ></speak-verse-from-memory-page>`,
     },
     {
@@ -102,6 +106,7 @@ export class AppStateProvider extends LitElement {
       render: () =>
         html`<type-verse-from-memory-page
           verse-reference=${this.selectedBibleVerse?.reference || nothing}
+          previous-page=${this.previousPage || nothing}
         ></type-verse-from-memory-page>`,
     },
     {
@@ -112,6 +117,7 @@ export class AppStateProvider extends LitElement {
           verse-reference=${this.selectedBibleVerse?.reference || nothing}
           verse-content=${this.selectedBibleVerse?.content || nothing}
           recited-bible-verse=${this.recitedBibleVerse || nothing}
+          previous-page=${this.previousPage || nothing}
         ></score-page>`,
     },
     {
@@ -132,6 +138,7 @@ export class AppStateProvider extends LitElement {
       (event: CustomEventInit<CustomEventNavigateToPage>) => {
         const pageNavigation = event.detail?.pageNavigation;
         if (pageNavigation) {
+          this.previousPage = pageNavigation.previousPage;
           this.#viewTransitionForPageNavigation(pageNavigation);
         }
       },
