@@ -4,8 +4,9 @@ import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 import { formSelectStyles } from "../../components/sharedStyles";
+import { getStateFromURL } from "../../services/router";
 
 import {
   getOldTestamentVerseReferences,
@@ -125,9 +126,7 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   }
 
   get #verseReferenceFromQueryString() {
-    const verseReference = new URL(window.location.href).searchParams.get(
-      "verse",
-    );
+    const verseReference = getStateFromURL()?.verse;
 
     if (verseReference && this.#allBibleVerses.includes(verseReference)) {
       return verseReference;
@@ -208,13 +207,13 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_URLS.SEARCH_VERSES_FOR_AWANA_PAGE,
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.SEARCH_VERSES_FOR_AWANA_PAGE,
     });
   }
 

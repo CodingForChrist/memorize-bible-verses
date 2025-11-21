@@ -1,3 +1,5 @@
+import type { PageName } from "./constants";
+
 export type BibleTranslation = {
   id: string;
   name: string;
@@ -16,10 +18,8 @@ export type BibleVerse = {
 };
 
 export type PageNavigation = {
-  nextPage: string;
-  previousPage?: string;
-  bibleTranslation?: string;
-  shouldUpdateBrowserHistory?: boolean;
+  nextPage: PageName;
+  previousPage?: PageName;
 };
 
 export type CustomEventUpdateBibleTranslation = {

@@ -1,15 +1,13 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { state } from "lit/decorators/state.js";
-import { Router } from "@lit-labs/router";
+import { choose } from "lit/directives/choose.js";
 
-// use polyfill for URLPattern support in older browsers
-import "urlpattern-polyfill";
-
-import { CUSTOM_EVENTS, PAGE_URLS } from "../constants";
-import { findBibleTranslationById } from "../data/bibleTranslationModel";
+import { CUSTOM_EVENT, PAGE_NAME, type PageName } from "../constants";
+import { getStateFromURL, setStateInURL } from "../services/router";
 
 import type {
+  BibleTranslation,
   BibleVerse,
   CustomEventUpdateBibleTranslation,
   CustomEventUpdateBibleVerse,
@@ -21,7 +19,7 @@ import type {
 @customElement("app-state-provider")
 export class AppStateProvider extends LitElement {
   @state()
-  selectedBibleId?: string;
+  selectedBibleTranslation?: BibleTranslation;
 
   @state()
   selectedBibleVerse?: BibleVerse;
@@ -30,7 +28,11 @@ export class AppStateProvider extends LitElement {
   recitedBibleVerse?: string;
 
   @state()
-  previousPage?: string;
+  currentPage: PageName =
+    getStateFromURL()?.pageName ?? PAGE_NAME.INSTRUCTIONS_PAGE;
+
+  @state()
+  previousPage?: PageName;
 
   static styles = css`
     *,
@@ -40,135 +42,60 @@ export class AppStateProvider extends LitElement {
     }
   `;
 
-  router = new Router(this, [
-    {
-      path: PAGE_URLS.INSTRUCTIONS_PAGE,
-      render: () => {
-        return html`<instructions-page></instructions-page>`;
-      },
-    },
-    {
-      path: PAGE_URLS.INSTRUCTIONS_PAGE,
-      render: () => {
-        return html`<instructions-page></instructions-page>`;
-      },
-    },
-    {
-      path: PAGE_URLS.SEARCH_OPTIONS_PAGE,
-      render: () => html`<search-options-page></search-options-page>`,
-    },
-    {
-      path: PAGE_URLS.SEARCH_VERSE_OF_THE_DAY_PAGE,
-      render: () =>
-        html`<search-verse-of-the-day-page
-          bible-id=${this.selectedBibleId}
-        ></search-verse-of-the-day-page>`,
-    },
-    {
-      path: PAGE_URLS.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
-      render: () =>
-        html`<search-verses-for-sharing-the-gospel-page
-          bible-id=${this.selectedBibleId}
-        ></search-verses-for-sharing-the-gospel-page>`,
-    },
-    {
-      path: PAGE_URLS.SEARCH_PSALM_23_PAGE,
-      render: () =>
-        html`<search-psalm-23-page
-          bible-id=${this.selectedBibleId}
-        ></search-psalm-23-page>`,
-    },
-    {
-      path: PAGE_URLS.SEARCH_VERSES_FOR_AWANA_PAGE,
-      render: () =>
-        html`<search-verses-for-awana-page
-          bible-id=${this.selectedBibleId}
-        ></search-verses-for-awana-page>`,
-    },
-    {
-      path: PAGE_URLS.SEARCH_ADVANCED_PAGE,
-      render: () =>
-        html`<search-advanced-page
-          bible-id=${this.selectedBibleId}
-        ></search-advanced-page>`,
-    },
-    {
-      path: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      render: () =>
-        html`<speak-verse-from-memory-page
-          verse-reference=${this.selectedBibleVerse?.reference || nothing}
-          verse-content=${this.selectedBibleVerse?.content || nothing}
-          previous-page=${this.previousPage || nothing}
-        ></speak-verse-from-memory-page>`,
-    },
-    {
-      path: PAGE_URLS.TYPE_VERSE_FROM_MEMORY_PAGE,
-      render: () =>
-        html`<type-verse-from-memory-page
-          verse-reference=${this.selectedBibleVerse?.reference || nothing}
-          previous-page=${this.previousPage || nothing}
-        ></type-verse-from-memory-page>`,
-    },
-    {
-      path: PAGE_URLS.SCORE_PAGE,
-      render: () =>
-        html`<score-page
-          bible-id=${this.selectedBibleId}
-          verse-reference=${this.selectedBibleVerse?.reference || nothing}
-          verse-content=${this.selectedBibleVerse?.content || nothing}
-          recited-bible-verse=${this.recitedBibleVerse || nothing}
-          previous-page=${this.previousPage || nothing}
-        ></score-page>`,
-    },
-    {
-      path: "(.*)",
-      render: () => {
-        return html`<instructions-page></instructions-page>`;
-      },
-    },
-  ]);
-
   constructor() {
     super();
 
     window.history.scrollRestoration = "manual";
 
+    window.addEventListener("popstate", () => {
+      const nextPage =
+        getStateFromURL()?.pageName ?? PAGE_NAME.INSTRUCTIONS_PAGE;
+      this.#goto({ nextPage });
+    });
+
     this.addEventListener(
-      CUSTOM_EVENTS.NAVIGATE_TO_PAGE,
+      CUSTOM_EVENT.NAVIGATE_TO_PAGE,
       (event: CustomEventInit<CustomEventNavigateToPage>) => {
         const pageNavigation = event.detail?.pageNavigation;
         if (pageNavigation) {
-          this.previousPage = pageNavigation.previousPage;
           this.#viewTransitionForPageNavigation(pageNavigation);
         }
       },
     );
 
     this.addEventListener(
-      CUSTOM_EVENTS.UPDATE_BIBLE_TRANSLATION,
+      CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION,
       (event: CustomEventInit<CustomEventUpdateBibleTranslation>) => {
         const bibleTranslation = event.detail?.bibleTranslation;
         if (bibleTranslation) {
-          this.selectedBibleId = bibleTranslation.id;
-          history.replaceState({}, "", this.#getURLWithQueryParams());
+          this.selectedBibleTranslation = bibleTranslation;
+          setStateInURL({
+            pageName: this.currentPage,
+            translation: bibleTranslation.abbreviationLocal,
+            shouldUpdateBrowserHistory: false,
+          });
         }
       },
     );
 
     this.addEventListener(
-      CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
+      CUSTOM_EVENT.UPDATE_BIBLE_VERSE,
       (event: CustomEventInit<CustomEventUpdateBibleVerse>) => {
         const bibleVerse = event.detail?.bibleVerse;
         if (bibleVerse) {
           this.selectedBibleVerse = bibleVerse;
           this.recitedBibleVerse = undefined;
-          history.replaceState({}, "", this.#getURLWithQueryParams());
+          setStateInURL({
+            pageName: this.currentPage,
+            verse: bibleVerse.reference,
+            shouldUpdateBrowserHistory: false,
+          });
         }
       },
     );
 
     this.addEventListener(
-      CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
+      CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
       (event: CustomEventInit<CustomEventUpdateRecitedBibleVerse>) => {
         const recitedBibleVerse = event.detail?.recitedBibleVerse;
         if (recitedBibleVerse) {
@@ -179,26 +106,101 @@ export class AppStateProvider extends LitElement {
   }
 
   render() {
-    return html`${this.router.outlet()}`;
+    return choose(
+      this.currentPage,
+      [
+        [
+          PAGE_NAME.INSTRUCTIONS_PAGE,
+          () => html`<instructions-page></instructions-page>`,
+        ],
+        [
+          PAGE_NAME.SEARCH_OPTIONS_PAGE,
+          () => html`<search-options-page></search-options-page>`,
+        ],
+        [
+          PAGE_NAME.SEARCH_VERSE_OF_THE_DAY_PAGE,
+          () =>
+            html`<search-verse-of-the-day-page
+              bible-id=${this.selectedBibleTranslation?.id || nothing}
+            ></search-verse-of-the-day-page>`,
+        ],
+        [
+          PAGE_NAME.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+          () =>
+            html`<search-verses-for-sharing-the-gospel-page
+              bible-id=${this.selectedBibleTranslation?.id}
+            ></search-verses-for-sharing-the-gospel-page>`,
+        ],
+        [
+          PAGE_NAME.SEARCH_PSALM_23_PAGE,
+          () =>
+            html`<search-psalm-23-page
+              bible-id=${this.selectedBibleTranslation?.id || nothing}
+            ></search-psalm-23-page>`,
+        ],
+        [
+          PAGE_NAME.SEARCH_VERSES_FOR_AWANA_PAGE,
+          () =>
+            html`<search-verses-for-awana-page
+              bible-id=${this.selectedBibleTranslation?.id || nothing}
+            ></search-verses-for-awana-page>`,
+        ],
+        [
+          PAGE_NAME.SEARCH_ADVANCED_PAGE,
+          () =>
+            html`<search-advanced-page
+              bible-id=${this.selectedBibleTranslation?.id || nothing}
+            ></search-advanced-page>`,
+        ],
+        [
+          PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+          () =>
+            html`<speak-verse-from-memory-page
+              verse-reference=${this.selectedBibleVerse?.reference || nothing}
+              verse-content=${this.selectedBibleVerse?.content || nothing}
+              previous-page=${this.previousPage || nothing}
+            ></speak-verse-from-memory-page>`,
+        ],
+        [
+          PAGE_NAME.TYPE_VERSE_FROM_MEMORY_PAGE,
+          () =>
+            html`<type-verse-from-memory-page
+              verse-reference=${this.selectedBibleVerse?.reference || nothing}
+              previous-page=${this.previousPage || nothing}
+            ></type-verse-from-memory-page>`,
+        ],
+        [
+          PAGE_NAME.SCORE_PAGE,
+          () =>
+            html`<score-page
+              bible-id=${this.selectedBibleTranslation?.id || nothing}
+              verse-reference=${this.selectedBibleVerse?.reference || nothing}
+              verse-content=${this.selectedBibleVerse?.content || nothing}
+              recited-bible-verse=${this.recitedBibleVerse || nothing}
+              previous-page=${this.previousPage || nothing}
+            ></score-page>`,
+        ],
+      ],
+      () => html`<instructions-page></instructions-page>`,
+    );
   }
 
   #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
-    history.pushState(
-      {},
-      "",
-      this.#getURLWithQueryParams(pageNavigation.nextPage),
-    );
+    setStateInURL({
+      pageName: pageNavigation.nextPage,
+      shouldUpdateBrowserHistory: true,
+    });
 
     // fallback for browsers that don't support the View Transition API
     if (!document.startViewTransition) {
-      this.router.goto(pageNavigation.nextPage);
+      this.#goto(pageNavigation);
       window.scrollTo(0, 0);
       return;
     }
 
     // View Transition API
     const transition = document.startViewTransition(() => {
-      this.router.goto(pageNavigation.nextPage);
+      this.#goto(pageNavigation);
     });
 
     transition.ready.then(() => {
@@ -207,19 +209,8 @@ export class AppStateProvider extends LitElement {
     });
   }
 
-  #getURLWithQueryParams(pathname = window.location.pathname) {
-    const url = new URL(pathname, window.location.origin);
-    if (this.selectedBibleId) {
-      const { abbreviationLocal } = findBibleTranslationById(
-        this.selectedBibleId,
-      );
-      url.searchParams.set("translation", abbreviationLocal);
-    }
-
-    if (this.selectedBibleVerse) {
-      url.searchParams.set("verse", this.selectedBibleVerse.reference);
-    }
-
-    return url;
+  #goto(pageNavigation: PageNavigation) {
+    this.previousPage = pageNavigation.previousPage;
+    this.currentPage = pageNavigation.nextPage;
   }
 }

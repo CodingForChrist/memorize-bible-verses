@@ -4,7 +4,7 @@ import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 import { ButtonStyles } from "../../components/sharedStyles";
 
 @customElement("speak-verse-from-memory-page")
@@ -65,8 +65,8 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
           class="secondary"
           @click=${() =>
             this.navigateToPage({
-              nextPage: PAGE_URLS.TYPE_VERSE_FROM_MEMORY_PAGE,
-              previousPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
+              nextPage: PAGE_NAME.TYPE_VERSE_FROM_MEMORY_PAGE,
+              previousPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
             })}
         >
           Click here to type in the verse instead
@@ -120,14 +120,14 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? PAGE_URLS.SEARCH_ADVANCED_PAGE,
+      nextPage: this.previousPage ?? PAGE_NAME.SEARCH_ADVANCED_PAGE,
     });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: PAGE_URLS.SCORE_PAGE,
-      previousPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      nextPage: PAGE_NAME.SCORE_PAGE,
+      previousPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
     });
   }
 

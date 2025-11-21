@@ -7,7 +7,7 @@ import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 import { convertBibleVerseToText } from "../../services/formatApiResponse";
 import { findBibleTranslationById } from "../../data/bibleTranslationModel";
 
@@ -153,13 +153,13 @@ export class ScorePage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      nextPage: this.previousPage ?? PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
     });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE,
+      nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE,
     });
   }
 

@@ -4,7 +4,7 @@ import { property } from "lit/decorators/property.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 
 @customElement("search-verses-for-sharing-the-gospel-page")
 export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
@@ -168,13 +168,13 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_URLS.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
     });
   }
 }

@@ -11,7 +11,7 @@ import {
   standardizeVerseReference,
 } from "../../services/formatApiResponse";
 import { parseDate, formatDate } from "./dateTimeUtility";
-import { CUSTOM_EVENTS } from "../../constants";
+import { CUSTOM_EVENT } from "../../constants";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../../types";
 
@@ -129,7 +129,7 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
   #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
     const eventUpdateSelectedBible =
       new CustomEvent<CustomEventUpdateBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_BIBLE_VERSE,
+        CUSTOM_EVENT.UPDATE_BIBLE_VERSE,
         {
           detail: { bibleVerse },
           bubbles: true,

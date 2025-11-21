@@ -4,8 +4,9 @@ import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "../basePageMixin";
-import { PAGE_URLS } from "../../constants";
+import { PAGE_NAME } from "../../constants";
 import { ButtonStyles } from "../../components/sharedStyles";
+import { getStateFromURL } from "../../services/router";
 
 @customElement("search-advanced-page")
 export class SearchAdvancedPage extends BasePage(LitElement) {
@@ -13,7 +14,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   bibleId?: string;
 
   @state()
-  verseReference = this.#verseReferenceFromQueryString;
+  verseReference = getStateFromURL()?.verse ?? "";
 
   #textInput = this.verseReference;
   pageTitle = "Advanced Search";
@@ -128,13 +129,13 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   }
 
   #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_URLS.SEARCH_OPTIONS_PAGE });
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
   }
 
   #handleForwardButtonClick() {
     this.navigateToPage({
-      nextPage: PAGE_URLS.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_URLS.SEARCH_ADVANCED_PAGE,
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.SEARCH_ADVANCED_PAGE,
     });
   }
 
@@ -145,13 +146,5 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   #handleFormSubmit(event: Event) {
     event.preventDefault();
     this.verseReference = this.#textInput;
-  }
-
-  get #verseReferenceFromQueryString() {
-    const verseReference = new URL(window.location.href).searchParams.get(
-      "verse",
-    );
-
-    return verseReference ?? "";
   }
 }

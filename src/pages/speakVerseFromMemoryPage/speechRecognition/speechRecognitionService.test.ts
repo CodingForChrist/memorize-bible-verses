@@ -11,10 +11,10 @@ import { SpeechRecognition as SpeechRecognitionMock } from "corti";
 
 import {
   SpeechRecognitionService,
-  SPEECH_RECOGNITION_STATES,
+  SPEECH_RECOGNITION_STATE,
 } from "./speechRecognitionService";
 
-const { LISTENING, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATES;
+const { LISTENING, RESOLVED, REJECTED } = SPEECH_RECOGNITION_STATE;
 
 beforeAll(() => {
   vi.stubGlobal("SpeechRecognition", SpeechRecognitionMock);

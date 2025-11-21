@@ -1,7 +1,7 @@
 export {
-  SPEECH_RECOGNITION_STATES,
-  SPEECH_RECOGNITION_CUSTOM_EVENTS,
+  SPEECH_RECOGNITION_STATE,
+  SPEECH_RECOGNITION_CUSTOM_EVENT,
   SpeechRecognitionService,
 } from "./speechRecognitionService";
 
-export type { SpeechRecognitionStates } from "./speechRecognitionService";
+export type { SpeechRecognitionState } from "./speechRecognitionService";

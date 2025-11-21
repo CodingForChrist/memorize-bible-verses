@@ -5,13 +5,13 @@ import { state } from "lit/decorators/state.js";
 import { choose } from "lit/directives/choose.js";
 import { live } from "lit/directives/live.js";
 
-import { CUSTOM_EVENTS } from "../../constants";
+import { CUSTOM_EVENT } from "../../constants";
 
 import {
   SpeechRecognitionService,
-  SPEECH_RECOGNITION_STATES,
-  SPEECH_RECOGNITION_CUSTOM_EVENTS,
-  type SpeechRecognitionStates,
+  SPEECH_RECOGNITION_STATE,
+  SPEECH_RECOGNITION_CUSTOM_EVENT,
+  type SpeechRecognitionState,
 } from "./speechRecognition";
 import { convertBibleVerseToText } from "../../services/formatApiResponse";
 import { autoCorrectSpeechRecognitionInput } from "./autoCorrectSpokenBibleVerse";
@@ -28,8 +28,8 @@ export class ReciteBibleVerse extends LitElement {
   verseContent?: string;
 
   @state()
-  speechRecognitionState: SpeechRecognitionStates =
-    SPEECH_RECOGNITION_STATES.INITIAL;
+  speechRecognitionState: SpeechRecognitionState =
+    SPEECH_RECOGNITION_STATE.INITIAL;
 
   @state()
   interimTranscript: string = "";
@@ -45,7 +45,7 @@ export class ReciteBibleVerse extends LitElement {
     try {
       this.speechRecognitionService = new SpeechRecognitionService();
     } catch (error) {
-      this.speechRecognitionState = SPEECH_RECOGNITION_STATES.REJECTED;
+      this.speechRecognitionState = SPEECH_RECOGNITION_STATE.REJECTED;
       console.error("Unable to use the SpeechRecognition API", error);
     }
   }
@@ -91,7 +91,7 @@ export class ReciteBibleVerse extends LitElement {
       AUDIOEND,
       RESOLVED,
       REJECTED,
-    } = SPEECH_RECOGNITION_STATES;
+    } = SPEECH_RECOGNITION_STATE;
 
     return html` ${choose(this.speechRecognitionState, [
       [
@@ -211,11 +211,11 @@ export class ReciteBibleVerse extends LitElement {
     super.connectedCallback();
 
     this.speechRecognitionService?.addEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_STATE,
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE,
       this.#handleSpeechRecognitionStateEvent,
     );
     this.speechRecognitionService?.addEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_INTERIM_TRANSCRIPT,
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
       this.#handleSpeechRecognitionInterimTranscriptEvent,
     );
   }
@@ -224,11 +224,11 @@ export class ReciteBibleVerse extends LitElement {
     super.disconnectedCallback();
 
     this.speechRecognitionService?.removeEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_STATE,
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE,
       this.#handleSpeechRecognitionStateEvent,
     );
     this.speechRecognitionService?.removeEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENTS.UPDATE_INTERIM_TRANSCRIPT,
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
       this.#handleSpeechRecognitionInterimTranscriptEvent,
     );
   }
@@ -242,7 +242,7 @@ export class ReciteBibleVerse extends LitElement {
   #resetState() {
     this.interimTranscript = "";
     this.finalTranscript = "";
-    this.speechRecognitionState = SPEECH_RECOGNITION_STATES.INITIAL;
+    this.speechRecognitionState = SPEECH_RECOGNITION_STATE.INITIAL;
   }
 
   #handleRecordButtonClick() {
@@ -278,7 +278,7 @@ export class ReciteBibleVerse extends LitElement {
   }
 
   #handleSpeechRecognitionStateEvent = (
-    event: CustomEventInit<{ state: SpeechRecognitionStates }>,
+    event: CustomEventInit<{ state: SpeechRecognitionState }>,
   ) => {
     const speechRecognitionState = event.detail?.state;
     if (speechRecognitionState) {
@@ -302,7 +302,7 @@ export class ReciteBibleVerse extends LitElement {
   #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
     const eventUpdateRecitedBibleVerse =
       new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
-        CUSTOM_EVENTS.UPDATE_RECITED_BIBLE_VERSE,
+        CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
         {
           detail: { recitedBibleVerse },
           bubbles: true,
