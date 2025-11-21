@@ -2,9 +2,9 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS } from "../../constants";
-import { ButtonStyles } from "../sharedStyles";
+import { ButtonStyles } from "../../components/sharedStyles";
 
 @customElement("search-options-page")
 export class SearchOptionsPage extends BasePage(LitElement) {

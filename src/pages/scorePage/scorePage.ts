@@ -1,17 +1,15 @@
 import { LitElement, css, html, unsafeCSS, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
-import { query } from "lit/decorators/query.js";
 import { when } from "lit/directives/when.js";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS } from "../../constants";
 import { convertBibleVerseToText } from "../../services/formatApiResponse";
 import { findBibleTranslationById } from "../../data/bibleTranslationModel";
-import type { ScoreRecitedBibleVerse } from "../scoreRecitedBibleVerse";
 
 @customElement("score-page")
 export class ScorePage extends BasePage(LitElement) {
@@ -26,9 +24,6 @@ export class ScorePage extends BasePage(LitElement) {
 
   @property({ attribute: "recited-bible-verse", reflect: true })
   recitedBibleVerse?: string;
-
-  @query("score-recited-bible-verse")
-  scoreRecitedBibleVerse?: ScoreRecitedBibleVerse;
 
   pageTitle = "Score";
 

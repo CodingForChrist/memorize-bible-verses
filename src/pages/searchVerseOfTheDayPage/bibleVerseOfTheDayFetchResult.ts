@@ -5,12 +5,12 @@ import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { Task } from "@lit/task";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
-import { fetchBibleVerseOfTheDayWithCache } from "../services/api";
-import { removeExtraContentFromBibleVerse } from "../services/formatApiResponse";
-import { parseDate, formatDate } from "../services/dateTimeUtility";
-import { CUSTOM_EVENTS } from "../constants";
+import { fetchBibleVerseOfTheDayWithCache } from "../../services/api";
+import { removeExtraContentFromBibleVerse } from "../../services/formatApiResponse";
+import { parseDate, formatDate } from "./dateTimeUtility";
+import { CUSTOM_EVENTS } from "../../constants";
 
-import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
+import type { BibleVerse, CustomEventUpdateBibleVerse } from "../../types";
 
 @customElement("bible-verse-of-the-day-fetch-result")
 export class BibleVerseOfTheDayFetchResult extends LitElement {

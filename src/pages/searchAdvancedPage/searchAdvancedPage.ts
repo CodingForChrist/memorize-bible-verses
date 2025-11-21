@@ -3,9 +3,9 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 
-import { BasePage } from "./basePageMixin";
+import { BasePage } from "../basePageMixin";
 import { PAGE_URLS } from "../../constants";
-import { ButtonStyles } from "../sharedStyles";
+import { ButtonStyles } from "../../components/sharedStyles";
 
 @customElement("search-advanced-page")
 export class SearchAdvancedPage extends BasePage(LitElement) {
