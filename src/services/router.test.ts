@@ -33,35 +33,25 @@ describe("getStateFromURL()", () => {
     expect(getStateFromURL()).toBeUndefined;
   });
 
-  test("should return undefined for an invalid page name", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
-      hash: "#/invalid-page-name",
-    });
-
-    expect(getStateFromURL()).toBeUndefined;
-  });
-
   test("should return valid page name", () => {
     vi.stubGlobal("location", {
       ...window.location,
       ...defaultLocationData,
-      hash: "#/instructions-page",
+      hash: "#/instructions",
     });
 
-    expect(getStateFromURL()?.pageName).toBe("instructions-page");
+    expect(getStateFromURL()?.pageName).toBe("instructions");
   });
 
   test("should return valid page name, translation, and verse", () => {
     vi.stubGlobal("location", {
       ...window.location,
       ...defaultLocationData,
-      hash: "#/search-verses-for-awana-page?translation=NASB+1995&verse=Psalm+9%3A10",
+      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
     expect(getStateFromURL()).toEqual({
-      pageName: "search-verses-for-awana-page",
+      pageName: "search-verses-for-awana",
       translation: "NASB 1995",
       verse: "Psalm 9:10",
     });
@@ -82,14 +72,14 @@ describe("setStateInURL()", () => {
 
     const pushStateSpy = vi.spyOn(window.history, "pushState");
     setStateInURL({
-      pageName: "instructions-page",
+      pageName: "instructions",
       shouldUpdateBrowserHistory: true,
     });
 
     expect(pushStateSpy).toHaveBeenCalledWith(
       {},
       "",
-      "http://localhost:3000/memorize-bible-verses/#/instructions-page",
+      "http://localhost:3000/memorize-bible-verses/#/instructions",
     );
   });
 
@@ -102,14 +92,14 @@ describe("setStateInURL()", () => {
 
     const replaceStateSpy = vi.spyOn(window.history, "replaceState");
     setStateInURL({
-      pageName: "instructions-page",
+      pageName: "instructions",
       shouldUpdateBrowserHistory: false,
     });
 
     expect(replaceStateSpy).toHaveBeenCalledWith(
       {},
       "",
-      "http://localhost:3000/memorize-bible-verses/#/instructions-page",
+      "http://localhost:3000/memorize-bible-verses/#/instructions",
     );
   });
 
@@ -117,13 +107,13 @@ describe("setStateInURL()", () => {
     vi.stubGlobal("location", {
       ...window.location,
       ...defaultLocationData,
-      href: "http://localhost:3000/memorize-bible-verses/#/search-verses-for-awana-page?translation=NASB+1995&verse=Psalm+9%3A10",
-      hash: "#/search-verses-for-awana-page?translation=NASB+1995&verse=Psalm+9%3A10",
+      href: "http://localhost:3000/memorize-bible-verses/#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
     const pushStateSpy = vi.spyOn(window.history, "pushState");
     setStateInURL({
-      pageName: "search-advanced-page",
+      pageName: "search-advanced",
       verse: "John 3:16",
       shouldUpdateBrowserHistory: true,
     });
@@ -131,7 +121,7 @@ describe("setStateInURL()", () => {
     expect(pushStateSpy).toHaveBeenCalledWith(
       {},
       "",
-      "http://localhost:3000/memorize-bible-verses/#/search-advanced-page?translation=NASB+1995&verse=John+3%3A16",
+      "http://localhost:3000/memorize-bible-verses/#/search-advanced?translation=NASB+1995&verse=John+3%3A16",
     );
   });
 });
