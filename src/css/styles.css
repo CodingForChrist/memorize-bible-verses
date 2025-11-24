@@ -53,6 +53,7 @@
 
   --color-gray: rgba(0, 0, 0, 0.7);
   --color-light-gray: rgba(0, 0, 0, 0.2);
+  --color-lighter-gray: rgba(0, 0, 0, 0.05);
   --font-body: "PT Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
 }
