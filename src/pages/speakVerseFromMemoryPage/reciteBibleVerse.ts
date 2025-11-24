@@ -3,7 +3,6 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 import { choose } from "lit/directives/choose.js";
-import { live } from "lit/directives/live.js";
 
 import { CUSTOM_EVENT } from "../../constants";
 
@@ -32,11 +31,9 @@ export class ReciteBibleVerse extends LitElement {
     SPEECH_RECOGNITION_STATE.INITIAL;
 
   @state()
-  interimTranscript: string = "";
+  transcript: string = "";
 
-  @state()
-  finalTranscript: string = "";
-
+  #textareaInput = "";
   speechRecognitionService?: SpeechRecognitionService;
 
   constructor() {
@@ -59,15 +56,12 @@ export class ReciteBibleVerse extends LitElement {
         justify-content: space-between;
         height: 100%;
       }
-      alert-message {
-        margin-bottom: 2rem;
-      }
       .button-container {
         text-align: center;
       }
-      .transcript-container {
-        margin-bottom: 2rem;
-        min-height: 8rem;
+      loading-spinner {
+        margin-top: 2rem;
+        margin-bottom: 0;
       }
       button {
         min-width: 7rem;
@@ -76,8 +70,53 @@ export class ReciteBibleVerse extends LitElement {
       button .icon {
         margin-right: 0.25rem;
       }
+      textarea {
+        font: inherit;
+        color: inherit;
+        width: 100%;
+        padding: 1rem;
+        background-color: var(--color-primary-mint-cream);
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
+        box-sizing: border-box;
+        margin: 2rem 0;
+      }
+      textarea:focus,
+      textarea:active {
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
+      }
+      textarea:disabled {
+        background-color: var(--color-lighter-gray);
+        border-color: var(--color-light-gray);
+        cursor: not-allowed;
+      }
     `,
   ];
+
+  get #verseText() {
+    if (!this.verseContent) {
+      return "";
+    }
+
+    return convertBibleVerseToText(this.verseContent);
+  }
+
+  #renderTextarea({ disabled }: { disabled: boolean }) {
+    const placeholderText = `Speak or type in ${this.verseReference ?? "the verse reference"} from memory...`;
+
+    const verseWordCount = this.#verseText.split(" ").length;
+    const numRows = Math.max(Math.floor(verseWordCount / 6), 3);
+
+    return html`<textarea
+      name="transcript-text-input"
+      rows=${numRows}
+      placeholder=${placeholderText}
+      .value=${this.#textareaInput}
+      @input=${this.#handleTextareaInput}
+      ?disabled=${disabled}
+    ></textarea>`;
+  }
 
   render() {
     if (!this.verseReference || !this.verseContent) {
@@ -106,6 +145,7 @@ export class ReciteBibleVerse extends LitElement {
               <span class="icon">&#9679;</span>
               <span class="text-content">Record</span>
             </button>
+            ${this.#renderTextarea({ disabled: false })}
           </div>`,
       ],
       [
@@ -115,6 +155,7 @@ export class ReciteBibleVerse extends LitElement {
               Waiting for microphone access
             </alert-message>
             <loading-spinner></loading-spinner>
+            ${this.#renderTextarea({ disabled: true })}
             <div class="button-container">
               <button
                 type="button"
@@ -132,10 +173,8 @@ export class ReciteBibleVerse extends LitElement {
           html`<alert-message type="info">
               Recording in progress
             </alert-message>
-            <div class="transcript-container">
-              <p>${this.interimTranscript}</p>
-              <loading-spinner></loading-spinner>
-            </div>
+            <loading-spinner></loading-spinner>
+            ${this.#renderTextarea({ disabled: true })}
             <div class="button-container">
               <button
                 type="button"
@@ -151,17 +190,15 @@ export class ReciteBibleVerse extends LitElement {
         AUDIOEND,
         () =>
           html`<alert-message type="info"> Finalizing recording </alert-message>
-            <div class="transcript-container">
-              <p>${this.interimTranscript}</p>
-              <loading-spinner></loading-spinner>
-            </div>
+            <loading-spinner></loading-spinner>
+            ${this.#renderTextarea({ disabled: true })}
             <div class="button-container">
               <button
                 type="button"
                 class="secondary"
                 @click=${this.#handleRecordButtonClick}
               >
-                <span class="text-content">Try Again</span>
+                <span class="text-content">Try Recording Again</span>
               </button>
             </div>`,
       ],
@@ -171,20 +208,14 @@ export class ReciteBibleVerse extends LitElement {
           html`<alert-message type="success">
               Recording complete!
             </alert-message>
-            <div class="transcript-container">
-              <p
-                contenteditable="plaintext-only"
-                .innerText=${live(this.finalTranscript)}
-                @focusout=${this.#handleFinalTranscriptFocusOut}
-              ></p>
-            </div>
+            ${this.#renderTextarea({ disabled: false })}
             <div class="button-container">
               <button
                 type="button"
                 class="secondary"
                 @click=${this.#handleRecordButtonClick}
               >
-                <span class="text-content">Try Again</span>
+                <span class="text-content">Try Recording Again</span>
               </button>
             </div>`,
       ],
@@ -194,13 +225,14 @@ export class ReciteBibleVerse extends LitElement {
           html`<alert-message type="danger">
               Failed to use microphone input
             </alert-message>
+            ${this.#renderTextarea({ disabled: false })}
             <div class="button-container">
               <button
                 type="button"
                 class="secondary"
                 @click=${this.#handleRecordButtonClick}
               >
-                <span class="text-content">Try Again</span>
+                <span class="text-content">Try Recording Again</span>
               </button>
             </div>`,
       ],
@@ -240,8 +272,8 @@ export class ReciteBibleVerse extends LitElement {
   }
 
   #resetState() {
-    this.interimTranscript = "";
-    this.finalTranscript = "";
+    this.transcript = "";
+    this.#textareaInput = "";
     this.speechRecognitionState = SPEECH_RECOGNITION_STATE.INITIAL;
   }
 
@@ -253,13 +285,14 @@ export class ReciteBibleVerse extends LitElement {
     }
 
     this.speechRecognitionService!.listen().then((finalTranscript) => {
-      this.finalTranscript = autoCorrectSpeechRecognitionInput({
+      this.transcript = autoCorrectSpeechRecognitionInput({
         transcript: finalTranscript,
         verseReference: this.verseReference!,
-        verseText: convertBibleVerseToText(this.verseContent!),
+        verseText: this.#verseText,
       });
 
-      this.#sendEventForRecitedBibleVerse(this.finalTranscript);
+      this.#textareaInput = this.transcript;
+      this.#sendEventForRecitedBibleVerse(this.transcript);
     });
   }
 
@@ -267,14 +300,9 @@ export class ReciteBibleVerse extends LitElement {
     this.speechRecognitionService!.stop();
   }
 
-  #handleFinalTranscriptFocusOut(event: FocusEvent) {
-    const target = event.target as HTMLParagraphElement;
-    if (!target?.innerText || target.innerText === this.finalTranscript) {
-      return;
-    }
-
-    this.finalTranscript = target.innerText;
-    this.#sendEventForRecitedBibleVerse(this.finalTranscript);
+  #handleTextareaInput(event: FocusEvent) {
+    this.#textareaInput = (event.target as HTMLTextAreaElement).value;
+    this.#sendEventForRecitedBibleVerse(this.#textareaInput);
   }
 
   #handleSpeechRecognitionStateEvent = (
@@ -291,11 +319,12 @@ export class ReciteBibleVerse extends LitElement {
   ) => {
     const interimTranscript = event.detail?.interimTranscript;
     if (interimTranscript && this.verseReference && this.verseContent) {
-      this.interimTranscript = autoCorrectSpeechRecognitionInput({
+      this.transcript = autoCorrectSpeechRecognitionInput({
         transcript: interimTranscript,
         verseReference: this.verseReference,
-        verseText: convertBibleVerseToText(this.verseContent),
+        verseText: this.#verseText,
       });
+      this.#textareaInput = this.transcript;
     }
   };
 
