@@ -17,7 +17,6 @@ export const PAGE_NAME = {
   SEARCH_VERSES_FOR_AWANA_PAGE: "search-verses-for-awana",
   SEARCH_ADVANCED_PAGE: "search-advanced",
   SPEAK_VERSE_FROM_MEMORY_PAGE: "speak-verse-from-memory",
-  TYPE_VERSE_FROM_MEMORY_PAGE: "type-verse-from-memory",
   SCORE_PAGE: "score",
 } as const;
 

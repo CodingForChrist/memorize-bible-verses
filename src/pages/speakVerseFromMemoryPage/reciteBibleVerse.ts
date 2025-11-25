@@ -1,4 +1,4 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
@@ -26,12 +26,12 @@ export class ReciteBibleVerse extends LitElement {
   @property({ attribute: "verse-content", reflect: true })
   verseContent?: string;
 
+  @property({ reflect: true })
+  transcript: string = "";
+
   @state()
   speechRecognitionState: SpeechRecognitionState =
     SPEECH_RECOGNITION_STATE.INITIAL;
-
-  @state()
-  transcript: string = "";
 
   speechRecognitionService?: SpeechRecognitionService;
 
@@ -266,19 +266,10 @@ export class ReciteBibleVerse extends LitElement {
     );
   }
 
-  willUpdate(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("verseReference")) {
-      this.#resetState();
-    }
-  }
-
-  #resetState() {
+  #handleRecordButtonClick() {
+    // reset state
     this.transcript = "";
     this.speechRecognitionState = SPEECH_RECOGNITION_STATE.INITIAL;
-  }
-
-  #handleRecordButtonClick() {
-    this.#resetState();
 
     if (window.scrollY < 200) {
       this.scrollIntoView();

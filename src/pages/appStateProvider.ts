@@ -158,16 +158,9 @@ export class AppStateProvider extends LitElement {
             html`<speak-verse-from-memory-page
               verse-reference=${this.selectedBibleVerse?.reference || nothing}
               verse-content=${this.selectedBibleVerse?.content || nothing}
+              recited-bible-verse=${this.recitedBibleVerse || nothing}
               previous-page=${this.previousPage || nothing}
             ></speak-verse-from-memory-page>`,
-        ],
-        [
-          PAGE_NAME.TYPE_VERSE_FROM_MEMORY_PAGE,
-          () =>
-            html`<type-verse-from-memory-page
-              verse-reference=${this.selectedBibleVerse?.reference || nothing}
-              previous-page=${this.previousPage || nothing}
-            ></type-verse-from-memory-page>`,
         ],
         [
           PAGE_NAME.SCORE_PAGE,
