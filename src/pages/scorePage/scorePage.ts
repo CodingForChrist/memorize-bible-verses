@@ -153,7 +153,7 @@ export class ScorePage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
     });
   }
 
