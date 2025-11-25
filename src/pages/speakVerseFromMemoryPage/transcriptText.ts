@@ -49,7 +49,8 @@ export class TranscriptText extends LitElement {
       border-color: var(--color-primary-mint-cream);
       outline: 1px solid var(--color-gray);
     }
-    textarea:disabled {
+    textarea:disabled,
+    textarea[readonly] {
       background-color: var(--color-lighter-gray);
       border-color: var(--color-light-gray);
       cursor: not-allowed;
