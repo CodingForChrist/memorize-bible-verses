@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { query } from "lit/decorators/query.js";
@@ -53,7 +53,8 @@ export class TranscriptText extends LitElement {
       background-color: var(--color-lighter-gray);
       border-color: var(--color-light-gray);
       cursor: not-allowed;
-      -webkit-text-fill-color: currentColor;
+      color: var(--color-gray);
+      -webkit-text-fill-color: var(--color-gray);
     }
   `;
 
@@ -68,7 +69,7 @@ export class TranscriptText extends LitElement {
 
     return html`<textarea
       id="transcript-textarea"
-      placeholder=${placeholderText}
+      placeholder=${this.disabled ? nothing : placeholderText}
       .value=${this.transcript}
       @input=${this.#fieldSizingContentPolyfill}
       @focusout=${this.#handleFocusout}
