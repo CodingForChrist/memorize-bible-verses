@@ -39,44 +39,6 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
     `,
   ];
 
-  get #hasSupportForSpeechRecognition() {
-    return "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
-  }
-
-  #renderAlert() {
-    if (!this.verseReference || !this.verseContent) {
-      return html`
-        <alert-message type="danger">
-          Go back to Step 1 and select a bible verse.</span
-        </alert-message>
-      `;
-    }
-
-    if (!this.#hasSupportForSpeechRecognition) {
-      return html`
-        <h2>${this.verseReference}</h2>
-        <alert-message type="danger">
-          Your browser does not support the Web Speech API. Please try another
-          browser like Chrome or Safari.
-        </alert-message>
-        <button
-          type="button"
-          id="button-fallback"
-          class="secondary"
-          @click=${() =>
-            this.navigateToPage({
-              nextPage: PAGE_NAME.TYPE_VERSE_FROM_MEMORY_PAGE,
-              previousPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-            })}
-        >
-          Click here to type in the verse instead
-        </button>
-      `;
-    }
-
-    return null;
-  }
-
   render() {
     return html`
       <verse-text-page-template
@@ -98,9 +60,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
         <span slot="page-content">
           ${when(
-            this.verseReference &&
-              this.verseContent &&
-              this.#hasSupportForSpeechRecognition,
+            this.verseReference && this.verseContent,
             () => html`
               <h2>${this.verseReference}</h2>
               <recite-bible-verse
@@ -108,7 +68,11 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
                 verse-content="${this.verseContent}"
               ></recite-bible-verse>
             `,
-            () => this.#renderAlert(),
+            () => html`
+        <alert-message type="danger">
+          Go back to Step 1 and select a bible verse.</span
+        </alert-message>
+            `,
           )}
         </span>
 
@@ -127,7 +91,6 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   #handleForwardButtonClick() {
     this.navigateToPage({
       nextPage: PAGE_NAME.SCORE_PAGE,
-      previousPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
     });
   }
 

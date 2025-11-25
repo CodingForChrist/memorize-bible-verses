@@ -14,7 +14,7 @@ export * from "./searchVersesForSharingTheGospelPage/searchVersesForSharingTheGo
 // step 2: speak or type the verse from memory
 export * from "./speakVerseFromMemoryPage/speakVerseFromMemoryPage";
 export * from "./speakVerseFromMemoryPage/reciteBibleVerse";
-export * from "./typeVerseFromMemoryPage/typeVerseFromMemoryPage";
+export * from "./speakVerseFromMemoryPage/transcriptText";
 
 // step 3: see your score
 export * from "./scorePage/scorePage";
