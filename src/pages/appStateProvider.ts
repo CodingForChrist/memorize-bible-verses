@@ -31,6 +31,8 @@ export class AppStateProvider extends LitElement {
   currentPage: PageName =
     getStateFromURL()?.pageName ?? PAGE_NAME.INSTRUCTIONS_PAGE;
 
+  // previousPage is used to keep track of the search page used
+  // so the back button will return to it
   @state()
   previousPage?: PageName;
 
@@ -170,7 +172,6 @@ export class AppStateProvider extends LitElement {
               verse-reference=${this.selectedBibleVerse?.reference || nothing}
               verse-content=${this.selectedBibleVerse?.content || nothing}
               recited-bible-verse=${this.recitedBibleVerse || nothing}
-              previous-page=${this.previousPage || nothing}
             ></score-page>`,
         ],
       ],
@@ -202,8 +203,8 @@ export class AppStateProvider extends LitElement {
     });
   }
 
-  #goto(pageNavigation: PageNavigation) {
-    this.previousPage = pageNavigation.previousPage;
-    this.currentPage = pageNavigation.nextPage;
+  #goto({ nextPage, previousPage }: PageNavigation) {
+    this.currentPage = nextPage;
+    if (previousPage) this.previousPage = previousPage;
   }
 }
