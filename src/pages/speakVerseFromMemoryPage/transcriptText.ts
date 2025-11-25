@@ -55,6 +55,7 @@ export class TranscriptText extends LitElement {
       border-color: var(--color-light-gray);
       cursor: not-allowed;
       color: var(--color-gray);
+      opacity: 1;
       -webkit-text-fill-color: var(--color-gray);
     }
   `;
