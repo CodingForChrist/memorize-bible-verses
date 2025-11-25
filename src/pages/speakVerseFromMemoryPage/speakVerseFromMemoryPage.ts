@@ -1,4 +1,4 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
+import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
@@ -14,6 +14,9 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
   @property({ attribute: "verse-content", reflect: true })
   verseContent?: string;
+
+  @property({ attribute: "recited-bible-verse", reflect: true })
+  recitedBibleVerse?: string;
 
   pageTitle = "Speak";
 
@@ -66,6 +69,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
               <recite-bible-verse
                 verse-reference="${this.verseReference}"
                 verse-content="${this.verseContent}"
+                transcript="${this.recitedBibleVerse || nothing}"
               ></recite-bible-verse>
             `,
             () => html`
