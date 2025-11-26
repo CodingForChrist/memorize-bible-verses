@@ -87,7 +87,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             ${this.#chevronLeftIcon}
             <input
               type="date"
-              name="date-picker-for-verse-of-the-day"
+              id="date-picker-for-verse-of-the-day"
               min="2025-01-01"
               max="2026-12-31"
               .valueAsDate=${this.dateForVerseOfTheDay}
