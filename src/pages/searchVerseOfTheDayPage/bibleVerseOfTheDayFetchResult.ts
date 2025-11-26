@@ -73,7 +73,7 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
     args: () => [this.bibleId, this.date],
   });
 
-  #validateAndEnhanceVerseData(verseData: any) {
+  #validateAndEnhanceVerseData(verseData: Record<string, unknown>) {
     if (typeof verseData.data !== "object") {
       throw new Error("expected data to be an object");
     }

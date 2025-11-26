@@ -72,7 +72,7 @@ export class BibleTranslationDropDownList extends LitElement {
     args: () => [],
   });
 
-  #validateAndEnhanceBibleData(bibleData: any) {
+  #validateAndEnhanceBibleData(bibleData: Record<string, unknown>) {
     if (!Array.isArray(bibleData.data)) {
       throw new Error("expected data to be an array");
     }

@@ -20,7 +20,7 @@ describe("getStateFromURL()", () => {
       hash: "",
     });
 
-    expect(getStateFromURL()).toBeUndefined;
+    expect(getStateFromURL()).toBeUndefined();
   });
 
   test("should return undefined for an invalid page name", () => {
@@ -30,7 +30,7 @@ describe("getStateFromURL()", () => {
       hash: "#/invalid-page-name",
     });
 
-    expect(getStateFromURL()).toBeUndefined;
+    expect(getStateFromURL()).toBeUndefined();
   });
 
   test("should return valid page name", () => {

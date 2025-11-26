@@ -60,9 +60,7 @@ export async function fetchBibleTranslationsWithCache({
     );
   }
 
-  let responsePromise: Promise<Response>;
-
-  responsePromise = fetch(url, {
+  const responsePromise = fetch(url, {
     method: "POST",
     body: JSON.stringify({
       language,
@@ -113,9 +111,7 @@ export async function fetchBibleVerseWithCache({
     return resolveResponseToJSON<FetchBibleVerseResponseBody>(cacheResult);
   }
 
-  let responsePromise: Promise<Response>;
-
-  responsePromise = fetch(url, {
+  const responsePromise = fetch(url, {
     method: "POST",
     body: JSON.stringify({
       verseReference,
@@ -165,9 +161,7 @@ export async function fetchBibleVerseOfTheDayWithCache({
     );
   }
 
-  let responsePromise: Promise<Response>;
-
-  responsePromise = fetch(url, {
+  const responsePromise = fetch(url, {
     method: "POST",
     body: JSON.stringify({
       date,
