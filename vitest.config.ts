@@ -7,5 +7,6 @@ export default defineConfig({
     sequence: {
       shuffle: true,
     },
+    exclude: ["**/node_modules/**", "**/playwrightTests/**"],
   },
 });
