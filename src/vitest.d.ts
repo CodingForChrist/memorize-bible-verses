@@ -2,7 +2,6 @@ declare module "corti" {
   class SpeechRecognition extends globalThis.SpeechRecognition {
     say(value: string | string[]): void;
   }
-  interface SpeechRecognitionResultList {}
   class SpeechRecognitionResultList extends globalThis.SpeechRecognitionResultList {
     constructor(results: SpeechRecognitionResult[]);
   }
