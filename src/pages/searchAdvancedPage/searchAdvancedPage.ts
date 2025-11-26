@@ -76,14 +76,14 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
     }
 
     return html`
-      <label for="input-bible-verse">
+      <label for="input-verse-reference">
         <span>Enter a bible verse reference</span><br />
         <small>e.g. "John 1:1" or "John 3:16-21"</small>
       </label>
       <form @submit=${this.#handleFormSubmit}>
         <input
           type="text"
-          name="verse-reference-input"
+          id="input-verse-reference"
           .value=${this.#textInput}
           @input=${this.#handleTextInput}
           required

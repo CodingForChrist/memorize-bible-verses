@@ -11,12 +11,15 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest",
+    "playwright": "playwright test"
   },
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.57.0",
     "@types/dom-speech-recognition": "^0.0.6",
+    "@types/node": "^24.10.1",
     "corti": "^1.0.0",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",

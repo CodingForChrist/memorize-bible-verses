@@ -96,6 +96,8 @@ export class BibleTranslationDropDownList extends LitElement {
       pending: () => html`<loading-spinner></loading-spinner>`,
       complete: () => html`
         <select
+          id="select-bible-translation"
+          aria-label="Bible Translation Selection"
           .value="${this.bibleId}"
           @change=${this.#handleSelectElementChange}
         >
