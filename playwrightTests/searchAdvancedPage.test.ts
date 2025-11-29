@@ -49,6 +49,14 @@ test("page load", async ({ page }) => {
   ).toHaveValue(bibleIdNKJV);
 });
 
+test("back button", async ({ page }) => {
+  await page.goto("/#/search-advanced");
+  await page.getByRole("button", { name: "< Back" }).click();
+
+  await page.goto("/#/search-options");
+  await expect(page).toHaveTitle(/Search Options | Memorize Bible Verses"/);
+});
+
 test("search for verse", async ({ page }) => {
   await page.goto("/#/search-advanced");
   await page.getByLabel("Enter a bible verse reference").fill("John 3:16");
@@ -67,6 +75,21 @@ test("change bible translation", async ({ page }) => {
   await page
     .getByRole("combobox", { name: "Bible Translation Selection" })
     .selectOption({ label: "BSB - Berean Standard Bible" });
+
+  await expect(page.locator("bible-verse-blockquote")).toHaveText(
+    /For God so loved the world/,
+  );
+  await expect(page.locator(".citation")).toHaveText(/Berean Standard Bible/);
+});
+
+test("auto-fill form based on query parameter values", async ({ page }) => {
+  await page.goto("/#/search-advanced?translation=BSB&verse=John+3%3A16");
+  await expect(page.getByLabel("Enter a bible verse reference")).toHaveValue(
+    "John 3:16",
+  );
+  await expect(
+    page.getByRole("combobox", { name: "Bible Translation Selection" }),
+  ).toHaveValue(bibleIdBSB);
 
   await expect(page.locator("bible-verse-blockquote")).toHaveText(
     /For God so loved the world/,
