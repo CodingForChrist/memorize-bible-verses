@@ -1,52 +1,51 @@
 import { describe, expect, test, beforeEach, vi } from "vitest";
 
-import { getStateFromURL, setStateInURL } from "./router";
+import {
+  getStateFromURL,
+  setStateInURL,
+  deleteUnknownParametersInURL,
+} from "./router";
 
-const defaultLocationData = {
-  origin: "http://localhost:3000",
-  pathname: "/memorize-bible-verses/",
-  href: "http://localhost:3000/memorize-bible-verses/",
-};
+function stubLocationData({ hash }: { hash: string }) {
+  const {
+    origin,
+    pathname,
+    href,
+    hash: hashValue,
+  } = new URL(hash, `http://localhost:3000/memorize-bible-verses/`);
+  vi.stubGlobal("location", {
+    ...window.location,
+    origin,
+    pathname,
+    href,
+    hash: hashValue,
+  });
+}
 
 describe("getStateFromURL()", () => {
   beforeEach(() => {
     vi.unstubAllGlobals();
+    vi.clearAllMocks();
   });
 
   test("should return undefined for url with no hash", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
-      hash: "",
-    });
+    stubLocationData({ hash: "" });
 
     expect(getStateFromURL()).toBeUndefined();
   });
 
   test("should return undefined for an invalid page name", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
-      hash: "#/invalid-page-name",
-    });
-
+    stubLocationData({ hash: "#/invalid-page-name" });
     expect(getStateFromURL()).toBeUndefined();
   });
 
   test("should return valid page name", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
-      hash: "#/instructions",
-    });
-
+    stubLocationData({ hash: "#/instructions" });
     expect(getStateFromURL()?.pageName).toBe("instructions");
   });
 
   test("should return valid page name, translation, and verse", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
+    stubLocationData({
       hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
@@ -61,12 +60,11 @@ describe("getStateFromURL()", () => {
 describe("setStateInURL()", () => {
   beforeEach(() => {
     vi.unstubAllGlobals();
+    vi.clearAllMocks();
   });
 
   test("should add page name to url with no hash", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
+    stubLocationData({
       hash: "",
     });
 
@@ -84,9 +82,7 @@ describe("setStateInURL()", () => {
   });
 
   test("should call replaceState when shouldUpdateBrowserHistory is false", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
+    stubLocationData({
       hash: "",
     });
 
@@ -104,10 +100,7 @@ describe("setStateInURL()", () => {
   });
 
   test("should preserve existing parameters", () => {
-    vi.stubGlobal("location", {
-      ...window.location,
-      ...defaultLocationData,
-      href: "http://localhost:3000/memorize-bible-verses/#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+    stubLocationData({
       hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
@@ -122,6 +115,50 @@ describe("setStateInURL()", () => {
       {},
       "",
       "http://localhost:3000/memorize-bible-verses/#/search-advanced?translation=NASB+1995&verse=John+3%3A16",
+    );
+  });
+});
+
+describe("deleteUnknownParametersInURL()", () => {
+  beforeEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  test("should not update url when there is no hash", () => {
+    stubLocationData({
+      hash: "",
+    });
+
+    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    deleteUnknownParametersInURL();
+
+    expect(replaceStateSpy).not.toHaveBeenCalled();
+  });
+
+  test("should not update url when all params are valid", () => {
+    stubLocationData({
+      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+    });
+
+    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    deleteUnknownParametersInURL();
+
+    expect(replaceStateSpy).not.toHaveBeenCalled();
+  });
+
+  test("should remove unknown parameters", () => {
+    stubLocationData({
+      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10&unknown-parameter=1&tracking=12345",
+    });
+
+    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    deleteUnknownParametersInURL();
+
+    expect(replaceStateSpy).toHaveBeenCalledWith(
+      {},
+      "",
+      "http://localhost:3000/memorize-bible-verses/#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     );
   });
 });

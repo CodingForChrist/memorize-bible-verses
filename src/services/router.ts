@@ -31,11 +31,7 @@ export function setStateInURL({
   translation?: string;
   shouldUpdateBrowserHistory?: boolean;
 }) {
-  const urlWithoutHash = window.location.href
-    .toString()
-    .replace("/memorize-bible-verses/#/", "/memorize-bible-verses/");
-
-  const url = new URL(urlWithoutHash);
+  const url = getURLWithoutHash();
   url.pathname = `/memorize-bible-verses/${pageName}`;
   url.hash = "";
 
@@ -46,13 +42,47 @@ export function setStateInURL({
     url.searchParams.set("verse", verse);
   }
 
-  const urlStringWithHash = url
+  if (shouldUpdateBrowserHistory) {
+    history.pushState({}, "", convertToHashURL(url));
+  } else {
+    history.replaceState({}, "", convertToHashURL(url));
+  }
+}
+
+export function deleteUnknownParametersInURL() {
+  const allowedParams = ["translation", "verse"];
+  const url = getURLWithoutHash();
+
+  const paramsToDelete = [];
+  for (const [key] of url.searchParams.entries()) {
+    if (!allowedParams.includes(key)) {
+      paramsToDelete.push(key);
+    }
+  }
+
+  // exit early when all params are valid
+  if (paramsToDelete.length === 0) {
+    return;
+  }
+
+  for (const param of paramsToDelete) {
+    url.searchParams.delete(param);
+  }
+
+  history.replaceState({}, "", convertToHashURL(url));
+}
+
+function getURLWithoutHash() {
+  const urlWithoutHash = window.location.href.replace(
+    "/memorize-bible-verses/#/",
+    "/memorize-bible-verses/",
+  );
+
+  return new URL(urlWithoutHash);
+}
+
+function convertToHashURL(url: URL) {
+  return url
     .toString()
     .replace("/memorize-bible-verses/", "/memorize-bible-verses/#/");
-
-  if (shouldUpdateBrowserHistory) {
-    history.pushState({}, "", urlStringWithHash);
-  } else {
-    history.replaceState({}, "", urlStringWithHash);
-  }
 }

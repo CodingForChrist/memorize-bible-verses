@@ -4,7 +4,11 @@ import { state } from "lit/decorators/state.js";
 import { choose } from "lit/directives/choose.js";
 
 import { CUSTOM_EVENT, PAGE_NAME, type PageName } from "../constants";
-import { getStateFromURL, setStateInURL } from "../services/router";
+import {
+  getStateFromURL,
+  setStateInURL,
+  deleteUnknownParametersInURL,
+} from "../services/router";
 
 import type {
   BibleTranslation,
@@ -48,6 +52,7 @@ export class AppStateProvider extends LitElement {
     super();
 
     window.history.scrollRestoration = "manual";
+    deleteUnknownParametersInURL();
 
     window.addEventListener("popstate", () => {
       const nextPage =
