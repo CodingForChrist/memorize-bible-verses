@@ -14,7 +14,7 @@ import {
 } from "./speechRecognition";
 import { convertBibleVerseToText } from "../../services/formatApiResponse";
 import { autoCorrectSpeechRecognitionInput } from "./autoCorrectSpokenBibleVerse";
-import { ButtonStyles } from "../../components/sharedStyles";
+import { buttonStyles } from "../../components/sharedStyles";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
@@ -47,7 +47,7 @@ export class ReciteBibleVerse extends LitElement {
   }
 
   static styles = [
-    ButtonStyles,
+    buttonStyles,
     css`
       :host {
         display: flex;

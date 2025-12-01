@@ -5,7 +5,7 @@ import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "../basePageMixin";
 import { PAGE_NAME } from "../../constants";
-import { ButtonStyles } from "../../components/sharedStyles";
+import { buttonStyles } from "../../components/sharedStyles";
 import { getStateFromURL } from "../../services/router";
 
 @customElement("search-advanced-page")
@@ -20,7 +20,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   pageTitle = "Advanced Search";
 
   static styles = [
-    ButtonStyles,
+    buttonStyles,
     css`
       p {
         margin: 1rem 0;

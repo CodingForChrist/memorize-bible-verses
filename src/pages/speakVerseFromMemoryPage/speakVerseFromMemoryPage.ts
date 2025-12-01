@@ -5,7 +5,7 @@ import { when } from "lit/directives/when.js";
 
 import { BasePage } from "../basePageMixin";
 import { PAGE_NAME } from "../../constants";
-import { ButtonStyles } from "../../components/sharedStyles";
+import { buttonStyles } from "../../components/sharedStyles";
 
 @customElement("speak-verse-from-memory-page")
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
@@ -21,7 +21,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   pageTitle = "Speak";
 
   static styles = [
-    ButtonStyles,
+    buttonStyles,
     css`
       p {
         margin: 1rem 0;
