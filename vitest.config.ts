@@ -1,4 +1,4 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -7,6 +7,6 @@ export default defineConfig({
     sequence: {
       shuffle: true,
     },
-    exclude: ["**/node_modules/**", "**/playwrightTests/**"],
+    exclude: ["**/node_modules/**", "**/playwright-tests/**"],
   },
 });
