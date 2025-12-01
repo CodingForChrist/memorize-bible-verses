@@ -1,12 +1,12 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 
-import { ButtonStyles } from "../components/sharedStyles";
+import { buttonStyles } from "../components/sharedStyles";
 
 @customElement("verse-text-page-template")
 export class VerseTextPageTemplate extends LitElement {
   static styles = [
-    ButtonStyles,
+    buttonStyles,
     css`
       :host {
         margin: 1rem auto;

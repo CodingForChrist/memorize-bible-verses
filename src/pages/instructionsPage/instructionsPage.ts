@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 
 import { BasePage } from "../basePageMixin";
 import { PAGE_NAME } from "../../constants";
-import { ButtonStyles } from "../../components/sharedStyles";
+import { buttonStyles } from "../../components/sharedStyles";
 import logoURL from "../../images/logo.svg";
 
 @customElement("instructions-page")
@@ -11,7 +11,7 @@ export class InstructionsPage extends BasePage(LitElement) {
   pageTitle = "︎Instructions";
 
   static styles = [
-    ButtonStyles,
+    buttonStyles,
     css`
       :host {
         margin: 1rem auto;

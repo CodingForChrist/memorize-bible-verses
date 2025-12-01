@@ -25,7 +25,7 @@ export const formSelectStyles = css`
   }
 `;
 
-export const ButtonStyles = css`
+export const buttonStyles = css`
   button {
     --base-padding: 0.25rem 1rem;
 

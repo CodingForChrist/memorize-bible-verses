@@ -4,7 +4,7 @@ import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../basePageMixin";
 import { PAGE_NAME } from "../../constants";
-import { ButtonStyles } from "../../components/sharedStyles";
+import { buttonStyles } from "../../components/sharedStyles";
 
 @customElement("search-options-page")
 export class SearchOptionsPage extends BasePage(LitElement) {
@@ -14,7 +14,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
   pageTitle = "Search Options";
 
   static styles = [
-    ButtonStyles,
+    buttonStyles,
     css`
       :host {
         margin: 1rem auto;
