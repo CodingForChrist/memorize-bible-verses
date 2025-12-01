@@ -14,7 +14,7 @@ function stubLocationData({ hash }: { hash: string }) {
     hash: hashValue,
   } = new URL(hash, `http://localhost:3000/memorize-bible-verses/`);
   vi.stubGlobal("location", {
-    ...window.location,
+    ...globalThis.location,
     origin,
     pathname,
     href,
@@ -68,7 +68,7 @@ describe("setStateInURL()", () => {
       hash: "",
     });
 
-    const pushStateSpy = vi.spyOn(window.history, "pushState");
+    const pushStateSpy = vi.spyOn(globalThis.history, "pushState");
     setStateInURL({
       pageName: "instructions",
       shouldUpdateBrowserHistory: true,
@@ -86,7 +86,7 @@ describe("setStateInURL()", () => {
       hash: "",
     });
 
-    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    const replaceStateSpy = vi.spyOn(globalThis.history, "replaceState");
     setStateInURL({
       pageName: "instructions",
       shouldUpdateBrowserHistory: false,
@@ -104,7 +104,7 @@ describe("setStateInURL()", () => {
       hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
-    const pushStateSpy = vi.spyOn(window.history, "pushState");
+    const pushStateSpy = vi.spyOn(globalThis.history, "pushState");
     setStateInURL({
       pageName: "search-advanced",
       verse: "John 3:16",
@@ -130,7 +130,7 @@ describe("deleteUnknownParametersInURL()", () => {
       hash: "",
     });
 
-    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    const replaceStateSpy = vi.spyOn(globalThis.history, "replaceState");
     deleteUnknownParametersInURL();
 
     expect(replaceStateSpy).not.toHaveBeenCalled();
@@ -141,7 +141,7 @@ describe("deleteUnknownParametersInURL()", () => {
       hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
-    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    const replaceStateSpy = vi.spyOn(globalThis.history, "replaceState");
     deleteUnknownParametersInURL();
 
     expect(replaceStateSpy).not.toHaveBeenCalled();
@@ -152,7 +152,7 @@ describe("deleteUnknownParametersInURL()", () => {
       hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10&unknown-parameter=1&tracking=12345",
     });
 
-    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+    const replaceStateSpy = vi.spyOn(globalThis.history, "replaceState");
     deleteUnknownParametersInURL();
 
     expect(replaceStateSpy).toHaveBeenCalledWith(

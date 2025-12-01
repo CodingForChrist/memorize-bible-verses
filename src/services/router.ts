@@ -1,12 +1,12 @@
 import { PAGE_NAME, type PageName } from "../constants";
 
 export function getStateFromURL() {
-  if (!window.location.hash) {
+  if (!globalThis.location.hash) {
     return;
   }
 
-  const pathNameWithQueryString = window.location.hash.replace("#", "");
-  const url = new URL(pathNameWithQueryString, window.location.origin);
+  const pathNameWithQueryString = globalThis.location.hash.replace("#", "");
+  const url = new URL(pathNameWithQueryString, globalThis.location.origin);
   const pathName = url.pathname.replace("/", "");
 
   if (!Object.values(PAGE_NAME).includes(pathName as PageName)) {
@@ -50,30 +50,30 @@ export function setStateInURL({
 }
 
 export function deleteUnknownParametersInURL() {
-  const allowedParams = ["translation", "verse"];
+  const allowedParameters = new Set(["translation", "verse"]);
   const url = getURLWithoutHash();
 
-  const paramsToDelete = [];
+  const parametersToDelete = [];
   for (const [key] of url.searchParams.entries()) {
-    if (!allowedParams.includes(key)) {
-      paramsToDelete.push(key);
+    if (!allowedParameters.has(key)) {
+      parametersToDelete.push(key);
     }
   }
 
   // exit early when all params are valid
-  if (paramsToDelete.length === 0) {
+  if (parametersToDelete.length === 0) {
     return;
   }
 
-  for (const param of paramsToDelete) {
-    url.searchParams.delete(param);
+  for (const parameter of parametersToDelete) {
+    url.searchParams.delete(parameter);
   }
 
   history.replaceState({}, "", convertToHashURL(url));
 }
 
 function getURLWithoutHash() {
-  const urlWithoutHash = window.location.href.replace(
+  const urlWithoutHash = globalThis.location.href.replace(
     "/memorize-bible-verses/#/",
     "/memorize-bible-verses/",
   );
