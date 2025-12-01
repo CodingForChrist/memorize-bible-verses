@@ -102,6 +102,7 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
       return;
     }
     return html`
+      <h2>${verseData.reference}</h2>
       <bible-verse-blockquote bible-id=${this.bibleId} display-citation=${true}>
         <span class="scripture-styles"> ${unsafeHTML(verseData.content)} </span>
       </bible-verse-blockquote>

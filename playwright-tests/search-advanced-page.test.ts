@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 import bibleData from "./mocks/bibles.json" with { type: "json" };
-import verseReferenceDataNKJV from "./mocks/verses/NKJV/verseReferenceJohnChapter3Verse16.json" with { type: "json" };
-import verseReferenceDataBSB from "./mocks/verses/BSB/verseReferenceJohnChapter3Verse16.json" with { type: "json" };
+import verseReferenceDataNKJV from "./mocks/verses/NKJV/verse-reference-john-3-16.json" with { type: "json" };
+import verseReferenceDataBSB from "./mocks/verses/BSB/verse-reference-john-3-16.json" with { type: "json" };
 
 function findBibleId(abbreviationLocal: string) {
   const bible = bibleData.data.find((bibleData) => {

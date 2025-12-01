@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 import bibleData from "./mocks/bibles.json" with { type: "json" };
-import verseOfTheDayData from "./mocks/verses/NKJV/verseOfTheDay2PeterChapter3Verse7.json" with { type: "json" };
+import verseOfTheDayData from "./mocks/verses/NKJV/verse-of-the-day-2-peter-3-7.json" with { type: "json" };
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/v1/bibles", async (route) => {
