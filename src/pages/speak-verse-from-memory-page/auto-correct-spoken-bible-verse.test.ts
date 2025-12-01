@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { autoCorrectSpeechRecognitionInput } from "./autoCorrectSpokenBibleVerse";
+import { autoCorrectSpeechRecognitionInput } from "./auto-correct-spoken-bible-verse";
 
 describe("autoCorrectSpeechRecognitionInput()", () => {
   test("should add missing colon between chapter and verse number for a single verse", () => {
