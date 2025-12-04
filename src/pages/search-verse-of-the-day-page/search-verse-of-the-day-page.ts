@@ -4,7 +4,12 @@ import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { formatDate, addDays, subtractDays } from "./date-time-utility";
+import {
+  formatDate,
+  parseDate,
+  addDays,
+  subtractDays,
+} from "./date-time-utility";
 
 @customElement("search-verse-of-the-day-page")
 export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
@@ -88,9 +93,10 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             <input
               type="date"
               id="date-picker-for-verse-of-the-day"
+              aria-label="Date for Verse of the Day"
               min="2025-01-01"
               max="2026-12-31"
-              .valueAsDate=${this.dateForVerseOfTheDay}
+              .value=${dateShortFormat}
               @input=${this.#handleDateInputChange}
             />
             ${this.#chevronRightIcon}
@@ -153,10 +159,10 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   }
 
   #handleDateInputChange(event: Event) {
-    const valueAsDate = (event.target as HTMLInputElement).valueAsDate;
+    const value = (event.target as HTMLInputElement).value;
 
-    if (valueAsDate) {
-      this.dateForVerseOfTheDay = valueAsDate;
+    if (value) {
+      this.dateForVerseOfTheDay = parseDate(value, "YYYY-MM-DD");
     }
   }
 
