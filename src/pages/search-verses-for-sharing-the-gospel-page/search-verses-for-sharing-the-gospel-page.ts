@@ -5,6 +5,7 @@ import { classMap } from "lit/directives/class-map.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
+import { breakpointsREM } from "../../components/shared-styles";
 
 @customElement("search-verses-for-sharing-the-gospel-page")
 export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
@@ -38,11 +39,11 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
       margin: 0.25rem 0 0.75rem -1rem;
       font-size: 85%;
 
-      @media (width >= 28rem) {
+      @media (width >= ${breakpointsREM.small}rem) {
         font-size: 90%;
       }
 
-      @media (width >= 32rem) {
+      @media (width >= ${breakpointsREM.medium}rem) {
         font-size: 100%;
       }
     }

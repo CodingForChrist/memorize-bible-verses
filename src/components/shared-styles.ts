@@ -1,5 +1,15 @@
 import { css } from "lit";
 
+// js is used for breakpoints because
+// css variables do not work with media queries
+export const breakpointsREM = {
+  extraSmall: 24, // 384 pixels
+  small: 28, // 448 pixels
+  medium: 32, // 512 pixels
+  large: 40, // 640 pixels
+  extraLarge: 48, // 768 pixels
+};
+
 export const formSelectStyles = css`
   select {
     font: inherit;

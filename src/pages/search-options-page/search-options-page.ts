@@ -4,7 +4,7 @@ import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { buttonStyles } from "../../components/shared-styles";
+import { breakpointsREM, buttonStyles } from "../../components/shared-styles";
 
 @customElement("search-options-page")
 export class SearchOptionsPage extends BasePage(LitElement) {
@@ -19,7 +19,6 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       :host {
         margin: 1rem auto;
         text-align: center;
-        max-width: 28rem;
         display: block;
       }
       h1 {
@@ -28,7 +27,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
         font-weight: 400;
         margin: 2rem 0;
 
-        @media (width >= 40rem) {
+        @media (width >= ${breakpointsREM.large}rem) {
           font-size: 2.5rem;
         }
       }
@@ -39,7 +38,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       .buttons-container {
         margin-top: 2rem;
 
-        @media (width >= 28rem) {
+        @media (width >= ${breakpointsREM.small}rem) {
           margin-left: 1rem;
           margin-right: 1rem;
         }
@@ -105,7 +104,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
         display: flex;
         justify-content: space-between;
 
-        @media (width >= 28rem) {
+        @media (width >= ${breakpointsREM.small}rem) {
           margin: 6rem 1rem 2rem;
         }
       }

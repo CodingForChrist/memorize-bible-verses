@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 
-import { buttonStyles } from "../components/shared-styles";
+import { breakpointsREM, buttonStyles } from "../components/shared-styles";
 
 @customElement("verse-text-page-template")
 export class VerseTextPageTemplate extends LitElement {
@@ -11,7 +11,6 @@ export class VerseTextPageTemplate extends LitElement {
       :host {
         margin: 1rem auto;
         text-align: center;
-        max-width: 28rem;
         display: block;
       }
       h1 {
@@ -20,14 +19,15 @@ export class VerseTextPageTemplate extends LitElement {
         font-weight: 400;
         margin: 2rem 0;
 
-        @media (width >= 40rem) {
+        @media (width >= ${breakpointsREM.large}rem) {
           font-size: 2.5rem;
         }
       }
       .page-description {
         margin: 0 1.5rem 1rem;
+        text-wrap: balance;
 
-        @media (width >= 28rem) {
+        @media (width >= ${breakpointsREM.small}rem) {
           margin: 0 2.5rem 1rem;
         }
       }
@@ -40,7 +40,7 @@ export class VerseTextPageTemplate extends LitElement {
         margin: 2rem 0;
         padding: 1.5rem 1rem;
 
-        @media (width >= 28rem) {
+        @media (width >= ${breakpointsREM.small}rem) {
           margin: 2rem 1rem;
           padding: 1.5rem;
         }
@@ -50,7 +50,7 @@ export class VerseTextPageTemplate extends LitElement {
         display: flex;
         justify-content: space-between;
 
-        @media (width >= 28rem) {
+        @media (width >= ${breakpointsREM.small}rem) {
           margin: 2rem 1rem;
         }
       }
