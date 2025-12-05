@@ -65,7 +65,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
       }
       button[type="submit"] {
         --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-        min-width: 5rem;
+        min-width: 6rem;
       }
     `,
   ];
@@ -105,7 +105,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
         <span slot="page-description">
           <p>
             Power Users can enter specific verses. Simply type in the book,
-            chapter number and verse number you wish to learn. Then practice the verse.
+            chapter number and verse number you wish to learn.
           </p>
           <p>When you have the verse memorized go to Step 2.</p>
         </span>
