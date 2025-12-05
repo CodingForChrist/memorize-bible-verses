@@ -36,19 +36,6 @@ export class BibleTranslationDropDownList extends LitElement {
       :host {
         display: block;
       }
-      select:has(option.label-long:checked) {
-        font-size: 80%;
-
-        @media (width >= 24rem) {
-          font-size: 85%;
-        }
-        @media (width >= 28rem) {
-          font-size: 90%;
-        }
-        @media (width >= 32rem) {
-          font-size: 100%;
-        }
-      }
     `,
   ];
 
