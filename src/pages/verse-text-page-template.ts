@@ -1,10 +1,21 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
+import { state } from "lit/decorators/state.js";
+import { query } from "lit/decorators/query.js";
+import { classMap } from "lit/directives/class-map.js";
 
 import { breakpointsREM, buttonStyles } from "../components/shared-styles";
 
 @customElement("verse-text-page-template")
 export class VerseTextPageTemplate extends LitElement {
+  @state()
+  isPageNavigationSticky: boolean = false;
+
+  @query("#page-navigation-sentinel")
+  pageNavigationSentinelElement?: HTMLDivElement;
+
+  observer: IntersectionObserver | undefined;
+
   static styles = [
     buttonStyles,
     css`
@@ -49,11 +60,23 @@ export class VerseTextPageTemplate extends LitElement {
         margin: 2rem 0;
         display: flex;
         justify-content: space-between;
+        height: 2.5rem;
+        position: sticky;
+        bottom: 0;
 
         @media (width >= ${breakpointsREM.small}rem) {
           margin: 2rem 1rem;
         }
       }
+
+      .page-navigation.sticky {
+        background-color: var(--color-primary-mint-cream);
+        border-top: 3px solid var(--color-light-gray);
+        box-shadow: 0 -5px 10px var(--color-light-gray);
+        padding: 0.5rem;
+        margin: inherit 0;
+      }
+
       .page-navigation button {
         min-width: 6rem;
       }
@@ -61,6 +84,11 @@ export class VerseTextPageTemplate extends LitElement {
   ];
 
   render() {
+    const pageNavigationClasses = {
+      sticky: this.isPageNavigationSticky,
+      "page-navigation": true,
+    };
+
     return html`
       <h1><slot name="page-heading">PAGE HEADING MISSING</slot></h1>
 
@@ -72,7 +100,10 @@ export class VerseTextPageTemplate extends LitElement {
         <slot name="page-content">PAGE CONTENT MISSING</slot>
       </div>
 
-      <div class="page-navigation">
+      <!-- used to track when page-navigation element becomes sticky -->
+      <div id="page-navigation-sentinel"></div>
+
+      <div class="page-navigation" class=${classMap(pageNavigationClasses)}>
         <button
           id="button-back"
           type="button"
@@ -99,5 +130,38 @@ export class VerseTextPageTemplate extends LitElement {
         </button>
       </div>
     `;
+  }
+
+  firstUpdated() {
+    this.#setupIntersectionObserver();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.#disconnectIntersectionObserver();
+  }
+
+  #setupIntersectionObserver() {
+    if (!this.pageNavigationSentinelElement) {
+      return;
+    }
+
+    this.observer = new IntersectionObserver(
+      this.#handleIntersection.bind(this),
+    );
+    this.observer.observe(this.pageNavigationSentinelElement);
+  }
+
+  #disconnectIntersectionObserver() {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = undefined;
+    }
+  }
+
+  #handleIntersection(entries: IntersectionObserverEntry[]) {
+    for (const { isIntersecting } of entries) {
+      this.isPageNavigationSticky = !isIntersecting;
+    }
   }
 }
