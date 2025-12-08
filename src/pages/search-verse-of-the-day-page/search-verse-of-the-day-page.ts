@@ -22,10 +22,6 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   pageTitle = "Verse of the Day";
 
   static styles = css`
-    p {
-      margin: 1rem 0;
-      text-wrap: balance;
-    }
     bible-verse-of-the-day-fetch-result {
       margin-top: 2rem;
     }
@@ -79,13 +75,11 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
       >
         <span slot="page-heading">Search</span>
 
-        <span slot="page-description">
-          <p>
-            Practice memorizing the verse of the day for
-            <span id="page-heading-date">${dateLongFormat}</span>.
-          </p>
-          <p>When you have it memorized go to Step 2.</p>
-        </span>
+        <p slot="page-description">
+          Practice memorizing the verse of the day for
+          <span id="page-heading-date">${dateLongFormat}</span>.
+        </p>
+        <p slot="page-description">When you have it memorized go to Step 2.</p>
 
         <span slot="page-content">
           <div class="date-picker-container">

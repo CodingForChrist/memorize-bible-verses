@@ -25,10 +25,11 @@ export class SearchOptionsPage extends BasePage(LitElement) {
         font-family: var(--font-heading);
         font-size: 2rem;
         font-weight: 400;
-        margin: 2rem 0;
+        margin: 2rem 0 1rem;
 
         @media (width >= ${breakpointsREM.large}rem) {
           font-size: 2.5rem;
+          margin: 2rem 0;
         }
       }
       p {

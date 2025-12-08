@@ -20,29 +20,46 @@ export class VerseTextPageTemplate extends LitElement {
     buttonStyles,
     css`
       :host {
-        margin: 1rem auto;
-        text-align: center;
         display: block;
       }
       h1 {
         font-family: var(--font-heading);
         font-size: 2rem;
         font-weight: 400;
-        margin: 2rem 0;
+        margin: 2rem 0 1rem;
+        text-align: center;
 
         @media (width >= ${breakpointsREM.large}rem) {
           font-size: 2.5rem;
+          margin: 2rem 0;
         }
       }
       .page-description {
-        margin: 0 1.5rem 1rem;
+        margin: 0 1.5rem;
+        text-align: center;
         text-wrap: balance;
 
         @media (width >= ${breakpointsREM.small}rem) {
-          margin: 0 2.5rem 1rem;
+          margin: 0 2.5rem;
         }
       }
-      .search-container {
+      .page-description ::slotted(p) {
+        margin: 0 0 1rem;
+        text-wrap: balance;
+      }
+      .main-content-container {
+        margin: 0;
+        border-radius: 1.5rem;
+
+        @media (width >= ${breakpointsREM.small}rem) {
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
+      }
+      .main-content-container.sticky {
+        background-color: var(--color-primary-mint-cream);
+      }
+      .page-content {
         background-color: var(--color-primary-mint-cream);
         border-radius: 1.5rem;
         color: var(--color-gray);
@@ -52,23 +69,16 @@ export class VerseTextPageTemplate extends LitElement {
         padding: 1.5rem 1rem;
 
         @media (width >= ${breakpointsREM.small}rem) {
-          margin: 2rem 1rem;
           padding: 1.5rem;
         }
       }
       .page-navigation {
-        margin: 2rem 0;
         display: flex;
         justify-content: space-between;
         height: 2.5rem;
         position: sticky;
         bottom: 0;
-
-        @media (width >= ${breakpointsREM.small}rem) {
-          margin: 2rem 1rem;
-        }
       }
-
       .page-navigation.sticky {
         background-color: var(--color-primary-mint-cream);
         border-top: 3px solid var(--color-light-gray);
@@ -76,7 +86,6 @@ export class VerseTextPageTemplate extends LitElement {
         padding: 0.5rem;
         margin: inherit 0;
       }
-
       .page-navigation button {
         min-width: 6rem;
       }
@@ -84,11 +93,6 @@ export class VerseTextPageTemplate extends LitElement {
   ];
 
   render() {
-    const pageNavigationClasses = {
-      sticky: this.isPageNavigationSticky,
-      "page-navigation": true,
-    };
-
     return html`
       <h1><slot name="page-heading">PAGE HEADING MISSING</slot></h1>
 
@@ -96,38 +100,52 @@ export class VerseTextPageTemplate extends LitElement {
         <slot name="page-description">PAGE DESCRIPTION MISSING</slot>
       </div>
 
-      <div class="search-container">
-        <slot name="page-content">PAGE CONTENT MISSING</slot>
-      </div>
+      <div
+        class=${classMap({
+          sticky: this.isPageNavigationSticky,
+          "main-content-container": true,
+        })}
+      >
+        <div class="page-content">
+          <slot name="page-content">PAGE CONTENT MISSING</slot>
+        </div>
 
-      <!-- used to track when page-navigation element becomes sticky -->
-      <div id="page-navigation-sentinel"></div>
+        <div
+          class=${classMap({
+            sticky: this.isPageNavigationSticky,
+            "page-navigation": true,
+          })}
+        >
+          <button
+            id="button-back"
+            type="button"
+            class="secondary"
+            @click=${() =>
+              this.dispatchEvent(
+                new Event("page-navigation-back-button-click"),
+              )}
+          >
+            <slot name="page-navigation-back-button">
+              PAGE NAVIGATION BACK BUTTON MISSING
+            </slot>
+          </button>
+          <button
+            id="button-forward"
+            type="button"
+            class="primary"
+            @click=${() =>
+              this.dispatchEvent(
+                new Event("page-navigation-forward-button-click"),
+              )}
+          >
+            <slot name="page-navigation-forward-button">
+              PAGE NAVIGATION FORWARD BUTTON MISSING
+            </slot>
+          </button>
+        </div>
 
-      <div class="page-navigation" class=${classMap(pageNavigationClasses)}>
-        <button
-          id="button-back"
-          type="button"
-          class="secondary"
-          @click=${() =>
-            this.dispatchEvent(new Event("page-navigation-back-button-click"))}
-        >
-          <slot name="page-navigation-back-button">
-            PAGE NAVIGATION BACK BUTTON MISSING
-          </slot>
-        </button>
-        <button
-          id="button-forward"
-          type="button"
-          class="primary"
-          @click=${() =>
-            this.dispatchEvent(
-              new Event("page-navigation-forward-button-click"),
-            )}
-        >
-          <slot name="page-navigation-forward-button">
-            PAGE NAVIGATION FORWARD BUTTON MISSING
-          </slot>
-        </button>
+        <!-- used to track when page-navigation element becomes sticky -->
+        <div id="page-navigation-sentinel"></div>
       </div>
     `;
   }

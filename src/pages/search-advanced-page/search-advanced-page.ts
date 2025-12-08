@@ -22,10 +22,6 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   static styles = [
     buttonStyles,
     css`
-      p {
-        margin: 1rem 0;
-        text-wrap: balance;
-      }
       bible-translation-drop-down-list {
         margin-bottom: 1.5rem;
       }
@@ -102,13 +98,13 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
       >
         <span slot="page-heading">Search</span>
 
-        <span slot="page-description">
-          <p>
-            Power Users can enter specific verses. Simply type in the book,
-            chapter number and verse number you wish to learn.
-          </p>
-          <p>When you have the verse memorized go to Step 2.</p>
-        </span>
+        <p slot="page-description">
+          Power Users can enter specific verses. Simply type in the book,
+          chapter number and verse number you wish to learn.
+        </p>
+        <p slot="page-description">
+          When you have the verse memorized go to Step 2.
+        </p>
 
         <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
