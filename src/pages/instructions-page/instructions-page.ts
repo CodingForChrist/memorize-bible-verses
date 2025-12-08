@@ -16,7 +16,6 @@ export class InstructionsPage extends BasePage(LitElement) {
       :host {
         margin: 1rem auto;
         text-align: center;
-        max-width: 24rem;
         padding: 0 1rem;
         display: block;
 
@@ -56,19 +55,18 @@ export class InstructionsPage extends BasePage(LitElement) {
         margin-top: 3rem;
         min-width: 12rem;
       }
-      .row {
-        display: flex;
-        flex-direction: column;
+      .grid-container {
+        display: grid;
         gap: 2rem;
 
-        @media (width >= ${breakpointsREM.large}rem) {
-          flex-direction: row;
-          margin: 2.5rem 0;
+        @media (width >= ${breakpointsREM.medium}rem) {
+          margin: 0 2rem;
         }
-      }
-      .column {
+
         @media (width >= ${breakpointsREM.large}rem) {
-          width: 33.33%;
+          grid-auto-flow: column;
+          grid-auto-columns: 1fr;
+          margin: 2.5rem 0 4rem;
         }
       }
     `,
@@ -79,21 +77,21 @@ export class InstructionsPage extends BasePage(LitElement) {
       <header>
         <img src=${logoURL} alt="Memorize Bible Verses" />
       </header>
-      <div class="row">
-        <div class="column">
+      <div class="grid-container">
+        <div>
           <h2>Search</h2>
           <p>
             Choose from a collection of verses or enter verses you want to learn
           </p>
         </div>
-        <div class="column">
+        <div>
           <h2>Speak</h2>
           <p>
             Record yourself reciting the verse or typing in the verse from
             memory
           </p>
         </div>
-        <div class="column">
+        <div>
           <h2>Score</h2>
           <p>
             Can you get a perfect score? Find out how well you know each verse
