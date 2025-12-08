@@ -38,9 +38,11 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
       @media (width >= ${breakpointsREM.small}rem) {
         font-size: 90%;
       }
-
       @media (width >= ${breakpointsREM.medium}rem) {
         font-size: 100%;
+      }
+      @media (width >= ${breakpointsREM.extraLarge}rem) {
+        grid-template-columns: repeat(4, 1fr);
       }
     }
     .verse-container button {
