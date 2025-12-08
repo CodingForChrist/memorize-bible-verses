@@ -23,10 +23,6 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   static styles = [
     buttonStyles,
     css`
-      p {
-        margin: 1rem 0;
-        text-wrap: balance;
-      }
       h2 {
         margin-top: 0;
         margin-bottom: 2rem;
@@ -50,16 +46,14 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
       >
         <span slot="page-heading">Speak</span>
 
-        <span slot="page-description">
-          <p>
-            When you are ready, press Record. Speak the entire verse clearly and
-            slowly—then press stop. Don't worry if you make a mistake, you can
-            record again.
-          </p>
-          <p>
-            Once you have a recording you like go to Step 3 and get your score.
-          </p>
-        </span>
+        <p slot="page-description">
+          When you are ready, press Record. Speak the entire verse clearly and
+          slowly—then press stop. Don't worry if you make a mistake, you can
+          record again.
+        </p>
+        <p slot="page-description">
+          Once you have a recording you like go to Step 3 and get your score.
+        </p>
 
         <span slot="page-content">
           ${when(

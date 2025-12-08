@@ -21,10 +21,6 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
     bible-translation-drop-down-list {
       margin-bottom: 1.5rem;
     }
-    p {
-      margin: 1rem 0;
-      text-wrap: balance;
-    }
     ol {
       margin: 0 0 2rem;
       padding-left: 1rem;
@@ -106,10 +102,12 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
       >
         <span slot="page-heading">Search</span>
 
-        <span slot="page-description">
-          <p>Pick and practice a verse for sharing the gospel.</p>
-          <p>When you have the verse memorized go to Step 2.</p>
-        </span>
+        <p slot="page-description">
+          Pick and practice a verse for sharing the gospel.
+        </p>
+        <p slot="page-description">
+          When you have the verse memorized go to Step 2.
+        </p>
 
         <div class="page-content" slot="page-content">
           <ol>

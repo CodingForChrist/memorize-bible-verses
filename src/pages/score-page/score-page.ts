@@ -127,10 +127,7 @@ export class ScorePage extends BasePage(LitElement) {
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
         <span slot="page-heading">Score</span>
-
-        <span slot="page-description">
-          <p>Your results are below.</p>
-        </span>
+        <p slot="page-description">Your results are below.</p>
 
         <span slot="page-content">
           ${when(

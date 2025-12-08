@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
@@ -12,13 +12,6 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
 
   pageTitle = "Psalm 23";
 
-  static styles = css`
-    p {
-      margin: 1rem 0;
-      text-wrap: balance;
-    }
-  `;
-
   render() {
     return html`
       <verse-text-page-template
@@ -27,10 +20,8 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
       >
         <span slot="page-heading">Search</span>
 
-        <span slot="page-description">
-          <p>Practice memorizing Psalm 23.</p>
-          <p>When you have it memorized go to Step 2.</p>
-        </span>
+        <p slot="page-description">Practice memorizing Psalm 23.</p>
+        <p slot="page-description">When you have it memorized go to Step 2.</p>
 
         <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
