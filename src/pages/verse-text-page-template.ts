@@ -166,9 +166,6 @@ export class VerseTextPageTemplate extends LitElement {
 
     this.observer = new IntersectionObserver(
       this.#handleIntersection.bind(this),
-      {
-        threshold: 1,
-      },
     );
     this.observer.observe(this.pageNavigationSentinelElement);
   }
