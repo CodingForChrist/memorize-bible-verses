@@ -27,14 +27,6 @@ test("page load", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Search" })).toBeVisible();
 });
 
-test("back button", async ({ page }) => {
-  await page.goto("/#/search-options");
-  await page.getByRole("button", { name: "< Back" }).click();
-
-  await expect(page.url()).toContain("/#/instructions");
-  await expect(page).toHaveTitle(/Instructions | Memorize Bible Verses"/);
-});
-
 test("verse of the day button", async ({ page }) => {
   await page.goto("/#/search-options");
   await page.getByRole("button", { name: "Verse of the Day" }).click();

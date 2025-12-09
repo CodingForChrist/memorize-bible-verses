@@ -100,18 +100,6 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           --color-secondary-cerulean-darker-two
         );
       }
-      .page-navigation {
-        margin: 6rem 0 2rem;
-        display: flex;
-        justify-content: space-between;
-
-        @media (width >= ${breakpointsREM.small}rem) {
-          margin: 6rem 1rem 2rem;
-        }
-      }
-      .page-navigation button {
-        min-width: 6rem;
-      }
     `,
   ];
 
@@ -122,7 +110,6 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       SEARCH_PSALM_23_PAGE,
       SEARCH_VERSES_FOR_AWANA_PAGE,
       SEARCH_ADVANCED_PAGE,
-      INSTRUCTIONS_PAGE,
     } = PAGE_NAME;
 
     return html`
@@ -184,29 +171,6 @@ export class SearchOptionsPage extends BasePage(LitElement) {
             })}
         >
           Power User: Choose Your Verses
-        </button>
-      </div>
-
-      <div class="page-navigation">
-        <button
-          type="button"
-          class="secondary"
-          @click=${() =>
-            this.navigateToPage({
-              nextPage: INSTRUCTIONS_PAGE,
-            })}
-        >
-          &lt; Back
-        </button>
-        <button
-          type="button"
-          class="primary"
-          @click=${() =>
-            this.navigateToPage({
-              nextPage: SEARCH_ADVANCED_PAGE,
-            })}
-        >
-          Step 1 &gt;
         </button>
       </div>
     `;
