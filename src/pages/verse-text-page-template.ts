@@ -79,6 +79,9 @@ export class VerseTextPageTemplate extends LitElement {
         position: sticky;
         bottom: 0;
       }
+      .page-navigation button {
+        min-width: 6rem;
+      }
       .page-navigation.sticky {
         background-color: var(--color-primary-mint-cream);
         border-top: 3px solid var(--color-light-gray);
@@ -86,8 +89,9 @@ export class VerseTextPageTemplate extends LitElement {
         padding: 0.5rem;
         margin: inherit 0;
       }
-      .page-navigation button {
-        min-width: 6rem;
+      .page-navigation.sticky button {
+        --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
       }
     `,
   ];
