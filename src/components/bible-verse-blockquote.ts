@@ -34,6 +34,9 @@ export class BibleVerseBlockquote extends LitElement {
     a:hover {
       color: var(--color-primary-bright-pink-darker-one);
     }
+    a:focus {
+      outline: 1px solid var(--color-primary-bright-pink-darker-one);
+    }
     a:visited {
       color: var(--color-primary-bright-pink-darker-two);
     }

@@ -30,6 +30,8 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
       color: inherit;
       line-height: 1.5rem;
       text-align: center;
+      /* center text input in safari */
+      justify-content: center;
       box-sizing: border-box;
       width: 100%;
       background-color: var(--color-primary-mint-cream);
@@ -42,22 +44,29 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
       border-color: var(--color-primary-mint-cream);
       outline: 1px solid var(--color-gray);
     }
-    input[type="date"]::-webkit-date-and-time-value {
-      text-align: center;
-    }
     .date-picker-container {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
+      align-items: stretch;
+      max-width: 20rem;
+      margin: 0 auto 2rem;
+    }
+    .date-picker-container button {
+      all: initial;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      margin: 0 0.5rem;
+    }
+    .date-picker-container button:focus svg {
+      stroke: var(--color-gray);
+      stroke-width: 3;
     }
     .date-picker-container svg {
       width: 1.5rem;
       height: 1.5rem;
-      padding: 0 0.25rem;
-      margin: 0 0.75rem;
+      padding: 0 0.5rem;
       flex-shrink: 0;
-      cursor: pointer;
     }
   `;
 
@@ -83,7 +92,13 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
 
         <span slot="page-content">
           <div class="date-picker-container">
-            ${this.#chevronLeftIcon}
+            <button
+              type="button"
+              aria-label="show verse for previous day"
+              @click=${this.#handlePreviousDay}
+            >
+              ${this.#chevronLeftIcon}
+            </button>
             <input
               type="date"
               id="date-picker-for-verse-of-the-day"
@@ -93,7 +108,13 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
               .value=${dateShortFormat}
               @input=${this.#handleDateInputChange}
             />
-            ${this.#chevronRightIcon}
+            <button
+              type="button"
+              aria-label="show verse for next day"
+              @click=${this.#handleNextDay}
+            >
+              ${this.#chevronRightIcon}
+            </button>
           </div>
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
 
@@ -120,7 +141,6 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
         stroke-width="1.5"
         stroke="currentColor"
         class="size-6"
-        @click=${this.#handlePreviousDay}
       >
         <path
           stroke-linecap="round"
@@ -141,7 +161,6 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
         stroke-width="1.5"
         stroke="currentColor"
         class="size-6"
-        @click=${this.#handleNextDay}
       >
         <path
           stroke-linecap="round"
