@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.0.1...v1.0.2) (2025-12-10)
+
+
+### Bug Fixes
+
+* move conditional check to github pages action ([#211](https://github.com/CodingForChrist/memorize-bible-verses/issues/211)) ([0a90f76](https://github.com/CodingForChrist/memorize-bible-verses/commit/0a90f767b48050deadde0e8b4d3dd16367a1894e))
+* switch to publish to github pages based on branch push ([#210](https://github.com/CodingForChrist/memorize-bible-verses/issues/210)) ([925f7c8](https://github.com/CodingForChrist/memorize-bible-verses/commit/925f7c8966a4d1785b1c12a357295b10aec2c4e2))
+* use default release commit message ([#213](https://github.com/CodingForChrist/memorize-bible-verses/issues/213)) ([09723ab](https://github.com/CodingForChrist/memorize-bible-verses/commit/09723ab69626907b68b4fbc5489a3b9591377c0a))
+
 ## [1.0.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.0.0...v1.0.1) (2025-12-10)
 
 
