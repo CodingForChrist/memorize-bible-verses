@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.0.0...v1.0.1) (2025-12-10)
+
+
+### Bug Fixes
+
+* always deploy github pages from main branch ([#208](https://github.com/CodingForChrist/memorize-bible-verses/issues/208)) ([32129de](https://github.com/CodingForChrist/memorize-bible-verses/commit/32129debea4556971ef36c19146bc82cc1c23b87))
+
 ## 1.0.0 (2025-12-10)
 
 
