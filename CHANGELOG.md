@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.0.2...v1.1.0) (2025-12-11)
+
+
+### Features
+
+* add app-footer component ([#214](https://github.com/CodingForChrist/memorize-bible-verses/issues/214)) ([98a0ad9](https://github.com/CodingForChrist/memorize-bible-verses/commit/98a0ad96bf269cd9cd00b4fc8e62439bf9bce98c))
+
 ## [1.0.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.0.1...v1.0.2) (2025-12-10)
 
 
