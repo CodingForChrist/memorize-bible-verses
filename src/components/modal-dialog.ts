@@ -52,12 +52,12 @@ export class ModalDialog extends LitElement {
       position: fixed;
       top: 0;
       right: 0;
-      padding: 0.5rem 0.5rem 0.25rem;
+      padding: 0.75rem 0.75rem 0.5rem;
       z-index: 100;
     }
     #button-close svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 2rem;
+      height: 2rem;
     }
     #button-close:hover {
       opacity: 1;

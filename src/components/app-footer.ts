@@ -76,7 +76,7 @@ export class AppFooter extends LitElement {
           this.isDialogOpen = false;
         }}
       >
-        <p>Memorize Bible Verses app version ${this.version}</p>
+        <p>Memorize Bible Verses version ${this.version}</p>
         <p>
           This bible memorization app is free and open source.
           <a
