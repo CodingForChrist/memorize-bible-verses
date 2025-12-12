@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { query } from "lit/decorators/query.js";
 
-import { breakpointsREM } from "./shared-styles";
+import { breakpointsREM, buttonStyles } from "./shared-styles";
 
 @customElement("modal-dialog")
 export class ModalDialog extends LitElement {
@@ -16,7 +16,9 @@ export class ModalDialog extends LitElement {
   @query("dialog")
   dialogElement?: HTMLDialogElement;
 
-  static styles = css`
+  static styles = [
+    buttonStyles,
+    css`
     dialog {
       background: none;
       border: none;
@@ -43,28 +45,17 @@ export class ModalDialog extends LitElement {
     dialog::backdrop {
       background-color: rgba(0, 0, 0, 0.7);
     }
-    #button-close {
-      all: initial;
-      font: inherit;
+    button.svg-icon-container {
       color: var(--color-primary-mint-cream);
-      opacity: 0.6;
+      opacity: 0.7;
       cursor: pointer;
       position: fixed;
       top: 0;
       right: 0;
-      padding: 0.75rem 0.75rem 0.5rem;
-      z-index: 100;
+      padding: 0.5rem;
     }
-    #button-close svg {
-      width: 2rem;
-      height: 2rem;
-    }
-    #button-close:hover {
+    button.svg-icon-container:hover {
       opacity: 1;
-    }
-    #button-close:focus {
-      box-shadow: 0 0 0 0.25rem rgba(var(--color-primary-mint-cream-rgb), 0.5);
-      outline: none;
     }
     .dialog-content {
       background-color: var(--color-primary-mint-cream);
@@ -82,7 +73,8 @@ export class ModalDialog extends LitElement {
         width: 80vw;
       }
     }
-  `;
+  `,
+  ];
 
   get #xMarkIcon() {
     // x-mark from https://heroicons.com/
@@ -108,7 +100,7 @@ export class ModalDialog extends LitElement {
     return html`
       <dialog @cancel=${this.#handleClose}>
         <button
-          id="button-close"
+          class="svg-icon-container"
           @click=${this.#handleClose}
           aria-label="close dialog"
         >

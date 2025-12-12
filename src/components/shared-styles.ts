@@ -61,6 +61,10 @@ export const buttonStyles = css`
     );
     --secondary-border-color-hover: var(--color-primary-bright-pink-darker-two);
 
+    --svg-icon-container-box-shadow-color-rgb: var(
+      --color-primary-mint-cream-rgb
+    );
+
     display: inline-block;
     font: inherit;
     line-height: 1.5rem;
@@ -68,42 +72,59 @@ export const buttonStyles = css`
     cursor: pointer;
     border-radius: 1.5rem;
   }
-  .primary {
+  button.primary {
     background-color: var(--primary-background-color);
     border: 1px solid var(--primary-background-color);
     color: var(--primary-color);
   }
-  .primary:hover,
-  .primary:active {
+  button.primary:hover,
+  button.primary:active {
     color: var(--primary-color-hover);
     background-color: var(--primary-background-color-hover);
     border-color: var(--primary-border-color-hover);
   }
-  .primary:focus-visible {
+  button.primary:focus-visible {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(var(--primary-box-shadow-color-rgb), 0.5);
   }
-  .secondary {
+  button.secondary {
     background-color: var(--secondary-background-color);
     border: 2px solid var(--secondary-border-color);
     color: var(--secondary-color);
   }
-  .secondary:hover,
-  .secondary:active {
+  button.secondary:hover,
+  button.secondary:active {
     color: var(--secondary-color-hover);
     background-color: var(--secondary-background-color-hover);
     border-color: var(--secondary-border-color-hover);
   }
-  .secondary:focus-visible {
+  button.secondary:focus-visible {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(var(--secondary-box-shadow-color-rgb), 0.5);
   }
-  .primary:active,
-  .secondary:active {
+  button.primary:active,
+  button.secondary:active {
     scale: 95% 95%;
     transition-property: scale;
     transition-timing-function: ease-out;
     transition-duration: 0.3s;
+  }
+  button.svg-icon-container {
+    all: initial;
+    font: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  button.svg-icon-container:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem
+      rgba(var(--svg-icon-container-box-shadow-color-rgb), 0.5);
+  }
+  button.svg-icon-container svg {
+    width: 2rem;
+    height: 2rem;
   }
 `;
 
@@ -114,7 +135,7 @@ export const hyperlinkStyles = css`
   a:hover {
     box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-bright-pink-rgb), 0.4);
   }
-  a:focus {
+  a:focus-visible {
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-bright-pink-rgb), 0.4);
   }

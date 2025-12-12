@@ -2,7 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { state } from "lit/decorators/state.js";
 
-import { hyperlinkStyles } from "./shared-styles";
+import { hyperlinkStyles, buttonStyles } from "./shared-styles";
 
 @customElement("app-footer")
 export class AppFooter extends LitElement {
@@ -11,34 +11,21 @@ export class AppFooter extends LitElement {
 
   static styles = [
     hyperlinkStyles,
+    buttonStyles,
     css`
       :host {
         display: block;
       }
-      .button-more-information {
-        all: initial;
-        font: inherit;
-        color: var(--color-primary-mint-cream-darker-two);
-        cursor: pointer;
-      }
-      .button-more-information:hover {
-        color: var(--color-primary-mint-cream);
-      }
-      .button-more-information:focus {
-        outline: none;
-      }
-      .button-more-information:focus svg {
-        color: var(--color-primary-bright-pink-darker-one);
-        fill: var(--color-primary-mint-cream);
-        box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-mint-cream-rgb), 0.5);
-      }
-      .button-more-information svg {
-        width: 2rem;
-        height: 2rem;
-      }
       footer {
         margin-top: 8rem;
-        text-align: center;
+      }
+      button.svg-icon-container {
+        color: var(--color-primary-mint-cream-darker-two);
+        padding: 0.5rem;
+        margin: 0 auto;
+      }
+      button.svg-icon-container:hover {
+        color: var(--color-primary-mint-cream);
       }
       p {
         margin: 0 0 1rem 0;
@@ -91,7 +78,7 @@ export class AppFooter extends LitElement {
         <button
           type="button"
           aria-label="more information"
-          class="button-more-information"
+          class="svg-icon-container"
           @click=${this.#handleButtonClickToShowDialog}
         >
           ${this.#infomationCircleIcon}
