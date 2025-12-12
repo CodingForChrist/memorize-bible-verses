@@ -3,6 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 
 import { findBibleTranslationById } from "../data/bible-translation-model";
+import { hyperlinkStyles } from "./shared-styles";
 
 @customElement("bible-verse-blockquote")
 export class BibleVerseBlockquote extends LitElement {
@@ -12,35 +13,26 @@ export class BibleVerseBlockquote extends LitElement {
   @property({ type: Boolean, attribute: "display-citation", reflect: true })
   displayCitation: boolean = false;
 
-  static styles = css`
-    :host {
-      display: block;
-      font-size: 1.25rem;
-    }
-    blockquote {
-      background-color: transparent;
-      border: 0;
-      padding: 0;
-      margin: 0;
-    }
-    .citation {
-      font-size: 60%;
-      margin-top: 3rem;
-      margin-bottom: 0;
-    }
-    a {
-      color: var(--color-primary-bright-pink);
-    }
-    a:hover {
-      color: var(--color-primary-bright-pink-darker-one);
-    }
-    a:focus {
-      outline: 1px solid var(--color-primary-bright-pink-darker-one);
-    }
-    a:visited {
-      color: var(--color-primary-bright-pink-darker-two);
-    }
-  `;
+  static styles = [
+    hyperlinkStyles,
+    css`
+      :host {
+        display: block;
+        font-size: 1.25rem;
+      }
+      blockquote {
+        background-color: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;
+      }
+      .citation {
+        font-size: 60%;
+        margin-top: 3rem;
+        margin-bottom: 0;
+      }
+    `,
+  ];
 
   #renderCitation() {
     if (!this.bibleId || !this.displayCitation) {

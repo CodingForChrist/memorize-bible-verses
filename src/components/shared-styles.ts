@@ -106,3 +106,22 @@ export const buttonStyles = css`
     transition-duration: 0.3s;
   }
 `;
+
+export const hyperlinkStyles = css`
+  a {
+    color: var(--color-primary-bright-pink);
+  }
+  a:hover {
+    box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-bright-pink-rgb), 0.4);
+  }
+  a:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-bright-pink-rgb), 0.4);
+  }
+  a:active {
+    color: var(--color-primary-bright-pink-darker-one);
+  }
+  a:visited {
+    color: var(--color-primary-bright-pink-darker-two);
+  }
+`;
