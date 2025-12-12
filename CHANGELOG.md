@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.2.1...v1.2.2) (2025-12-12)
+
+
+### Bug Fixes
+
+* use flexbox to better style svg buttons ([#221](https://github.com/CodingForChrist/memorize-bible-verses/issues/221)) ([a833e81](https://github.com/CodingForChrist/memorize-bible-verses/commit/a833e81fc8c0e4b5c57032f1ad73ffceb37d06b3))
+
 ## [1.2.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.2.0...v1.2.1) (2025-12-12)
 
 
