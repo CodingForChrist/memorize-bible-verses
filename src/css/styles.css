@@ -51,9 +51,9 @@
   --color-secondary-orange-peel-darker-one: #de8c18;
   --color-secondary-orange-peel-darker-two: #c37b13;
 
-  --color-gray: rgba(0, 0, 0, 0.7);
-  --color-light-gray: rgba(0, 0, 0, 0.2);
-  --color-lighter-gray: rgba(0, 0, 0, 0.05);
+  --color-gray: #404040;
+  --color-light-gray: #b3b3b3;
+  --color-lighter-gray: #f2f2f2;
   --font-body: "PT Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
 }
@@ -75,6 +75,11 @@ html {
 
 body {
   margin: 0;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  scrollbar-gutter: stable both-edges;
 }
 
 #app-container {
