@@ -4,6 +4,7 @@ import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
+import { buttonStyles } from "../../components/shared-styles";
 import {
   formatDate,
   parseDate,
@@ -21,54 +22,52 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
 
   pageTitle = "Verse of the Day";
 
-  static styles = css`
-    bible-verse-of-the-day-fetch-result {
-      margin-top: 2rem;
-    }
-    input[type="date"] {
-      font: inherit;
-      color: inherit;
-      line-height: 1.5rem;
-      text-align: center;
-      /* center text input in safari */
-      justify-content: center;
-      box-sizing: border-box;
-      width: 100%;
-      background-color: var(--color-primary-mint-cream);
-      border: 1px solid var(--color-light-gray);
-      border-radius: 1.5rem;
-      padding: 0.5rem 0.75rem;
-      -webkit-appearance: none;
-    }
-    input[type="date"]:focus {
-      border-color: var(--color-primary-mint-cream);
-      outline: 1px solid var(--color-gray);
-    }
-    .date-picker-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: stretch;
-      max-width: 20rem;
-      margin: 0 auto 2rem;
-    }
-    .date-picker-container button {
-      all: initial;
-      font: inherit;
-      color: inherit;
-      cursor: pointer;
-      margin: 0 0.5rem;
-    }
-    .date-picker-container button:focus svg {
-      stroke: var(--color-gray);
-      stroke-width: 3;
-    }
-    .date-picker-container svg {
-      width: 1.5rem;
-      height: 1.5rem;
-      padding: 0 0.5rem;
-      flex-shrink: 0;
-    }
-  `;
+  static styles = [
+    buttonStyles,
+    css`
+      bible-verse-of-the-day-fetch-result {
+        margin-top: 2rem;
+      }
+      input[type="date"] {
+        font: inherit;
+        color: inherit;
+        line-height: 1.5rem;
+        text-align: center;
+        /* center text input in safari */
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        background-color: var(--color-primary-mint-cream);
+        border: 1px solid var(--color-light-gray);
+        border-radius: 1.5rem;
+        padding: 0.5rem 0.75rem;
+        -webkit-appearance: none;
+      }
+      input[type="date"]:focus {
+        border-color: var(--color-primary-mint-cream);
+        outline: 1px solid var(--color-gray);
+      }
+      .date-picker-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+        max-width: 20rem;
+        margin: 0 auto 2rem;
+      }
+      button.svg-icon-container {
+        --svg-icon-container-box-shadow-color-rgb: 0, 0, 0;
+        padding: 0.5rem;
+        margin: 0 0.5rem;
+      }
+      button.svg-icon-container svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      button.svg-icon-container:hover {
+        box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+      }
+    `,
+  ];
 
   render() {
     const dateShortFormat = formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD");
@@ -95,6 +94,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             <button
               type="button"
               aria-label="show verse for previous day"
+              class="svg-icon-container"
               @click=${this.#handlePreviousDay}
             >
               ${this.#chevronLeftIcon}
@@ -111,6 +111,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             <button
               type="button"
               aria-label="show verse for next day"
+              class="svg-icon-container"
               @click=${this.#handleNextDay}
             >
               ${this.#chevronRightIcon}
