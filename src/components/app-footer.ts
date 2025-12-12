@@ -27,22 +27,18 @@ export class AppFooter extends LitElement {
       .button-more-information:focus {
         outline: none;
       }
-
       .button-more-information:focus svg {
         color: var(--color-primary-bright-pink-darker-one);
         fill: var(--color-primary-mint-cream);
         box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-mint-cream-rgb), 0.5);
       }
-
       .button-more-information svg {
         width: 2rem;
         height: 2rem;
       }
-
       footer {
         margin-top: 8rem;
         text-align: center;
-        color: var(--color-primary-mint-cream);
       }
       p {
         margin: 0 0 1rem 0;
