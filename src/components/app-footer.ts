@@ -106,12 +106,14 @@ export class AppFooter extends LitElement {
           <p>
             This bible memorization app is a free tool for you to use to
             practice memorizing scripture so you can grow in your faith.
+          </p>
+          <p>
             <a
               href="https://github.com/CodingForChrist/memorize-bible-verses"
               target="_blank"
               rel="noopener noreferrer"
-              >Check out the source code on GitHub</a
-            >.
+              >View the source code on GitHub</a
+            >
           </p>
           <p>app version ${this.version}</p>
         </div>
