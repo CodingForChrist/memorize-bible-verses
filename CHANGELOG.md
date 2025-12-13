@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.3.0...v1.4.0) (2025-12-13)
+
+
+### Features
+
+* more tweaking of footer content ([#226](https://github.com/CodingForChrist/memorize-bible-verses/issues/226)) ([16a5827](https://github.com/CodingForChrist/memorize-bible-verses/commit/16a58276f53375b42d252e377a5ddebf8a18be36))
+
 ## [1.3.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.2.2...v1.3.0) (2025-12-13)
 
 
