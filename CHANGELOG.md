@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.4.0...v1.5.0) (2025-12-14)
+
+
+### Features
+
+* **ui:** improve icon styling ([#229](https://github.com/CodingForChrist/memorize-bible-verses/issues/229)) ([d3b9449](https://github.com/CodingForChrist/memorize-bible-verses/commit/d3b94491098858c161b70b1e74f766e69279615a))
+
+
+### Bug Fixes
+
+* update placeholder message based on speech recognition support ([#231](https://github.com/CodingForChrist/memorize-bible-verses/issues/231)) ([c59de19](https://github.com/CodingForChrist/memorize-bible-verses/commit/c59de198b32d4b7cdc7ea32af51447d203346212))
+
 ## [1.4.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.3.0...v1.4.0) (2025-12-13)
 
 
