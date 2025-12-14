@@ -116,6 +116,7 @@ export class ReciteBibleVerse extends LitElement {
         <transcript-text
           verse-reference=${this.verseReference}
           transcript=${this.transcript}
+          ?no-speech-recognition-support=${true}
         >
         </transcript-text>
       `;
