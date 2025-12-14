@@ -21,12 +21,15 @@ export class AppFooter extends LitElement {
         margin-top: 8rem;
       }
       button.svg-icon-container {
-        color: var(--color-primary-mint-cream-darker-two);
+        color: var(--color-primary-mint-cream);
         padding: 0.5rem;
         margin: 0 auto;
       }
       button.svg-icon-container:hover {
-        color: var(--color-primary-mint-cream);
+        color: var(--color-primary-bright-pink);
+      }
+      button.svg-icon-container:hover svg {
+        fill: var(--color-primary-mint-cream);
       }
       .dialog-content {
         text-align: center;
