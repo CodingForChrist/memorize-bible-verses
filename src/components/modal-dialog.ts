@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
-import { query } from "lit/decorators/query.js";
+import { ref, createRef, type Ref } from "lit/directives/ref.js";
 
 import { breakpointsREM, buttonStyles } from "./shared-styles";
 
@@ -12,9 +12,7 @@ export class ModalDialog extends LitElement {
     reflect: true,
   })
   open: boolean = false;
-
-  @query("dialog")
-  dialogElement?: HTMLDialogElement;
+  dialogElementReference: Ref<HTMLDialogElement> = createRef();
 
   static styles = [
     buttonStyles,
@@ -98,7 +96,10 @@ export class ModalDialog extends LitElement {
 
   render() {
     return html`
-      <dialog @cancel=${this.#handleClose}>
+      <dialog
+        @cancel=${this.#handleClose}
+        ref=${ref(this.dialogElementReference)}
+      >
         <button
           class="svg-icon-container"
           @click=${this.#handleClose}
@@ -115,10 +116,10 @@ export class ModalDialog extends LitElement {
 
   updated() {
     if (this.open) {
-      this.dialogElement?.showModal();
+      this.dialogElementReference.value?.showModal();
       document.body.classList.add("no-scroll");
     } else {
-      this.dialogElement?.close();
+      this.dialogElementReference.value?.close();
       document.body.classList.remove("no-scroll");
     }
   }

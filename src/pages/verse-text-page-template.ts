@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { state } from "lit/decorators/state.js";
-import { query } from "lit/decorators/query.js";
+import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { classMap } from "lit/directives/class-map.js";
 
 import { breakpointsREM, buttonStyles } from "../components/shared-styles";
@@ -11,9 +11,7 @@ export class VerseTextPageTemplate extends LitElement {
   @state()
   isPageNavigationSticky: boolean = false;
 
-  @query("#page-navigation-sentinel")
-  pageNavigationSentinelElement?: HTMLDivElement;
-
+  navigationStickyElementReference: Ref<HTMLDivElement> = createRef();
   observer: IntersectionObserver | undefined;
 
   static styles = [
@@ -149,7 +147,7 @@ export class VerseTextPageTemplate extends LitElement {
         </div>
 
         <!-- used to track when page-navigation element becomes sticky -->
-        <div id="page-navigation-sentinel"></div>
+        <div ref=${ref(this.navigationStickyElementReference)}></div>
       </div>
     `;
   }
@@ -164,14 +162,14 @@ export class VerseTextPageTemplate extends LitElement {
   }
 
   #setupIntersectionObserver() {
-    if (!this.pageNavigationSentinelElement) {
+    if (!this.navigationStickyElementReference.value) {
       return;
     }
 
     this.observer = new IntersectionObserver(
       this.#handleIntersection.bind(this),
     );
-    this.observer.observe(this.pageNavigationSentinelElement);
+    this.observer.observe(this.navigationStickyElementReference.value);
   }
 
   #disconnectIntersectionObserver() {
