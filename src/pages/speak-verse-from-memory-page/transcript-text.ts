@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
-import { query } from "lit/decorators/query.js";
+import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { state } from "lit/decorators/state.js";
 import { styleMap } from "lit/directives/style-map.js";
 
@@ -19,8 +19,7 @@ export class TranscriptText extends LitElement {
   @property({ type: Boolean, reflect: true })
   disabled: boolean = false;
 
-  @query("#transcript-textarea")
-  transcriptTextareaElement?: HTMLTextAreaElement;
+  textareaElementReference: Ref<HTMLTextAreaElement> = createRef();
 
   @state()
   heightInPixels?: number;
@@ -72,6 +71,7 @@ export class TranscriptText extends LitElement {
     return html`
       <textarea
         id="transcript-textarea"
+        ref=${ref(this.textareaElementReference)}
         placeholder=${this.disabled ? nothing : placeholderText}
         .value=${this.transcript}
         @input=${this.#fieldSizingContentPolyfill}
@@ -87,11 +87,11 @@ export class TranscriptText extends LitElement {
       return;
     }
 
-    if (!this.transcriptTextareaElement) {
+    if (!this.textareaElementReference.value) {
       return;
     }
 
-    const { clientHeight, scrollHeight } = this.transcriptTextareaElement;
+    const { clientHeight, scrollHeight } = this.textareaElementReference.value;
 
     if (clientHeight < scrollHeight) {
       this.heightInPixels = scrollHeight;
