@@ -19,6 +19,13 @@ export class TranscriptText extends LitElement {
   @property({ type: Boolean, reflect: true })
   disabled: boolean = false;
 
+  @property({
+    attribute: "no-speech-recognition-support",
+    type: Boolean,
+    reflect: true,
+  })
+  noSpeechRecognitionSupport: boolean = false;
+
   textareaElementReference: Ref<HTMLTextAreaElement> = createRef();
 
   @state()
@@ -60,7 +67,7 @@ export class TranscriptText extends LitElement {
   `;
 
   render() {
-    const placeholderText = `Speak or type in ${this.verseReference ?? "the verse reference"} from memory...`;
+    const placeholderText = `${this.noSpeechRecognitionSupport ? "Type" : "Speak or type"} in ${this.verseReference ?? "the verse reference"} from memory...`;
 
     this.#fieldSizingContentPolyfill();
 
