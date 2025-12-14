@@ -63,11 +63,26 @@ export class ReciteBibleVerse extends LitElement {
         margin-bottom: 0;
       }
       button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
         min-width: 7rem;
         --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
       }
       button .icon {
         margin-right: 0.25rem;
+      }
+      button .circle-icon {
+        background-color: currentColor;
+        border-radius: 50%;
+        width: 0.85rem;
+        height: 0.85rem;
+      }
+      button .square-icon {
+        background-color: currentColor;
+        width: 0.75rem;
+        height: 0.75rem;
       }
     `,
   ];
@@ -125,8 +140,8 @@ export class ReciteBibleVerse extends LitElement {
               class="secondary"
               @click=${this.#handleRecordButtonClick}
             >
-              <span class="icon">&#9679;</span>
-              <span class="text-content">Record</span>
+              <span class="circle-icon"></span>
+              <span>Record</span>
             </button>
             <transcript-text
               verse-reference=${this.verseReference}
@@ -155,8 +170,8 @@ export class ReciteBibleVerse extends LitElement {
               class="secondary"
               @click=${this.#handleStopButtonClick}
             >
-              <span class="icon">&#9632;</span>
-              <span class="text-content">Stop</span>
+              <span class="square-icon"></span>
+              <span>Stop</span>
             </button>
           </div>
         `,
@@ -177,8 +192,8 @@ export class ReciteBibleVerse extends LitElement {
               class="secondary"
               @click=${this.#handleStopButtonClick}
             >
-              <span class="icon">&#9632;</span>
-              <span class="text-content">Stop</span>
+              <span class="square-icon"></span>
+              <span>Stop</span>
             </button>
           </div>
         `,
@@ -199,7 +214,8 @@ export class ReciteBibleVerse extends LitElement {
               class="secondary"
               @click=${this.#handleRecordButtonClick}
             >
-              <span class="text-content">Try Recording Again</span>
+              <span class="circle-icon"></span>
+              <span>Try Recording Again</span>
             </button>
           </div>
         `,
@@ -218,7 +234,8 @@ export class ReciteBibleVerse extends LitElement {
               class="secondary"
               @click=${this.#handleRecordButtonClick}
             >
-              <span class="text-content">Try Recording Again</span>
+              <span class="circle-icon"></span>
+              <span>Try Recording Again</span>
             </button>
           </div>
         `,
@@ -239,7 +256,8 @@ export class ReciteBibleVerse extends LitElement {
               class="secondary"
               @click=${this.#handleRecordButtonClick}
             >
-              <span class="text-content">Try Recording Again</span>
+              <span class="circle-icon"></span>
+              <span>Try Recording Again</span>
             </button>
           </div>
         `,
