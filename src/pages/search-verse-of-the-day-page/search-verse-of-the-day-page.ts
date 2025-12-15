@@ -63,8 +63,12 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
         width: 1.5rem;
         height: 1.5rem;
       }
-      button.svg-icon-container:hover {
-        box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+      button.svg-icon-container:hover svg,
+      button.svg-icon-container:focus-visible svg {
+        stroke-width: 3;
+      }
+      button.svg-icon-container:focus-visible {
+        box-shadow: none;
       }
     `,
   ];
