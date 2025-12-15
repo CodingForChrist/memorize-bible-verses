@@ -55,6 +55,7 @@ export const formControlStyles = css`
   input:-webkit-autofill,
   input:-webkit-autofill:focus {
     box-shadow: inset 0 0 0 2rem var(--color-primary-mint-cream);
+    -webkit-text-fill-color: var(--color-gray);
   }
   input[type="date"] {
     padding-top: 0.375rem;
