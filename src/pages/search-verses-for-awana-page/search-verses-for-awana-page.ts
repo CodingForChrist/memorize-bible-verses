@@ -5,7 +5,7 @@ import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { formSelectStyles } from "../../components/shared-styles";
+import { formControlStyles } from "../../components/shared-styles";
 import { getStateFromURL } from "../../services/router";
 
 import {
@@ -25,7 +25,7 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   pageTitle = "Verses for Awana Club for Kids";
 
   static styles = [
-    formSelectStyles,
+    formControlStyles,
     css`
       bible-translation-drop-down-list {
         margin-bottom: 1.5rem;

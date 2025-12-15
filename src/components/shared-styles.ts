@@ -10,7 +10,7 @@ export const breakpointsREM = {
   extraLarge: 48, // 768 pixels
 };
 
-export const formSelectStyles = css`
+export const formControlStyles = css`
   select {
     font: inherit;
     color: inherit;
@@ -18,7 +18,7 @@ export const formSelectStyles = css`
     display: block;
     width: 100%;
     margin: 0;
-    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
     background-color: var(--color-primary-mint-cream);
     border: 1px solid var(--color-light-gray);
     border-radius: 1.5rem;
@@ -30,8 +30,31 @@ export const formSelectStyles = css`
     background-size: 1.5em 1.5em;
   }
   select:focus {
-    border-color: var(--color-primary-mint-cream);
-    outline: 1px solid var(--color-gray);
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  input {
+    display: block;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    line-height: 1.5rem;
+    padding: 0.375rem 0.75rem;
+    background-color: var(--color-primary-mint-cream);
+    border: 1px solid var(--color-light-gray);
+    border-radius: 1.5rem;
+  }
+  input:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition:
+      background-color 0s 600000s,
+      color 0s 600000s !important;
   }
 `;
 
