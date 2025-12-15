@@ -5,7 +5,10 @@ import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { buttonStyles } from "../../components/shared-styles";
+import {
+  formControlStyles,
+  buttonStyles,
+} from "../../components/shared-styles";
 import { getStateFromURL } from "../../services/router";
 
 @customElement("search-advanced-page")
@@ -20,6 +23,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   pageTitle = "Advanced Search";
 
   static styles = [
+    formControlStyles,
     buttonStyles,
     css`
       bible-translation-drop-down-list {
@@ -36,28 +40,6 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
         display: flex;
         gap: 0.25rem;
         margin-top: 0.25rem;
-      }
-      input {
-        font: inherit;
-        color: inherit;
-        line-height: 1.5rem;
-        flex: 1;
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        background-color: var(--color-primary-mint-cream);
-        border: 1px solid var(--color-light-gray);
-        border-radius: 1.5rem;
-      }
-      input:focus,
-      input:active {
-        border-color: var(--color-primary-mint-cream);
-        outline: 1px solid var(--color-gray);
-      }
-      input:-webkit-autofill,
-      input:-webkit-autofill:focus {
-        transition:
-          background-color 0s 600000s,
-          color 0s 600000s !important;
       }
       button[type="submit"] {
         --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);

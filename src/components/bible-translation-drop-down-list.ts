@@ -5,7 +5,7 @@ import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
 import { getStateFromURL } from "../services/router";
-import { formSelectStyles } from "./shared-styles";
+import { formControlStyles } from "./shared-styles";
 import {
   getAllBibleTranslations,
   findBibleTranslationByAbbreviation,
@@ -31,7 +31,7 @@ export class BibleTranslationDropDownList extends LitElement {
   bibleTranslations: BibleTranslationWithCustomLabel[] = [];
 
   static styles = [
-    formSelectStyles,
+    formControlStyles,
     css`
       :host {
         display: block;

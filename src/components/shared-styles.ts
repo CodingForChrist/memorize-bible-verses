@@ -10,15 +10,16 @@ export const breakpointsREM = {
   extraLarge: 48, // 768 pixels
 };
 
-export const formSelectStyles = css`
+export const formControlStyles = css`
   select {
+    display: block;
+    width: 100%;
     font: inherit;
     color: inherit;
     line-height: 1.5rem;
-    display: block;
-    width: 100%;
+    box-sizing: border-box;
     margin: 0;
-    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    padding: 0.445rem 2.25rem 0.445rem 1rem;
     background-color: var(--color-primary-mint-cream);
     border: 1px solid var(--color-light-gray);
     border-radius: 1.5rem;
@@ -30,8 +31,73 @@ export const formSelectStyles = css`
     background-size: 1.5em 1.5em;
   }
   select:focus {
-    border-color: var(--color-primary-mint-cream);
-    outline: 1px solid var(--color-gray);
+    outline: 0;
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
+  }
+  input {
+    display: block;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    line-height: 1.5rem;
+    box-sizing: border-box;
+    padding: 0.445rem 1rem;
+    background-color: var(--color-primary-mint-cream);
+    border: 1px solid var(--color-light-gray);
+    border-radius: 1.5rem;
+  }
+  input:focus {
+    outline: 0;
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    box-shadow: inset 0 0 0 2rem var(--color-primary-mint-cream);
+    -webkit-text-fill-color: var(--color-gray);
+  }
+  input[type="date"] {
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    text-align: center;
+    /* center text input in safari */
+    justify-content: center;
+    -webkit-appearance: none;
+  }
+  input[type="date"]::-webkit-datetime-edit {
+    display: block;
+    padding: 0;
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    line-height: 1.5rem;
+    box-sizing: border-box;
+    min-block-size: 10rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-primary-mint-cream);
+    border: 1px solid var(--color-light-gray);
+    border-radius: 1.5rem;
+    field-sizing: content;
+    overflow: hidden;
+    resize: none;
+  }
+  textarea:focus {
+    outline: 0;
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
+  }
+  textarea:disabled,
+  textarea[readonly] {
+    background-color: var(--color-lighter-gray);
+    border-color: var(--color-light-gray);
+    cursor: not-allowed;
+    color: var(--color-gray);
+    opacity: 1;
+    -webkit-text-fill-color: var(--color-gray);
   }
 `;
 

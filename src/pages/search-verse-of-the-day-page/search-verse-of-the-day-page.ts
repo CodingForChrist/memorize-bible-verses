@@ -4,7 +4,10 @@ import { property } from "lit/decorators/property.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { buttonStyles } from "../../components/shared-styles";
+import {
+  formControlStyles,
+  buttonStyles,
+} from "../../components/shared-styles";
 import {
   formatDate,
   parseDate,
@@ -23,29 +26,11 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   pageTitle = "Verse of the Day";
 
   static styles = [
+    formControlStyles,
     buttonStyles,
     css`
       bible-verse-of-the-day-fetch-result {
         margin-top: 2rem;
-      }
-      input[type="date"] {
-        font: inherit;
-        color: inherit;
-        line-height: 1.5rem;
-        text-align: center;
-        /* center text input in safari */
-        justify-content: center;
-        box-sizing: border-box;
-        width: 100%;
-        background-color: var(--color-primary-mint-cream);
-        border: 1px solid var(--color-light-gray);
-        border-radius: 1.5rem;
-        padding: 0.5rem 0.75rem;
-        -webkit-appearance: none;
-      }
-      input[type="date"]:focus {
-        border-color: var(--color-primary-mint-cream);
-        outline: 1px solid var(--color-gray);
       }
       .date-picker-container {
         display: flex;
