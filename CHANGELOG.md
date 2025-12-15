@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.5.0...v1.6.0) (2025-12-15)
+
+
+### Features
+
+* shared form control styles ([#241](https://github.com/CodingForChrist/memorize-bible-verses/issues/241)) ([2ce2b9b](https://github.com/CodingForChrist/memorize-bible-verses/commit/2ce2b9bc0be5fece3abc70a9253748e4466102b7))
+
+
+### Bug Fixes
+
+* better visible style for verse of the day page ([#232](https://github.com/CodingForChrist/memorize-bible-verses/issues/232)) ([8bfaf09](https://github.com/CodingForChrist/memorize-bible-verses/commit/8bfaf093a4f4db59ae85c195477364868edc2eaa))
+
 ## [1.5.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.4.0...v1.5.0) (2025-12-14)
 
 
