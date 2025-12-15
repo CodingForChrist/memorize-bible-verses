@@ -5,6 +5,7 @@ import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { state } from "lit/decorators/state.js";
 import { styleMap } from "lit/directives/style-map.js";
 
+import { formControlStyles } from "../../components/shared-styles";
 import { CUSTOM_EVENT } from "../../constants";
 import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
@@ -31,40 +32,15 @@ export class TranscriptText extends LitElement {
   @state()
   heightInPixels?: number;
 
-  static styles = css`
-    :host {
-      display: block;
-      margin: 2rem 0;
-    }
-    textarea {
-      font: inherit;
-      color: inherit;
-      width: 100%;
-      min-block-size: 10rem;
-      padding: 1rem;
-      background-color: var(--color-primary-mint-cream);
-      border: 1px solid var(--color-light-gray);
-      border-radius: 1.5rem;
-      box-sizing: border-box;
-      field-sizing: content;
-      overflow: hidden;
-      resize: none;
-    }
-    textarea:focus,
-    textarea:active {
-      border-color: var(--color-primary-mint-cream);
-      outline: 1px solid var(--color-gray);
-    }
-    textarea:disabled,
-    textarea[readonly] {
-      background-color: var(--color-lighter-gray);
-      border-color: var(--color-light-gray);
-      cursor: not-allowed;
-      color: var(--color-gray);
-      opacity: 1;
-      -webkit-text-fill-color: var(--color-gray);
-    }
-  `;
+  static styles = [
+    formControlStyles,
+    css`
+      :host {
+        display: block;
+        margin: 2rem 0;
+      }
+    `,
+  ];
 
   render() {
     const placeholderText = `${this.noSpeechRecognitionSupport ? "Type" : "Speak or type"} in ${this.verseReference ?? "the verse reference"} from memory...`;

@@ -12,13 +12,14 @@ export const breakpointsREM = {
 
 export const formControlStyles = css`
   select {
+    display: block;
+    width: 100%;
     font: inherit;
     color: inherit;
     line-height: 1.5rem;
-    display: block;
-    width: 100%;
+    box-sizing: border-box;
     margin: 0;
-    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    padding: 0.445rem 2.25rem 0.445rem 1rem;
     background-color: var(--color-primary-mint-cream);
     border: 1px solid var(--color-light-gray);
     border-radius: 1.5rem;
@@ -30,9 +31,9 @@ export const formControlStyles = css`
     background-size: 1.5em 1.5em;
   }
   select:focus {
-    border-color: #86b7fe;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
   }
   input {
     display: block;
@@ -40,21 +41,62 @@ export const formControlStyles = css`
     font: inherit;
     color: inherit;
     line-height: 1.5rem;
-    padding: 0.375rem 0.75rem;
+    box-sizing: border-box;
+    padding: 0.445rem 1rem;
     background-color: var(--color-primary-mint-cream);
     border: 1px solid var(--color-light-gray);
     border-radius: 1.5rem;
   }
   input:focus {
-    border-color: #86b7fe;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
   }
   input:-webkit-autofill,
   input:-webkit-autofill:focus {
-    transition:
-      background-color 0s 600000s,
-      color 0s 600000s !important;
+    box-shadow: inset 0 0 0 2rem var(--color-primary-mint-cream);
+  }
+  input[type="date"] {
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    text-align: center;
+    /* center text input in safari */
+    justify-content: center;
+    -webkit-appearance: none;
+  }
+  input[type="date"]::-webkit-datetime-edit {
+    display: block;
+    padding: 0;
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    line-height: 1.5rem;
+    box-sizing: border-box;
+    min-block-size: 10rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-primary-mint-cream);
+    border: 1px solid var(--color-light-gray);
+    border-radius: 1.5rem;
+    field-sizing: content;
+    overflow: hidden;
+    resize: none;
+  }
+  textarea:focus {
+    outline: 0;
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-ring);
+  }
+  textarea:disabled,
+  textarea[readonly] {
+    background-color: var(--color-lighter-gray);
+    border-color: var(--color-light-gray);
+    cursor: not-allowed;
+    color: var(--color-gray);
+    opacity: 1;
+    -webkit-text-fill-color: var(--color-gray);
   }
 `;
 

@@ -51,6 +51,9 @@
   --color-secondary-orange-peel-darker-one: #de8c18;
   --color-secondary-orange-peel-darker-two: #c37b13;
 
+  --color-focus-ring: rgba(13, 110, 253, 0.25);
+  --color-focus-border: #86b7fe;
+
   --color-gray: #404040;
   --color-light-gray: #b3b3b3;
   --color-lighter-gray: #f2f2f2;

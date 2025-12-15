@@ -5,7 +5,10 @@ import { state } from "lit/decorators/state.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { formControlStyles, buttonStyles } from "../../components/shared-styles";
+import {
+  formControlStyles,
+  buttonStyles,
+} from "../../components/shared-styles";
 import { getStateFromURL } from "../../services/router";
 
 @customElement("search-advanced-page")
