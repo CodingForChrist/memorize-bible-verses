@@ -56,7 +56,8 @@
 
   --color-gray: #404040;
   --color-light-gray: #b3b3b3;
-  --color-lighter-gray: #f2f2f2;
+  --color-lighter-gray: #e9ecef;
+
   --font-body: "PT Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
 }
