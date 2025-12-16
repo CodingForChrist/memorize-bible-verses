@@ -2,7 +2,6 @@ import { LitElement, css, html, unsafeCSS, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
@@ -90,7 +89,7 @@ export class ScorePage extends BasePage(LitElement) {
             </td>
           </tr>
           <tr>
-            <td>Text Difference</td>
+            <td>Compare</td>
             <td>
               <score-recited-bible-verse
                 type="diff"
@@ -109,13 +108,7 @@ export class ScorePage extends BasePage(LitElement) {
           </tr>
           <tr>
             <td>Actual Verse</td>
-            <td>
-              <bible-verse-blockquote>
-                <span class="scripture-styles">
-                  ${unsafeHTML(this.verseContent)}
-                </span>
-              </bible-verse-blockquote>
-            </td>
+            <td>${convertBibleVerseToText(this.verseContent)}</td>
           </tr>
           <tr>
             <td>Recited Verse</td>

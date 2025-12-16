@@ -32,11 +32,13 @@ export class ScoreRecitedBibleVerse extends LitElement {
     }
     .legend-container {
       margin-top: 1.5rem;
+      font-size: 85%;
     }
     .legend-container > div {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem;
       align-items: center;
+      margin-bottom: 0.5rem;
     }
     .legend-container .added,
     .legend-container .removed {
