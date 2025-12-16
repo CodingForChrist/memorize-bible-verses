@@ -44,7 +44,7 @@ export class BibleVerseFetchResult extends LitElement {
         margin-bottom: 2rem;
       }
       bible-verse-blockquote .scripture-styles {
-        color: var(--color-gray);
+        color: var(--color-dark-gray);
       }
     `,
   ];

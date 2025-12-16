@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { classMap } from "lit/directives/class-map.js";
+import { map } from "lit/directives/map.js";
 import { diffWords } from "diff";
 
 @customElement("score-recited-bible-verse")
@@ -28,6 +29,20 @@ export class ScoreRecitedBibleVerse extends LitElement {
     }
     .removed {
       background-color: var(--text-removed-color);
+    }
+    .legend-container {
+      margin-top: 1.5rem;
+    }
+    .legend-container > div {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .legend-container .added,
+    .legend-container .removed {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 0.25rem;
     }
   `;
 
@@ -78,9 +93,25 @@ export class ScoreRecitedBibleVerse extends LitElement {
       return html`${this.grade.letter} (${this.grade.percentage}%)`;
     }
 
-    return html`${differenceParts.map(({ text, added, removed }) => {
-      return html`<span class=${classMap({ added, removed })}> ${text} </span>`;
-    })}`;
+    return html`
+      <div class="text-difference-container">
+        ${map(
+          differenceParts,
+          ({ text, added, removed }) =>
+            html`<span class=${classMap({ added, removed })}>${text}</span>`,
+        )}
+      </div>
+      <div class="legend-container">
+        <div>
+          <span class="added"></span>
+          <span>Missed words in the verse</span>
+        </div>
+        <div>
+          <span class="removed"></span>
+          <span>Extra words not in the verse</span>
+        </div>
+      </div>
+    `;
   }
 }
 
@@ -91,10 +122,16 @@ function compareVerses({
   originalBibleVerseText: string;
   recitedBibleVerseText: string;
 }) {
+  type TextDifferencePart = {
+    text: string;
+    added: boolean;
+    removed: boolean;
+  };
+
   const result = {
     wordCount: 0,
     errorCount: 0,
-    differenceParts: [] as { text: string; added: boolean; removed: boolean }[],
+    differenceParts: [] as TextDifferencePart[],
   };
 
   if (!originalBibleVerseText || !recitedBibleVerseText) {
