@@ -10,6 +10,7 @@ import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 import { convertBibleVerseToText } from "../../services/format-api-response";
 import { findBibleTranslationById } from "../../data/bible-translation-model";
+import { breakpointsREM } from "../../components/shared-styles";
 
 @customElement("score-page")
 export class ScorePage extends BasePage(LitElement) {
@@ -47,10 +48,15 @@ export class ScorePage extends BasePage(LitElement) {
         padding: 1rem 0;
       }
       td:first-child {
-        padding-right: 2rem;
+        padding-right: 1rem;
+
+        @media (min-width: ${breakpointsREM.medium}rem) {
+          min-width: 8rem;
+          padding-right: 2rem;
+        }
       }
       bible-verse-blockquote .scripture-styles {
-        color: var(--color-gray);
+        color: var(--color-dark-gray);
       }
     `,
   ];
@@ -84,6 +90,16 @@ export class ScorePage extends BasePage(LitElement) {
             </td>
           </tr>
           <tr>
+            <td>Text Difference</td>
+            <td>
+              <score-recited-bible-verse
+                type="diff"
+                original-bible-verse-text=${verseText}
+                recited-bible-verse-text=${this.recitedBibleVerse}
+              ></score-recited-bible-verse>
+            </td>
+          </tr>
+          <tr>
             <td>Bible</td>
             <td>${abbreviationLocal}</td>
           </tr>
@@ -104,16 +120,6 @@ export class ScorePage extends BasePage(LitElement) {
           <tr>
             <td>Recited Verse</td>
             <td>${this.recitedBibleVerse}</td>
-          </tr>
-          <tr>
-            <td>Text Difference</td>
-            <td>
-              <score-recited-bible-verse
-                type="diff"
-                original-bible-verse-text=${verseText}
-                recited-bible-verse-text=${this.recitedBibleVerse}
-              ></score-recited-bible-verse>
-            </td>
           </tr>
         </tbody>
       </table>
