@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
@@ -35,13 +36,13 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
       margin: 0.25rem 0 0.75rem -1rem;
       font-size: 85%;
 
-      @media (width >= ${breakpointsREM.small}rem) {
+      @media (min-width: ${breakpointsREM.small}rem) {
         font-size: 90%;
       }
-      @media (width >= ${breakpointsREM.medium}rem) {
+      @media (min-width: ${breakpointsREM.medium}rem) {
         font-size: 100%;
       }
-      @media (width >= ${breakpointsREM.extraLarge}rem) {
+      @media (min-width: ${breakpointsREM.extraLarge}rem) {
         grid-template-columns: repeat(4, 1fr);
       }
     }
@@ -152,7 +153,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
 
           <bible-verse-fetch-result
             verse-reference=${this.verseReference}
-            bible-id=${this.bibleId}
+            bible-id=${ifDefined(this.bibleId)}
           ></bible-verse-fetch-result>
         </div>
 

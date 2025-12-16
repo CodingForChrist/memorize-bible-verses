@@ -1,7 +1,8 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { state } from "lit/decorators/state.js";
 import { choose } from "lit/directives/choose.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { CUSTOM_EVENT, PAGE_NAME, type PageName } from "../constants";
 import {
@@ -128,7 +129,7 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SEARCH_VERSE_OF_THE_DAY_PAGE,
           () => html`
             <search-verse-of-the-day-page
-              bible-id=${this.selectedBibleTranslation?.id || nothing}
+              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
             ></search-verse-of-the-day-page>
           `,
         ],
@@ -136,7 +137,7 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
           () => html`
             <search-verses-for-sharing-the-gospel-page
-              bible-id=${this.selectedBibleTranslation?.id}
+              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
             ></search-verses-for-sharing-the-gospel-page>
           `,
         ],
@@ -144,7 +145,7 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SEARCH_PSALM_23_PAGE,
           () => html`
             <search-psalm-23-page
-              bible-id=${this.selectedBibleTranslation?.id || nothing}
+              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
             ></search-psalm-23-page>
           `,
         ],
@@ -152,7 +153,7 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SEARCH_VERSES_FOR_AWANA_PAGE,
           () => html`
             <search-verses-for-awana-page
-              bible-id=${this.selectedBibleTranslation?.id || nothing}
+              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
             ></search-verses-for-awana-page>
           `,
         ],
@@ -160,7 +161,7 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SEARCH_ADVANCED_PAGE,
           () => html`
             <search-advanced-page
-              bible-id=${this.selectedBibleTranslation?.id || nothing}
+              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
             ></search-advanced-page>
           `,
         ],
@@ -168,10 +169,10 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
           () => html`
             <speak-verse-from-memory-page
-              verse-reference=${this.selectedBibleVerse?.reference || nothing}
-              verse-content=${this.selectedBibleVerse?.content || nothing}
-              recited-bible-verse=${this.recitedBibleVerse || nothing}
-              previous-page=${this.previousPage || nothing}
+              verse-reference=${ifDefined(this.selectedBibleVerse?.reference)}
+              verse-content=${ifDefined(this.selectedBibleVerse?.content)}
+              recited-bible-verse=${ifDefined(this.recitedBibleVerse)}
+              previous-page=${ifDefined(this.previousPage)}
             ></speak-verse-from-memory-page>
           `,
         ],
@@ -179,10 +180,10 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SCORE_PAGE,
           () => html`
             <score-page
-              bible-id=${this.selectedBibleTranslation?.id || nothing}
-              verse-reference=${this.selectedBibleVerse?.reference || nothing}
-              verse-content=${this.selectedBibleVerse?.content || nothing}
-              recited-bible-verse=${this.recitedBibleVerse || nothing}
+              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
+              verse-reference=${ifDefined(this.selectedBibleVerse?.reference)}
+              verse-content=${ifDefined(this.selectedBibleVerse?.content)}
+              recited-bible-verse=${ifDefined(this.recitedBibleVerse)}
             ></score-page>
           `,
         ],

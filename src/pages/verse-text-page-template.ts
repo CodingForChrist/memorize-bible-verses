@@ -27,7 +27,7 @@ export class VerseTextPageTemplate extends LitElement {
         margin: 2rem 0 1rem;
         text-align: center;
 
-        @media (width >= ${breakpointsREM.large}rem) {
+        @media (min-width: ${breakpointsREM.large}rem) {
           font-size: 2.5rem;
           margin: 2rem 0;
         }
@@ -37,7 +37,7 @@ export class VerseTextPageTemplate extends LitElement {
         text-align: center;
         text-wrap: balance;
 
-        @media (width >= ${breakpointsREM.small}rem) {
+        @media (min-width: ${breakpointsREM.small}rem) {
           margin: 0 2.5rem;
         }
       }
@@ -49,7 +49,7 @@ export class VerseTextPageTemplate extends LitElement {
         margin: 0;
         border-radius: 1.5rem;
 
-        @media (width >= ${breakpointsREM.small}rem) {
+        @media (min-width: ${breakpointsREM.small}rem) {
           margin-left: 1rem;
           margin-right: 1rem;
         }
@@ -66,7 +66,7 @@ export class VerseTextPageTemplate extends LitElement {
         margin: 2rem 0;
         padding: 1.5rem 1rem;
 
-        @media (width >= ${breakpointsREM.small}rem) {
+        @media (min-width: ${breakpointsREM.small}rem) {
           padding: 1.5rem;
         }
       }

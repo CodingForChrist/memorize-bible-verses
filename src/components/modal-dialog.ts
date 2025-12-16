@@ -17,61 +17,60 @@ export class ModalDialog extends LitElement {
   static styles = [
     buttonStyles,
     css`
-    dialog {
-      background: none;
-      border: none;
-      display: none;
-      opacity: 0;
-      padding: 0;
-      transition:
-        opacity 0.3s,
-        display 0.3s allow-discrete,
-        overlay 0.3s allow-discrete;
-    }
-    dialog[open] {
-      display: block;
-      opacity: 1;
-    }
-    dialog::backdrop {
-      background-color: transparent;
-      border 2px inset var(--color-light-gray);
-      transition:
-        background-color 0.3s,
-        display 0.3s allow-discrete,
-        overlay 0.3s allow-discrete;
-    }
-    dialog::backdrop {
-      background-color: rgba(0, 0, 0, 0.7);
-    }
-    button.svg-icon-container {
-      color: var(--color-primary-mint-cream);
-      opacity: 0.7;
-      cursor: pointer;
-      position: fixed;
-      top: 0;
-      right: 0;
-      padding: 0.5rem;
-    }
-    button.svg-icon-container:hover {
-      opacity: 1;
-    }
-    .dialog-content {
-      background-color: var(--color-primary-mint-cream);
-      border-radius: 1.5rem;
-      color: var(--color-gray);
-      text-align: left;
-      min-height: 16rem;
-      margin: 2rem 0;
-      padding: 1.5rem;
-      min-width: 12rem;
-      max-width: 42rem;
-
-      @media (width >= ${breakpointsREM.small}rem) {
-        padding: 1.5rem;
-        width: 80vw;
+      dialog {
+        background: none;
+        border: none;
+        display: none;
+        opacity: 0;
+        padding: 0;
+        transition:
+          opacity 0.3s,
+          display 0.3s allow-discrete,
+          overlay 0.3s allow-discrete;
       }
-    }
-  `,
+      dialog[open] {
+        display: block;
+        opacity: 1;
+      }
+      dialog::backdrop {
+        background-color: transparent;
+        border: 2px inset var(--color-light-gray);
+        transition:
+          background-color 0.3s,
+          display 0.3s allow-discrete,
+          overlay 0.3s allow-discrete;
+      }
+      dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+      button.svg-icon-container {
+        color: var(--color-primary-mint-cream);
+        opacity: 0.7;
+        cursor: pointer;
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 0.5rem;
+      }
+      button.svg-icon-container:hover {
+        opacity: 1;
+      }
+      .dialog-content {
+        background-color: var(--color-primary-mint-cream);
+        border-radius: 1.5rem;
+        color: var(--color-gray);
+        text-align: left;
+        min-height: 16rem;
+        margin: 2rem 0;
+        padding: 1.5rem;
+        min-width: 12rem;
+        max-width: 42rem;
+
+        @media (min-width: ${breakpointsREM.small}rem) {
+          width: 80vw;
+        }
+      }
+    `,
   ];
 
   get #xMarkIcon() {

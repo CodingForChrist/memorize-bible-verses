@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
@@ -17,9 +18,9 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   bibleId?: string;
 
   @state()
-  verseReference = getStateFromURL()?.verse ?? "";
+  verseReference = getStateFromURL()?.verse;
 
-  #textInput = this.verseReference;
+  #textInput = this.verseReference ?? "";
   pageTitle = "Advanced Search";
 
   static styles = [
@@ -94,8 +95,8 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
           ${this.#renderSearchForm()}
 
           <bible-verse-fetch-result
-            bible-id=${this.bibleId}
-            verse-reference=${this.verseReference}
+            bible-id=${ifDefined(this.bibleId)}
+            verse-reference=${ifDefined(this.verseReference)}
           ></bible-verse-fetch-result>
         </span>
 
