@@ -1,7 +1,8 @@
-import { LitElement, css, html, nothing, type PropertyValues } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
@@ -61,14 +62,14 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
             () => html`
               <h2>${this.verseReference}</h2>
               <recite-bible-verse
-                verse-reference="${this.verseReference}"
-                verse-content="${this.verseContent}"
-                transcript="${this.recitedBibleVerse || nothing}"
+                verse-reference="${ifDefined(this.verseReference)}"
+                verse-content="${ifDefined(this.verseContent)}"
+                transcript="${ifDefined(this.recitedBibleVerse)}"
               ></recite-bible-verse>
             `,
             () => html`
               <alert-message type="danger">
-                Go back to Step 1 and select a bible verse.</span
+                Go back to Step 1 and select a bible verse.
               </alert-message>
             `,
           )}

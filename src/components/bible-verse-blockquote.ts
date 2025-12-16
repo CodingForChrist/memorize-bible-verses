@@ -43,12 +43,18 @@ export class BibleVerseBlockquote extends LitElement {
       citation: { text, link },
     } = findBibleTranslationById(this.bibleId);
 
-    return html`
-      <p class="citation">
-        ${text}
-        <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
-      </p>
-    `;
+    if (link) {
+      return html`
+        <p class="citation">
+          ${text}
+          <a href="${link}" target="_blank" rel="noopener noreferrer"
+            >${link}</a
+          >
+        </p>
+      `;
+    }
+
+    return html` <p class="citation">${text}</p> `;
   }
 
   render() {

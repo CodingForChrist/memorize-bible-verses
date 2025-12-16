@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
@@ -28,8 +29,8 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
 
           <bible-verse-fetch-result
             verse-reference="Psalm 23:1-6"
-            should-display-section-headings="true"
-            bible-id=${this.bibleId}
+            ?should-display-section-headings=${true}
+            bible-id=${ifDefined(this.bibleId)}
           ></bible-verse-fetch-result>
         </span>
 

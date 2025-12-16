@@ -19,7 +19,7 @@ export class InstructionsPage extends BasePage(LitElement) {
         padding: 0 1rem;
         display: block;
 
-        @media (width >= ${breakpointsREM.large}rem) {
+        @media (min-width: ${breakpointsREM.large}rem) {
           max-width: none;
         }
       }
@@ -31,7 +31,7 @@ export class InstructionsPage extends BasePage(LitElement) {
         margin-bottom: 2rem;
         width: 10rem;
 
-        @media (width >= ${breakpointsREM.large}rem) {
+        @media (min-width: ${breakpointsREM.large}rem) {
           margin: 1rem 0 2rem;
           width: 14rem;
         }
@@ -42,7 +42,7 @@ export class InstructionsPage extends BasePage(LitElement) {
         font-weight: 400;
         margin: 0;
 
-        @media (width >= ${breakpointsREM.large}rem) {
+        @media (min-width: ${breakpointsREM.large}rem) {
           font-size: 1.6rem;
           margin-bottom: 1rem;
         }
@@ -59,11 +59,11 @@ export class InstructionsPage extends BasePage(LitElement) {
         display: grid;
         gap: 2rem;
 
-        @media (width >= ${breakpointsREM.medium}rem) {
+        @media (min-width: ${breakpointsREM.medium}rem) {
           margin: 0 2rem;
         }
 
-        @media (width >= ${breakpointsREM.large}rem) {
+        @media (min-width: ${breakpointsREM.large}rem) {
           grid-auto-flow: column;
           grid-auto-columns: 1fr;
           margin: 2.5rem 0 4rem;

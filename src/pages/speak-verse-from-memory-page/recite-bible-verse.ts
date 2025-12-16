@@ -3,6 +3,7 @@ import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 import { choose } from "lit/directives/choose.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { CUSTOM_EVENT } from "../../constants";
 
@@ -145,7 +146,7 @@ export class ReciteBibleVerse extends LitElement {
               <span>Record</span>
             </button>
             <transcript-text
-              verse-reference=${this.verseReference}
+              verse-reference=${ifDefined(this.verseReference)}
               transcript=${this.transcript}
             >
             </transcript-text>
@@ -160,7 +161,7 @@ export class ReciteBibleVerse extends LitElement {
           </alert-message>
           <loading-spinner></loading-spinner>
           <transcript-text
-            verse-reference=${this.verseReference}
+            verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
             ?disabled=${true}
           >
@@ -183,7 +184,7 @@ export class ReciteBibleVerse extends LitElement {
           <alert-message type="info"> Recording in progress </alert-message>
           <loading-spinner></loading-spinner>
           <transcript-text
-            verse-reference=${this.verseReference}
+            verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
             ?disabled=${true}
           ></transcript-text>
@@ -205,7 +206,7 @@ export class ReciteBibleVerse extends LitElement {
           <alert-message type="info"> Finalizing recording </alert-message>
           <loading-spinner></loading-spinner>
           <transcript-text
-            verse-reference=${this.verseReference}
+            verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
             ?disabled=${true}
           ></transcript-text>
@@ -226,7 +227,7 @@ export class ReciteBibleVerse extends LitElement {
         () => html`
           <alert-message type="success"> Recording complete! </alert-message>
           <transcript-text
-            verse-reference=${this.verseReference}
+            verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
           ></transcript-text>
           <div class="button-container">
@@ -248,7 +249,7 @@ export class ReciteBibleVerse extends LitElement {
             Failed to use microphone input
           </alert-message>
           <transcript-text
-            verse-reference=${this.verseReference}
+            verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
           ></transcript-text>
           <div class="button-container">

@@ -27,7 +27,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
         font-weight: 400;
         margin: 2rem 0 1rem;
 
-        @media (width >= ${breakpointsREM.large}rem) {
+        @media (min-width: ${breakpointsREM.large}rem) {
           font-size: 2.5rem;
           margin: 2rem 0;
         }
@@ -39,7 +39,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       .buttons-container {
         margin-top: 2rem;
 
-        @media (width >= ${breakpointsREM.small}rem) {
+        @media (min-width: ${breakpointsREM.small}rem) {
           margin-left: 1rem;
           margin-right: 1rem;
         }

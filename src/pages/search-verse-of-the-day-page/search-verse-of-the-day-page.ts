@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
@@ -110,7 +111,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
 
           <bible-verse-of-the-day-fetch-result
             date=${dateShortFormat}
-            bible-id=${this.bibleId}
+            bible-id=${ifDefined(this.bibleId)}
           >
           </bible-verse-of-the-day-fetch-result>
         </span>
