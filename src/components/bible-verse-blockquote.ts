@@ -54,7 +54,7 @@ export class BibleVerseBlockquote extends LitElement {
       `;
     }
 
-    return html` <p class="citation">${text}</p> `;
+    return html`<p class="citation">${text}</p>`;
   }
 
   render() {
