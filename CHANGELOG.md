@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.6.0...v1.7.0) (2025-12-16)
+
+
+### Features
+
+* change color for lighter gray ([#244](https://github.com/CodingForChrist/memorize-bible-verses/issues/244)) ([a2520f2](https://github.com/CodingForChrist/memorize-bible-verses/commit/a2520f21c1168fd0d648ff612614c0656edfe61b))
+
+
+### Bug Fixes
+
+* misc lit fixes ([#242](https://github.com/CodingForChrist/memorize-bible-verses/issues/242)) ([4197abd](https://github.com/CodingForChrist/memorize-bible-verses/commit/4197abd453b8dcca94618dfa43d76048ff00b76b))
+
 ## [1.6.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.5.0...v1.6.0) (2025-12-15)
 
 
