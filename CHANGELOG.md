@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.7.0...v1.8.0) (2025-12-16)
+
+
+### Features
+
+* add legend to text difference view ([#245](https://github.com/CodingForChrist/memorize-bible-verses/issues/245)) ([7d15ff7](https://github.com/CodingForChrist/memorize-bible-verses/commit/7d15ff703314ce91b6ecc44445ce3b376cece604))
+
 ## [1.7.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.6.0...v1.7.0) (2025-12-16)
 
 
