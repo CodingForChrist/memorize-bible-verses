@@ -1,12 +1,17 @@
 import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { state } from "lit/decorators/state.js";
 import { when } from "lit/directives/when.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 import { buttonStyles } from "../../components/shared-styles";
+import {
+  SPEECH_RECOGNITION_STATE,
+  type SpeechRecognitionState,
+} from "./speech-recognition";
 
 @customElement("speak-verse-from-memory-page")
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
@@ -18,6 +23,10 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
   @property({ attribute: "recited-bible-verse", reflect: true })
   recitedBibleVerse?: string;
+
+  @state()
+  speechRecognitionState: SpeechRecognitionState =
+    SPEECH_RECOGNITION_STATE.INITIAL;
 
   pageTitle = "Speak";
 
@@ -42,6 +51,8 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   render() {
     return html`
       <verse-text-page-template
+        ?should-hide-page-navigation=${this.speechRecognitionState ===
+        SPEECH_RECOGNITION_STATE.LISTENING}
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
@@ -65,6 +76,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
                 verse-reference="${ifDefined(this.verseReference)}"
                 verse-content="${ifDefined(this.verseContent)}"
                 transcript="${ifDefined(this.recitedBibleVerse)}"
+                @state-change=${this.#handleSpeechRecognitionStateChange}
               ></recite-bible-verse>
             `,
             () => html`
@@ -91,6 +103,15 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
     this.navigateToPage({
       nextPage: PAGE_NAME.SCORE_PAGE,
     });
+  }
+
+  #handleSpeechRecognitionStateChange(
+    event: CustomEventInit<{ state: SpeechRecognitionState }>,
+  ) {
+    const speechRecognitionState = event.detail?.state;
+    if (speechRecognitionState) {
+      this.speechRecognitionState = speechRecognitionState;
+    }
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
