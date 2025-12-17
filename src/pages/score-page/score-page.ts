@@ -54,9 +54,6 @@ export class ScorePage extends BasePage(LitElement) {
           padding-right: 2rem;
         }
       }
-      bible-verse-blockquote .scripture-styles {
-        color: var(--color-dark-gray);
-      }
     `,
   ];
 

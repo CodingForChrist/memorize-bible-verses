@@ -60,8 +60,12 @@ export class ReciteBibleVerse extends LitElement {
         text-align: center;
       }
       loading-spinner {
-        margin-top: 2rem;
-        margin-bottom: 0;
+        margin: 0;
+        margin-left: 0.75rem;
+        --spinner-color: currentColor;
+        --spinner-border-width: 2px;
+        --spinner-width: 1rem;
+        --spinner-height: 1rem;
       }
       button {
         display: inline-flex;
@@ -158,8 +162,8 @@ export class ReciteBibleVerse extends LitElement {
         () => html`
           <alert-message type="warning">
             Waiting for microphone access
+            <loading-spinner></loading-spinner>
           </alert-message>
-          <loading-spinner></loading-spinner>
           <transcript-text
             verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
@@ -181,8 +185,10 @@ export class ReciteBibleVerse extends LitElement {
       [
         LISTENING,
         () => html`
-          <alert-message type="info"> Recording in progress </alert-message>
-          <loading-spinner></loading-spinner>
+          <alert-message type="info">
+            Recording in progress
+            <loading-spinner></loading-spinner>
+          </alert-message>
           <transcript-text
             verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
@@ -203,8 +209,11 @@ export class ReciteBibleVerse extends LitElement {
       [
         AUDIOEND,
         () => html`
-          <alert-message type="info"> Finalizing recording </alert-message>
-          <loading-spinner></loading-spinner>
+          <alert-message type="info">
+            Finalizing recording
+            <loading-spinner></loading-spinner>
+          </alert-message>
+
           <transcript-text
             verse-reference=${ifDefined(this.verseReference)}
             transcript=${this.transcript}
