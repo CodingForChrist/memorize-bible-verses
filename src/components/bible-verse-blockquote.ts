@@ -18,7 +18,6 @@ export class BibleVerseBlockquote extends LitElement {
     css`
       :host {
         display: block;
-        font-size: 1.25rem;
       }
       blockquote {
         background-color: transparent;
@@ -27,7 +26,7 @@ export class BibleVerseBlockquote extends LitElement {
         margin: 0;
       }
       .citation {
-        font-size: 60%;
+        font-size: 0.75rem;
         margin-top: 3rem;
         margin-bottom: 0;
       }

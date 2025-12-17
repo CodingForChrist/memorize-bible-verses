@@ -62,7 +62,7 @@ export class ModalDialog extends LitElement {
         text-align: left;
         min-height: 16rem;
         margin: 2rem 0;
-        padding: 1.5rem;
+        padding: 1rem;
         min-width: 12rem;
         max-width: 42rem;
 
