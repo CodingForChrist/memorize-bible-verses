@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.9.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.8.0...v1.9.0) (2025-12-17)
+
+
+### Features
+
+* adjust font size and line height styles ([#251](https://github.com/CodingForChrist/memorize-bible-verses/issues/251)) ([b3b9a55](https://github.com/CodingForChrist/memorize-bible-verses/commit/b3b9a5555c19fd2d6761e50e2fa6d328fbb38d74))
+* customize loading spinner ([#250](https://github.com/CodingForChrist/memorize-bible-verses/issues/250)) ([aa303f3](https://github.com/CodingForChrist/memorize-bible-verses/commit/aa303f3a4c43d7760ad902644ca4b6233d664205))
+* improve styles on score page ([#247](https://github.com/CodingForChrist/memorize-bible-verses/issues/247)) ([58d0862](https://github.com/CodingForChrist/memorize-bible-verses/commit/58d0862423f54d560e613f4cc6ed7bab14da8a80))
+
+
+### Bug Fixes
+
+* prevent navigating to next page when listening ([#249](https://github.com/CodingForChrist/memorize-bible-verses/issues/249)) ([4b7571f](https://github.com/CodingForChrist/memorize-bible-verses/commit/4b7571fa2b8cc9335d532752773466f0b3ad7382))
+
 ## [1.8.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.7.0...v1.8.0) (2025-12-16)
 
 
