@@ -5,6 +5,10 @@ import { customElement } from "lit/decorators/custom-element.js";
 export class LoadingSpinner extends LitElement {
   static styles = css`
     :host {
+      --spinner-color: var(--color-gray);
+      --spinner-width: 1.75rem;
+      --spinner-height: 1.75rem;
+      --spinner-border-width: 3px;
       display: block;
       margin: 2rem 0;
     }
@@ -13,9 +17,9 @@ export class LoadingSpinner extends LitElement {
       justify-content: center;
     }
     .loading-spinner {
-      height: 26px;
-      width: 26px;
-      border: 3px solid var(--color-gray);
+      height: var(--spinner-height);
+      width: var(--spinner-width);
+      border: var(--spinner-border-width) solid var(--spinner-color);
       border-top-color: transparent;
       border-radius: calc(infinity * 1px);
       animation: spin 1s linear infinite;
