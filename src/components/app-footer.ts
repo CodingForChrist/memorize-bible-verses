@@ -57,7 +57,7 @@ export class AppFooter extends LitElement {
       }
       .blockquote-footer {
         margin-bottom: 2rem;
-        font-size: 0.875em;
+        font-size: 0.875rem;
         color: #6c757d;
       }
     `,

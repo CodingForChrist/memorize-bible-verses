@@ -16,7 +16,7 @@ export const formControlStyles = css`
     width: 100%;
     font: inherit;
     color: inherit;
-    line-height: 1.5rem;
+    line-height: 1.5;
     box-sizing: border-box;
     margin: 0;
     padding: 0.445rem 2.25rem 0.445rem 1rem;
@@ -39,7 +39,7 @@ export const formControlStyles = css`
     width: 100%;
     font: inherit;
     color: inherit;
-    line-height: 1.5rem;
+    line-height: 1.5;
     box-sizing: border-box;
     padding: 0.445rem 1rem;
     background-color: var(--color-primary-mint-cream);
@@ -73,7 +73,7 @@ export const formControlStyles = css`
     width: 100%;
     font: inherit;
     color: inherit;
-    line-height: 1.5rem;
+    line-height: 1.5;
     box-sizing: border-box;
     min-block-size: 10rem;
     padding: 0.75rem 1rem;
@@ -132,7 +132,7 @@ export const buttonStyles = css`
 
     display: inline-block;
     font: inherit;
-    line-height: 1.5rem;
+    line-height: 1.5;
     padding: var(--base-padding);
     cursor: pointer;
     border-radius: 1.5rem;

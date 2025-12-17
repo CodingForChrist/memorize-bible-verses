@@ -38,6 +38,7 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
       }
       bible-verse-blockquote .scripture-styles {
         color: var(--color-dark-gray);
+        line-height: 1.5;
       }
       h2 {
         font-size: 1.5rem;
