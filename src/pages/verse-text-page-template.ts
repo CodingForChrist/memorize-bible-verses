@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
+import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -8,6 +9,13 @@ import { breakpointsREM, buttonStyles } from "../components/shared-styles";
 
 @customElement("verse-text-page-template")
 export class VerseTextPageTemplate extends LitElement {
+  @property({
+    type: Boolean,
+    attribute: "should-hide-page-navigation",
+    reflect: true,
+  })
+  shouldHidePageNavigation: boolean = false;
+
   @state()
   isPageNavigationSticky: boolean = false;
 
@@ -91,6 +99,9 @@ export class VerseTextPageTemplate extends LitElement {
         --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
         --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
       }
+      .page-navigation.hide {
+        visibility: hidden;
+      }
     `,
   ];
 
@@ -115,6 +126,7 @@ export class VerseTextPageTemplate extends LitElement {
         <div
           class=${classMap({
             sticky: this.isPageNavigationSticky,
+            hide: this.shouldHidePageNavigation,
             "page-navigation": true,
           })}
         >

@@ -291,6 +291,10 @@ export class ReciteBibleVerse extends LitElement {
       SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
       this.#handleSpeechRecognitionInterimTranscriptEvent,
     );
+
+    if (this.speechRecognitionState === SPEECH_RECOGNITION_STATE.LISTENING) {
+      this.speechRecognitionService?.stop();
+    }
   }
 
   #handleRecordButtonClick() {
@@ -321,9 +325,20 @@ export class ReciteBibleVerse extends LitElement {
     event: CustomEventInit<{ state: SpeechRecognitionState }>,
   ) => {
     const speechRecognitionState = event.detail?.state;
-    if (speechRecognitionState) {
-      this.speechRecognitionState = speechRecognitionState;
+    if (!speechRecognitionState) {
+      return;
     }
+
+    this.speechRecognitionState = speechRecognitionState;
+
+    const eventUpdateState = new CustomEvent<{
+      state: SpeechRecognitionState;
+    }>("state-change", {
+      detail: { state: speechRecognitionState },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateState);
   };
 
   #handleSpeechRecognitionInterimTranscriptEvent = (
