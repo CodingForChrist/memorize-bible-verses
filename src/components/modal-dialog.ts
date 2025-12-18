@@ -23,52 +23,65 @@ export class ModalDialog extends LitElement {
         display: none;
         opacity: 0;
         padding: 0;
-        transition:
-          opacity 0.3s,
-          display 0.3s allow-discrete,
-          overlay 0.3s allow-discrete;
       }
       dialog[open] {
-        display: block;
+        display: flex;
+        align-items: center;
         opacity: 1;
+        overflow: hidden;
       }
       dialog::backdrop {
         background-color: transparent;
         border: 2px inset var(--color-light-gray);
-        transition:
-          background-color 0.3s,
-          display 0.3s allow-discrete,
-          overlay 0.3s allow-discrete;
       }
       dialog::backdrop {
         background-color: rgba(0, 0, 0, 0.7);
       }
-      button.svg-icon-container {
-        color: var(--color-primary-mint-cream);
-        opacity: 0.7;
-        cursor: pointer;
-        position: fixed;
-        top: 0;
-        right: 0;
-        padding: 0.5rem;
-      }
-      button.svg-icon-container:hover {
-        opacity: 1;
-      }
-      .dialog-content {
+      .modal-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 16rem;
+        height: calc(100vh - 4rem);
+        min-width: 12rem;
+        max-width: 42rem;
+        overflow: hidden;
         background-color: var(--color-primary-mint-cream);
         border-radius: 1.5rem;
         color: var(--color-gray);
-        text-align: left;
-        min-height: 16rem;
         margin: 2rem 0;
-        padding: 1rem;
-        min-width: 12rem;
-        max-width: 42rem;
 
         @media (min-width: ${breakpointsREM.small}rem) {
           width: 80vw;
         }
+      }
+      .modal-header {
+        display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        border-bottom: 1px solid var(--color-light-gray);
+        padding: 1rem;
+      }
+      .modal-header h1 {
+        font-size: 1.25rem;
+        font-weight: 400;
+        margin: 0;
+      }
+      .modal-header button.svg-icon-container {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: var(--color-dark-gray);
+        opacity: 0.7;
+        cursor: pointer;
+        padding: 0.25rem;
+        margin-left: auto;
+      }
+      .modal-header button.svg-icon-container:hover {
+        opacity: 1;
+      }
+      .modal-body {
+        padding: 1rem;
+        height: 100%;
+        overflow-y: auto;
       }
     `,
   ];
@@ -96,18 +109,27 @@ export class ModalDialog extends LitElement {
   render() {
     return html`
       <dialog
+        @click=${this.#handleBackdropClick}
         @cancel=${this.#handleClose}
         ref=${ref(this.dialogElementReference)}
       >
-        <button
-          class="svg-icon-container"
-          @click=${this.#handleClose}
-          aria-label="close dialog"
-        >
-          ${this.#xMarkIcon}
-        </button>
-        <div class="dialog-content">
-          <slot>DIALOG CONTENT MISSING</slot>
+        <div class="modal-container">
+          <div class="modal-header">
+            <h1>
+              <slot name="heading">MODAL DIALOG HEADING CONTENT MISSING</slot>
+            </h1>
+            <button
+              type="button"
+              class="svg-icon-container"
+              @click=${this.#handleClose}
+              aria-label="close dialog"
+            >
+              ${this.#xMarkIcon}
+            </button>
+          </div>
+          <div class="modal-body">
+            <slot name="body">MODAL DIALOG BODY CONTENT MISSING</slot>
+          </div>
         </div>
       </dialog>
     `;
@@ -120,6 +142,12 @@ export class ModalDialog extends LitElement {
     } else {
       this.dialogElementReference.value?.close();
       document.body.classList.remove("no-scroll");
+    }
+  }
+
+  #handleBackdropClick(event: Event) {
+    if (event.target === this.dialogElementReference.value) {
+      this.#handleClose();
     }
   }
 

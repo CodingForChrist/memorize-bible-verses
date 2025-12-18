@@ -58,6 +58,14 @@ describe("formatDate()", () => {
     expect(formattedDate).toBe("2025-12-25");
   });
 
+  test("should format to ddd, MMM D, YYYY", () => {
+    const formattedDate = formatDate(
+      new Date("2025-12-25T23:38:04-06:00"),
+      "ddd, MMM DD, YYYY",
+    );
+    expect(formattedDate).toBe("Thu, Dec 25, 2025");
+  });
+
   test("should format to dddd, MMMM D, YYYY", () => {
     const formattedDate = formatDate(
       new Date("2025-12-25T23:38:04-06:00"),
