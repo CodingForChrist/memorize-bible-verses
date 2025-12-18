@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.9.0...v1.10.0) (2025-12-18)
+
+
+### Features
+
+* update modal and add verse list component ([#252](https://github.com/CodingForChrist/memorize-bible-verses/issues/252)) ([d168322](https://github.com/CodingForChrist/memorize-bible-verses/commit/d168322b79251529087015f8d3caeb49001720ce))
+
 ## [1.9.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.8.0...v1.9.0) (2025-12-17)
 
 
