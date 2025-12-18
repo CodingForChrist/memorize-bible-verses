@@ -23,14 +23,36 @@ export function parseDate(value: string, format: "YYYY-MM-DD"): Date {
  */
 export function formatDate(
   value: Date,
-  format: "YYYY-MM-DD" | "dddd, MMMM D, YYYY" | "ISO8601",
+  format: "YYYY-MM-DD" | "ddd, MMM DD, YYYY" | "dddd, MMMM D, YYYY" | "ISO8601",
 ): string {
   if (format === "YYYY-MM-DD") {
-    return formatDateToShortDateFormat(value);
+    const year = value.getFullYear();
+    const month = (value.getMonth() + 1).toString().padStart(2, "0");
+    const day = value.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  if (format === "ddd, MMM DD, YYYY") {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      weekday: "short",
+    };
+
+    return value.toLocaleDateString("en-US", options);
   }
 
   if (format === "dddd, MMMM D, YYYY") {
-    return formatDateToLongDateFormat(value);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    };
+
+    return value.toLocaleDateString("en-US", options);
   }
 
   if (format === "ISO8601") {
@@ -38,25 +60,6 @@ export function formatDate(
   }
 
   throw new Error("Unsupported date format");
-}
-
-function formatDateToShortDateFormat(date: Date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const day = date.getDate().toString().padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
-
-function formatDateToLongDateFormat(date: Date) {
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-  };
-
-  return date.toLocaleDateString("en-US", options);
 }
 
 function formatDateToISOStringWithTimezone(date: Date) {

@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
+import { state } from "lit/decorators/state.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
@@ -24,6 +25,9 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   @property({ type: Object })
   dateForVerseOfTheDay: Date = new Date();
 
+  @state()
+  isDialogOpen: boolean = false;
+
   pageTitle = "Verse of the Day";
 
   static styles = [
@@ -41,7 +45,6 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
         margin: 0 auto 2rem;
       }
       button.svg-icon-container {
-        --svg-icon-container-box-shadow-color-rgb: 0, 0, 0;
         padding: 0.5rem;
         margin: 0 0.5rem;
       }
@@ -56,8 +59,25 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
       button.svg-icon-container:focus-visible {
         box-shadow: none;
       }
+      .verse-list-container {
+        margin-top: 4rem;
+        text-align: center;
+        font-size: 0.875rem;
+      }
     `,
   ];
+
+  #renderModalDialogContent() {
+    if (!this.isDialogOpen) {
+      return;
+    }
+    return html`
+      <span slot="heading">2026 Verse List</span>
+      <span slot="body">
+        <verse-list-fetch-result year="2026"></verse-list-fetch-result>
+      </span>
+    `;
+  }
 
   render() {
     const dateShortFormat = formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD");
@@ -114,6 +134,25 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
             bible-id=${ifDefined(this.bibleId)}
           >
           </bible-verse-of-the-day-fetch-result>
+
+          <modal-dialog
+            ?open=${this.isDialogOpen}
+            @close=${() => {
+              this.isDialogOpen = false;
+            }}
+          >
+            ${this.#renderModalDialogContent()}
+          </modal-dialog>
+
+          <div class="verse-list-container">
+            <button
+              type="button"
+              class="secondary"
+              @click=${this.#handleButtonClickToShowDialog}
+            >
+              Verse List for 2026
+            </button>
+          </div>
         </span>
 
         <span slot="page-navigation-back-button">&lt; Back</span>
@@ -176,6 +215,10 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
 
   #handleNextDay() {
     this.dateForVerseOfTheDay = addDays(this.dateForVerseOfTheDay, 1);
+  }
+
+  #handleButtonClickToShowDialog() {
+    this.isDialogOpen = true;
   }
 
   #handleBackButtonClick() {

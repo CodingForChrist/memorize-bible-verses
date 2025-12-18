@@ -21,6 +21,8 @@ export class AppFooter extends LitElement {
         margin-top: 8rem;
       }
       button.svg-icon-container {
+        --svg-icon-container-focus-box-shadow: 0 0 0 0.2rem
+          rgba(var(--color-primary-mint-cream-rgb), 0.5);
         color: var(--color-primary-mint-cream);
         padding: 0.5rem;
         margin: 0 auto;
@@ -41,6 +43,9 @@ export class AppFooter extends LitElement {
       .dialog-content p {
         margin: 0 0 2rem 0;
         text-wrap: balance;
+      }
+      .dialog-content p:last-child {
+        margin-bottom: 0;
       }
       figure {
         margin: 0 0 1rem;
@@ -93,7 +98,8 @@ export class AppFooter extends LitElement {
           this.isDialogOpen = false;
         }}
       >
-        <div class="dialog-content">
+        <span slot="heading">About the app</span>
+        <div slot="body" class="dialog-content">
           <img src=${logoURL} alt="Memorize Bible Verses" />
 
           <figure>

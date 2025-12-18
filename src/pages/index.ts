@@ -9,6 +9,7 @@ export * from "./search-psalm-23-page/search-psalm-23-page";
 export * from "./search-verses-for-awana-page/search-verses-for-awana-page";
 export * from "./search-verse-of-the-day-page/search-verse-of-the-day-page";
 export * from "./search-verse-of-the-day-page/bible-verse-of-the-day-fetch-result";
+export * from "./search-verse-of-the-day-page/verse-list-fetch-result";
 export * from "./search-verses-for-sharing-the-gospel-page/search-verses-for-sharing-the-gospel-page";
 
 // step 2: speak or type the verse from memory

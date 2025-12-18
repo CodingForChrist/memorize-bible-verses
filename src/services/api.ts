@@ -185,3 +185,54 @@ export async function fetchBibleVerseOfTheDayWithCache({
     throw new Error(`failed to fetch verse of the day: ${error}`);
   }
 }
+
+type FetchVerseOfTheDayVerseListOptions = {
+  year: string;
+};
+
+type FetchVerseOfTheDayVerseListResponseBody = {
+  verse: string;
+  date: string;
+  formattedDate: string;
+}[];
+
+export async function fetchVerseOfTheDayVerseListWithCache({
+  year,
+}: FetchVerseOfTheDayVerseListOptions) {
+  const url = `${API_BASE_URL}/api/v1/verse-of-the-day/verse-list`;
+  const cacheKey = createCacheKey({
+    url,
+    options: { year },
+  });
+  const cacheResult = cache.get(cacheKey);
+
+  if (cacheResult) {
+    return resolveResponseToJSON<FetchVerseOfTheDayVerseListResponseBody>(
+      cacheResult,
+    );
+  }
+
+  const responsePromise = fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      year,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "Application-User-Id": APPLICATION_USER_ID,
+    },
+  });
+
+  cache.set(cacheKey, responsePromise);
+
+  try {
+    const data =
+      await resolveResponseToJSON<FetchVerseOfTheDayVerseListResponseBody>(
+        responsePromise,
+      );
+    return data;
+  } catch (error) {
+    cache.delete(cacheKey);
+    throw new Error(`failed to fetch verse of the day verse list: ${error}`);
+  }
+}
