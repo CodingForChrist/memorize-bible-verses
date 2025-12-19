@@ -126,7 +126,7 @@ export const buttonStyles = css`
     );
     --secondary-border-color-hover: var(--color-primary-bright-pink-darker-two);
 
-    --svg-icon-container-focus-box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+    --svg-icon-container-focus-box-shadow: 0 0 0 0.2rem var(--color-focus-ring);
 
     display: inline-block;
     font: inherit;
@@ -180,9 +180,6 @@ export const buttonStyles = css`
     align-items: center;
     justify-content: center;
   }
-  button.svg-icon-container:hover {
-    box-shadow: var(--svg-icon-container-focus-box-shadow);
-  }
   button.svg-icon-container:focus-visible {
     outline: none;
     box-shadow: var(--svg-icon-container-focus-box-shadow);
@@ -197,9 +194,6 @@ export const hyperlinkStyles = css`
   a {
     color: var(--color-primary-bright-pink);
   }
-  a:hover {
-    box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-bright-pink-rgb), 0.4);
-  }
   a:focus-visible {
     outline: none;
     box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-bright-pink-rgb), 0.4);
@@ -209,5 +203,9 @@ export const hyperlinkStyles = css`
   }
   a:visited {
     color: var(--color-primary-bright-pink-darker-two);
+  }
+  a:hover {
+    background-color: var(--color-primary-bright-pink);
+    color: var(--color-primary-mint-cream);
   }
 `;

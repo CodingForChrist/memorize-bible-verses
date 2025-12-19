@@ -54,7 +54,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
       }
       button.svg-icon-container:hover svg,
       button.svg-icon-container:focus-visible svg {
-        stroke-width: 3;
+        stroke-width: 2;
       }
       button.svg-icon-container:focus-visible {
         box-shadow: none;
@@ -63,6 +63,9 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
         margin-top: 4rem;
         text-align: center;
         font-size: 0.875rem;
+      }
+      .verse-list-container button.secondary {
+        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
       }
     `,
   ];
