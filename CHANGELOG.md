@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.0...v1.10.1) (2025-12-19)
+
+
+### Bug Fixes
+
+* improve api error messages ([#256](https://github.com/CodingForChrist/memorize-bible-verses/issues/256)) ([29e30e5](https://github.com/CodingForChrist/memorize-bible-verses/commit/29e30e5c826c95afeeed3009f928a21bd4289cf2))
+* improve hover and focus styles ([#254](https://github.com/CodingForChrist/memorize-bible-verses/issues/254)) ([27ce417](https://github.com/CodingForChrist/memorize-bible-verses/commit/27ce417b8fb3a20dac29390dfe0175191a78ec86))
+
 ## [1.10.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.9.0...v1.10.0) (2025-12-18)
 
 
