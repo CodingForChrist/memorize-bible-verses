@@ -53,23 +53,18 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
       if (!bibleId || !date) {
         return;
       }
-
-      try {
-        const dateISOStringWithTimezoneOffset = formatDate(
-          parseDate(date, "YYYY-MM-DD"),
-          "ISO8601",
-        );
-        const verseBibleData = await fetchBibleVerseOfTheDayWithCache({
-          bibleId,
-          date: dateISOStringWithTimezoneOffset,
-        });
-        const enhancedBibleVerseData =
-          this.#validateAndEnhanceVerseData(verseBibleData);
-        this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
-        return enhancedBibleVerseData;
-      } catch (error) {
-        throw new Error(`Error fetching verse of the day: ${error}`);
-      }
+      const dateISOStringWithTimezoneOffset = formatDate(
+        parseDate(date, "YYYY-MM-DD"),
+        "ISO8601",
+      );
+      const verseBibleData = await fetchBibleVerseOfTheDayWithCache({
+        bibleId,
+        date: dateISOStringWithTimezoneOffset,
+      });
+      const enhancedBibleVerseData =
+        this.#validateAndEnhanceVerseData(verseBibleData);
+      this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
+      return enhancedBibleVerseData;
     },
     args: () => [this.bibleId, this.date],
   });
@@ -121,11 +116,15 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
     return this.#bibleVerseOfTheDayTask.render({
       pending: () => html`<loading-spinner></loading-spinner>`,
       complete: (verseData) => this.#renderVerse(verseData),
-      error: (error) => html`
-        <alert-message type="danger">
-          Failed to load verse of the day. Please try again later. ${error}
-        </alert-message>
-      `,
+      error: (error) => {
+        const errorMessage =
+          error instanceof Error ? error.message : "Internal Server Error";
+        return html`
+          <alert-message type="danger">
+            Failed to load verse of the day. <br />${errorMessage}
+          </alert-message>
+        `;
+      },
     });
   }
 
