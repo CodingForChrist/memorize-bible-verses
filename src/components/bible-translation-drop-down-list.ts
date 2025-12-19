@@ -41,20 +41,16 @@ export class BibleTranslationDropDownList extends LitElement {
 
   #bibleTranslationTask = new Task(this, {
     task: async () => {
-      try {
-        const ids = getAllBibleTranslations()
-          .map(({ id }) => id)
-          .toString();
-        const bibleData = await fetchBibleTranslationsWithCache({
-          language: "eng",
-          includeFullDetails: true,
-          ids,
-        });
-        this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
-        this.#sendEventForSelectedBibleTranslation();
-      } catch (error) {
-        throw new Error(`Error fetching bibles: ${error}`);
-      }
+      const ids = getAllBibleTranslations()
+        .map(({ id }) => id)
+        .toString();
+      const bibleData = await fetchBibleTranslationsWithCache({
+        language: "eng",
+        includeFullDetails: true,
+        ids,
+      });
+      this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
+      this.#sendEventForSelectedBibleTranslation();
     },
     args: () => [],
   });
@@ -97,11 +93,15 @@ export class BibleTranslationDropDownList extends LitElement {
           )}
         </select>
       `,
-      error: () => html`
-        <alert-message type="danger">
-          Failed to load bibles. Please try again later.
-        </alert-message>
-      `,
+      error: (error) => {
+        const errorMessage =
+          error instanceof Error ? error.message : "Internal Server Error";
+        return html`
+          <alert-message type="danger">
+            Failed to load bibles. <br />${errorMessage}
+          </alert-message>
+        `;
+      },
     });
   }
 

@@ -24,6 +24,10 @@ async function resolveResponseToJSON<T>(
 ): Promise<T> {
   const response = await responsePromise;
   if (!response.ok) {
+    if (response.status === 400) {
+      const { errorDescription } = await response.clone().json();
+      throw new Error(errorDescription);
+    }
     throw new Error(`response status: ${response.status}`);
   }
 
@@ -83,7 +87,7 @@ export async function fetchBibleTranslationsWithCache({
     return data;
   } catch (error) {
     cache.delete(cacheKey);
-    throw new Error(`failed to fetch bibles: ${error}`);
+    throw error;
   }
 }
 
@@ -130,7 +134,7 @@ export async function fetchBibleVerseWithCache({
     return data;
   } catch (error) {
     cache.delete(cacheKey);
-    throw new Error(`failed to fetch bible verse: ${error}`);
+    throw error;
   }
 }
 
@@ -182,7 +186,7 @@ export async function fetchBibleVerseOfTheDayWithCache({
     return data;
   } catch (error) {
     cache.delete(cacheKey);
-    throw new Error(`failed to fetch verse of the day: ${error}`);
+    throw error;
   }
 }
 
@@ -233,6 +237,6 @@ export async function fetchVerseOfTheDayVerseListWithCache({
     return data;
   } catch (error) {
     cache.delete(cacheKey);
-    throw new Error(`failed to fetch verse of the day verse list: ${error}`);
+    throw error;
   }
 }

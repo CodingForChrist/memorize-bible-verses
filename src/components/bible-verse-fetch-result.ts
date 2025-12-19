@@ -55,19 +55,14 @@ export class BibleVerseFetchResult extends LitElement {
       if (!bibleId || !verseReference) {
         return;
       }
-
-      try {
-        const verseBibleData = await fetchBibleVerseWithCache({
-          bibleId,
-          verseReference,
-        });
-        const enhancedBibleVerseData =
-          this.#validateAndEnhanceVerseData(verseBibleData);
-        this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
-        return enhancedBibleVerseData;
-      } catch (error) {
-        throw new Error(`Error fetching bible verse: ${error}`);
-      }
+      const verseBibleData = await fetchBibleVerseWithCache({
+        bibleId,
+        verseReference,
+      });
+      const enhancedBibleVerseData =
+        this.#validateAndEnhanceVerseData(verseBibleData);
+      this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
+      return enhancedBibleVerseData;
     },
     args: () => [this.bibleId, this.verseReference],
   });
@@ -118,11 +113,15 @@ export class BibleVerseFetchResult extends LitElement {
     return this.#bibleVerseTask.render({
       pending: () => html`<loading-spinner></loading-spinner>`,
       complete: (verseData) => this.#renderVerse(verseData),
-      error: (error) => html`
-        <alert-message type="danger">
-          Failed to load bible verse. Please try again later. ${error}
-        </alert-message>
-      `,
+      error: (error) => {
+        const errorMessage =
+          error instanceof Error ? error.message : "Internal Server Error";
+        return html`
+          <alert-message type="danger">
+            Failed to load bible verse. <br />${errorMessage}
+          </alert-message>
+        `;
+      },
     });
   }
 

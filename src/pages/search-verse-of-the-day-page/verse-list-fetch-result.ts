@@ -30,14 +30,10 @@ export class VerseListFetchResult extends LitElement {
 
   #verseListTask = new Task(this, {
     task: async ([year]) => {
-      try {
-        const verseListData = await fetchVerseOfTheDayVerseListWithCache({
-          year,
-        });
-        return verseListData;
-      } catch (error) {
-        throw new Error(`Error fetching verse list: ${error}`);
-      }
+      const verseListData = await fetchVerseOfTheDayVerseListWithCache({
+        year,
+      });
+      return verseListData;
     },
     args: () => [this.year],
   });
@@ -65,11 +61,15 @@ export class VerseListFetchResult extends LitElement {
           )}
         </ul>
       `,
-      error: (error) => html`
-        <alert-message type="danger">
-          Failed to load bible verse. Please try again later. ${error}
-        </alert-message>
-      `,
+      error: (error) => {
+        const errorMessage =
+          error instanceof Error ? error.message : "Internal Server Error";
+        return html`
+          <alert-message type="danger">
+            Failed to load verse list. <br />${errorMessage}
+          </alert-message>
+        `;
+      },
     });
   }
 }
