@@ -70,7 +70,7 @@ export class ModalDialog extends LitElement {
         width: 1.5rem;
         height: 1.5rem;
         color: var(--color-dark-gray);
-        opacity: 0.7;
+        opacity: 0.6;
         cursor: pointer;
         padding: 0.25rem;
         margin-left: auto;
