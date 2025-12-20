@@ -17,6 +17,10 @@ export class ModalDialog extends LitElement {
   static styles = [
     buttonStyles,
     css`
+      :host {
+        display: block;
+        --vertical-margin: 2rem;
+      }
       dialog {
         background: none;
         border: none;
@@ -41,14 +45,15 @@ export class ModalDialog extends LitElement {
         display: flex;
         flex-direction: column;
         min-height: 16rem;
-        height: calc(100vh - 4rem);
+        height: calc(100vh - var(--vertical-margin) * 2);
+        /* dynamic viewport height for ios safari */
+        height: calc(100dvh - var(--vertical-margin) * 2);
         min-width: 12rem;
         max-width: 42rem;
         overflow: hidden;
         background-color: var(--color-primary-mint-cream);
         border-radius: 1.5rem;
         color: var(--color-gray);
-        margin: 2rem 0;
 
         @media (min-width: ${breakpointsREM.small}rem) {
           width: 80vw;
