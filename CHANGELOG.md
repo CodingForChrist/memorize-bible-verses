@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.1...v1.10.2) (2025-12-20)
+
+
+### Bug Fixes
+
+* use dynamic modal height for ios safari ([#257](https://github.com/CodingForChrist/memorize-bible-verses/issues/257)) ([80ac56c](https://github.com/CodingForChrist/memorize-bible-verses/commit/80ac56c5191d92fc1e2286cb6813193b2db01de9))
+
 ## [1.10.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.0...v1.10.1) (2025-12-19)
 
 
