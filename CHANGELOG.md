@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.3](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.2...v1.10.3) (2025-12-22)
+
+
+### Bug Fixes
+
+* adjust minimum modal width for mobile ([#263](https://github.com/CodingForChrist/memorize-bible-verses/issues/263)) ([55cd73d](https://github.com/CodingForChrist/memorize-bible-verses/commit/55cd73d218e311e84b17654058195e1f90307c82))
+
 ## [1.10.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.1...v1.10.2) (2025-12-20)
 
 
