@@ -48,7 +48,7 @@ export class ModalDialog extends LitElement {
         height: calc(100vh - var(--vertical-margin) * 2);
         /* dynamic viewport height for ios safari */
         height: calc(100dvh - var(--vertical-margin) * 2);
-        min-width: 12rem;
+        width: 90vw;
         max-width: 42rem;
         overflow: hidden;
         background-color: var(--color-primary-mint-cream);
