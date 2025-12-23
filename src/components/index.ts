@@ -5,3 +5,4 @@ export * from "./bible-verse-fetch-result";
 export * from "./loading-spinner";
 export * from "./app-footer";
 export * from "./modal-dialog";
+export * from "./collapsible-content";

@@ -6,7 +6,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { breakpointsREM } from "../../components/shared-styles";
+import { breakpointsREM, buttonStyles } from "../../components/shared-styles";
 
 @customElement("search-verses-for-sharing-the-gospel-page")
 export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
@@ -18,80 +18,80 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
 
   pageTitle = "Verses for Sharing the Gospel";
 
-  static styles = css`
-    bible-translation-drop-down-list {
-      margin-bottom: 1.5rem;
-    }
-    ol {
-      margin: 0 0 2rem;
-      padding-left: 1rem;
-    }
-    .page-content {
-      min-height: 26rem;
-    }
-    .verse-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      row-gap: 0.25rem;
-      margin: 0.25rem 0 0.75rem -1rem;
-      font-size: 85%;
+  static styles = [
+    buttonStyles,
+    css`
+      bible-translation-drop-down-list {
+        margin-bottom: 1.5rem;
+      }
+      .verse-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        row-gap: 0.5rem;
+        font-size: 80%;
 
-      @media (min-width: ${breakpointsREM.small}rem) {
-        font-size: 90%;
+        @media (min-width: ${breakpointsREM.small}rem) {
+          font-size: 90%;
+        }
+        @media (min-width: ${breakpointsREM.medium}rem) {
+          font-size: 100%;
+        }
+        @media (min-width: ${breakpointsREM.extraLarge}rem) {
+          grid-template-columns: repeat(4, 1fr);
+        }
       }
-      @media (min-width: ${breakpointsREM.medium}rem) {
-        font-size: 100%;
+      button.secondary {
+        --secondary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
+        text-wrap: balance;
       }
-      @media (min-width: ${breakpointsREM.extraLarge}rem) {
-        grid-template-columns: repeat(4, 1fr);
+      .verse-container button.secondary:active,
+      .verse-container button.secondary.active {
+        --secondary-color: var(--color-primary-mint-cream);
+        --secondary-background-color: var(--color-primary-bright-pink);
+        --secondary-border-color: var(--color-primary-bright-pink);
+        --secondary-color-hover: var(--color-primary-mint-cream);
+        --secondary-background-color-hover: var(
+          --color-primary-bright-pink-darker-one
+        );
       }
-    }
-    .verse-container button {
-      all: unset;
-      color: var(--color-primary-bright-pink);
-      text-decoration: underline;
-      cursor: pointer;
-      padding: 0.25rem 1rem;
-      border: 1px solid transparent;
-      text-align: left;
-    }
-    .verse-container button:hover,
-    .verse-container button:focus,
-    .verse-container button:focus-visible,
-    .verse-container button:active,
-    .verse-container button.active {
-      outline: 0;
-      text-decoration: none;
-      border: 1px solid var(--color-primary-bright-pink);
-      border-radius: 1.5rem;
-      background-color: var(--color-primary-bright-pink);
-      color: var(--color-primary-mint-cream);
-    }
-    .verse-container button:hover {
-      background-color: var(--color-primary-bright-pink-darker-one);
-      border-color: var(--color-primary-bright-pink-darker-two);
-    }
-    .verse-container button:active {
-      scale: 95% 95%;
-      transition-property: scale;
-      transition-timing-function: ease-out;
-      transition-duration: 0.3s;
-    }
-    .verse-container button:focus-visible {
-      text-decoration: underline;
-    }
-  `;
+      collapsible-content:first-of-type {
+        --border-top-right-radius: 1.5rem;
+        --border-top-left-radius: 1.5rem;
+        --border-bottom-right-radius: 0;
+        --border-bottom-left-radius: 0;
+      }
+      collapsible-content:not(:first-of-type) {
+        --border-top-right-radius: 0;
+        --border-top-left-radius: 0;
+        --border-bottom-right-radius: 0;
+        --border-bottom-left-radius: 0;
+        border-top: 0;
+      }
+      collapsible-content:last-of-type {
+        --border-top-right-radius: 0;
+        --border-top-left-radius: 0;
+        --border-bottom-right-radius: 1.5rem;
+        --border-bottom-left-radius: 1.5rem;
+        margin-bottom: 2rem;
+      }
+    `,
+  ];
 
-  #renderButtonGroup(verses: string[]) {
-    return verses.map((verse) => {
-      const classes = { active: this.verseReference === verse };
+  #renderButtonGroup(verses: { verseReference: string; verseLabel: string }[]) {
+    return verses.map(({ verseReference, verseLabel }) => {
+      const classes = {
+        active: this.verseReference === verseReference,
+        secondary: true,
+      };
       return html`
         <button
           type="button"
           class=${classMap(classes)}
           @click=${this.#handleVerseButtonClick}
+          data-verse-reference=${verseReference}
         >
-          ${verse}
+          ${verseLabel}
         </button>
       `;
     });
@@ -113,43 +113,47 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
         </p>
 
         <div class="page-content" slot="page-content">
-          <ol>
-            <li>
-              All have sinned
-              <div class="verse-container">
-                ${this.#renderButtonGroup([
-                  "Romans 3:23",
-                  "Romans 6:23",
-                  "Ecclesiastes 7:20",
-                  "Isaiah 53:6",
-                ])}
-              </div>
-            </li>
-            <li>
-              Jesus paid the penalty for our sins
-              <div class="verse-container">
-                ${this.#renderButtonGroup([
-                  "Romans 5:8",
-                  "2 Corinthians 5:21",
-                  "1 Peter 3:18",
-                  "Romans 5:19",
-                ])}
-              </div>
-            </li>
-            <li>
-              Believe in Jesus and be saved
-              <div class="verse-container">
-                ${this.#renderButtonGroup([
-                  "Ephesians 2:8-9",
-                  "John 3:16-17",
-                  "John 14:6",
-                  "Romans 10:9",
-                ])}
-              </div>
-            </li>
-          </ol>
-
           <bible-translation-drop-down-list></bible-translation-drop-down-list>
+
+          <collapsible-content title="All have sinned" ?expanded=${true}>
+            <div class="verse-container">
+              ${this.#renderButtonGroup([
+                { verseReference: "Romans 3:23", verseLabel: "Romans 3:23" },
+                { verseReference: "Romans 6:23", verseLabel: "Romans 6:23" },
+                {
+                  verseReference: "Ecclesiastes 7:20",
+                  verseLabel: "Eccles. 7:20",
+                },
+                { verseReference: "Isaiah 53:6", verseLabel: "Isaiah 53:6" },
+              ])}
+            </div>
+          </collapsible-content>
+          <collapsible-content title="Jesus paid the penalty for our sins">
+            <div class="verse-container">
+              ${this.#renderButtonGroup([
+                { verseReference: "Romans 5:8", verseLabel: "Romans 5:8" },
+                {
+                  verseReference: "2 Corinthians 5:21",
+                  verseLabel: "2 Cor. 5:21",
+                },
+                { verseReference: "1 Peter 3:18", verseLabel: "1 Peter 3:18" },
+                { verseReference: "Romans 5:19", verseLabel: "Romans 5:19" },
+              ])}
+            </div>
+          </collapsible-content>
+          <collapsible-content title="Believe in Jesus and be saved">
+            <div class="verse-container">
+              ${this.#renderButtonGroup([
+                {
+                  verseReference: "Ephesians 2:8-9",
+                  verseLabel: "Ephesians 2:8-9",
+                },
+                { verseReference: "John 3:16-17", verseLabel: "John 3:16-17" },
+                { verseReference: "John 14:6", verseLabel: "John 14:6" },
+                { verseReference: "Romans 10:9", verseLabel: "Romans 10:9" },
+              ])}
+            </div>
+          </collapsible-content>
 
           <bible-verse-fetch-result
             verse-reference=${this.verseReference}
@@ -165,8 +169,11 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
 
   #handleVerseButtonClick(event: Event) {
     const selectedButtonElement = event.target as HTMLButtonElement;
-    this.verseReference = selectedButtonElement.textContent.trim();
-    selectedButtonElement.closest("li")?.scrollIntoView();
+    if (!selectedButtonElement.dataset.verseReference) {
+      return;
+    }
+    this.verseReference = selectedButtonElement.dataset.verseReference;
+    selectedButtonElement.closest("collapsible-content")?.scrollIntoView();
   }
 
   #handleBackButtonClick() {
