@@ -1,9 +1,10 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { state } from "lit/decorators/state.js";
 import { styleMap } from "lit/directives/style-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import { formControlStyles } from "../../components/shared-styles";
 import { CUSTOM_EVENT } from "../../constants";
@@ -42,9 +43,15 @@ export class TranscriptText extends LitElement {
     `,
   ];
 
-  render() {
-    const placeholderText = `${this.noSpeechRecognitionSupport ? "Type" : "Speak or type"} in ${this.verseReference ?? "the verse reference"} from memory...`;
+  get #placeholderText() {
+    if (this.disabled) {
+      return;
+    }
 
+    return `${this.noSpeechRecognitionSupport ? "Type" : "Speak or type"} in ${this.verseReference ?? "the verse reference"} from memory...`;
+  }
+
+  render() {
     this.#fieldSizingContentPolyfill();
 
     const dynamicStyles = {
@@ -55,7 +62,7 @@ export class TranscriptText extends LitElement {
       <textarea
         id="transcript-textarea"
         ref=${ref(this.textareaElementReference)}
-        placeholder=${this.disabled ? nothing : placeholderText}
+        placeholder=${ifDefined(this.#placeholderText)}
         .value=${this.transcript}
         @input=${this.#fieldSizingContentPolyfill}
         @focusout=${this.#handleFocusout}
