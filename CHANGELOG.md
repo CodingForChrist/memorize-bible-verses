@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.3...v1.11.0) (2025-12-23)
+
+
+### Features
+
+* redesign the share the gospel page ([#265](https://github.com/CodingForChrist/memorize-bible-verses/issues/265)) ([d022a47](https://github.com/CodingForChrist/memorize-bible-verses/commit/d022a474f72606f781a67818fdfc0f2a7dfe20f3))
+
 ## [1.10.3](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.2...v1.10.3) (2025-12-22)
 
 
