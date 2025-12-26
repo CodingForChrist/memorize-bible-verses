@@ -15,8 +15,8 @@ import {
   sortBibleVerseReferences,
 } from "./sort-bible-verses";
 
-@customElement("search-verses-for-awana-page")
-export class SearchVersesForAwanaPage extends BasePage(LitElement) {
+@customElement("verses-for-awana-page")
+export class VersesForAwanaPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
 

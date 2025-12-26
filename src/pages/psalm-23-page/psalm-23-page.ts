@@ -6,8 +6,8 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 
-@customElement("search-psalm-23-page")
-export class SearchPsalm23Page extends BasePage(LitElement) {
+@customElement("psalm-23-page")
+export class Psalm23Page extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
 

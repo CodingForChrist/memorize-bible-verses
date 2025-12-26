@@ -12,8 +12,8 @@ import {
 } from "../../components/shared-styles";
 import { getStateFromURL } from "../../services/router";
 
-@customElement("search-advanced-page")
-export class SearchAdvancedPage extends BasePage(LitElement) {
+@customElement("advanced-search-page")
+export class AdvancedSearchPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
 

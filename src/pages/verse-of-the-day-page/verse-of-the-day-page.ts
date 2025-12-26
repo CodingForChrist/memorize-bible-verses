@@ -17,8 +17,8 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
-@customElement("search-verse-of-the-day-page")
-export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
+@customElement("verse-of-the-day-page")
+export class VerseOfTheDayPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
 
