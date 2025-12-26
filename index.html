@@ -36,6 +36,9 @@
       src="https://www.googletagmanager.com/gtag/js?id=G-X353691VQ1"
     ></script>
     <script>
+      if (window.location.hostname === "localhost") {
+        window["ga-disable-G-X353691VQ1"] = true;
+      }
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
