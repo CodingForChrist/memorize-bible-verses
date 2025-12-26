@@ -79,7 +79,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
-        <span slot="page-heading">Search</span>
+        <span slot="page-heading">Advanced Search</span>
 
         <p slot="page-description">
           Power Users can enter specific verses. Simply type in the book,

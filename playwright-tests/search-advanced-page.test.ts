@@ -43,7 +43,9 @@ test("page load", async ({ page }) => {
   await page.goto("/#/search-advanced");
 
   await expect(page).toHaveTitle(/Advanced Search | Memorize Bible Verses"/);
-  await expect(page.getByRole("heading", { name: "Search" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Advanced Search" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("combobox", { name: "Bible Translation Selection" }),
   ).toHaveValue(bibleIdNKJV);

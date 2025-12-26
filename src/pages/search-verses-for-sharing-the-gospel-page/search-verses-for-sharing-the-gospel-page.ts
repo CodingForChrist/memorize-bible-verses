@@ -28,7 +28,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
-        <span slot="page-heading">Search</span>
+        <span slot="page-heading">Share the Gospel</span>
 
         <p slot="page-description">
           Pick and practice a verse for sharing the gospel.

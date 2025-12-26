@@ -19,10 +19,11 @@ export class SearchPsalm23Page extends BasePage(LitElement) {
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
-        <span slot="page-heading">Search</span>
+        <span slot="page-heading">Psalm 23</span>
 
-        <p slot="page-description">Practice memorizing Psalm 23.</p>
-        <p slot="page-description">When you have it memorized go to Step 2.</p>
+        <p slot="page-description">
+          When you have Psalm 23 memorized go to Step 2.
+        </p>
 
         <span slot="page-content">
           <bible-translation-drop-down-list></bible-translation-drop-down-list>

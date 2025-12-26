@@ -94,7 +94,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
-        <span slot="page-heading">Search</span>
+        <span slot="page-heading">Verse of the Day</span>
 
         <p slot="page-description">
           Practice memorizing the verse of the day for
