@@ -179,7 +179,7 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
-        <span slot="page-heading">Search</span>
+        <span slot="page-heading">Awana Club for Kids</span>
 
         <p slot="page-description">Pick and practice a verse for Awana.</p>
         <p slot="page-description">

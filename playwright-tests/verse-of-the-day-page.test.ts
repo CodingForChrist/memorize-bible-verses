@@ -20,7 +20,7 @@ test("page load", async ({ page }) => {
   await page.goto("/#/search-verse-of-the-day");
 
   await expect(page).toHaveTitle(/Verse of the Day | Memorize Bible Verses"/);
-  await expect(page.getByRole("heading", { name: "Search" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Verse of the Day" })).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "2 Peter 3:7" }),
   ).toBeVisible();
