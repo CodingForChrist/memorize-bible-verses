@@ -11,6 +11,7 @@ export * from "./search-verse-of-the-day-page/search-verse-of-the-day-page";
 export * from "./search-verse-of-the-day-page/bible-verse-of-the-day-fetch-result";
 export * from "./search-verse-of-the-day-page/verse-list-fetch-result";
 export * from "./search-verses-for-sharing-the-gospel-page/search-verses-for-sharing-the-gospel-page";
+export * from "./search-verses-for-sharing-the-gospel-page/accordion-gospel-verses";
 
 // step 2: speak or type the verse from memory
 export * from "./speak-verse-from-memory-page/speak-verse-from-memory-page";
