@@ -46,7 +46,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("page load", async ({ page }) => {
-  await page.goto("/#/search-verses-for-sharing-the-gospel");
+  await page.goto("/#/share-the-gospel");
 
   await expect(page).toHaveTitle(
     /Verses for Sharing the Gospel | Memorize Bible Verses"/,
@@ -65,7 +65,7 @@ test("page load", async ({ page }) => {
 });
 
 test("back button", async ({ page }) => {
-  await page.goto("/#/search-verses-for-sharing-the-gospel");
+  await page.goto("/#/share-the-gospel");
   await page.getByRole("button", { name: "< Back" }).click();
 
   await page.goto("/#/search-options");
@@ -73,9 +73,7 @@ test("back button", async ({ page }) => {
 });
 
 test("auto-fill form based on query parameter values", async ({ page }) => {
-  await page.goto(
-    "/#/search-verses-for-sharing-the-gospel?translation=BSB&verse=John+14%3A6",
-  );
+  await page.goto("/#/share-the-gospel?translation=BSB&verse=John+14%3A6");
   await expect(
     page.getByRole("combobox", { name: "Bible Translation Selection" }),
   ).toHaveValue(bibleIdBSB);
@@ -87,7 +85,7 @@ test("auto-fill form based on query parameter values", async ({ page }) => {
 });
 
 test("select a verse", async ({ page }) => {
-  await page.goto("/#/search-verses-for-sharing-the-gospel");
+  await page.goto("/#/share-the-gospel");
 
   await page
     .getByRole("combobox", { name: "Bible Translation Selection" })

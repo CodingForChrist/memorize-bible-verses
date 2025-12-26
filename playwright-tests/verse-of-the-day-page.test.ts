@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("page load", async ({ page }) => {
-  await page.goto("/#/search-verse-of-the-day");
+  await page.goto("/#/verse-of-the-day");
 
   await expect(page).toHaveTitle(/Verse of the Day | Memorize Bible Verses"/);
   await expect(
@@ -27,13 +27,13 @@ test("page load", async ({ page }) => {
     page.getByRole("heading", { name: "2 Peter 3:7" }),
   ).toBeVisible();
   await expect(page.url()).toContain(
-    "/#/search-verse-of-the-day?translation=NKJV&verse=2+Peter+3%3A7",
+    "/#/verse-of-the-day?translation=NKJV&verse=2+Peter+3%3A7",
   );
 });
 
 test("default date for verse of the day", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2025-11-26T20:30:00"));
-  await page.goto("/#/search-verse-of-the-day");
+  await page.goto("/#/verse-of-the-day");
 
   await expect(
     page.getByRole("textbox", { name: "Date for Verse of the Day" }),

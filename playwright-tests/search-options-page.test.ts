@@ -31,7 +31,7 @@ test("verse of the day button", async ({ page }) => {
   await page.goto("/#/search-options");
   await page.getByRole("button", { name: "Verse of the Day" }).click();
 
-  await expect(page.url()).toContain("/#/search-verse-of-the-day");
+  await expect(page.url()).toContain("/#/verse-of-the-day");
   await expect(page).toHaveTitle(/Verse of the Day | Memorize Bible Verses"/);
 });
 
@@ -39,7 +39,7 @@ test("share the gospel button", async ({ page }) => {
   await page.goto("/#/search-options");
   await page.getByRole("button", { name: "Share the Gospel" }).click();
 
-  await expect(page.url()).toContain("/#/search-verses-for-sharing-the-gospel");
+  await expect(page.url()).toContain("/#/share-the-gospel");
   await expect(page).toHaveTitle(
     /Verses for Sharing the Gospel | Memorize Bible Verses"/,
   );
@@ -49,7 +49,7 @@ test("psalm 23 button", async ({ page }) => {
   await page.goto("/#/search-options");
   await page.getByRole("button", { name: "Psalm 23" }).click();
 
-  await expect(page.url()).toContain("/#/search-psalm-23");
+  await expect(page.url()).toContain("/#/psalm-23");
   await expect(page).toHaveTitle(/Psalm 23 | Memorize Bible Verses"/);
 });
 
@@ -57,7 +57,7 @@ test("awana button", async ({ page }) => {
   await page.goto("/#/search-options");
   await page.getByRole("button", { name: "Awana Club for Kids" }).click();
 
-  await expect(page.url()).toContain("/#/search-verses-for-awana");
+  await expect(page.url()).toContain("/#/verses-for-awana");
   await expect(page).toHaveTitle(
     /Verses for Awana Club for Kids | Memorize Bible Verses"/,
   );
@@ -69,6 +69,6 @@ test("power user button", async ({ page }) => {
     .getByRole("button", { name: "Power User: Choose Your Verses" })
     .click();
 
-  await expect(page.url()).toContain("/#/search-advanced");
+  await expect(page.url()).toContain("/#/advanced-search");
   await expect(page).toHaveTitle(/Advanced Search | Memorize Bible Verses"/);
 });

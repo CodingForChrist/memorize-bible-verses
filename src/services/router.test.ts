@@ -46,11 +46,11 @@ describe("getStateFromURL()", () => {
 
   test("should return valid page name, translation, and verse", () => {
     stubLocationData({
-      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+      hash: "#/verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
     expect(getStateFromURL()).toEqual({
-      pageName: "search-verses-for-awana",
+      pageName: "verses-for-awana",
       translation: "NASB 1995",
       verse: "Psalm 9:10",
     });
@@ -101,12 +101,12 @@ describe("setStateInURL()", () => {
 
   test("should preserve existing parameters", () => {
     stubLocationData({
-      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+      hash: "#/verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
     const pushStateSpy = vi.spyOn(globalThis.history, "pushState");
     setStateInURL({
-      pageName: "search-advanced",
+      pageName: "advanced-search",
       verse: "John 3:16",
       shouldUpdateBrowserHistory: true,
     });
@@ -114,7 +114,7 @@ describe("setStateInURL()", () => {
     expect(pushStateSpy).toHaveBeenCalledWith(
       {},
       "",
-      "http://localhost:3000/memorize-bible-verses/#/search-advanced?translation=NASB+1995&verse=John+3%3A16",
+      "http://localhost:3000/memorize-bible-verses/#/advanced-search?translation=NASB+1995&verse=John+3%3A16",
     );
   });
 });
@@ -138,7 +138,7 @@ describe("deleteUnknownParametersInURL()", () => {
 
   test("should not update url when all params are valid", () => {
     stubLocationData({
-      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+      hash: "#/verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     });
 
     const replaceStateSpy = vi.spyOn(globalThis.history, "replaceState");
@@ -149,7 +149,7 @@ describe("deleteUnknownParametersInURL()", () => {
 
   test("should remove unknown parameters", () => {
     stubLocationData({
-      hash: "#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10&unknown-parameter=1&tracking=12345",
+      hash: "#/verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10&unknown-parameter=1&tracking=12345",
     });
 
     const replaceStateSpy = vi.spyOn(globalThis.history, "replaceState");
@@ -158,7 +158,7 @@ describe("deleteUnknownParametersInURL()", () => {
     expect(replaceStateSpy).toHaveBeenCalledWith(
       {},
       "",
-      "http://localhost:3000/memorize-bible-verses/#/search-verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
+      "http://localhost:3000/memorize-bible-verses/#/verses-for-awana?translation=NASB+1995&verse=Psalm+9%3A10",
     );
   });
 });

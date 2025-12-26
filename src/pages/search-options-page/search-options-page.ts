@@ -105,11 +105,11 @@ export class SearchOptionsPage extends BasePage(LitElement) {
 
   render() {
     const {
-      SEARCH_VERSE_OF_THE_DAY_PAGE,
-      SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
-      SEARCH_PSALM_23_PAGE,
-      SEARCH_VERSES_FOR_AWANA_PAGE,
-      SEARCH_ADVANCED_PAGE,
+      VERSE_OF_THE_DAY_PAGE,
+      SHARE_THE_GOSPEL_PAGE,
+      PSALM_23_PAGE,
+      VERSES_FOR_AWANA_PAGE,
+      ADVANCED_SEARCH_PAGE,
     } = PAGE_NAME;
 
     return html`
@@ -123,7 +123,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           class="primary button-color-blue-green"
           @click=${() =>
             this.navigateToPage({
-              nextPage: SEARCH_VERSE_OF_THE_DAY_PAGE,
+              nextPage: VERSE_OF_THE_DAY_PAGE,
             })}
         >
           Verse of the Day
@@ -134,7 +134,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           class="primary button-color-bright-pink"
           @click=${() =>
             this.navigateToPage({
-              nextPage: SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+              nextPage: SHARE_THE_GOSPEL_PAGE,
             })}
         >
           Share the Gospel
@@ -145,7 +145,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           class="primary button-color-ut-orange"
           @click=${() =>
             this.navigateToPage({
-              nextPage: SEARCH_PSALM_23_PAGE,
+              nextPage: PSALM_23_PAGE,
             })}
         >
           Psalm 23
@@ -156,7 +156,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           class="primary button-color-jade"
           @click=${() =>
             this.navigateToPage({
-              nextPage: SEARCH_VERSES_FOR_AWANA_PAGE,
+              nextPage: VERSES_FOR_AWANA_PAGE,
             })}
         >
           Awana Club for Kids
@@ -167,7 +167,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
           class="primary button-color-cerulean"
           @click=${() =>
             this.navigateToPage({
-              nextPage: SEARCH_ADVANCED_PAGE,
+              nextPage: ADVANCED_SEARCH_PAGE,
             })}
         >
           Power User: Choose Your Verses
