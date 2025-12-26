@@ -231,7 +231,7 @@ export class SearchVerseOfTheDayPage extends BasePage(LitElement) {
   #handleForwardButtonClick() {
     this.navigateToPage({
       nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.SEARCH_VERSE_OF_THE_DAY_PAGE,
+      previousPage: PAGE_NAME.VERSE_OF_THE_DAY_PAGE,
     });
   }
 }

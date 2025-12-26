@@ -53,7 +53,7 @@ export class VerseListFetchResult extends LitElement {
               <li>
                 <span class="date">${this.#abbreviatedDate(date)}</span>
                 <a
-                  href=${`/memorize-bible-verses/#/search-advanced?verse=${verse}`}
+                  href=${`/memorize-bible-verses/#/advanced-search?verse=${verse}`}
                   >${verse}</a
                 >
               </li>

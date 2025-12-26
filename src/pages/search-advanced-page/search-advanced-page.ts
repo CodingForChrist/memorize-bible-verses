@@ -113,7 +113,7 @@ export class SearchAdvancedPage extends BasePage(LitElement) {
   #handleForwardButtonClick() {
     this.navigateToPage({
       nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.SEARCH_ADVANCED_PAGE,
+      previousPage: PAGE_NAME.ADVANCED_SEARCH_PAGE,
     });
   }
 

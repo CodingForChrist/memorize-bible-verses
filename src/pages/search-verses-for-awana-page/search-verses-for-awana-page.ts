@@ -210,7 +210,7 @@ export class SearchVersesForAwanaPage extends BasePage(LitElement) {
   #handleForwardButtonClick() {
     this.navigateToPage({
       nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.SEARCH_VERSES_FOR_AWANA_PAGE,
+      previousPage: PAGE_NAME.VERSES_FOR_AWANA_PAGE,
     });
   }
 

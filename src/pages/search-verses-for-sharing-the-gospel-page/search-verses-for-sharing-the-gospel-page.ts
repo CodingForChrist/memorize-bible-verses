@@ -76,7 +76,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
   #handleForwardButtonClick() {
     this.navigateToPage({
       nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE,
+      previousPage: PAGE_NAME.SHARE_THE_GOSPEL_PAGE,
     });
   }
 }

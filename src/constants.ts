@@ -10,12 +10,11 @@ export type CustomEvent = (typeof CUSTOM_EVENT)[keyof typeof CUSTOM_EVENT];
 export const PAGE_NAME = {
   INSTRUCTIONS_PAGE: "instructions",
   SEARCH_OPTIONS_PAGE: "search-options",
-  SEARCH_VERSE_OF_THE_DAY_PAGE: "search-verse-of-the-day",
-  SEARCH_VERSES_FOR_SHARING_THE_GOSPEL_PAGE:
-    "search-verses-for-sharing-the-gospel",
-  SEARCH_PSALM_23_PAGE: "search-psalm-23",
-  SEARCH_VERSES_FOR_AWANA_PAGE: "search-verses-for-awana",
-  SEARCH_ADVANCED_PAGE: "search-advanced",
+  VERSE_OF_THE_DAY_PAGE: "verse-of-the-day",
+  SHARE_THE_GOSPEL_PAGE: "share-the-gospel",
+  PSALM_23_PAGE: "psalm-23",
+  VERSES_FOR_AWANA_PAGE: "verses-for-awana",
+  ADVANCED_SEARCH_PAGE: "advanced-search",
   SPEAK_VERSE_FROM_MEMORY_PAGE: "speak-verse-from-memory",
   SCORE_PAGE: "score",
 } as const;

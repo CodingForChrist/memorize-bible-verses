@@ -95,7 +95,7 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
   #handleBackButtonClick() {
     this.navigateToPage({
-      nextPage: this.previousPage ?? PAGE_NAME.SEARCH_ADVANCED_PAGE,
+      nextPage: this.previousPage ?? PAGE_NAME.ADVANCED_SEARCH_PAGE,
     });
   }
 

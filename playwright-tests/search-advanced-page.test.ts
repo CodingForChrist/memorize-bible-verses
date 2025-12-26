@@ -40,7 +40,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("page load", async ({ page }) => {
-  await page.goto("/#/search-advanced");
+  await page.goto("/#/advanced-search");
 
   await expect(page).toHaveTitle(/Advanced Search | Memorize Bible Verses"/);
   await expect(
@@ -52,7 +52,7 @@ test("page load", async ({ page }) => {
 });
 
 test("back button", async ({ page }) => {
-  await page.goto("/#/search-advanced");
+  await page.goto("/#/advanced-search");
   await page.getByRole("button", { name: "< Back" }).click();
 
   await page.goto("/#/search-options");
@@ -60,7 +60,7 @@ test("back button", async ({ page }) => {
 });
 
 test("search for verse", async ({ page }) => {
-  await page.goto("/#/search-advanced");
+  await page.goto("/#/advanced-search");
   await page.getByLabel("Enter a bible verse reference").fill("John 3:16");
   await page.getByRole("button", { name: "Search" }).click();
 
@@ -71,7 +71,7 @@ test("search for verse", async ({ page }) => {
 });
 
 test("change bible translation", async ({ page }) => {
-  await page.goto("/#/search-advanced");
+  await page.goto("/#/advanced-search");
   await page.getByLabel("Enter a bible verse reference").fill("John 3:16");
   await page.getByRole("button", { name: "Search" }).click();
   await page
@@ -85,7 +85,7 @@ test("change bible translation", async ({ page }) => {
 });
 
 test("auto-fill form based on query parameter values", async ({ page }) => {
-  await page.goto("/#/search-advanced?translation=BSB&verse=John+3%3A16");
+  await page.goto("/#/advanced-search?translation=BSB&verse=John+3%3A16");
   await expect(page.getByLabel("Enter a bible verse reference")).toHaveValue(
     "John 3:16",
   );
