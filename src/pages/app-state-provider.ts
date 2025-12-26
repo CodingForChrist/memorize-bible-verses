@@ -128,41 +128,41 @@ export class AppStateProvider extends LitElement {
         [
           PAGE_NAME.VERSE_OF_THE_DAY_PAGE,
           () => html`
-            <search-verse-of-the-day-page
+            <verse-of-the-day-page
               bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
-            ></search-verse-of-the-day-page>
+            ></verse-of-the-day-page>
           `,
         ],
         [
           PAGE_NAME.SHARE_THE_GOSPEL_PAGE,
           () => html`
-            <search-verses-for-sharing-the-gospel-page
+            <share-the-gospel-page
               bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
-            ></search-verses-for-sharing-the-gospel-page>
+            ></share-the-gospel-page>
           `,
         ],
         [
           PAGE_NAME.PSALM_23_PAGE,
           () => html`
-            <search-psalm-23-page
+            <psalm-23-page
               bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
-            ></search-psalm-23-page>
+            ></psalm-23-page>
           `,
         ],
         [
           PAGE_NAME.VERSES_FOR_AWANA_PAGE,
           () => html`
-            <search-verses-for-awana-page
+            <verses-for-awana-page
               bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
-            ></search-verses-for-awana-page>
+            ></verses-for-awana-page>
           `,
         ],
         [
           PAGE_NAME.ADVANCED_SEARCH_PAGE,
           () => html`
-            <search-advanced-page
+            <advanced-search-page
               bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
-            ></search-advanced-page>
+            ></advanced-search-page>
           `,
         ],
         [

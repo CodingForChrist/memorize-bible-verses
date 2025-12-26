@@ -6,8 +6,8 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 
-@customElement("search-verses-for-sharing-the-gospel-page")
-export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
+@customElement("share-the-gospel-page")
+export class ShareTheGospelPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })
   bibleId?: string;
 
