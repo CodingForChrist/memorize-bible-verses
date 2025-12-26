@@ -51,7 +51,9 @@ test("page load", async ({ page }) => {
   await expect(page).toHaveTitle(
     /Verses for Sharing the Gospel | Memorize Bible Verses"/,
   );
-  await expect(page.getByRole("heading", { name: "Share the Gospel" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Share the Gospel" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("combobox", { name: "Bible Translation Selection" }),
   ).toHaveValue(bibleIdNKJV);
