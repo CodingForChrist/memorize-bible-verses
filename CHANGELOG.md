@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.12.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.11.0...v1.12.0) (2025-12-26)
+
+
+### Features
+
+* persist verse on share the gospel page ([#267](https://github.com/CodingForChrist/memorize-bible-verses/issues/267)) ([159f9a8](https://github.com/CodingForChrist/memorize-bible-verses/commit/159f9a87ed4006a379ecf15f8988ab5a8639b22c))
+* update page headings ([#270](https://github.com/CodingForChrist/memorize-bible-verses/issues/270)) ([d8e7afe](https://github.com/CodingForChrist/memorize-bible-verses/commit/d8e7afea49332238c8268aff6f01de27916156a5))
+* update page names in url ([#271](https://github.com/CodingForChrist/memorize-bible-verses/issues/271)) ([d2d889a](https://github.com/CodingForChrist/memorize-bible-verses/commit/d2d889a37ef8bfa456e3d66093646addc1481e6c))
+
+
+### Bug Fixes
+
+* disable google analytics for localhost ([#272](https://github.com/CodingForChrist/memorize-bible-verses/issues/272)) ([3ec0d0d](https://github.com/CodingForChrist/memorize-bible-verses/commit/3ec0d0db0849879dc16350e697c56c17282d0682))
+* set default verse for gospel page and add e2e tests ([#269](https://github.com/CodingForChrist/memorize-bible-verses/issues/269)) ([f0aa4ee](https://github.com/CodingForChrist/memorize-bible-verses/commit/f0aa4ee469e72720126c7089bb7cd4647086334f))
+
 ## [1.11.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.10.3...v1.11.0) (2025-12-23)
 
 
