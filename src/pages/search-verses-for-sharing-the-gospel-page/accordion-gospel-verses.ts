@@ -51,8 +51,9 @@ export class AccordionGospelVerses extends LitElement {
   hidden = false;
 
   @state()
-  selectedVerseReference = this.#verseReferenceFromQueryString ?? "Romans 3:23";
-
+  selectedVerseReference =
+    this.#verseReferenceFromQueryString ??
+    accordionContent[0].verses[0].verseReference;
   static styles = [
     buttonStyles,
     css`
@@ -182,10 +183,7 @@ export class AccordionGospelVerses extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-
-    if (this.#verseReferenceFromQueryString) {
-      this.#sendSelectedVerseReferenceChangeEvent();
-    }
+    this.#sendSelectedVerseReferenceChangeEvent();
   }
 
   #handleVerseButtonClick(event: Event) {
