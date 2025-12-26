@@ -12,7 +12,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
   bibleId?: string;
 
   @property()
-  verseReference: string = "Romans 3:23";
+  verseReference?: string;
 
   pageTitle = "Verses for Sharing the Gospel";
 
@@ -46,7 +46,7 @@ export class SearchVersesForSharingTheGospelPage extends BasePage(LitElement) {
           ></accordion-gospel-verses>
 
           <bible-verse-fetch-result
-            verse-reference=${this.verseReference}
+            verse-reference=${ifDefined(this.verseReference)}
             bible-id=${ifDefined(this.bibleId)}
           ></bible-verse-fetch-result>
         </div>
