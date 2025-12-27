@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.12.0...v1.13.0) (2025-12-27)
+
+
+### Features
+
+* host fonts using fontsource packages ([#274](https://github.com/CodingForChrist/memorize-bible-verses/issues/274)) ([ea0eda4](https://github.com/CodingForChrist/memorize-bible-verses/commit/ea0eda457da30e9df19ac4dc7702fc73bc26f19b))
+
 ## [1.12.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.11.0...v1.12.0) (2025-12-26)
 
 
