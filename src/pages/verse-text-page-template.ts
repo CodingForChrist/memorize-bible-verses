@@ -1,7 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators/property.js";
-import { state } from "lit/decorators/state.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { classMap } from "lit/directives/class-map.js";
 

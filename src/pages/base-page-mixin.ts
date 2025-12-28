@@ -1,5 +1,5 @@
 import { LitElement } from "lit";
-import { property } from "lit/decorators/property.js";
+import { property } from "lit/decorators.js";
 
 import { CUSTOM_EVENT, type PageName } from "../constants";
 import type { CustomEventNavigateToPage, PageNavigation } from "../types";

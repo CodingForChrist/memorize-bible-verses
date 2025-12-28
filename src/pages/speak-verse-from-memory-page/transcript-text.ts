@@ -1,8 +1,6 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators/property.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
-import { state } from "lit/decorators/state.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 

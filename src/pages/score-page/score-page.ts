@@ -1,6 +1,5 @@
 import { LitElement, css, html, type PropertyValues } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators/property.js";
+import { customElement, property } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 
 import { BasePage } from "../base-page-mixin";

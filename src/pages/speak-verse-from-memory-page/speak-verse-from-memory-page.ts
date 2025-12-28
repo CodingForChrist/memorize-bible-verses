@@ -1,7 +1,5 @@
 import { LitElement, css, html, type PropertyValues } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators/property.js";
-import { state } from "lit/decorators/state.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
