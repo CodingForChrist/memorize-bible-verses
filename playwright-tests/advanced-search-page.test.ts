@@ -86,9 +86,7 @@ test("change bible translation", async ({ page }) => {
   await expect(page.locator(".citation")).toHaveText(/Berean Standard Bible/);
 });
 
-test("auto-fill form based on query parameter values", async ({
-  page,
-}) => {
+test("auto-fill form based on query parameter values", async ({ page }) => {
   await page.goto("/#/advanced-search?translation=BSB&verse=John+3%3A16");
   await expect(page.getByLabel("Enter a bible verse reference")).toHaveValue(
     "John 3:16",
