@@ -1,6 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { property } from "lit/decorators/property.js";
+import { customElement, property } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import { fetchVerseOfTheDayVerseListWithCache } from "../../services/api";

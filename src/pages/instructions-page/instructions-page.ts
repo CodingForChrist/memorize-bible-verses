@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
+import { customElement } from "lit/decorators.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";

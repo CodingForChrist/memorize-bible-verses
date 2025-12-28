@@ -1,6 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { property } from "lit/decorators/property.js";
-import { customElement } from "lit/decorators/custom-element.js";
+import { customElement, property } from "lit/decorators.js";
 
 type AlertType = "success" | "info" | "warning" | "danger";
 

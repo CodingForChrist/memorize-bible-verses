@@ -1,6 +1,5 @@
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators/custom-element.js";
-import { state } from "lit/decorators/state.js";
+import { customElement, state } from "lit/decorators.js";
 import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
