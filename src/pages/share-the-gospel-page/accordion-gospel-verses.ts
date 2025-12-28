@@ -2,47 +2,41 @@ import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { state } from "lit/decorators/state.js";
+import { queryAll } from "lit/decorators/query-all.js";
+import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
 
+import { CollapsibleContent } from "../../components/collapsible-content";
 import { breakpointsREM, buttonStyles } from "../../components/shared-styles";
 import { getStateFromURL } from "../../services/router";
 
-const accordionContent = [
-  {
-    title: "All have sinned",
-    verses: [
-      { verseReference: "Romans 3:23" },
-      { verseReference: "Romans 6:23" },
-      {
-        verseReference: "Ecclesiastes 7:20",
-        verseLabel: "Eccles. 7:20",
-      },
-      { verseReference: "Isaiah 53:6" },
-    ],
-  },
-  {
-    title: "Jesus paid for our sins",
-    verses: [
-      { verseReference: "Romans 5:8" },
-      {
-        verseReference: "2 Corinthians 5:21",
-        verseLabel: "2 Cor. 5:21",
-      },
-      { verseReference: "1 Peter 3:18" },
-      { verseReference: "Romans 5:19" },
-    ],
-  },
-  {
-    title: "Believe in Jesus and be saved",
-    verses: [
-      {
-        verseReference: "Ephesians 2:8-9",
-      },
-      { verseReference: "John 3:16-17" },
-      { verseReference: "John 14:6" },
-      { verseReference: "Romans 10:9" },
-    ],
-  },
+const accordionVerses = [
+  [
+    { verseReference: "Romans 3:23" },
+    { verseReference: "Romans 6:23" },
+    {
+      verseReference: "Ecclesiastes 7:20",
+      verseLabel: "Eccles. 7:20",
+    },
+    { verseReference: "Isaiah 53:6" },
+  ],
+  [
+    { verseReference: "Romans 5:8" },
+    {
+      verseReference: "2 Corinthians 5:21",
+      verseLabel: "2 Cor. 5:21",
+    },
+    { verseReference: "1 Peter 3:18" },
+    { verseReference: "Romans 5:19" },
+  ],
+  [
+    {
+      verseReference: "Ephesians 2:8-9",
+    },
+    { verseReference: "John 3:16-17" },
+    { verseReference: "John 14:6" },
+    { verseReference: "Romans 10:9" },
+  ],
 ];
 
 @customElement("accordion-gospel-verses")
@@ -52,8 +46,11 @@ export class AccordionGospelVerses extends LitElement {
 
   @state()
   selectedVerseReference =
-    this.#verseReferenceFromQueryString ??
-    accordionContent[0].verses[0].verseReference;
+    this.#verseReferenceFromQueryString ?? accordionVerses[0][0].verseReference;
+
+  @queryAll("collapsible-content")
+  accordionItems?: CollapsibleContent[];
+
   static styles = [
     buttonStyles,
     css`
@@ -114,91 +111,110 @@ export class AccordionGospelVerses extends LitElement {
     `,
   ];
 
-  get #allBibleVerses() {
-    const allBibleVerses: string[] = [];
-
-    for (const { verses } of accordionContent) {
-      for (const { verseReference } of verses) {
-        allBibleVerses.push(verseReference);
-      }
-    }
-
-    return allBibleVerses;
-  }
-
   get #verseReferenceFromQueryString() {
     const verseReference = getStateFromURL()?.verse;
+    const allVerses = accordionVerses
+      .flat()
+      .map(({ verseReference }) => verseReference);
 
-    if (verseReference && this.#allBibleVerses.includes(verseReference)) {
+    if (verseReference && allVerses.includes(verseReference)) {
       return verseReference;
     }
   }
 
   #hasSelectedBibleVerse(index: number) {
-    const foundVerse = accordionContent[index].verses.find(
-      ({ verseReference }) => {
-        return this.selectedVerseReference === verseReference;
-      },
-    );
+    const foundVerse = accordionVerses[index].find(({ verseReference }) => {
+      return this.selectedVerseReference === verseReference;
+    });
     return Boolean(foundVerse);
   }
 
   #renderButtonGroup(
     verses: { verseReference: string; verseLabel?: string }[],
   ) {
-    return verses.map(({ verseReference, verseLabel }) => {
-      const classes = {
-        active: this.selectedVerseReference === verseReference,
-        secondary: true,
-      };
-      return html`
-        <button
-          type="button"
-          class=${classMap(classes)}
-          @click=${this.#handleVerseButtonClick}
-          data-verse-reference=${verseReference}
-        >
-          ${verseLabel ?? verseReference}
-        </button>
-      `;
-    });
+    return html`
+      <div class="verse-container">
+        ${map(verses, ({ verseReference, verseLabel }) => {
+          const classes = {
+            active: this.selectedVerseReference === verseReference,
+            secondary: true,
+          };
+          return html`
+            <button
+              type="button"
+              class=${classMap(classes)}
+              @click=${this.#handleVerseButtonClick}
+              data-verse-reference=${verseReference}
+            >
+              ${verseLabel ?? verseReference}
+            </button>
+          `;
+        })}
+      </div>
+    `;
   }
 
   render() {
     if (this.hidden) {
       return;
     }
-
-    return accordionContent.map(({ title, verses }, index) => {
-      return html`
-        <collapsible-content
-          title=${title}
-          ?expanded=${this.#hasSelectedBibleVerse(index)}
-        >
-          <div class="verse-container">${this.#renderButtonGroup(verses)}</div>
-        </collapsible-content>
-      `;
-    });
+    return html`
+      <collapsible-content
+        title="All have sinned"
+        ?expanded=${this.#hasSelectedBibleVerse(0)}
+      >
+        ${this.#renderButtonGroup(accordionVerses[0])}
+      </collapsible-content>
+      <collapsible-content
+        title="Jesus paid for our sins"
+        ?expanded=${this.#hasSelectedBibleVerse(1)}
+      >
+        ${this.#renderButtonGroup(accordionVerses[1])}
+      </collapsible-content>
+      <collapsible-content
+        title="Believe in Jesus and be saved"
+        ?expanded=${this.#hasSelectedBibleVerse(2)}
+      >
+        ${this.#renderButtonGroup(accordionVerses[2])}
+      </collapsible-content>
+    `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  firstUpdated() {
     this.#sendSelectedVerseReferenceChangeEvent();
   }
 
   #handleVerseButtonClick(event: Event) {
     const selectedButtonElement = event.target as HTMLButtonElement;
-    if (!selectedButtonElement.dataset.verseReference) {
+    const selectedAccordionItem = selectedButtonElement.closest(
+      "collapsible-content",
+    );
+    const verseReference = selectedButtonElement.dataset.verseReference;
+
+    if (!verseReference) {
       return;
     }
-    this.selectedVerseReference = selectedButtonElement.dataset.verseReference;
+    this.selectedVerseReference = verseReference;
 
     this.#sendSelectedVerseReferenceChangeEvent();
+    this.scrollIntoView();
 
-    selectedButtonElement.closest("collapsible-content")?.scrollIntoView();
+    // close other open accordion items
+    if (this.accordionItems) {
+      for (const accordionItem of this.accordionItems) {
+        if (selectedAccordionItem === accordionItem) {
+          continue;
+        }
+        accordionItem.expanded = false;
+      }
+    }
   }
 
   #sendSelectedVerseReferenceChangeEvent() {
+    if (!this.selectedVerseReference) {
+      throw new Error("Failed to send event because no verse is selected");
+    }
+
     const eventUpdateSelectedVerseReference = new CustomEvent<{
       verseReference: string;
     }>("change", {
