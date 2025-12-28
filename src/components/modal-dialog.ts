@@ -116,7 +116,7 @@ export class ModalDialog extends LitElement {
       <dialog
         @click=${this.#handleBackdropClick}
         @cancel=${this.#handleClose}
-        ref=${ref(this.dialogElementReference)}
+        ${ref(this.dialogElementReference)}
       >
         <div class="modal-container">
           <div class="modal-header">

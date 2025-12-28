@@ -13,6 +13,10 @@ import {
   type SpeechRecognitionState,
 } from "./speech-recognition";
 
+import "./recite-bible-verse";
+import "../verse-text-page-template";
+import "../../components/alert-message";
+
 @customElement("speak-verse-from-memory-page")
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   @property({ attribute: "verse-reference", reflect: true })

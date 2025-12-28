@@ -6,6 +6,10 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 
+import "../verse-text-page-template";
+import "../../components/bible-translation-drop-down-list";
+import "../../components/bible-verse-fetch-result";
+
 @customElement("psalm-23-page")
 export class Psalm23Page extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })

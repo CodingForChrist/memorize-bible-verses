@@ -19,6 +19,10 @@ import { buttonStyles } from "../../components/shared-styles";
 
 import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
+import "./transcript-text";
+import "../../components/alert-message";
+import "../../components/loading-spinner";
+
 @customElement("recite-bible-verse")
 export class ReciteBibleVerse extends LitElement {
   @property({ attribute: "verse-reference", reflect: true })

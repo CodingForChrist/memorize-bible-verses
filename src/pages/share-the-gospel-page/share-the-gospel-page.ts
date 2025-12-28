@@ -6,6 +6,11 @@ import { ifDefined } from "lit/directives/if-defined.js";
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 
+import "./accordion-gospel-verses";
+import "../verse-text-page-template";
+import "../../components/bible-translation-drop-down-list";
+import "../../components/bible-verse-fetch-result";
+
 @customElement("share-the-gospel-page")
 export class ShareTheGospelPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })

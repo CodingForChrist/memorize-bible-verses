@@ -159,7 +159,7 @@ export class VerseTextPageTemplate extends LitElement {
         </div>
 
         <!-- used to track when page-navigation element becomes sticky -->
-        <div ref=${ref(this.navigationStickyElementReference)}></div>
+        <div ${ref(this.navigationStickyElementReference)}></div>
       </div>
     `;
   }
