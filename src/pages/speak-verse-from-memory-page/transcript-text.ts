@@ -59,7 +59,7 @@ export class TranscriptText extends LitElement {
     return html`
       <textarea
         id="transcript-textarea"
-        ref=${ref(this.textareaElementReference)}
+        ${ref(this.textareaElementReference)}
         placeholder=${ifDefined(this.#placeholderText)}
         .value=${this.transcript}
         @input=${this.#fieldSizingContentPolyfill}

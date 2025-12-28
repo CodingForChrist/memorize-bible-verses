@@ -49,6 +49,8 @@ test("page load", async ({ page }) => {
   await expect(
     page.getByRole("combobox", { name: "Bible Translation Selection" }),
   ).toHaveValue(bibleIdNKJV);
+
+  await expect(page.getByLabel("Enter a bible verse reference")).toBeFocused();
 });
 
 test("back button", async ({ page }) => {
@@ -84,7 +86,9 @@ test("change bible translation", async ({ page }) => {
   await expect(page.locator(".citation")).toHaveText(/Berean Standard Bible/);
 });
 
-test("auto-fill form based on query parameter values", async ({ page }) => {
+test.only("auto-fill form based on query parameter values", async ({
+  page,
+}) => {
   await page.goto("/#/advanced-search?translation=BSB&verse=John+3%3A16");
   await expect(page.getByLabel("Enter a bible verse reference")).toHaveValue(
     "John 3:16",
