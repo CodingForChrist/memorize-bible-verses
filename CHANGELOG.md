@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.13.0...v1.13.1) (2025-12-28)
+
+
+### Bug Fixes
+
+* ensure only one accordion item stays open ([#276](https://github.com/CodingForChrist/memorize-bible-verses/issues/276)) ([4ac20ea](https://github.com/CodingForChrist/memorize-bible-verses/commit/4ac20ead27cdd7fec00192496fb11858046fc65c))
+
 ## [1.13.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.12.0...v1.13.0) (2025-12-27)
 
 
