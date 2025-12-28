@@ -1,15 +1,17 @@
-import { LitElement, css, html, unsafeCSS, type PropertyValues } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement } from "lit/decorators/custom-element.js";
 import { property } from "lit/decorators/property.js";
 import { when } from "lit/directives/when.js";
-
-import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
 import { convertBibleVerseToText } from "../../services/format-api-response";
 import { findBibleTranslationById } from "../../data/bible-translation-model";
 import { breakpointsREM } from "../../components/shared-styles";
+
+import "./score-recited-bible-verse";
+import "../verse-text-page-template";
+import "../../components/alert-message";
 
 @customElement("score-page")
 export class ScorePage extends BasePage(LitElement) {
@@ -27,35 +29,32 @@ export class ScorePage extends BasePage(LitElement) {
 
   pageTitle = "Score";
 
-  static styles = [
-    unsafeCSS(scriptureStyles),
-    css`
-      :host {
-        display: block;
-      }
-      p {
-        margin: 1rem 0;
-      }
-      table {
-        table-layout: auto;
-        text-indent: 0;
-        border-color: inherit;
-        border-collapse: collapse;
-      }
-      td {
-        border-bottom: 1px solid var(--color-light-gray);
-        padding: 1rem 0;
-      }
-      td:first-child {
-        padding-right: 1rem;
+  static styles = css`
+    :host {
+      display: block;
+    }
+    p {
+      margin: 1rem 0;
+    }
+    table {
+      table-layout: auto;
+      text-indent: 0;
+      border-color: inherit;
+      border-collapse: collapse;
+    }
+    td {
+      border-bottom: 1px solid var(--color-light-gray);
+      padding: 1rem 0;
+    }
+    td:first-child {
+      padding-right: 1rem;
 
-        @media (min-width: ${breakpointsREM.medium}rem) {
-          min-width: 8rem;
-          padding-right: 2rem;
-        }
+      @media (min-width: ${breakpointsREM.medium}rem) {
+        min-width: 8rem;
+        padding-right: 2rem;
       }
-    `,
-  ];
+    }
+  `;
 
   #renderReport() {
     if (

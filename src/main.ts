@@ -1,6 +1,6 @@
 // JS
-import "./components";
-import "./pages";
+import "./pages/app-state-provider";
+import "./components/app-footer";
 
 // CSS
 import "./css/styles.css";

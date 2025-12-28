@@ -11,6 +11,16 @@ import {
   deleteUnknownParametersInURL,
 } from "../services/router";
 
+import "./instructions-page/instructions-page";
+import "./search-options-page/search-options-page";
+import "./advanced-search-page/advanced-search-page";
+import "./psalm-23-page/psalm-23-page";
+import "./verses-for-awana-page/verses-for-awana-page";
+import "./verse-of-the-day-page/verse-of-the-day-page";
+import "./share-the-gospel-page/share-the-gospel-page";
+import "./speak-verse-from-memory-page/speak-verse-from-memory-page";
+import "./score-page/score-page";
+
 import type {
   BibleTranslation,
   BibleVerse,

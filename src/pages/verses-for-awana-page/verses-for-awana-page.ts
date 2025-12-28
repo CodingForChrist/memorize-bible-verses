@@ -15,6 +15,10 @@ import {
   sortBibleVerseReferences,
 } from "./sort-bible-verses";
 
+import "../verse-text-page-template";
+import "../../components/bible-translation-drop-down-list";
+import "../../components/bible-verse-fetch-result";
+
 @customElement("verses-for-awana-page")
 export class VersesForAwanaPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })

@@ -5,6 +5,8 @@ import { state } from "lit/decorators/state.js";
 import logoURL from "../images/logo.svg";
 import { hyperlinkStyles, buttonStyles } from "./shared-styles";
 
+import "../components/modal-dialog";
+
 @customElement("app-footer")
 export class AppFooter extends LitElement {
   @state()

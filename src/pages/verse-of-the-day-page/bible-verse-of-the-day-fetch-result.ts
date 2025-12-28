@@ -15,6 +15,10 @@ import { CUSTOM_EVENT } from "../../constants";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../../types";
 
+import "../../components/alert-message";
+import "../../components/loading-spinner";
+import "../../components/bible-verse-blockquote";
+
 @customElement("bible-verse-of-the-day-fetch-result")
 export class BibleVerseOfTheDayFetchResult extends LitElement {
   @property({ attribute: "bible-id", reflect: true })

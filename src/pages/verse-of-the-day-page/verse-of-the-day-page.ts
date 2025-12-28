@@ -17,6 +17,12 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
+import "./bible-verse-of-the-day-fetch-result";
+import "./verse-list-fetch-result";
+import "../verse-text-page-template";
+import "../../components/bible-translation-drop-down-list";
+import "../../components/modal-dialog";
+
 @customElement("verse-of-the-day-page")
 export class VerseOfTheDayPage extends BasePage(LitElement) {
   @property({ attribute: "bible-id", reflect: true })

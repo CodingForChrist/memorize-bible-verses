@@ -5,12 +5,16 @@ import { state } from "lit/decorators/state.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { BasePage } from "../base-page-mixin";
+import { getStateFromURL } from "../../services/router";
 import { PAGE_NAME } from "../../constants";
 import {
   formControlStyles,
   buttonStyles,
 } from "../../components/shared-styles";
-import { getStateFromURL } from "../../services/router";
+
+import "../verse-text-page-template";
+import "../../components/bible-translation-drop-down-list";
+import "../../components/bible-verse-fetch-result";
 
 @customElement("advanced-search-page")
 export class AdvancedSearchPage extends BasePage(LitElement) {

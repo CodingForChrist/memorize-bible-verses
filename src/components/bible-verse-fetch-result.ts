@@ -6,12 +6,15 @@ import { Task } from "@lit/task";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 import { fetchBibleVerseWithCache } from "../services/api";
+import { CUSTOM_EVENT } from "../constants";
 import {
   removeExtraContentFromBibleVerse,
   standardizeVerseReference,
 } from "../services/format-api-response";
 
-import { CUSTOM_EVENT } from "../constants";
+import "./alert-message";
+import "./loading-spinner";
+import "./bible-verse-blockquote";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
 

@@ -7,6 +7,9 @@ import { fetchVerseOfTheDayVerseListWithCache } from "../../services/api";
 import { formatDate, parseDate } from "./date-time-utility";
 import { hyperlinkStyles } from "../../components/shared-styles";
 
+import "../../components/alert-message";
+import "../../components/loading-spinner";
+
 @customElement("verse-list-fetch-result")
 export class VerseListFetchResult extends LitElement {
   @property({ reflect: true })
