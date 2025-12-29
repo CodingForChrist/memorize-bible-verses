@@ -2,19 +2,15 @@ import { beforeEach, afterEach, describe, expect, test, vi } from "vitest";
 import { AdvancedSearchPage } from "./advanced-search-page";
 import { fetchBibleTranslationsWithCache } from "../../services/api";
 
-vi.mock("../../services/api", async (importOriginal) => {
-  return {
-    ...(await importOriginal()),
-    fetchBibleTranslationsWithCache: vi.fn().mockResolvedValue({ data: [] }),
-  };
+vi.mock("../../services/api", async () => {
+  const { mockApiModule } = await import("../../services/api-mock");
+  return mockApiModule;
 });
 
 describe("<advanced-search-page>", () => {
   let advancedSearchPageElement: AdvancedSearchPage;
 
   beforeEach(() => {
-    vi.resetAllMocks();
-
     advancedSearchPageElement = document.createElement(
       "advanced-search-page",
     ) as AdvancedSearchPage;

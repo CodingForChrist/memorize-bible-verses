@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   test: {
+    clearMocks: true,
     environment: "happy-dom",
     sequence: {
       shuffle: true,
