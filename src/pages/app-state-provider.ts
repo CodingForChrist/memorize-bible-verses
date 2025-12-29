@@ -89,6 +89,8 @@ export class AppStateProvider extends LitElement {
           setStateInURL({
             pageName: this.currentPage,
             translation: bibleTranslation.abbreviationLocal,
+            verse:
+              this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
             shouldUpdateBrowserHistory: false,
           });
         }

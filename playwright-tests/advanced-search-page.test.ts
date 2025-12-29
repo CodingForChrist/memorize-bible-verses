@@ -49,6 +49,8 @@ test("page load", async ({ page }) => {
   await expect(
     page.getByRole("combobox", { name: "Bible Translation Selection" }),
   ).toHaveValue(bibleIdNKJV);
+
+  await expect(page.getByLabel("Enter a bible verse reference")).toBeFocused();
 });
 
 test("back button", async ({ page }) => {

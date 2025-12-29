@@ -1,10 +1,20 @@
-import { beforeEach, afterEach, describe, expect, test } from "vitest";
+import { beforeEach, afterEach, describe, expect, test, vi } from "vitest";
 import { AdvancedSearchPage } from "./advanced-search-page";
+import { fetchBibleTranslationsWithCache } from "../../services/api";
+
+vi.mock("../../services/api", async (importOriginal) => {
+  return {
+    ...(await importOriginal()),
+    fetchBibleTranslationsWithCache: vi.fn().mockResolvedValue({ data: [] }),
+  };
+});
 
 describe("<advanced-search-page>", () => {
   let advancedSearchPageElement: AdvancedSearchPage;
 
   beforeEach(() => {
+    vi.resetAllMocks();
+
     advancedSearchPageElement = document.createElement(
       "advanced-search-page",
     ) as AdvancedSearchPage;
@@ -19,8 +29,10 @@ describe("<advanced-search-page>", () => {
     document.body.append(advancedSearchPageElement);
     await advancedSearchPageElement.updateComplete;
 
+    expect(fetchBibleTranslationsWithCache).toBeCalled();
+
     expect(
-      advancedSearchPageElement.shadowRoot!.querySelector("form"),
+      advancedSearchPageElement.shadowRoot!.querySelector("search-form"),
     ).toBeTruthy();
   });
 
@@ -28,8 +40,10 @@ describe("<advanced-search-page>", () => {
     document.body.append(advancedSearchPageElement);
     await advancedSearchPageElement.updateComplete;
 
+    expect(fetchBibleTranslationsWithCache).toBeCalled();
+
     expect(
-      advancedSearchPageElement.shadowRoot!.querySelector("form"),
+      advancedSearchPageElement.shadowRoot!.querySelector("search-form"),
     ).toBeNull();
   });
 });
