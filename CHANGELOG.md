@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.13.1...v1.14.0) (2025-12-29)
+
+
+### Features
+
+* explicit imports for components ([#278](https://github.com/CodingForChrist/memorize-bible-verses/issues/278)) ([7594bb2](https://github.com/CodingForChrist/memorize-bible-verses/commit/7594bb2687022ebb1522ec36adbc1f4aefd4f619))
+* set focus state on search form ([#281](https://github.com/CodingForChrist/memorize-bible-verses/issues/281)) ([14f0665](https://github.com/CodingForChrist/memorize-bible-verses/commit/14f0665a8c7d89997922ee6e52bd3c3863cf6ac9))
+* unit test api mocks ([#284](https://github.com/CodingForChrist/memorize-bible-verses/issues/284)) ([dc376ca](https://github.com/CodingForChrist/memorize-bible-verses/commit/dc376ca35d89d7beb11a079992e75ec2b6aae278))
+
 ## [1.13.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.13.0...v1.13.1) (2025-12-28)
 
 
