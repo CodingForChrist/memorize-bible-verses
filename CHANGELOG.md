@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.16.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.15.0...v1.16.0) (2025-12-30)
+
+
+### Features
+
+* use local storage to remember preferred bible translation ([#289](https://github.com/CodingForChrist/memorize-bible-verses/issues/289)) ([edf232c](https://github.com/CodingForChrist/memorize-bible-verses/commit/edf232c3c2ac6b4b035112baec3bb3cc91abdbe9))
+
+
+### Bug Fixes
+
+* use borders for month dividers ([#287](https://github.com/CodingForChrist/memorize-bible-verses/issues/287)) ([98959b7](https://github.com/CodingForChrist/memorize-bible-verses/commit/98959b76c4a9ac2242dc8761fd270f27d4606f1f))
+
 ## [1.15.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.14.0...v1.15.0) (2025-12-30)
 
 
