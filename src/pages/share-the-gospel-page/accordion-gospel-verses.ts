@@ -62,7 +62,6 @@ export class AccordionGospelVerses extends LitElement {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
-        row-gap: 0.5rem;
         font-size: 80%;
 
         @media (min-width: ${breakpointsREM.small}rem) {

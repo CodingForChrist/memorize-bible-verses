@@ -82,13 +82,17 @@ function formatDateToISOStringWithTimezone(date: Date) {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}${offsetSign}${offsetHours}:${offsetMinutes}`;
 }
 
-export function addDays(date: Date, numberOfDays: number): Date {
+export function getMonthName(date: Date) {
+  return date.toLocaleString("default", { month: "long" });
+}
+
+export function addDays(date: Date, numberOfDays: number) {
   const dateCopy = new Date(date);
   dateCopy.setDate(dateCopy.getDate() + numberOfDays);
   return dateCopy;
 }
 
-export function subtractDays(date: Date, numberOfDays: number): Date {
+export function subtractDays(date: Date, numberOfDays: number) {
   const dateCopy = new Date(date);
   dateCopy.setDate(dateCopy.getDate() - numberOfDays);
   return dateCopy;
