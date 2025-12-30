@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.14.0...v1.15.0) (2025-12-30)
+
+
+### Features
+
+* improve navigation with verse of the day verse list ([#285](https://github.com/CodingForChrist/memorize-bible-verses/issues/285)) ([a3ab660](https://github.com/CodingForChrist/memorize-bible-verses/commit/a3ab660148ec30bd92d6bb878cf0a50ddbab310b))
+
 ## [1.14.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.13.1...v1.14.0) (2025-12-29)
 
 
