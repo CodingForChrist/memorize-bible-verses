@@ -81,7 +81,10 @@ export class VerseOfTheDayPage extends BasePage(LitElement) {
     return html`
       <span slot="heading">2026 Verse List</span>
       <span slot="body">
-        <verse-list-fetch-result year="2026"></verse-list-fetch-result>
+        <verse-list-fetch-result
+          year="2026"
+          @change=${this.#handleVerseListChangeEvent}
+        ></verse-list-fetch-result>
       </span>
     `;
   }
@@ -226,6 +229,17 @@ export class VerseOfTheDayPage extends BasePage(LitElement) {
 
   #handleButtonClickToShowDialog() {
     this.isDialogOpen = true;
+  }
+
+  #handleVerseListChangeEvent(event: CustomEventInit<{ date: string }>) {
+    const dateAsString = event.detail?.date;
+
+    if (!dateAsString) {
+      return;
+    }
+
+    this.dateForVerseOfTheDay = parseDate(dateAsString, "YYYY-MM-DD");
+    this.isDialogOpen = false;
   }
 
   #handleBackButtonClick() {
