@@ -32,7 +32,8 @@ export class VerseListFetchResult extends LitElement {
         margin: 2rem 0;
         font-size: 2rem;
         font-weight: 400;
-        background-color: var(--color-lighter-gray);
+        border-top: 1px solid var(--color-light-gray);
+        border-bottom: 1px solid var(--color-light-gray);
         text-align: center;
       }
       h2:first-child {
