@@ -4,6 +4,7 @@ import { choose } from "lit/directives/choose.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
 import { CUSTOM_EVENT, PAGE_NAME, type PageName } from "../constants";
+import { setBibleTranslationInLocalStorage } from "../services/local-storage";
 import {
   getStateFromURL,
   setStateInURL,
@@ -86,12 +87,17 @@ export class AppStateProvider extends LitElement {
         const bibleTranslation = event.detail?.bibleTranslation;
         if (bibleTranslation) {
           this.selectedBibleTranslation = bibleTranslation;
+          const { id, abbreviationLocal } = bibleTranslation;
           setStateInURL({
             pageName: this.currentPage,
-            translation: bibleTranslation.abbreviationLocal,
+            translation: abbreviationLocal,
             verse:
               this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
             shouldUpdateBrowserHistory: false,
+          });
+          setBibleTranslationInLocalStorage({
+            id,
+            abbreviationLocal,
           });
         }
       },

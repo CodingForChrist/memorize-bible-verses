@@ -4,6 +4,7 @@ import { Task } from "@lit/task";
 
 import { fetchBibleTranslationsWithCache } from "../services/api";
 import { getStateFromURL } from "../services/router";
+import { getBibleTranslationFromLocalStorage } from "../services/local-storage";
 import { formControlStyles } from "./shared-styles";
 import { CUSTOM_EVENT } from "../constants";
 import {
@@ -107,7 +108,10 @@ export class BibleTranslationDropDownList extends LitElement {
   }
 
   get #defaultBibleId() {
-    const abbreviation = getStateFromURL()?.translation || "NKJV";
+    const abbreviation =
+      getStateFromURL()?.translation ||
+      getBibleTranslationFromLocalStorage()?.abbreviationLocal ||
+      "NKJV";
 
     const { id } = findBibleTranslationByAbbreviation(abbreviation);
     return id;
