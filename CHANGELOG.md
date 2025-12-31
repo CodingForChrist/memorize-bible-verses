@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.16.0...v1.17.0) (2025-12-31)
+
+
+### Features
+
+* don't show diff when its an exact match ([#290](https://github.com/CodingForChrist/memorize-bible-verses/issues/290)) ([08ff81f](https://github.com/CodingForChrist/memorize-bible-verses/commit/08ff81f84d4470668eae6da7ea6a52259ee6aff3))
+
 ## [1.16.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.15.0...v1.16.0) (2025-12-30)
 
 
