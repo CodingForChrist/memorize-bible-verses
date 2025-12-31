@@ -94,6 +94,10 @@ export class ScoreRecitedBibleVerse extends LitElement {
       return html`${this.grade.letter} (${this.grade.percentage}%)`;
     }
 
+    if (errorCount === 0) {
+      return html`<span>Exact match!</span>`;
+    }
+
     return html`
       <div class="text-difference-container">
         ${map(
