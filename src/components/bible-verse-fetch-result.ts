@@ -60,6 +60,7 @@ export class BibleVerseFetchResult extends LitElement {
       const verseBibleData = await fetchBibleVerseWithCache({
         bibleId,
         verseReference,
+        includeTitles: this.shouldDisplaySectionHeadings,
       });
       const enhancedBibleVerseData =
         this.#validateAndEnhanceVerseData(verseBibleData);
