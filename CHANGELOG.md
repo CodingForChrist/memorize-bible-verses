@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.17.0...v1.17.1) (2026-01-01)
+
+
+### Bug Fixes
+
+* do not display titles ([#292](https://github.com/CodingForChrist/memorize-bible-verses/issues/292)) ([7433020](https://github.com/CodingForChrist/memorize-bible-verses/commit/7433020005c1c47f3e4e6c5cdfa584574e97fd0a))
+
 ## [1.17.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.16.0...v1.17.0) (2025-12-31)
 
 
