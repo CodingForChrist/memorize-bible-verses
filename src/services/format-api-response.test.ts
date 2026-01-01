@@ -31,6 +31,15 @@ describe("removeExtraContentFromBibleVerse()", () => {
     ).toBe(
       '<p class="q1">The <span class="nd">Lord</span> is my shepherd, I lack nothing.</p>',
     );
+
+    // NIV
+    expect(
+      removeExtraContentFromBibleVerse(
+        '<p class="ms1"><span class="sc">Book I</span></p><p class="mr"><span id="PSA.1-PSA.41">Psalms 1–41</span></p><p class="cl">Psalm 1</p><p class="q1"><span data-number="1" data-sid="PSA 1:1" class="v">1</span>Blessed is the one</p><p data-vid="PSA 1:1" class="q2">who does not walk in step with the wicked</p><p data-vid="PSA 1:1" class="q1">or stand in the way that sinners take</p><p data-vid="PSA 1:1" class="q2">or sit in the company of mockers,</p>',
+      ),
+    ).toBe(
+      '<p class="q1">Blessed is the one</p><p data-vid="PSA 1:1" class="q2">who does not walk in step with the wicked</p><p data-vid="PSA 1:1" class="q1">or stand in the way that sinners take</p><p data-vid="PSA 1:1" class="q2">or sit in the company of mockers,</p>',
+    );
   });
 
   test("should remove title, notes, and verse numbers from multiple verses", () => {

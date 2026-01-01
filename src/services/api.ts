@@ -94,6 +94,7 @@ export async function fetchBibleTranslationsWithCache({
 type FetchBibleVerseOptions = {
   bibleId: string;
   verseReference: string;
+  includeTitles: boolean;
 };
 
 type FetchBibleVerseResponseBody = {
@@ -103,11 +104,12 @@ type FetchBibleVerseResponseBody = {
 export async function fetchBibleVerseWithCache({
   bibleId,
   verseReference,
+  includeTitles,
 }: FetchBibleVerseOptions) {
   const url = `${API_BASE_URL}/api/v1/bibles/${bibleId}/passages/verse-reference`;
   const cacheKey = createCacheKey({
     url,
-    options: { verseReference },
+    options: { verseReference, includeTitles },
   });
   const cacheResult = cache.get(cacheKey);
 
@@ -119,6 +121,7 @@ export async function fetchBibleVerseWithCache({
     method: "POST",
     body: JSON.stringify({
       verseReference,
+      includeTitles,
     }),
     headers: {
       "Content-Type": "application/json",
