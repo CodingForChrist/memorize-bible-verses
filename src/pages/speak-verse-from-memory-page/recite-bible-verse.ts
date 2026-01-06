@@ -64,7 +64,6 @@ export class ReciteBibleVerse extends LitElement {
       loading-spinner {
         margin: 0;
         margin-left: 0.75rem;
-        --spinner-color: currentColor;
         --spinner-border-width: 2px;
         --spinner-width: 1rem;
         --spinner-height: 1rem;
