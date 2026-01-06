@@ -1,8 +1,8 @@
 export const CUSTOM_EVENT = {
-  UPDATE_BIBLE_TRANSLATION: "UPDATE_BIBLE_TRANSLATION",
-  UPDATE_BIBLE_VERSE: "UPDATE_BIBLE_VERSE",
-  UPDATE_RECITED_BIBLE_VERSE: "UPDATE_RECITED_BIBLE_VERSE",
-  NAVIGATE_TO_PAGE: "NAVIGATE_TO_PAGE",
+  UPDATE_BIBLE_TRANSLATION: "update-bible-translation",
+  UPDATE_BIBLE_VERSE: "update-bible-verse",
+  UPDATE_RECITED_BIBLE_VERSE: "update-recited-bible-verse",
+  NAVIGATE_TO_PAGE: "navigate-to-page",
 } as const;
 
 export type CustomEvent = (typeof CUSTOM_EVENT)[keyof typeof CUSTOM_EVENT];

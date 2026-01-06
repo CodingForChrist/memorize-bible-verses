@@ -1,18 +1,18 @@
 export const SPEECH_RECOGNITION_STATE = {
-  INITIAL: "INITIAL",
-  WAITING_FOR_MICROPHONE_ACCESS: "WAITING_FOR_MICROPHONE_ACCESS",
-  LISTENING: "LISTENING",
-  AUDIOEND: "AUDIOEND",
-  RESOLVED: "RESOLVED",
-  REJECTED: "REJECTED",
+  INITIAL: "initial",
+  WAITING_FOR_MICROPHONE_ACCESS: "waiting-for-microphone-access",
+  LISTENING: "listening",
+  AUDIOEND: "audioend",
+  RESOLVED: "resolved",
+  REJECTED: "rejected",
 } as const;
 
 export type SpeechRecognitionState =
   (typeof SPEECH_RECOGNITION_STATE)[keyof typeof SPEECH_RECOGNITION_STATE];
 
 export const SPEECH_RECOGNITION_CUSTOM_EVENT = {
-  UPDATE_STATE: "UPDATE_STATE",
-  UPDATE_INTERIM_TRANSCRIPT: "UPDATE_INTERIM_TRANSCRIPT",
+  UPDATE_STATE: "update-state",
+  UPDATE_INTERIM_TRANSCRIPT: "update-interim-transcript",
 } as const;
 
 export type SpeechRecognitionCustomEvent =
