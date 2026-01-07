@@ -43,8 +43,7 @@ export class AppStateProvider extends LitElement {
   recitedBibleVerse?: string;
 
   @state()
-  currentPage: PageName =
-    getStateFromURL()?.pageName ?? PAGE_NAME.INSTRUCTIONS_PAGE;
+  currentPage: PageName = this.#getPageNameFromURLWithFallback();
 
   // previousPage is used to keep track of the search page used
   // so the back button will return to it
@@ -66,8 +65,7 @@ export class AppStateProvider extends LitElement {
     deleteUnknownParametersInURL();
 
     globalThis.addEventListener("popstate", () => {
-      const nextPage =
-        getStateFromURL()?.pageName ?? PAGE_NAME.INSTRUCTIONS_PAGE;
+      const nextPage = this.#getPageNameFromURLWithFallback();
       this.#goto({ nextPage });
     });
 
@@ -207,6 +205,21 @@ export class AppStateProvider extends LitElement {
       ],
       () => html`<instructions-page></instructions-page>`,
     );
+  }
+
+  #getPageNameFromURLWithFallback() {
+    const pageNameFromURL = getStateFromURL()?.pageName;
+    if (pageNameFromURL) {
+      return pageNameFromURL;
+    }
+
+    const fallbackPageName = PAGE_NAME.INSTRUCTIONS_PAGE;
+    setStateInURL({
+      pageName: fallbackPageName,
+      shouldUpdateBrowserHistory: false,
+    });
+
+    return fallbackPageName;
   }
 
   #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
