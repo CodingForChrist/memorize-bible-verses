@@ -5,15 +5,15 @@ test("page load", async ({ page }) => {
   await expect(page).toHaveTitle(/Instructions | Memorize Bible Verses"/);
 });
 
-test("redirect to instructions page for any unknown url", async ({ page }) => {
-  const pageNames = [
+test("redirect to instructions page for unknown url hash", async ({ page }) => {
+  const urlHashValues = [
     "", // no hash
     "/#/fake-page", // unknown page name
     "/#/instrctions", // misspelled page name
   ];
 
-  for (const pageName of pageNames) {
-    await page.goto(pageName);
+  for (const hashValue of urlHashValues) {
+    await page.goto(hashValue);
     await expect(page.url()).toContain("/#/instructions");
     await expect(page).toHaveTitle(/Instructions | Memorize Bible Verses/);
   }
