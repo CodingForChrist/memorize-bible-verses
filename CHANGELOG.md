@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.18.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.17.1...v1.18.0) (2026-01-07)
+
+
+### Features
+
+* simplify loading spinner styles ([#296](https://github.com/CodingForChrist/memorize-bible-verses/issues/296)) ([c4757cc](https://github.com/CodingForChrist/memorize-bible-verses/commit/c4757ccb4c231840f20abbf379d8b9af2ef8819b))
+
+
+### Bug Fixes
+
+* update url when falling back to instructions page ([#299](https://github.com/CodingForChrist/memorize-bible-verses/issues/299)) ([cf2dd2e](https://github.com/CodingForChrist/memorize-bible-verses/commit/cf2dd2e17aa63a8e77901c4532ae80cd285a0e05))
+
 ## [1.17.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.17.0...v1.17.1) (2026-01-01)
 
 
