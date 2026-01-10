@@ -27,7 +27,9 @@ export type CustomEventUpdateBibleTranslation = {
 };
 
 export type CustomEventUpdateBibleVerse = {
-  bibleVerse: BibleVerse;
+  bibleVerse: Omit<BibleVerse, "content"> & {
+    textContent: string;
+  };
 };
 
 export type CustomEventUpdateRecitedBibleVerse = {

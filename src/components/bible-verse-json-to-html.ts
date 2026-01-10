@@ -128,4 +128,44 @@ export class BibleVerseJSONToHTML extends LitElement {
       </span>
     `;
   }
+
+  get bibleVerseText() {
+    let textParts: string[] = [];
+
+    for (const itemTag of this.#trustedContent) {
+      textParts = [...textParts, ...this.#getTextFromItemsArray(itemTag.items)];
+    }
+
+    return textParts.join(" ").trim();
+  }
+
+  #getTextFromItemsArray(items: Item[]): string[] {
+    let textArray: string[] = [];
+    for (const item of items) {
+      if (item.type === "tag" && item.name === "verse") {
+        // ignore verse numbers
+        continue;
+      }
+
+      if (item.type === "tag") {
+        textArray = [...textArray, ...this.#getTextFromItemsArray(item.items)];
+      }
+
+      if (item.type === "text") {
+        // ignore spaces
+        if (item.text.trim() === "") {
+          continue;
+        }
+
+        // ignore heading text not related to a verse
+        if (!item.attrs?.verseId) {
+          continue;
+        }
+
+        textArray.push(item.text.trim());
+      }
+    }
+
+    return textArray;
+  }
 }
