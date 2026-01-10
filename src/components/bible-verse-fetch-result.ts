@@ -1,18 +1,15 @@
 import { LitElement, css, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { Task } from "@lit/task";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 import { fetchBibleVerseWithCache } from "../services/api";
 import { CUSTOM_EVENT } from "../constants";
-import {
-  removeExtraContentFromBibleVerse,
-  standardizeVerseReference,
-} from "../services/format-api-response";
+import { standardizeVerseReference } from "../services/format-api-response";
 
 import "./alert-message";
 import "./loading-spinner";
+import "./bible-verse-json-to-html";
 import "./bible-verse-blockquote";
 
 import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
@@ -78,18 +75,11 @@ export class BibleVerseFetchResult extends LitElement {
     const { id, bibleId, reference, content, verseCount } =
       verseData.data as BibleVerse;
 
-    const options = {
-      shouldRemoveSectionHeadings: !this.shouldDisplaySectionHeadings,
-      shouldRemoveFootnotes: true,
-      shouldRemoveVerseNumbers: verseCount < 2,
-      shouldTrimParagraphBreaks: true,
-    };
-
     return {
       id,
       bibleId,
       reference: standardizeVerseReference(reference),
-      content: removeExtraContentFromBibleVerse(content, options),
+      content,
       verseCount,
     };
   }
@@ -98,12 +88,19 @@ export class BibleVerseFetchResult extends LitElement {
     if (!this.bibleId || !verseData) {
       return;
     }
+    const { content, verseCount } = verseData;
+
     return html`
       <bible-verse-blockquote
         bible-id=${this.bibleId}
         ?display-citation=${true}
       >
-        <span class="scripture-styles"> ${unsafeHTML(verseData.content)} </span>
+        <span class="scripture-styles">
+          <bible-verse-json-to-html
+            .content=${content}
+            ?include-verse-numbers=${verseCount > 1}
+          ></bible-verse-json-to-html>
+        </span>
       </bible-verse-blockquote>
     `;
   }

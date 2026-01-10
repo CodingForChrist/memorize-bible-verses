@@ -13,7 +13,7 @@ export type BibleVerse = {
   id: string;
   bibleId: string;
   reference: string;
-  content: string;
+  content: Record<string, unknown>[];
   verseCount: number;
 };
 

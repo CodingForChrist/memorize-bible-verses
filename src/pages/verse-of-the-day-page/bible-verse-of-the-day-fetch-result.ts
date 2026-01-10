@@ -1,14 +1,10 @@
 import { LitElement, css, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { Task } from "@lit/task";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 import { fetchBibleVerseOfTheDayWithCache } from "../../services/api";
-import {
-  removeExtraContentFromBibleVerse,
-  standardizeVerseReference,
-} from "../../services/format-api-response";
+import { standardizeVerseReference } from "../../services/format-api-response";
 import { parseDate, formatDate } from "./date-time-utility";
 import { CUSTOM_EVENT } from "../../constants";
 
@@ -16,6 +12,7 @@ import type { BibleVerse, CustomEventUpdateBibleVerse } from "../../types";
 
 import "../../components/alert-message";
 import "../../components/loading-spinner";
+import "../../components/bible-verse-json-to-html";
 import "../../components/bible-verse-blockquote";
 
 @customElement("bible-verse-of-the-day-fetch-result")
@@ -80,18 +77,11 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
     const { id, bibleId, reference, content, verseCount } =
       verseData.data as BibleVerse;
 
-    const options = {
-      shouldRemoveSectionHeadings: true,
-      shouldRemoveFootnotes: true,
-      shouldRemoveVerseNumbers: verseCount < 2,
-      shouldTrimParagraphBreaks: true,
-    };
-
     return {
       id,
       bibleId,
       reference: standardizeVerseReference(reference),
-      content: removeExtraContentFromBibleVerse(content, options),
+      content,
       verseCount,
     };
   }
@@ -100,13 +90,19 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
     if (!this.bibleId || !verseData) {
       return;
     }
+
+    const { content, reference, verseCount } = verseData;
+
     return html`
-      <h2>${verseData.reference}</h2>
+      <h2>${reference}</h2>
       <bible-verse-blockquote
         bible-id=${this.bibleId}
         ?display-citation=${true}
       >
-        <span class="scripture-styles"> ${unsafeHTML(verseData.content)} </span>
+        <bible-verse-json-to-html
+          .content=${content}
+          ?include-verse-numbers=${verseCount > 1}
+        ></bible-verse-json-to-html>
       </bible-verse-blockquote>
     `;
   }
