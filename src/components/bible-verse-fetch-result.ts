@@ -1,15 +1,13 @@
 import { LitElement, css, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { Task } from "@lit/task";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 import { fetchBibleVerseWithCache } from "../services/api";
 import { CUSTOM_EVENT } from "../constants";
-import {
-  removeExtraContentFromBibleVerse,
-  standardizeVerseReference,
-} from "../services/format-api-response";
+import { standardizeVerseReference } from "../services/format-api-response";
+import { BibleVerseJSONToHTML } from "./bible-verse-json-to-html";
 
 import "./alert-message";
 import "./loading-spinner";
@@ -31,6 +29,9 @@ export class BibleVerseFetchResult extends LitElement {
     reflect: true,
   })
   shouldDisplaySectionHeadings: boolean = false;
+
+  bibleVerse?: BibleVerse;
+  bibleVerseJSONToHTMLElementReference: Ref<BibleVerseJSONToHTML> = createRef();
 
   static styles = [
     unsafeCSS(scriptureStyles),
@@ -64,7 +65,7 @@ export class BibleVerseFetchResult extends LitElement {
       });
       const enhancedBibleVerseData =
         this.#validateAndEnhanceVerseData(verseBibleData);
-      this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
+      this.bibleVerse = enhancedBibleVerseData;
       return enhancedBibleVerseData;
     },
     args: () => [this.bibleId, this.verseReference],
@@ -78,18 +79,11 @@ export class BibleVerseFetchResult extends LitElement {
     const { id, bibleId, reference, content, verseCount } =
       verseData.data as BibleVerse;
 
-    const options = {
-      shouldRemoveSectionHeadings: !this.shouldDisplaySectionHeadings,
-      shouldRemoveFootnotes: true,
-      shouldRemoveVerseNumbers: verseCount < 2,
-      shouldTrimParagraphBreaks: true,
-    };
-
     return {
       id,
       bibleId,
       reference: standardizeVerseReference(reference),
-      content: removeExtraContentFromBibleVerse(content, options),
+      content,
       verseCount,
     };
   }
@@ -98,12 +92,20 @@ export class BibleVerseFetchResult extends LitElement {
     if (!this.bibleId || !verseData) {
       return;
     }
+    const { content, verseCount } = verseData;
+
     return html`
       <bible-verse-blockquote
         bible-id=${this.bibleId}
         ?display-citation=${true}
       >
-        <span class="scripture-styles"> ${unsafeHTML(verseData.content)} </span>
+        <span class="scripture-styles">
+          <bible-verse-json-to-html
+            .content=${content}
+            ?include-verse-numbers=${verseCount > 1}
+            ${ref(this.bibleVerseJSONToHTMLElementReference)}
+          ></bible-verse-json-to-html>
+        </span>
       </bible-verse-blockquote>
     `;
   }
@@ -128,7 +130,32 @@ export class BibleVerseFetchResult extends LitElement {
     });
   }
 
-  #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    if (!this.bibleVerseJSONToHTMLElementReference.value) {
+      return;
+    }
+
+    this.#sendEventForSelectedBibleVerse(
+      this.bibleVerseJSONToHTMLElementReference.value.bibleVerseText,
+    );
+  }
+
+  #sendEventForSelectedBibleVerse(bibleVerseText: string) {
+    if (!this.bibleVerse) {
+      return;
+    }
+
+    const { id, bibleId, reference, verseCount } = this.bibleVerse;
+    const bibleVerse = {
+      id,
+      bibleId,
+      reference,
+      verseCount,
+      textContent: bibleVerseText,
+    };
+
     const eventUpdateSelectedBible =
       new CustomEvent<CustomEventUpdateBibleVerse>(
         CUSTOM_EVENT.UPDATE_BIBLE_VERSE,

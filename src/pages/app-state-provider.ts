@@ -36,6 +36,7 @@ export class AppStateProvider extends LitElement {
   @state()
   selectedBibleTranslation?: BibleTranslation;
 
+  // TODO: only store verse reference and verse text
   @state()
   selectedBibleVerse?: BibleVerse;
 
@@ -185,7 +186,7 @@ export class AppStateProvider extends LitElement {
           () => html`
             <speak-verse-from-memory-page
               verse-reference=${ifDefined(this.selectedBibleVerse?.reference)}
-              verse-content=${ifDefined(this.selectedBibleVerse?.content)}
+              verse-content=${ifDefined(this.selectedBibleVerse?.textContent)}
               recited-bible-verse=${ifDefined(this.recitedBibleVerse)}
               previous-page=${ifDefined(this.previousPage)}
             ></speak-verse-from-memory-page>

@@ -13,7 +13,7 @@ export type BibleVerse = {
   id: string;
   bibleId: string;
   reference: string;
-  content: string;
+  content: Record<string, unknown>[];
   verseCount: number;
 };
 
@@ -27,7 +27,9 @@ export type CustomEventUpdateBibleTranslation = {
 };
 
 export type CustomEventUpdateBibleVerse = {
-  bibleVerse: BibleVerse;
+  bibleVerse: Omit<BibleVerse, "content"> & {
+    textContent: string;
+  };
 };
 
 export type CustomEventUpdateRecitedBibleVerse = {
