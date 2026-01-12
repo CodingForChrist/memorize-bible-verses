@@ -6,14 +6,60 @@
     "bookId": "2PE",
     "chapterIds": ["2PE.3"],
     "reference": "II Peter 3:7",
-    "content": "<p class=\"p\"><span data-number=\"7\" data-sid=\"2PE 3:7\" class=\"v\">7</span>But the heavens and the earth <span class=\"it\">which</span> are now preserved by the same word, are reserved for fire until the day of judgment and perdition of ungodly men.</p>",
+    "content": [
+      {
+        "name": "para",
+        "type": "tag",
+        "attrs": { "style": "p" },
+        "items": [
+          {
+            "name": "verse",
+            "type": "tag",
+            "attrs": { "number": "7", "style": "v", "sid": "2PE 3:7" },
+            "items": [{ "text": "7", "type": "text" }]
+          },
+          {
+            "text": "But ",
+            "type": "text",
+            "attrs": { "verseId": "2PE.3.7", "verseOrgIds": ["2PE.3.7"] }
+          },
+          {
+            "text": "the heavens and the earth ",
+            "type": "text",
+            "attrs": { "verseId": "2PE.3.7", "verseOrgIds": ["2PE.3.7"] }
+          },
+          {
+            "name": "char",
+            "type": "tag",
+            "attrs": { "style": "it" },
+            "items": [
+              {
+                "text": "which",
+                "type": "text",
+                "attrs": { "verseId": "2PE.3.7", "verseOrgIds": ["2PE.3.7"] }
+              }
+            ]
+          },
+          {
+            "text": " are now preserved by the same word, are reserved for ",
+            "type": "text",
+            "attrs": { "verseId": "2PE.3.7", "verseOrgIds": ["2PE.3.7"] }
+          },
+          {
+            "text": "fire until the day of judgment and perdition of ungodly men.",
+            "type": "text",
+            "attrs": { "verseId": "2PE.3.7", "verseOrgIds": ["2PE.3.7"] }
+          }
+        ]
+      }
+    ],
     "verseCount": 1,
     "copyright": "New King James Version®, Copyright© 1982, Thomas Nelson. All rights reserved."
   },
   "meta": {
-    "fumsToken": "GzcBQBwHbqxlyoOgvZ6Fcyp_OvAUaH0HbnpTQJAsXX2h8_Q0UK4tCQJqQZi17H6TC_6AP8ghNkdJxGT8mbftH8_bAYgvjtw83mNWaspCpjSVVVnM1BPHVzreo4y6oKEA6juEyOHkgT_arIYLwAyglMPuA68YKCTJM__BC6HWmlYpkMkYsL0fJ5-3JRiZNlInAiF-ssR2BDusnsf7Wp9U6nRK8-KbFZu3VNhPm0J-qcsk85UaTQUD"
+    "fumsToken": "GzcBQIzTFfOihHXPxDWVP11I0rL_gUO1KSBoHZauvk9PA-XakiCgFoRpwJkk9h_0djjEDWmQZDK-xW3_eN4OAPtiy83l3UZHJS1kSlNZpcXMaWJ7pePdSq8xziSE_gpCpPDygD_GTN0FwA3BqIbDH3jFxBNJ1MSaZUSheldDMYlkjLC9PyeftyUw0rZSJwpD_GSJ7R9ghdXzeO8uAMtF5DhPUYdIWXsuKz1ziyjrRU5hPp8uVjTHAQ"
   },
-  "formattedDate": "November 26, 2025 2:49 PM",
-  "dayOfTheYear": 330,
+  "formattedDate": "August 6, 2026 11:43 PM",
+  "dayOfTheYear": 218,
   "verseReference": "2 Peter 3:7"
 }

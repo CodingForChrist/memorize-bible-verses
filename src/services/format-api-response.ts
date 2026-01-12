@@ -1,119 +1,7 @@
-type RemoveExtraContentFromBibleVerseOptions = {
-  shouldRemoveSectionHeadings: boolean;
-  shouldRemoveFootnotes: boolean;
-  shouldRemoveVerseNumbers: boolean;
-  shouldTrimParagraphBreaks: boolean;
-};
-
-const defaultOptions = {
-  shouldRemoveSectionHeadings: true,
-  shouldRemoveFootnotes: true,
-  shouldRemoveVerseNumbers: true,
-  shouldTrimParagraphBreaks: true,
-};
-
-export function removeExtraContentFromBibleVerse(
-  htmlContentString: string,
-  {
-    shouldRemoveSectionHeadings,
-    shouldRemoveFootnotes,
-    shouldRemoveVerseNumbers,
-    shouldTrimParagraphBreaks,
-  }: RemoveExtraContentFromBibleVerseOptions = defaultOptions,
-) {
-  const divElement = document.createElement("div");
-  divElement.innerHTML = htmlContentString;
-
-  if (shouldRemoveSectionHeadings) {
-    removeSectionHeadings(divElement);
-  }
-  if (shouldRemoveFootnotes) {
-    removeFootnotes(divElement);
-  }
-  if (shouldRemoveVerseNumbers) {
-    removeVerseNumbers(divElement);
-  }
-  if (shouldTrimParagraphBreaks) {
-    trimParagraphBreaks(divElement);
-  }
-
-  return divElement.innerHTML;
-}
-
-function removeFootnotes(element: Element) {
-  for (const footnoteElement of element.querySelectorAll("p.r")) {
-    footnoteElement.remove();
-  }
-
-  return element;
-}
-
-function removeSectionHeadings(element: Element) {
-  const cssClasses = [
-    "ms",
-    "ms1",
-    "ms2",
-    "ms3",
-    "s",
-    "s1",
-    "s2",
-    "s3",
-    "s4",
-    "d",
-    "cl",
-    "mr",
-  ];
-
-  for (const cssClass of cssClasses) {
-    for (const titleElement of element.querySelectorAll(`p.${cssClass}`)) {
-      titleElement.remove();
-    }
-  }
-
-  return element;
-}
-
-function removeVerseNumbers(element: Element) {
-  for (const verseNumberElement of element.querySelectorAll("[data-number]")) {
-    verseNumberElement.remove();
-  }
-
-  return element;
-}
-
-function trimParagraphBreaks(element: Element) {
-  const firstChildElement = element.firstElementChild;
-  const lastChildElement = element.lastElementChild;
-
-  if (firstChildElement && firstChildElement.classList.contains("b")) {
-    firstChildElement.remove();
-  }
-
-  if (lastChildElement && lastChildElement.classList.contains("b")) {
-    lastChildElement.remove();
-  }
-
-  return element;
-}
-
-export function convertBibleVerseToText(htmlContentString: string) {
-  const strippedHTMLContent =
-    removeExtraContentFromBibleVerse(htmlContentString);
-
-  const divElement = document.createElement("div");
-  divElement.innerHTML = strippedHTMLContent;
-
-  const textArray = [...divElement.children].map((childElement) => {
-    if (childElement.nodeName === "P") {
-      return (childElement as HTMLParagraphElement).textContent.trim();
-    }
-    throw new Error(
-      `Unexpected element in verse html "${childElement.nodeName}"`,
-    );
-  });
-
-  return textArray.join(" ");
-}
+import type {
+  BibleVerse,
+  BibleVerseContentItem,
+} from "../schemas/bible-verse-schema";
 
 export function standardizeVerseReference(verseReference: string) {
   let updatedVerseReference = verseReference.trim();
@@ -140,4 +28,54 @@ export function standardizeVerseReference(verseReference: string) {
   }
 
   return updatedVerseReference;
+}
+
+export function convertBibleVerseContentToText(content: BibleVerse["content"]) {
+  let textParts: string[] = [];
+
+  for (const topLevelItem of content) {
+    if (topLevelItem.type === "tag" && Array.isArray(topLevelItem.items)) {
+      textParts = [
+        ...textParts,
+        ...getTextFromBibleVerseContentItemsArray(topLevelItem.items),
+      ];
+    }
+  }
+
+  return textParts.join(" ").trim();
+}
+
+function getTextFromBibleVerseContentItemsArray(
+  items: BibleVerseContentItem[],
+): string[] {
+  let textArray: string[] = [];
+  for (const item of items) {
+    if (item.type === "tag" && item.name === "verse") {
+      // ignore verse numbers
+      continue;
+    }
+
+    if (item.type === "tag" && Array.isArray(item.items)) {
+      textArray = [
+        ...textArray,
+        ...getTextFromBibleVerseContentItemsArray(item.items),
+      ];
+    }
+
+    if (item.type === "text" && item.text) {
+      // ignore spaces
+      if (item.text.trim() === "") {
+        continue;
+      }
+
+      // ignore heading text not related to a verse
+      if (!item.attrs?.verseId) {
+        continue;
+      }
+
+      textArray.push(item.text.trim());
+    }
+  }
+
+  return textArray;
 }

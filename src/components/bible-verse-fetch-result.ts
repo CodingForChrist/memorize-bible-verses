@@ -1,21 +1,16 @@
-import { LitElement, css, html, unsafeCSS } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 import { Task } from "@lit/task";
 
-import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 import { fetchBibleVerseWithCache } from "../services/api";
 import { CUSTOM_EVENT } from "../constants";
-import {
-  removeExtraContentFromBibleVerse,
-  standardizeVerseReference,
-} from "../services/format-api-response";
 
 import "./alert-message";
 import "./loading-spinner";
 import "./bible-verse-blockquote";
 
-import type { BibleVerse, CustomEventUpdateBibleVerse } from "../types";
+import type { BibleVerse } from "../schemas/bible-verse-schema";
 
 @customElement("bible-verse-fetch-result")
 export class BibleVerseFetchResult extends LitElement {
@@ -27,13 +22,12 @@ export class BibleVerseFetchResult extends LitElement {
 
   @property({
     type: Boolean,
-    attribute: "should-display-section-headings",
+    attribute: "include-titles",
     reflect: true,
   })
-  shouldDisplaySectionHeadings: boolean = false;
+  includeTitles: boolean = false;
 
   static styles = [
-    unsafeCSS(scriptureStyles),
     css`
       :host {
         display: block;
@@ -45,10 +39,6 @@ export class BibleVerseFetchResult extends LitElement {
       alert-message {
         margin-bottom: 2rem;
       }
-      bible-verse-blockquote .scripture-styles {
-        color: var(--color-dark-gray);
-        line-height: 1.5;
-      }
     `,
   ];
 
@@ -57,53 +47,31 @@ export class BibleVerseFetchResult extends LitElement {
       if (!bibleId || !verseReference) {
         return;
       }
-      const verseBibleData = await fetchBibleVerseWithCache({
+      const bibleVerse = await fetchBibleVerseWithCache({
         bibleId,
         verseReference,
-        includeTitles: this.shouldDisplaySectionHeadings,
+        includeTitles: this.includeTitles,
       });
-      const enhancedBibleVerseData =
-        this.#validateAndEnhanceVerseData(verseBibleData);
-      this.#sendEventForSelectedBibleVerse(enhancedBibleVerseData);
-      return enhancedBibleVerseData;
+      this.#sendEventForSelectedBibleVerse(bibleVerse);
+      return bibleVerse;
     },
     args: () => [this.bibleId, this.verseReference],
   });
 
-  #validateAndEnhanceVerseData(verseData: Record<string, unknown>) {
-    if (typeof verseData.data !== "object") {
-      throw new TypeError("expected data to be an object");
-    }
-
-    const { id, bibleId, reference, content, verseCount } =
-      verseData.data as BibleVerse;
-
-    const options = {
-      shouldRemoveSectionHeadings: !this.shouldDisplaySectionHeadings,
-      shouldRemoveFootnotes: true,
-      shouldRemoveVerseNumbers: verseCount < 2,
-      shouldTrimParagraphBreaks: true,
-    };
-
-    return {
-      id,
-      bibleId,
-      reference: standardizeVerseReference(reference),
-      content: removeExtraContentFromBibleVerse(content, options),
-      verseCount,
-    };
-  }
-
-  #renderVerse(verseData?: BibleVerse) {
-    if (!this.bibleId || !verseData) {
+  #renderVerse(bibleVerse?: BibleVerse) {
+    if (!this.bibleId || !bibleVerse) {
       return;
     }
+    const { content, verseCount, bibleId, citationText, citationLink } =
+      bibleVerse;
     return html`
       <bible-verse-blockquote
-        bible-id=${this.bibleId}
-        ?display-citation=${true}
+        .content=${content}
+        ?display-verse-numbers=${verseCount > 1}
+        bible-id=${bibleId}
+        citation-text=${citationText}
+        citation-link=${ifDefined(citationLink)}
       >
-        <span class="scripture-styles"> ${unsafeHTML(verseData.content)} </span>
       </bible-verse-blockquote>
     `;
   }
@@ -115,7 +83,7 @@ export class BibleVerseFetchResult extends LitElement {
 
     return this.#bibleVerseTask.render({
       pending: () => html`<loading-spinner></loading-spinner>`,
-      complete: (verseData) => this.#renderVerse(verseData),
+      complete: (bibleVerse) => this.#renderVerse(bibleVerse),
       error: (error) => {
         const errorMessage =
           error instanceof Error ? error.message : "Internal Server Error";
@@ -129,15 +97,13 @@ export class BibleVerseFetchResult extends LitElement {
   }
 
   #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
-    const eventUpdateSelectedBible =
-      new CustomEvent<CustomEventUpdateBibleVerse>(
-        CUSTOM_EVENT.UPDATE_BIBLE_VERSE,
-        {
-          detail: { bibleVerse },
-          bubbles: true,
-          composed: true,
-        },
-      );
+    const eventUpdateSelectedBible = new CustomEvent<{
+      bibleVerse: BibleVerse;
+    }>(CUSTOM_EVENT.UPDATE_BIBLE_VERSE, {
+      detail: { bibleVerse },
+      bubbles: true,
+      composed: true,
+    });
     this.dispatchEvent(eventUpdateSelectedBible);
   }
 }

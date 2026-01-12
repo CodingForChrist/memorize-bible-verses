@@ -10,27 +10,19 @@ import { CUSTOM_EVENT } from "../constants";
 import {
   getAllBibleTranslations,
   findBibleTranslationByAbbreviation,
-  findBibleTranslationById,
 } from "../data/bible-translation-model";
 
 import "./alert-message";
 import "./loading-spinner";
 
-import type {
-  BibleTranslation,
-  CustomEventUpdateBibleTranslation,
-} from "../types";
-
-type BibleTranslationWithCustomLabel = BibleTranslation & {
-  customLabel: string;
-};
+import type { BibleTranslation } from "../schemas/bible-translation-schema";
 
 @customElement("bible-translation-drop-down-list")
 export class BibleTranslationDropDownList extends LitElement {
   @state()
   bibleId: string = this.#defaultBibleId;
 
-  bibleTranslations: BibleTranslationWithCustomLabel[] = [];
+  bibleTranslations: BibleTranslation[] = [];
 
   static styles = [
     formControlStyles,
@@ -46,35 +38,20 @@ export class BibleTranslationDropDownList extends LitElement {
       const ids = getAllBibleTranslations()
         .map(({ id }) => id)
         .toString();
-      const bibleData = await fetchBibleTranslationsWithCache({
+      const bibleTranslationsResult = await fetchBibleTranslationsWithCache({
         language: "eng",
         includeFullDetails: true,
         ids,
       });
-      this.bibleTranslations = this.#validateAndEnhanceBibleData(bibleData);
+
+      this.bibleTranslations = bibleTranslationsResult.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
+
       this.#sendEventForSelectedBibleTranslation();
     },
     args: () => [],
   });
-
-  #validateAndEnhanceBibleData(bibleData: Record<string, unknown>) {
-    if (!Array.isArray(bibleData.data)) {
-      throw new TypeError("expected data to be an array");
-    }
-
-    const enhancedBibleData: BibleTranslationWithCustomLabel[] =
-      bibleData.data.map((bible: BibleTranslation) => {
-        const { label } = findBibleTranslationById(bible.id);
-        return {
-          ...bible,
-          customLabel: label,
-        };
-      });
-
-    return enhancedBibleData.sort((a, b) =>
-      a.customLabel.localeCompare(b.customLabel),
-    );
-  }
 
   render() {
     return this.#bibleTranslationTask.render({
@@ -87,9 +64,9 @@ export class BibleTranslationDropDownList extends LitElement {
           @change=${this.#handleSelectElementChange}
         >
           ${this.bibleTranslations.map(
-            ({ id, customLabel }) => html`
+            ({ id, name }) => html`
               <option .value=${id} ?selected=${id === this.bibleId}>
-                ${customLabel}
+                ${name}
               </option>
             `,
           )}
@@ -110,7 +87,7 @@ export class BibleTranslationDropDownList extends LitElement {
   get #defaultBibleId() {
     const abbreviation =
       getStateFromURL()?.translation ||
-      getBibleTranslationFromLocalStorage()?.abbreviationLocal ||
+      getBibleTranslationFromLocalStorage()?.abbreviation ||
       "NKJV";
 
     const { id } = findBibleTranslationByAbbreviation(abbreviation);
@@ -130,17 +107,15 @@ export class BibleTranslationDropDownList extends LitElement {
       throw new Error("Failed to find the bible translation by id");
     }
 
-    const eventUpdateSelectedBibleTranslation =
-      new CustomEvent<CustomEventUpdateBibleTranslation>(
-        CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION,
-        {
-          detail: {
-            bibleTranslation,
-          },
-          bubbles: true,
-          composed: true,
-        },
-      );
+    const eventUpdateSelectedBibleTranslation = new CustomEvent<{
+      bibleTranslation: BibleTranslation;
+    }>(CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION, {
+      detail: {
+        bibleTranslation,
+      },
+      bubbles: true,
+      composed: true,
+    });
     this.dispatchEvent(eventUpdateSelectedBibleTranslation);
   }
 }

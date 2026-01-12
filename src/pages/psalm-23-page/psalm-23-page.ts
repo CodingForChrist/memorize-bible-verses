@@ -33,7 +33,7 @@ export class Psalm23Page extends BasePage(LitElement) {
 
           <bible-verse-fetch-result
             verse-reference="Psalm 23:1-6"
-            ?should-display-section-headings=${true}
+            ?include-titles=${true}
             bible-id=${ifDefined(this.bibleId)}
           ></bible-verse-fetch-result>
         </span>

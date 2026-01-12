@@ -6,11 +6,30 @@
     "bookId": "ROM",
     "chapterIds": ["ROM.3"],
     "reference": "Romans 3:23",
-    "content": "<p class=\"m\"><span data-number=\"23\" data-sid=\"ROM 3:23\" class=\"v\">23</span>for all have sinned and fall short of the glory of God, </p>",
+    "content": [
+      {
+        "name": "para",
+        "type": "tag",
+        "attrs": { "style": "m" },
+        "items": [
+          {
+            "name": "verse",
+            "type": "tag",
+            "attrs": { "number": "23", "style": "v", "sid": "ROM 3:23" },
+            "items": [{ "text": "23", "type": "text" }]
+          },
+          {
+            "text": "for all have sinned and fall short of the glory of God, ",
+            "type": "text",
+            "attrs": { "verseId": "ROM.3.23", "verseOrgIds": ["ROM.3.23"] }
+          }
+        ]
+      }
+    ],
     "verseCount": 1,
     "copyright": "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain"
   },
   "meta": {
-    "fumsToken": "GzoBCByHsWOnIgm2whsugUDbSn35zEOjEiHxIto6LF19q-nJbKcD5Q0GA_u73WCYRuVd5Ak20CSQbV4iXvoKSj0Vw65_nrcD0C-r8Tze9Ww21VUwtvjoUkheGqtPVd91n_LKeaKmhzNG8PjEn7ZTtwDmhEpSPR5sASYMad0UYWuLVVamhoHY3q_UnrclqCxbvI1CY4a25DvDClbP432_j5BimJUwk6vFIsvg50nWOFtJ677SMJ8WcT7j"
+    "fumsToken": "GzoBiJwHtmOXCgaDm8IzcMmqsaW--XXvXkOjMiRIYpIsXX2hU01PT08D5YIg4BZkpVn-nfyCP-i3wyFuOUkms5ESi_9u-8fzdgD8K3o0l3c_m03bSkOskpg1iw3RX3S--2FOHAVQr2AIBh93_NGyGiwAU4BSgt0Grt8AA7MN0UaOQurKTjppeQzY3p-Tz9sSRIYNThOBkJ8s2XZEg9XzeN_1WmWRGJfZ1nmYWV1Oq53OltXqNLWFrkLUGTE"
   }
 }

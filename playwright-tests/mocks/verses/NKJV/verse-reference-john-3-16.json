@@ -6,11 +6,59 @@
     "bookId": "JHN",
     "chapterIds": ["JHN.3"],
     "reference": "John 3:16",
-    "content": "<p class=\"p\"><span data-number=\"16\" data-sid=\"JHN 3:16\" class=\"v\">16</span><span class=\"wj\">For God so loved the world that He gave His only begotten</span> <span class=\"wj\">Son, that whoever believes in Him should not perish but have everlasting life.</span> </p>",
+    "content": [
+      {
+        "name": "para",
+        "type": "tag",
+        "attrs": { "style": "p" },
+        "items": [
+          {
+            "name": "verse",
+            "type": "tag",
+            "attrs": { "number": "16", "style": "v", "sid": "JHN 3:16" },
+            "items": [{ "text": "16", "type": "text" }]
+          },
+          {
+            "name": "char",
+            "type": "tag",
+            "attrs": { "style": "wj" },
+            "items": [
+              {
+                "text": "For God so loved the world that He gave His only begotten",
+                "type": "text",
+                "attrs": { "verseId": "JHN.3.16", "verseOrgIds": ["JHN.3.16"] }
+              }
+            ]
+          },
+          {
+            "text": " ",
+            "type": "text",
+            "attrs": { "verseId": "JHN.3.16", "verseOrgIds": ["JHN.3.16"] }
+          },
+          {
+            "name": "char",
+            "type": "tag",
+            "attrs": { "style": "wj" },
+            "items": [
+              {
+                "text": "Son, that whoever believes in Him should not perish but have everlasting life.",
+                "type": "text",
+                "attrs": { "verseId": "JHN.3.16", "verseOrgIds": ["JHN.3.16"] }
+              }
+            ]
+          },
+          {
+            "text": " ",
+            "type": "text",
+            "attrs": { "verseId": "JHN.3.16", "verseOrgIds": ["JHN.3.16"] }
+          }
+        ]
+      }
+    ],
     "verseCount": 1,
     "copyright": "New King James Version®, Copyright© 1982, Thomas Nelson. All rights reserved."
   },
   "meta": {
-    "fumsToken": "GzoBAIzTFfOihHUPHvpjkj_-1UDr842ionVYuvq-bddxtw6H4wki6OyFrx-t35k1bhDIDS_JxSXEHP88bwegX1aT83jXyZuaF25qpm6VFzMvjdV7ut91rzNSXtlElKhwxgiunvhTadddADNCKYvdH8wq-F-V1v5h70wLpZnMWsbE9n6g9rwtwcm0rstEYMigLNkdYQWr5_E-2ndwU7dM8yqntVYZ4mohpzFZaaehLF0yMeqKAw"
+    "fumsToken": "GzoBwBwHbqxlyoOgvZ5Gcyof_ZC7p7ZCdaimNgUEydLVFzpPTwPlgiDgFoRplreTX_Cn0-V2kBteksstQWz5x_N2APxLPDOPd58D67LQKae6KotZsBR_of3dd9uhC04yoDhDSYN_O_7oMessAFOAUp7dBlq_AaVmS7GiI6YmpEaDyxXHgO39NfG8LUFI27xhIhDSJ0tqK8Rg9Tzel7qcLbSKKmrLch5snE1pZ2kaHGRecbXkbD6bEQM"
   }
 }

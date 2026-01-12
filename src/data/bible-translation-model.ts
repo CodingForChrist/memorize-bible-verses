@@ -16,7 +16,7 @@ export function findBibleTranslationById(id: string) {
 
 export function findBibleTranslationByAbbreviation(abbreviation: string) {
   const bibleTranslation = bibleTranslations.find(
-    (bibleTranslation) => bibleTranslation.abbreviationLocal === abbreviation,
+    (bibleTranslation) => bibleTranslation.abbreviation === abbreviation,
   );
   if (!bibleTranslation) {
     throw new Error("Failed to find the bible translation by abbreviation");

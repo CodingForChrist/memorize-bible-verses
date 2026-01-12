@@ -2,7 +2,11 @@ import { LitElement } from "lit";
 import { property } from "lit/decorators.js";
 
 import { CUSTOM_EVENT, type PageName } from "../constants";
-import type { CustomEventNavigateToPage, PageNavigation } from "../types";
+
+type PageNavigation = {
+  nextPage: PageName;
+  previousPage?: PageName;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Constructor<T> = new (...arguments_: any[]) => T;
@@ -21,15 +25,13 @@ export const BasePage = <T extends Constructor<LitElement>>(superClass: T) => {
     previousPage?: PageName;
 
     navigateToPage(pageNavigation: PageNavigation) {
-      const eventNavigateToSearchPage =
-        new CustomEvent<CustomEventNavigateToPage>(
-          CUSTOM_EVENT.NAVIGATE_TO_PAGE,
-          {
-            detail: { pageNavigation },
-            bubbles: true,
-            composed: true,
-          },
-        );
+      const eventNavigateToSearchPage = new CustomEvent<{
+        pageNavigation: PageNavigation;
+      }>(CUSTOM_EVENT.NAVIGATE_TO_PAGE, {
+        detail: { pageNavigation },
+        bubbles: true,
+        composed: true,
+      });
       this.dispatchEvent(eventNavigateToSearchPage);
     }
 

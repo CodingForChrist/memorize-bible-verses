@@ -50,7 +50,7 @@ describe("<bible-translation-drop-down-list>", () => {
 
     expect(eventMock).toHaveBeenCalled();
     expect(eventMock.mock.calls[0][0].detail.bibleTranslation).toMatchObject({
-      abbreviationLocal: "NKJV",
+      abbreviation: "NKJV",
     });
   });
 
