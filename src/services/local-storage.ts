@@ -2,7 +2,7 @@ const bibleTranslationLocalStorageKey = "bibleTranslation";
 
 type BibleTranslationForLocalStorage = {
   id: string;
-  abbreviationLocal: string;
+  abbreviation: string;
 };
 
 export function getBibleTranslationFromLocalStorage() {
@@ -14,11 +14,7 @@ export function getBibleTranslationFromLocalStorage() {
       return;
     }
     const jsonData = JSON.parse(data);
-    if (
-      typeof jsonData === "object" &&
-      jsonData.id &&
-      jsonData.abbreviationLocal
-    ) {
+    if (typeof jsonData === "object" && jsonData.id && jsonData.abbreviation) {
       return jsonData as BibleTranslationForLocalStorage;
     }
   } catch (error) {
@@ -31,12 +27,12 @@ export function getBibleTranslationFromLocalStorage() {
 
 export function setBibleTranslationInLocalStorage({
   id,
-  abbreviationLocal,
+  abbreviation,
 }: BibleTranslationForLocalStorage) {
   try {
     globalThis.localStorage.setItem(
       bibleTranslationLocalStorageKey,
-      JSON.stringify({ id, abbreviationLocal }),
+      JSON.stringify({ id, abbreviation }),
     );
   } catch (error) {
     console.error(

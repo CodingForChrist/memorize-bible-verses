@@ -1,31 +1,28 @@
 import { beforeEach, afterEach, describe, expect, test } from "vitest";
-import { BibleVerseJSONToHTML } from "./bible-verse-json-to-html";
+import { BibleVerseBlockquote } from "./bible-verse-blockquote";
 
 function stripExpressionComments(html: string) {
   return html.replaceAll(/<!--\?lit\$[0-9]+\$-->|<!--\??-->/g, "");
 }
 
-describe("<bible-verse-json-to-html>", () => {
-  let bibleVerseJSONToHTMLElement: BibleVerseJSONToHTML;
+describe("<bible-verse-blockquote>", () => {
+  let bibleVerseBlockquoteElement: BibleVerseBlockquote;
 
   beforeEach(() => {
-    bibleVerseJSONToHTMLElement = document.createElement(
-      "bible-verse-json-to-html",
-    ) as BibleVerseJSONToHTML;
+    bibleVerseBlockquoteElement = document.createElement(
+      "bible-verse-blockquote",
+    ) as BibleVerseBlockquote;
   });
 
   afterEach(() => {
-    bibleVerseJSONToHTMLElement.remove();
+    bibleVerseBlockquoteElement.remove();
   });
 
   describe("NKJV", () => {
     test("should render John 3:16-17", async () => {
-      document.body.append(bibleVerseJSONToHTMLElement);
-      bibleVerseJSONToHTMLElement.setAttribute(
-        "include-verse-numbers",
-        "include-verse-numbers",
-      );
-      bibleVerseJSONToHTMLElement.content = [
+      document.body.append(bibleVerseBlockquoteElement);
+      bibleVerseBlockquoteElement.displayVerseNumbers = true;
+      bibleVerseBlockquoteElement.content = [
         {
           name: "para",
           type: "tag",
@@ -93,24 +90,20 @@ describe("<bible-verse-json-to-html>", () => {
         },
       ];
 
-      await bibleVerseJSONToHTMLElement.updateComplete;
+      await bibleVerseBlockquoteElement.updateComplete;
       const containerElement =
-        bibleVerseJSONToHTMLElement.shadowRoot!.querySelector(
+        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
           ".scripture-styles",
         ) as HTMLSpanElement;
 
       expect(stripExpressionComments(containerElement.innerHTML).trim()).toBe(
         '<p class="p"><span class=" v ">16</span><span class="wj"><span>For God so loved the world that He gave His only begotten </span></span><span>  </span><span class="wj"><span>Son, that whoever believes in Him should not perish but have everlasting life. </span></span><span>  </span><span class=" v ">17</span><span class="wj"><span>For God did not send His Son into the world to condemn the world, but that the world through Him might be saved. </span></span></p>',
       );
-
-      expect(bibleVerseJSONToHTMLElement.bibleVerseText).toBe(
-        "For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life. For God did not send His Son into the world to condemn the world, but that the world through Him might be saved.",
-      );
     });
 
     test("should render Revelation 4:11", async () => {
-      document.body.append(bibleVerseJSONToHTMLElement);
-      bibleVerseJSONToHTMLElement.content = [
+      document.body.append(bibleVerseBlockquoteElement);
+      bibleVerseBlockquoteElement.content = [
         {
           name: "para",
           type: "tag",
@@ -215,18 +208,14 @@ describe("<bible-verse-json-to-html>", () => {
         },
       ];
 
-      await bibleVerseJSONToHTMLElement.updateComplete;
+      await bibleVerseBlockquoteElement.updateComplete;
       const containerElement =
-        bibleVerseJSONToHTMLElement.shadowRoot!.querySelector(
+        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
           ".scripture-styles",
         ) as HTMLSpanElement;
 
       expect(stripExpressionComments(containerElement.innerHTML).trim()).toBe(
         '<p class="q1"><span class=" v hidden ">11</span><span>“You </span><span>are worthy, O Lord, </span></p><p class="q2"><span>To receive glory and honor and power; </span></p><p class="q2"><span>For You created all things, </span></p><p class="q2"><span>And by  </span><span>Your will they exist and were created.” </span></p>',
-      );
-
-      expect(bibleVerseJSONToHTMLElement.bibleVerseText).toBe(
-        "“You are worthy, O Lord, To receive glory and honor and power; For You created all things, And by Your will they exist and were created.”",
       );
     });
   });

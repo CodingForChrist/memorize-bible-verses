@@ -20,8 +20,8 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
 
-  @property({ attribute: "verse-content", reflect: true })
-  verseContent?: string;
+  @property({ attribute: "verse-text-content", reflect: true })
+  verseTextContent?: string;
 
   @property({ attribute: "recited-bible-verse", reflect: true })
   recitedBibleVerse?: string;
@@ -71,12 +71,12 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
 
         <span slot="page-content">
           ${when(
-            this.verseReference && this.verseContent,
+            this.verseReference && this.verseTextContent,
             () => html`
               <h2>${this.verseReference}</h2>
               <recite-bible-verse
                 verse-reference="${ifDefined(this.verseReference)}"
-                verse-content="${ifDefined(this.verseContent)}"
+                verse-text-content="${ifDefined(this.verseTextContent)}"
                 transcript="${ifDefined(this.recitedBibleVerse)}"
                 @state-change=${this.#handleSpeechRecognitionStateChange}
               ></recite-bible-verse>

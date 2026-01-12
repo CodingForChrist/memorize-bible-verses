@@ -1,108 +1,84 @@
 [
   {
     "id": "bba9f40183526463-01",
-    "abbreviationLocal": "BSB",
-    "label": "BSB - Berean Standard Bible",
-    "citation": {
-      "text": "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain.",
-      "link": "https://berean.bible/"
-    }
+    "abbreviation": "BSB",
+    "name": "BSB - Berean Standard Bible",
+    "citationText": "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain.",
+    "citationLink": "https://berean.bible/"
   },
   {
     "id": "de4e12af7f28f599-02",
-    "abbreviationLocal": "KJV",
-    "label": "KJV - King James Version",
-    "citation": {
-      "text": "King James Version (KJV) Public Domain"
-    }
+    "abbreviation": "KJV",
+    "name": "KJV - King James Version",
+    "citationText": "King James Version (KJV) Public Domain"
   },
   {
     "id": "b8ee27bcd1cae43a-01",
-    "abbreviationLocal": "NASB 1995",
-    "label": "NASB 1995 - New American Standard Bible",
-    "citation": {
-      "text": "New American Standard Bible®, Copyright © 1995, The Lockman Foundation. All rights reserved.",
-      "link": "https://www.lockman.org/"
-    }
+    "abbreviation": "NASB 1995",
+    "name": "NASB 1995 - New American Standard Bible",
+    "citationText": "New American Standard Bible®, Copyright © 1995, The Lockman Foundation. All rights reserved.",
+    "citationLink": "https://www.lockman.org/"
   },
   {
     "id": "a761ca71e0b3ddcf-01",
-    "abbreviationLocal": "NASB",
-    "label": "NASB 2020 - New American Standard Bible",
-    "citation": {
-      "text": "New American Standard Bible® 2020, Copyright © 2020, The Lockman Foundation. All rights reserved.",
-      "link": "https://www.lockman.org/"
-    }
+    "abbreviation": "NASB",
+    "name": "NASB 2020 - New American Standard Bible",
+    "citationText": "New American Standard Bible® 2020, Copyright © 2020, The Lockman Foundation. All rights reserved.",
+    "citationLink": "https://www.lockman.org/"
   },
   {
     "id": "63097d2a0a2f7db3-01",
-    "abbreviationLocal": "NKJV",
-    "label": "NKJV - New King James Version",
-    "citation": {
-      "text": "New King James Version®, Copyright © 1982, Thomas Nelson. All rights reserved.",
-      "link": "https://www.harpercollins.com/"
-    }
+    "abbreviation": "NKJV",
+    "name": "NKJV - New King James Version",
+    "citationText": "New King James Version®, Copyright © 1982, Thomas Nelson. All rights reserved.",
+    "citationLink": "https://www.harpercollins.com/"
   },
   {
     "id": "d6e14a625393b4da-01",
-    "abbreviationLocal": "NLT",
-    "label": "NLT - New Living Translation",
-    "citation": {
-      "text": "Holy Bible, New Living Translation, Copyright © 2014, Tyndale House Publishers. All rights reserved.",
-      "link": "https://www.tyndale.com/"
-    }
+    "abbreviation": "NLT",
+    "name": "NLT - New Living Translation",
+    "citationText": "Holy Bible, New Living Translation, Copyright © 2014, Tyndale House Publishers. All rights reserved.",
+    "citationLink": "https://www.tyndale.com/"
   },
   {
     "id": "06125adad2d5898a-01",
-    "abbreviationLocal": "ASV",
-    "label": "ASV - American Standard Version",
-    "citation": {
-      "text": "American Standard Version (ASV) Public Domain"
-    }
+    "abbreviation": "ASV",
+    "name": "ASV - American Standard Version",
+    "citationText": "American Standard Version (ASV) Public Domain"
   },
   {
     "id": "9879dbb7cfe39e4d-04",
-    "abbreviationLocal": "WEB",
-    "label": "WEB - World English Bible",
-    "citation": {
-      "text": "World English Bible (WEB) Public Domain",
-      "link": "https://worldenglish.bible/"
-    }
+    "abbreviation": "WEB",
+    "name": "WEB - World English Bible",
+    "citationText": "World English Bible (WEB) Public Domain",
+    "citationLink": "https://worldenglish.bible/"
   },
   {
     "id": "78a9f6124f344018-01",
-    "abbreviationLocal": "NIV",
-    "label": "NIV - New International Version",
-    "citation": {
-      "text": "The Holy Bible, New International Version® NIV® Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.® Used by Permission of Biblica, Inc.® All rights reserved worldwide.",
-      "link": "https://www.biblica.com/"
-    }
+    "abbreviation": "NIV",
+    "name": "NIV - New International Version",
+    "citationText": "The Holy Bible, New International Version® NIV® Copyright © 1973, 1978, 1984, 2011 by Biblica, Inc.® Used by Permission of Biblica, Inc.® All rights reserved worldwide.",
+    "citationLink": "https://www.biblica.com/"
   },
   {
     "id": "a556c5305ee15c3f-01",
-    "abbreviationLocal": "CSB",
-    "label": "CSB - Christian Standard Bible",
-    "citation": {
-      "text": "Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. All rights reserved.",
-      "link": "https://www.bhpublishinggroup.com/"
-    }
+    "abbreviation": "CSB",
+    "name": "CSB - Christian Standard Bible",
+    "citationText": "Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. All rights reserved.",
+    "citationLink": "https://www.bhpublishinggroup.com/"
   },
   {
     "id": "555fef9a6cb31151-01",
-    "abbreviationLocal": "CEV",
-    "label": "CEV - Contemporary English Version",
-    "citation": {
-      "text": "Contemporary English Version, Second Edition CEV® Copyright © 2006 American Bible Society. All rights reserved.",
-      "link": "https://www.americanbible.org/"
-    }
+    "abbreviation": "CEV",
+    "name": "CEV - Contemporary English Version",
+    "citationText": "Contemporary English Version, Second Edition CEV® Copyright © 2006 American Bible Society. All rights reserved.",
+    "citationLink": "https://www.americanbible.org/"
   },
   {
     "id": "61fd76eafa1577c2-02",
-    "abbreviationLocal": "GNT",
-    "label": "GNT - Good News Translation",
-    "citation": {
-      "text": "Good News Translation in Today’s English Version- Second Edition Copyright, Copyright © 1992 American Bible Society. All rights reserved.",
-      "link": "https://www.americanbible.org/"
-    }
+    "abbreviation": "GNT",
+    "name": "GNT - Good News Translation",
+    "citationText": "Good News Translation in Today’s English Version- Second Edition Copyright, Copyright © 1992 American Bible Society. All rights reserved.",
+    "citationLink": "https://www.americanbible.org/"
   }
 ]

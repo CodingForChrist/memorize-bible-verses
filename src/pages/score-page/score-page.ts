@@ -4,8 +4,6 @@ import { when } from "lit/directives/when.js";
 
 import { BasePage } from "../base-page-mixin";
 import { PAGE_NAME } from "../../constants";
-import { convertBibleVerseToText } from "../../services/format-api-response";
-import { findBibleTranslationById } from "../../data/bible-translation-model";
 import { breakpointsREM } from "../../components/shared-styles";
 
 import "./score-recited-bible-verse";
@@ -14,14 +12,14 @@ import "../../components/alert-message";
 
 @customElement("score-page")
 export class ScorePage extends BasePage(LitElement) {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
+  @property({ attribute: "bible-abbreviation", reflect: true })
+  bibleAbbreviation?: string;
 
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
 
-  @property({ attribute: "verse-content", reflect: true })
-  verseContent?: string;
+  @property({ attribute: "verse-text-content", reflect: true })
+  verseTextContent?: string;
 
   @property({ attribute: "recited-bible-verse", reflect: true })
   recitedBibleVerse?: string;
@@ -57,18 +55,16 @@ export class ScorePage extends BasePage(LitElement) {
 
   #renderReport() {
     if (
-      !this.bibleId ||
+      !this.bibleAbbreviation ||
       !this.verseReference ||
-      !this.verseContent ||
+      !this.verseTextContent ||
       !this.recitedBibleVerse
     ) {
       return;
     }
 
-    // add reference and strip out html characters
-    const verseText = `${this.verseReference} ${convertBibleVerseToText(this.verseContent)} ${this.verseReference}`;
-
-    const { abbreviationLocal } = findBibleTranslationById(this.bibleId);
+    // add reference
+    const verseText = `${this.verseReference} ${this.verseTextContent} ${this.verseReference}`;
 
     return html`
       <table>
@@ -95,7 +91,7 @@ export class ScorePage extends BasePage(LitElement) {
           </tr>
           <tr>
             <td>Bible</td>
-            <td>${abbreviationLocal}</td>
+            <td>${this.bibleAbbreviation}</td>
           </tr>
           <tr>
             <td>Verse Reference</td>
@@ -103,7 +99,7 @@ export class ScorePage extends BasePage(LitElement) {
           </tr>
           <tr>
             <td>Actual Verse</td>
-            <td>${convertBibleVerseToText(this.verseContent)}</td>
+            <td>${this.verseTextContent}</td>
           </tr>
           <tr>
             <td>Recited Verse</td>
@@ -125,9 +121,9 @@ export class ScorePage extends BasePage(LitElement) {
 
         <span slot="page-content">
           ${when(
-            this.bibleId &&
+            this.bibleAbbreviation &&
               this.verseReference &&
-              this.verseContent &&
+              this.verseTextContent &&
               this.recitedBibleVerse,
             () => this.#renderReport(),
             () => html`

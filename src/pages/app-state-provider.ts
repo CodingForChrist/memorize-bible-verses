@@ -21,22 +21,19 @@ import "./share-the-gospel-page/share-the-gospel-page";
 import "./speak-verse-from-memory-page/speak-verse-from-memory-page";
 import "./score-page/score-page";
 
-import type {
-  BibleTranslation,
-  BibleVerse,
-  CustomEventUpdateBibleTranslation,
-  CustomEventUpdateBibleVerse,
-  CustomEventUpdateRecitedBibleVerse,
-  CustomEventNavigateToPage,
-  PageNavigation,
-} from "../types";
+import type { BibleTranslation } from "../schemas/bible-translation-schema";
+import type { BibleVerse } from "../schemas/bible-verse-schema";
+
+type PageNavigation = {
+  nextPage: PageName;
+  previousPage?: PageName;
+};
 
 @customElement("app-state-provider")
 export class AppStateProvider extends LitElement {
   @state()
   selectedBibleTranslation?: BibleTranslation;
 
-  // TODO: only store verse reference and verse text
   @state()
   selectedBibleVerse?: BibleVerse;
 
@@ -72,7 +69,7 @@ export class AppStateProvider extends LitElement {
 
     this.addEventListener(
       CUSTOM_EVENT.NAVIGATE_TO_PAGE,
-      (event: CustomEventInit<CustomEventNavigateToPage>) => {
+      (event: CustomEventInit<{ pageNavigation: PageNavigation }>) => {
         const pageNavigation = event.detail?.pageNavigation;
         if (pageNavigation) {
           this.#viewTransitionForPageNavigation(pageNavigation);
@@ -82,21 +79,21 @@ export class AppStateProvider extends LitElement {
 
     this.addEventListener(
       CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION,
-      (event: CustomEventInit<CustomEventUpdateBibleTranslation>) => {
+      (event: CustomEventInit<{ bibleTranslation: BibleTranslation }>) => {
         const bibleTranslation = event.detail?.bibleTranslation;
         if (bibleTranslation) {
           this.selectedBibleTranslation = bibleTranslation;
-          const { id, abbreviationLocal } = bibleTranslation;
+          const { id, abbreviation } = bibleTranslation;
           setStateInURL({
             pageName: this.currentPage,
-            translation: abbreviationLocal,
+            translation: abbreviation,
             verse:
               this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
             shouldUpdateBrowserHistory: false,
           });
           setBibleTranslationInLocalStorage({
             id,
-            abbreviationLocal,
+            abbreviation,
           });
         }
       },
@@ -104,7 +101,7 @@ export class AppStateProvider extends LitElement {
 
     this.addEventListener(
       CUSTOM_EVENT.UPDATE_BIBLE_VERSE,
-      (event: CustomEventInit<CustomEventUpdateBibleVerse>) => {
+      (event: CustomEventInit<{ bibleVerse: BibleVerse }>) => {
         const bibleVerse = event.detail?.bibleVerse;
         if (bibleVerse) {
           this.selectedBibleVerse = bibleVerse;
@@ -120,7 +117,7 @@ export class AppStateProvider extends LitElement {
 
     this.addEventListener(
       CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
-      (event: CustomEventInit<CustomEventUpdateRecitedBibleVerse>) => {
+      (event: CustomEventInit<{ recitedBibleVerse: string }>) => {
         const recitedBibleVerse = event.detail?.recitedBibleVerse;
         if (recitedBibleVerse) {
           this.recitedBibleVerse = recitedBibleVerse;
@@ -186,7 +183,9 @@ export class AppStateProvider extends LitElement {
           () => html`
             <speak-verse-from-memory-page
               verse-reference=${ifDefined(this.selectedBibleVerse?.reference)}
-              verse-content=${ifDefined(this.selectedBibleVerse?.textContent)}
+              verse-text-content=${ifDefined(
+                this.selectedBibleVerse?.textContent,
+              )}
               recited-bible-verse=${ifDefined(this.recitedBibleVerse)}
               previous-page=${ifDefined(this.previousPage)}
             ></speak-verse-from-memory-page>
@@ -196,9 +195,13 @@ export class AppStateProvider extends LitElement {
           PAGE_NAME.SCORE_PAGE,
           () => html`
             <score-page
-              bible-id=${ifDefined(this.selectedBibleTranslation?.id)}
+              bible-abbreviation=${ifDefined(
+                this.selectedBibleTranslation?.abbreviation,
+              )}
               verse-reference=${ifDefined(this.selectedBibleVerse?.reference)}
-              verse-content=${ifDefined(this.selectedBibleVerse?.content)}
+              verse-text-content=${ifDefined(
+                this.selectedBibleVerse?.textContent,
+              )}
               recited-bible-verse=${ifDefined(this.recitedBibleVerse)}
             ></score-page>
           `,

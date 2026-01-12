@@ -11,11 +11,8 @@ import {
   SPEECH_RECOGNITION_CUSTOM_EVENT,
   type SpeechRecognitionState,
 } from "./speech-recognition";
-import { convertBibleVerseToText } from "../../services/format-api-response";
 import { autoCorrectSpeechRecognitionInput } from "./auto-correct-spoken-bible-verse";
 import { buttonStyles } from "../../components/shared-styles";
-
-import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
 import "./transcript-text";
 import "../../components/alert-message";
@@ -26,8 +23,8 @@ export class ReciteBibleVerse extends LitElement {
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
 
-  @property({ attribute: "verse-content", reflect: true })
-  verseContent?: string;
+  @property({ attribute: "verse-text-content", reflect: true })
+  verseTextContent?: string;
 
   @property({ reflect: true })
   transcript: string = "";
@@ -100,16 +97,8 @@ export class ReciteBibleVerse extends LitElement {
     );
   }
 
-  get #verseText() {
-    if (!this.verseContent) {
-      return "";
-    }
-
-    return convertBibleVerseToText(this.verseContent);
-  }
-
   render() {
-    if (!this.verseReference || !this.verseContent) {
+    if (!this.verseReference || !this.verseTextContent) {
       return;
     }
 
@@ -320,7 +309,7 @@ export class ReciteBibleVerse extends LitElement {
       this.transcript = autoCorrectSpeechRecognitionInput({
         transcript: finalTranscript,
         verseReference: this.verseReference!,
-        verseText: this.#verseText,
+        verseText: this.verseTextContent!,
       });
 
       this.#sendEventForRecitedBibleVerse(this.transcript);
@@ -355,25 +344,23 @@ export class ReciteBibleVerse extends LitElement {
     event: CustomEventInit<{ interimTranscript: string }>,
   ) => {
     const interimTranscript = event.detail?.interimTranscript;
-    if (interimTranscript && this.verseReference && this.verseContent) {
+    if (interimTranscript && this.verseReference && this.verseTextContent) {
       this.transcript = autoCorrectSpeechRecognitionInput({
         transcript: interimTranscript,
         verseReference: this.verseReference,
-        verseText: this.#verseText,
+        verseText: this.verseTextContent,
       });
     }
   };
 
   #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
-    const eventUpdateRecitedBibleVerse =
-      new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
-        CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
-        {
-          detail: { recitedBibleVerse },
-          bubbles: true,
-          composed: true,
-        },
-      );
+    const eventUpdateRecitedBibleVerse = new CustomEvent<{
+      recitedBibleVerse: string;
+    }>(CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE, {
+      detail: { recitedBibleVerse },
+      bubbles: true,
+      composed: true,
+    });
     this.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 }

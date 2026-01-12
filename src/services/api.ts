@@ -1,4 +1,6 @@
-import type { BibleTranslation, BibleVerse } from "../types";
+import { BibleTranslationArraySchema } from "../schemas/bible-translation-schema";
+import { BibleVerseSchema } from "../schemas/bible-verse-schema";
+import { VerseOfTheDayListArraySchema } from "../schemas/verse-of-the-day-list-schema";
 
 const API_BASE_URL =
   import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
@@ -19,9 +21,7 @@ function createCacheKey({ url, options }: CreateCacheKeyOptions) {
   return `${url}_${JSON.stringify(options)}`;
 }
 
-async function resolveResponseToJSON<T>(
-  responsePromise: Promise<Response>,
-): Promise<T> {
+async function resolveResponseToJSON(responsePromise: Promise<Response>) {
   const response = await responsePromise;
   if (!response.ok) {
     if (response.status === 400) {
@@ -32,7 +32,13 @@ async function resolveResponseToJSON<T>(
   }
 
   const json = await response.clone().json();
-  return json as T;
+  return json;
+}
+
+function assert(condition: unknown, message?: string): asserts condition {
+  if (!condition) {
+    throw new Error(message || "Assertion failed");
+  }
 }
 
 type FetchBibleTranslationsOptions = {
@@ -40,10 +46,6 @@ type FetchBibleTranslationsOptions = {
   ids: string;
   language: string;
   includeFullDetails: boolean;
-};
-
-type FetchBibleTranslationsResponseBody = {
-  data: BibleTranslation[];
 };
 
 export async function fetchBibleTranslationsWithCache({
@@ -59,9 +61,8 @@ export async function fetchBibleTranslationsWithCache({
   const cacheResult = cache.get(cacheKey);
 
   if (cacheResult) {
-    return resolveResponseToJSON<FetchBibleTranslationsResponseBody>(
-      cacheResult,
-    );
+    const jsonData = await resolveResponseToJSON(cacheResult);
+    return parseBibleTranslations(jsonData);
   }
 
   const responsePromise = fetch(url, {
@@ -80,25 +81,27 @@ export async function fetchBibleTranslationsWithCache({
   cache.set(cacheKey, responsePromise);
 
   try {
-    const data =
-      await resolveResponseToJSON<FetchBibleTranslationsResponseBody>(
-        responsePromise,
-      );
-    return data;
+    const jsonData = await resolveResponseToJSON(responsePromise);
+    return parseBibleTranslations(jsonData);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
 }
 
+function parseBibleTranslations(jsonData: unknown) {
+  assert(
+    jsonData && typeof jsonData === "object",
+    "expected Bible Translations API to return an object",
+  );
+  const { data } = jsonData as Record<string, unknown>;
+  return BibleTranslationArraySchema.parse(data);
+}
+
 type FetchBibleVerseOptions = {
   bibleId: string;
   verseReference: string;
   includeTitles: boolean;
-};
-
-type FetchBibleVerseResponseBody = {
-  data: BibleVerse;
 };
 
 export async function fetchBibleVerseWithCache({
@@ -114,7 +117,8 @@ export async function fetchBibleVerseWithCache({
   const cacheResult = cache.get(cacheKey);
 
   if (cacheResult) {
-    return resolveResponseToJSON<FetchBibleVerseResponseBody>(cacheResult);
+    const jsonData = await resolveResponseToJSON(cacheResult);
+    return parseBibleVerse(jsonData);
   }
 
   const responsePromise = fetch(url, {
@@ -132,23 +136,27 @@ export async function fetchBibleVerseWithCache({
   cache.set(cacheKey, responsePromise);
 
   try {
-    const data =
-      await resolveResponseToJSON<FetchBibleVerseResponseBody>(responsePromise);
-    return data;
+    const jsonData = await resolveResponseToJSON(responsePromise);
+    return parseBibleVerse(jsonData);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
 }
 
+function parseBibleVerse(jsonData: unknown) {
+  assert(
+    jsonData && typeof jsonData === "object",
+    "expected Bible Verse API to return an object",
+  );
+  const { data } = jsonData as Record<string, unknown>;
+  return BibleVerseSchema.parse(data);
+}
+
 type FetchBibleVerseOfTheDayOptions = {
   bibleId: string;
   // ISO8601 date with timezone offset
   date: string;
-};
-
-type FetchBibleVerseOfTheDayResponseBody = {
-  data: BibleVerse;
 };
 
 export async function fetchBibleVerseOfTheDayWithCache({
@@ -163,9 +171,8 @@ export async function fetchBibleVerseOfTheDayWithCache({
   const cacheResult = cache.get(cacheKey);
 
   if (cacheResult) {
-    return resolveResponseToJSON<FetchBibleVerseOfTheDayResponseBody>(
-      cacheResult,
-    );
+    const jsonData = await resolveResponseToJSON(cacheResult);
+    return parseVerseOfTheDay(jsonData);
   }
 
   const responsePromise = fetch(url, {
@@ -182,26 +189,26 @@ export async function fetchBibleVerseOfTheDayWithCache({
   cache.set(cacheKey, responsePromise);
 
   try {
-    const data =
-      await resolveResponseToJSON<FetchBibleVerseOfTheDayResponseBody>(
-        responsePromise,
-      );
-    return data;
+    const jsonData = await resolveResponseToJSON(responsePromise);
+    return parseVerseOfTheDay(jsonData);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
 }
 
+function parseVerseOfTheDay(jsonData: unknown) {
+  assert(
+    jsonData && typeof jsonData === "object",
+    "expected Verse of the Day API to return an object",
+  );
+  const { data } = jsonData as Record<string, unknown>;
+  return BibleVerseSchema.parse(data);
+}
+
 type FetchVerseOfTheDayVerseListOptions = {
   year: string;
 };
-
-type FetchVerseOfTheDayVerseListResponseBody = {
-  verse: string;
-  date: string;
-  formattedDate: string;
-}[];
 
 export async function fetchVerseOfTheDayVerseListWithCache({
   year,
@@ -214,9 +221,8 @@ export async function fetchVerseOfTheDayVerseListWithCache({
   const cacheResult = cache.get(cacheKey);
 
   if (cacheResult) {
-    return resolveResponseToJSON<FetchVerseOfTheDayVerseListResponseBody>(
-      cacheResult,
-    );
+    const jsonData = await resolveResponseToJSON(cacheResult);
+    return parseVerseOfTheDayList(jsonData);
   }
 
   const responsePromise = fetch(url, {
@@ -233,13 +239,18 @@ export async function fetchVerseOfTheDayVerseListWithCache({
   cache.set(cacheKey, responsePromise);
 
   try {
-    const data =
-      await resolveResponseToJSON<FetchVerseOfTheDayVerseListResponseBody>(
-        responsePromise,
-      );
-    return data;
+    const jsonData = await resolveResponseToJSON(responsePromise);
+    return parseVerseOfTheDayList(jsonData);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
+}
+
+function parseVerseOfTheDayList(jsonData: unknown) {
+  assert(
+    jsonData && Array.isArray(jsonData),
+    "expected Verse of the Day List API to return an array",
+  );
+  return VerseOfTheDayListArraySchema.parse(jsonData);
 }

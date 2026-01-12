@@ -6,7 +6,6 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { formControlStyles } from "../../components/shared-styles";
 import { CUSTOM_EVENT } from "../../constants";
-import type { CustomEventUpdateRecitedBibleVerse } from "../../types";
 
 @customElement("transcript-text")
 export class TranscriptText extends LitElement {
@@ -96,15 +95,13 @@ export class TranscriptText extends LitElement {
   }
 
   #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
-    const eventUpdateRecitedBibleVerse =
-      new CustomEvent<CustomEventUpdateRecitedBibleVerse>(
-        CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
-        {
-          detail: { recitedBibleVerse },
-          bubbles: true,
-          composed: true,
-        },
-      );
+    const eventUpdateRecitedBibleVerse = new CustomEvent<{
+      recitedBibleVerse: string;
+    }>(CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE, {
+      detail: { recitedBibleVerse },
+      bubbles: true,
+      composed: true,
+    });
     this.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 }
