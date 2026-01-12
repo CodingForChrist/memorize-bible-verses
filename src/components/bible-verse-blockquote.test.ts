@@ -30,8 +30,6 @@ function convertBibleVerseHTMLToText(htmlContentString: string) {
     );
   });
 
-  console.log(textArray);
-
   return textArray.join(" ");
 }
 

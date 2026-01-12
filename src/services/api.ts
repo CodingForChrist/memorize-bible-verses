@@ -32,7 +32,7 @@ async function resolveResponseToJSON(responsePromise: Promise<Response>) {
   }
 
   const json = await response.clone().json();
-  return json;
+  return json as unknown;
 }
 
 function assert(condition: unknown, message?: string): asserts condition {
@@ -59,43 +59,38 @@ export async function fetchBibleTranslationsWithCache({
     options: { language, ids, includeFullDetails },
   });
   const cacheResult = cache.get(cacheKey);
+  let responsePromise: Promise<Response>;
 
   if (cacheResult) {
-    const jsonData = await resolveResponseToJSON(cacheResult);
-    return parseBibleTranslations(jsonData);
+    responsePromise = cacheResult;
+  } else {
+    responsePromise = fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        language,
+        ids,
+        includeFullDetails,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": APPLICATION_USER_ID,
+      },
+    });
+    cache.set(cacheKey, responsePromise);
   }
-
-  const responsePromise = fetch(url, {
-    method: "POST",
-    body: JSON.stringify({
-      language,
-      ids,
-      includeFullDetails,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      "Application-User-Id": APPLICATION_USER_ID,
-    },
-  });
-
-  cache.set(cacheKey, responsePromise);
 
   try {
     const jsonData = await resolveResponseToJSON(responsePromise);
-    return parseBibleTranslations(jsonData);
+    assert(
+      jsonData && typeof jsonData === "object" && "data" in jsonData,
+      'expected Bible Translations API to return an object containing a "data" key',
+    );
+
+    return BibleTranslationArraySchema.parse(jsonData.data);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
-}
-
-function parseBibleTranslations(jsonData: unknown) {
-  assert(
-    jsonData && typeof jsonData === "object",
-    "expected Bible Translations API to return an object",
-  );
-  const { data } = jsonData as Record<string, unknown>;
-  return BibleTranslationArraySchema.parse(data);
 }
 
 type FetchBibleVerseOptions = {
@@ -115,42 +110,36 @@ export async function fetchBibleVerseWithCache({
     options: { verseReference, includeTitles },
   });
   const cacheResult = cache.get(cacheKey);
+  let responsePromise: Promise<Response>;
 
   if (cacheResult) {
-    const jsonData = await resolveResponseToJSON(cacheResult);
-    return parseBibleVerse(jsonData);
+    responsePromise = cacheResult;
+  } else {
+    responsePromise = fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        verseReference,
+        includeTitles,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": APPLICATION_USER_ID,
+      },
+    });
+
+    cache.set(cacheKey, responsePromise);
   }
-
-  const responsePromise = fetch(url, {
-    method: "POST",
-    body: JSON.stringify({
-      verseReference,
-      includeTitles,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      "Application-User-Id": APPLICATION_USER_ID,
-    },
-  });
-
-  cache.set(cacheKey, responsePromise);
-
   try {
     const jsonData = await resolveResponseToJSON(responsePromise);
-    return parseBibleVerse(jsonData);
+    assert(
+      jsonData && typeof jsonData === "object" && "data" in jsonData,
+      "expected Bible Verse API to return an object",
+    );
+    return BibleVerseSchema.parse(jsonData.data);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
-}
-
-function parseBibleVerse(jsonData: unknown) {
-  assert(
-    jsonData && typeof jsonData === "object",
-    "expected Bible Verse API to return an object",
-  );
-  const { data } = jsonData as Record<string, unknown>;
-  return BibleVerseSchema.parse(data);
 }
 
 type FetchBibleVerseOfTheDayOptions = {
@@ -169,41 +158,37 @@ export async function fetchBibleVerseOfTheDayWithCache({
     options: { date },
   });
   const cacheResult = cache.get(cacheKey);
+  let responsePromise: Promise<Response>;
 
   if (cacheResult) {
-    const jsonData = await resolveResponseToJSON(cacheResult);
-    return parseVerseOfTheDay(jsonData);
+    responsePromise = cacheResult;
+  } else {
+    responsePromise = fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        date,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": APPLICATION_USER_ID,
+      },
+    });
+
+    cache.set(cacheKey, responsePromise);
   }
-
-  const responsePromise = fetch(url, {
-    method: "POST",
-    body: JSON.stringify({
-      date,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      "Application-User-Id": APPLICATION_USER_ID,
-    },
-  });
-
-  cache.set(cacheKey, responsePromise);
 
   try {
     const jsonData = await resolveResponseToJSON(responsePromise);
-    return parseVerseOfTheDay(jsonData);
+    assert(
+      jsonData && typeof jsonData === "object" && "data" in jsonData,
+      'expected Verse of the Day API to return an object containing a "data" key',
+    );
+
+    return BibleVerseSchema.parse(jsonData.data);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
-}
-
-function parseVerseOfTheDay(jsonData: unknown) {
-  assert(
-    jsonData && typeof jsonData === "object",
-    "expected Verse of the Day API to return an object",
-  );
-  const { data } = jsonData as Record<string, unknown>;
-  return BibleVerseSchema.parse(data);
 }
 
 type FetchVerseOfTheDayVerseListOptions = {
@@ -219,38 +204,33 @@ export async function fetchVerseOfTheDayVerseListWithCache({
     options: { year },
   });
   const cacheResult = cache.get(cacheKey);
+  let responsePromise: Promise<Response>;
 
   if (cacheResult) {
-    const jsonData = await resolveResponseToJSON(cacheResult);
-    return parseVerseOfTheDayList(jsonData);
+    responsePromise = cacheResult;
+  } else {
+    responsePromise = fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        year,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": APPLICATION_USER_ID,
+      },
+    });
+
+    cache.set(cacheKey, responsePromise);
   }
-
-  const responsePromise = fetch(url, {
-    method: "POST",
-    body: JSON.stringify({
-      year,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      "Application-User-Id": APPLICATION_USER_ID,
-    },
-  });
-
-  cache.set(cacheKey, responsePromise);
-
   try {
     const jsonData = await resolveResponseToJSON(responsePromise);
-    return parseVerseOfTheDayList(jsonData);
+    assert(
+      jsonData && Array.isArray(jsonData),
+      "expected Verse of the Day List API to return an array",
+    );
+    return VerseOfTheDayListArraySchema.parse(jsonData);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
   }
-}
-
-function parseVerseOfTheDayList(jsonData: unknown) {
-  assert(
-    jsonData && Array.isArray(jsonData),
-    "expected Verse of the Day List API to return an array",
-  );
-  return VerseOfTheDayListArraySchema.parse(jsonData);
 }
