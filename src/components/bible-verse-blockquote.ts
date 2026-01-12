@@ -81,26 +81,41 @@ export class BibleVerseBlockquote extends LitElement {
   }
 
   #renderItems(items: BibleVerseContentItem[]): TemplateResult[] {
-    return items.map((item) => {
+    return items.map((item, index) => {
       if (item.type === "tag") {
         return this.#renderItemTag(item);
       }
       if (item.type === "text") {
-        return this.#renderItemText(item);
+        return this.#renderItemText({ items, index });
       }
       throw new Error("Unexpected item type");
     });
   }
 
-  #renderItemText({ type, text }: BibleVerseContentItem) {
-    if (type !== "text") {
+  #renderItemText({
+    items,
+    index,
+  }: {
+    items: BibleVerseContentItem[];
+    index: number;
+  }) {
+    const currentItem = items[index];
+    if (currentItem.type !== "text") {
       throw new Error('unexpected data for item type "text"');
     }
 
-    // TODO: dig into NASB with "L ORD" issue
-    // a trailing space is required to properly format text
+    const nextItem = items[index + 1] ?? {};
+
+    if (
+      currentItem.text?.endsWith(" ") ||
+      nextItem.text?.startsWith(" ") ||
+      nextItem.type !== "text"
+    ) {
+      return html`<span>${currentItem.text}</span>`;
+    }
+
     const whiteSpace = " ";
-    return html`<span>${text}${whiteSpace}</span>`;
+    return html`<span>${currentItem.text}${whiteSpace}</span>`;
   }
 
   #renderVerseNumberText({

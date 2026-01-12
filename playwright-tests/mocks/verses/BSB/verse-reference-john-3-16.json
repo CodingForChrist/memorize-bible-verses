@@ -6,11 +6,36 @@
     "bookId": "JHN",
     "chapterIds": ["JHN.3"],
     "reference": "John 3:16",
-    "content": "<p class=\"b\"></p><p class=\"m\"><span data-number=\"16\" data-sid=\"JHN 3:16\" class=\"v\">16</span>For God so loved the world that He gave His one and only  Son, that everyone who believes in Him shall not perish but have eternal life. </p>",
+    "content": [
+      { "name": "para", "type": "tag", "attrs": { "style": "b" }, "items": [] },
+      {
+        "name": "para",
+        "type": "tag",
+        "attrs": { "style": "m" },
+        "items": [
+          {
+            "name": "verse",
+            "type": "tag",
+            "attrs": { "number": "16", "style": "v", "sid": "JHN 3:16" },
+            "items": [{ "text": "16", "type": "text" }]
+          },
+          {
+            "text": "For God so loved the world that He gave His one and only ",
+            "type": "text",
+            "attrs": { "verseId": "JHN.3.16", "verseOrgIds": ["JHN.3.16"] }
+          },
+          {
+            "text": " Son, that everyone who believes in Him shall not perish but have eternal life. ",
+            "type": "text",
+            "attrs": { "verseId": "JHN.3.16", "verseOrgIds": ["JHN.3.16"] }
+          }
+        ]
+      }
+    ],
     "verseCount": 1,
     "copyright": "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain"
   },
   "meta": {
-    "fumsToken": "GzoBgIzTFfOihHUPHvpjkj_-1UDr842ionVYuvo-PQ2UC4LA2loQZu12_05-wR_wh0NsjpKIyfyOeW7_PG8HoF9WU_N417PZtK6CscVHl0Ly0lj9R-e77nVGyiubiPIWzhjBxgN_uqy6C2BGKGWw-4NXBber0tobvHCuxdysV7WkMbG9LyeftyUYGTZxmggM-ZMltz2sYPU83p_1V3OpwcQqZ8FEGWKxsoSpk3EVZqtImeX5nAM"
+    "fumsToken": "GzoBCBwHbqxlyoOgvR489Mckf_yrgdbnG0VFsnT1hc7bdh1363A4niAOZ096_Wj9zgnqBN1AtnmJeHkJCkY9Favtn-ftAPplNZ7Pu57NpnUVjC0-uhSSl8bqXZ3vutcZKa9sAj01zhjB5YM_w2bdBZgBpSK7D7YKT5yksdK6f3iF3EJS3uYx2N6PVJ63JVS6TR4mAiFDWfJtsYLV83hf75rn1sVSslyFvJRhFSymzqzk0s_qNJVrnK0cAw"
   }
 }

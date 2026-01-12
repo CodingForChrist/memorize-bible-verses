@@ -97,7 +97,7 @@ describe("<bible-verse-blockquote>", () => {
         ) as HTMLSpanElement;
 
       expect(stripExpressionComments(containerElement.innerHTML).trim()).toBe(
-        '<p class="p"><span class=" v ">16</span><span class="wj"><span>For God so loved the world that He gave His only begotten </span></span><span>  </span><span class="wj"><span>Son, that whoever believes in Him should not perish but have everlasting life. </span></span><span>  </span><span class=" v ">17</span><span class="wj"><span>For God did not send His Son into the world to condemn the world, but that the world through Him might be saved. </span></span></p>',
+        '<p class="p"><span class=" v ">16</span><span class="wj"><span>For God so loved the world that He gave His only begotten</span></span><span> </span><span class="wj"><span>Son, that whoever believes in Him should not perish but have everlasting life.</span></span><span> </span><span class=" v ">17</span><span class="wj"><span>For God did not send His Son into the world to condemn the world, but that the world through Him might be saved.</span></span></p>',
       );
     });
 
@@ -215,7 +215,7 @@ describe("<bible-verse-blockquote>", () => {
         ) as HTMLSpanElement;
 
       expect(stripExpressionComments(containerElement.innerHTML).trim()).toBe(
-        '<p class="q1"><span class=" v hidden ">11</span><span>“You </span><span>are worthy, O Lord, </span></p><p class="q2"><span>To receive glory and honor and power; </span></p><p class="q2"><span>For You created all things, </span></p><p class="q2"><span>And by  </span><span>Your will they exist and were created.” </span></p>',
+        '<p class="q1"><span class=" v hidden ">11</span><span>“You </span><span>are worthy, O Lord,</span></p><p class="q2"><span>To receive glory and honor and power;</span></p><p class="q2"><span>For You created all things,</span></p><p class="q2"><span>And by </span><span>Your will they exist and were created.”</span></p>',
       );
     });
   });

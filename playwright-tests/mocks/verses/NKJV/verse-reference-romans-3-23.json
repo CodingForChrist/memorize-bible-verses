@@ -6,11 +6,35 @@
     "bookId": "ROM",
     "chapterIds": ["ROM.3"],
     "reference": "Romans 3:23",
-    "content": "<p class=\"p\"><span data-number=\"23\" data-sid=\"ROM 3:23\" class=\"v\">23</span>for all have sinned and fall short of the glory of God, </p>",
+    "content": [
+      {
+        "name": "para",
+        "type": "tag",
+        "attrs": { "style": "p" },
+        "items": [
+          {
+            "name": "verse",
+            "type": "tag",
+            "attrs": { "number": "23", "style": "v", "sid": "ROM 3:23" },
+            "items": [{ "text": "23", "type": "text" }]
+          },
+          {
+            "text": "for ",
+            "type": "text",
+            "attrs": { "verseId": "ROM.3.23", "verseOrgIds": ["ROM.3.23"] }
+          },
+          {
+            "text": "all have sinned and fall short of the glory of God, ",
+            "type": "text",
+            "attrs": { "verseId": "ROM.3.23", "verseOrgIds": ["ROM.3.23"] }
+          }
+        ]
+      }
+    ],
     "verseCount": 1,
     "copyright": "New King James Version®, Copyright© 1982, Thomas Nelson. All rights reserved."
   },
   "meta": {
-    "fumsToken": "GzoBCJwHtmOXCgaDm8IzcAkE2lbqy2ceGpUIiRfRZOnqC51qenp6GigXBFnY1oIwvd2_k1_wB_z9EDd7SV7yVGSfbV22f563A-iX1Xge7zp5U_PCTWZyq7yYeWmsvtX5rvuUV86DmhZnjODzyZ-2VbcAc6CUZI_B1mDDJq3b4oWtzdsWvUrZDGB7f1I9b0uoDBueRoGQoSz59ljB6nm8n_chFOeDW6zkYlouZKizKmfzRZF5tgzZL_LcRmU"
+    "fumsToken": "GzoBwByHsWOnIgm2whsuwfP8_SQ_fF8l2NfhRlHROixdfavpad3pQfmHw8G-fYfjrWV5izyxCtO2IG45SSazBL377Z_n7QDMyxlmHu8mB9vKwk_t1K_KYhaUdeaFznczSgftA1Fcw1sr3Dvwp8dsWAAzQinP7g9aFXzdQlmnnMP-FmOPWafWxsT2fpp83pYgpNu8YSIwpE-W1LZwwup5vC_14ZalJV-aSrlaFaerpZr5RVXLWbDILab5yk05"
   }
 }
