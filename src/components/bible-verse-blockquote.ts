@@ -2,9 +2,11 @@ import { LitElement, css, html, unsafeCSS, type TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
+import { findBibleTranslationByAbbreviation } from "../data/bible-translation-model";
 import { hyperlinkStyles } from "./shared-styles";
 
 import type {
@@ -12,8 +14,13 @@ import type {
   BibleVerseContentItem,
 } from "../schemas/bible-verse-schema";
 
+const { id: bibleIdNKJV } = findBibleTranslationByAbbreviation("NKJV");
+
 @customElement("bible-verse-blockquote")
 export class BibleVerseBlockquote extends LitElement {
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
   @property({ type: Array })
   content?: BibleVerse["content"];
 
@@ -59,7 +66,7 @@ export class BibleVerseBlockquote extends LitElement {
   ];
 
   #renderItemTag({ type, name, attrs, items }: BibleVerseContentItem) {
-    if (type !== "tag" || !items || !attrs?.style) {
+    if (type !== "tag" || !items || !attrs) {
       throw new Error('unexpected data for item type "tag"');
     }
 
@@ -81,41 +88,28 @@ export class BibleVerseBlockquote extends LitElement {
   }
 
   #renderItems(items: BibleVerseContentItem[]): TemplateResult[] {
-    return items.map((item, index) => {
+    return items.map((item) => {
       if (item.type === "tag") {
         return this.#renderItemTag(item);
       }
       if (item.type === "text") {
-        return this.#renderItemText({ items, index });
+        return this.#renderItemText(item);
       }
       throw new Error("Unexpected item type");
     });
   }
 
-  #renderItemText({
-    items,
-    index,
-  }: {
-    items: BibleVerseContentItem[];
-    index: number;
-  }) {
-    const currentItem = items[index];
-    if (currentItem.type !== "text") {
+  #renderItemText({ type, text }: BibleVerseContentItem) {
+    if (type !== "text") {
       throw new Error('unexpected data for item type "text"');
     }
 
-    const nextItem = items[index + 1] ?? {};
-
-    if (
-      currentItem.text?.endsWith(" ") ||
-      nextItem.text?.startsWith(" ") ||
-      nextItem.type !== "text"
-    ) {
-      return html`<span>${currentItem.text}</span>`;
+    if (this.bibleId === bibleIdNKJV && !text?.endsWith(" ")) {
+      const whiteSpace = " ";
+      return html`<span>${text}${whiteSpace}</span>`;
     }
 
-    const whiteSpace = " ";
-    return html`<span>${currentItem.text}${whiteSpace}</span>`;
+    return html`<span>${text}</span>`;
   }
 
   #renderVerseNumberText({
@@ -130,15 +124,21 @@ export class BibleVerseBlockquote extends LitElement {
     if (type !== "tag" || !attributes?.style) {
       throw new Error('unexpected data for item type "tag"');
     }
+    const { style: dynamicClassName, number, sid } = attributes;
 
-    const dynamicClassName = attributes.style ?? "";
     const classes = {
       [dynamicClassName]: true,
       hidden: !this.displayVerseNumbers,
     };
 
     if (items.length === 1 && items[0].type === "text") {
-      return html`<span class=${classMap(classes)}>${items[0].text}</span>`;
+      // eslint-disable-next-line unicorn/template-indent
+      return html`<span
+        class=${classMap(classes)}
+        data-number=${ifDefined(number)}
+        data-sid=${ifDefined(sid)}
+        >${items[0].text}</span
+      >`;
     }
 
     throw new Error("Unexpected format for items array for verse numbers");

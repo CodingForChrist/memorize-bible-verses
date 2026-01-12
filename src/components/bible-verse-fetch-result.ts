@@ -62,11 +62,13 @@ export class BibleVerseFetchResult extends LitElement {
     if (!this.bibleId || !bibleVerse) {
       return;
     }
-    const { content, verseCount, citationText, citationLink } = bibleVerse;
+    const { content, verseCount, bibleId, citationText, citationLink } =
+      bibleVerse;
     return html`
       <bible-verse-blockquote
         .content=${content}
         ?display-verse-numbers=${verseCount > 1}
+        bible-id=${bibleId}
         citation-text=${citationText}
         citation-link=${ifDefined(citationLink)}
       >

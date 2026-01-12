@@ -65,14 +65,21 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
       return;
     }
 
-    const { content, reference, verseCount, citationLink, citationText } =
-      bibleVerse;
+    const {
+      content,
+      reference,
+      verseCount,
+      bibleId,
+      citationLink,
+      citationText,
+    } = bibleVerse;
 
     return html`
       <h2>${reference}</h2>
       <bible-verse-blockquote
         .content=${content}
         ?display-verse-numbers=${verseCount > 1}
+        bible-id=${bibleId}
         citation-text=${citationText}
         citation-link=${ifDefined(citationLink)}
       >
