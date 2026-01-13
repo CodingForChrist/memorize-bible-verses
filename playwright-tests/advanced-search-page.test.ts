@@ -100,3 +100,52 @@ test("auto-fill form based on query parameter values", async ({ page }) => {
   );
   await expect(page.locator(".citation")).toHaveText(/Berean Standard Bible/);
 });
+
+test("displays an alert when verse reference api returns invalid json content", async ({
+  page,
+}) => {
+  await page.route(
+    "**/api/v1/bibles/*/passages/verse-reference",
+    async (route) => {
+      const copyOfVerseReferenceDataBSB = globalThis.structuredClone(
+        verseReferenceDataBSB,
+      );
+      copyOfVerseReferenceDataBSB.data.content[0].type = "unexpected-type-name";
+      await route.fulfill({ json: copyOfVerseReferenceDataBSB });
+    },
+  );
+
+  await page.goto("/#/advanced-search");
+  await page.getByLabel("Enter a bible verse reference").fill("John 3:16");
+  await page.getByRole("button", { name: "Search" }).click();
+
+  const alertElement = page.locator('alert-message[type="danger"]');
+  await expect(alertElement).toHaveText(/Failed to load bible verse/);
+  await expect(alertElement).toHaveText(/invalid_value/);
+});
+
+test("displays an alert when verse reference api returns a 500 error", async ({
+  page,
+}) => {
+  await page.route(
+    "**/api/v1/bibles/*/passages/verse-reference",
+    async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: "application/json",
+        json: {
+          error: "Internal Server Error",
+          errorDescription: "some unknown error occurred",
+        },
+      });
+    },
+  );
+
+  await page.goto("/#/advanced-search");
+  await page.getByLabel("Enter a bible verse reference").fill("John 3:16");
+  await page.getByRole("button", { name: "Search" }).click();
+
+  const alertElement = page.locator('alert-message[type="danger"]');
+  await expect(alertElement).toHaveText(/Failed to load bible verse/);
+  await expect(alertElement).toHaveText(/response status: 500/);
+});
