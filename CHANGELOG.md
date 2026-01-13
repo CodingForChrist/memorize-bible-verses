@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.19.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.18.0...v1.19.0) (2026-01-13)
+
+
+### Features
+
+* use json content type with bible api ([#300](https://github.com/CodingForChrist/memorize-bible-verses/issues/300)) ([662a8ba](https://github.com/CodingForChrist/memorize-bible-verses/commit/662a8ba9b8b42405b0b65840589db748711fb4c7))
+
+
+### Bug Fixes
+
+* better type narrowing with api cache ([#306](https://github.com/CodingForChrist/memorize-bible-verses/issues/306)) ([a38e039](https://github.com/CodingForChrist/memorize-bible-verses/commit/a38e0391d4e4643be0ce6c497529cfa5b3fd3ec2))
+
 ## [1.18.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.17.1...v1.18.0) (2026-01-07)
 
 
