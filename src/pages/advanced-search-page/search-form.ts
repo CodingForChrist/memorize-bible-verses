@@ -1,12 +1,17 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
+import { map } from "lit/directives/map.js";
 
 import { getStateFromURL } from "../../services/router";
 import {
   formControlStyles,
   buttonStyles,
 } from "../../components/shared-styles";
+import {
+  oldTestamentBooks,
+  newTestamentBooks,
+} from "../../data/bible-books.json";
 
 import "../verse-text-page-template";
 import "../../components/bible-translation-drop-down-list";
@@ -43,6 +48,18 @@ export class SearchForm extends LitElement {
     `,
   ];
 
+  get #bibleBookNames() {
+    return [
+      ...oldTestamentBooks.map((bookName) => {
+        if (bookName === "Psalms") {
+          return "Psalm";
+        }
+        return bookName;
+      }),
+      ...newTestamentBooks,
+    ];
+  }
+
   render() {
     return html`
       <label for="input-verse-reference">
@@ -53,11 +70,19 @@ export class SearchForm extends LitElement {
         <input
           type="text"
           id="input-verse-reference"
+          list="bible-book-names"
           .value=${this.#textInput}
           @input=${this.#handleTextInput}
           ${ref(this.inputElementReference)}
           required
         />
+        <datalist id="bible-book-names">
+          ${map(
+            this.#bibleBookNames,
+            (bookName) => html`<option value=${bookName}></option>`,
+          )}
+        </datalist>
+
         <button type="submit" class="primary">Search</button>
       </form>
     `;
