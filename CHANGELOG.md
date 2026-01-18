@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.19.0...v1.20.0) (2026-01-18)
+
+
+### Features
+
+* add auto-complete functionality for bible books ([#309](https://github.com/CodingForChrist/memorize-bible-verses/issues/309)) ([dbdde6f](https://github.com/CodingForChrist/memorize-bible-verses/commit/dbdde6fcf673a9a1b9d8ee591ffa4030f91feb83))
+
 ## [1.19.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.18.0...v1.19.0) (2026-01-13)
 
 
