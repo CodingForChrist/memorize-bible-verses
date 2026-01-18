@@ -1,5 +1,5 @@
 {
-  "oldTestament": [
+  "oldTestamentBooks": [
     "Genesis",
     "Exodus",
     "Leviticus",
@@ -40,7 +40,7 @@
     "Zechariah",
     "Malachi"
   ],
-  "newTestament": [
+  "newTestamentBooks": [
     "Matthew",
     "Mark",
     "Luke",

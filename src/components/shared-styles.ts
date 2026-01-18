@@ -56,6 +56,10 @@ export const formControlStyles = css`
     box-shadow: inset 0 0 0 2rem var(--color-primary-mint-cream);
     -webkit-text-fill-color: var(--color-gray);
   }
+  // hide datalist drop-down arrow
+  input[list]::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
   input[type="date"] {
     padding-top: 0.375rem;
     padding-bottom: 0.375rem;

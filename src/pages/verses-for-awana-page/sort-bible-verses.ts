@@ -1,5 +1,8 @@
 import { parseVerseReferenceIntoParts } from "../../services/parse-bible-verse-reference";
-import { oldTestament, newTestament } from "../../data/bible-books.json";
+import {
+  oldTestamentBooks,
+  newTestamentBooks,
+} from "../../data/bible-books.json";
 
 export function getOldTestamentVerseReferences(verseReferences: string[]) {
   const oldTestamentVerses = verseReferences.filter((verseReferences) => {
@@ -8,7 +11,7 @@ export function getOldTestamentVerseReferences(verseReferences: string[]) {
       fullBookName = "Psalms";
     }
 
-    return oldTestament.includes(fullBookName);
+    return oldTestamentBooks.includes(fullBookName);
   });
   return oldTestamentVerses;
 }
@@ -17,7 +20,7 @@ export function getNewTestamentVerseReferences(verseReferences: string[]) {
   const newTestamentVerses = verseReferences.filter((verseReferences) => {
     const { fullBookName } = parseVerseReferenceIntoParts(verseReferences);
 
-    return newTestament.includes(fullBookName);
+    return newTestamentBooks.includes(fullBookName);
   });
   return newTestamentVerses;
 }
@@ -29,14 +32,14 @@ export function sortBibleVerseReferences(verseReferences: string[]) {
 
   const sortedVerseReferencesWithMetadata = verseReferencesWithMetadata.sort(
     (a, b) => {
-      const updatedOldTestament = oldTestament.map((bookName) => {
+      const updatedOldTestament = oldTestamentBooks.map((bookName) => {
         if (bookName === "Psalms") {
           return "Psalm";
         }
         return bookName;
       });
 
-      const allBooks = [...updatedOldTestament, ...newTestament];
+      const allBooks = [...updatedOldTestament, ...newTestamentBooks];
 
       const aBookIndex = allBooks.indexOf(a.fullBookName);
       const bBookIndex = allBooks.indexOf(b.fullBookName);
