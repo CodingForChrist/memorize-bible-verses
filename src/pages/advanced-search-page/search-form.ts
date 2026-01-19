@@ -2,7 +2,10 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { map } from "lit/directives/map.js";
+import { classMap } from "lit/directives/class-map.js";
+import { z } from "zod";
 
+import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 import { getStateFromURL } from "../../services/router";
 import {
   formControlStyles,
@@ -21,6 +24,12 @@ import "../../components/bible-verse-fetch-result";
 export class SearchForm extends LitElement {
   @state()
   verseReference = getStateFromURL()?.verse;
+
+  @state()
+  isValidVerseReference = true;
+
+  @state()
+  validationErrorMessage = "";
 
   #textInput = this.verseReference ?? "";
   inputElementReference: Ref<HTMLInputElement> = createRef();
@@ -44,6 +53,25 @@ export class SearchForm extends LitElement {
       button[type="submit"] {
         --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
         min-width: 6rem;
+        height: 2.5rem;
+        align-self: flex-start;
+      }
+      .input-container {
+        width: 100%;
+      }
+      input.invalid {
+        color: #dc3545;
+        border-color: #dc3545;
+        --color-focus-ring: rgba(220, 53, 69, 0.25);
+      }
+      .invalid-feedback {
+        color: #dc3545;
+        width: 100%;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+      }
+      .hidden {
+        display: none;
       }
     `,
   ];
@@ -67,22 +95,34 @@ export class SearchForm extends LitElement {
         <small>e.g. "John 1:1" or "John 3:16-21"</small>
       </label>
       <form @submit=${this.#handleFormSubmit}>
-        <input
-          type="text"
-          id="input-verse-reference"
-          list="bible-book-names"
-          .value=${this.#textInput}
-          @input=${this.#handleTextInput}
-          ${ref(this.inputElementReference)}
-          required
-        />
-        <datalist id="bible-book-names">
-          ${map(
-            this.#bibleBookNames,
-            (bookName) => html`<option value=${bookName}></option>`,
-          )}
-        </datalist>
-
+        <div class="input-container">
+          <input
+            type="text"
+            id="input-verse-reference"
+            list="bible-book-names"
+            .value=${this.#textInput}
+            @input=${this.#handleTextInput}
+            ${ref(this.inputElementReference)}
+            class=${classMap({
+              invalid: !this.isValidVerseReference,
+            })}
+          />
+          <datalist id="bible-book-names">
+            ${map(
+              this.#bibleBookNames,
+              (bookName) => html`<option value=${bookName}></option>`,
+            )}
+          </datalist>
+          <div
+            class=${classMap({
+              "invalid-feedback": true,
+              hidden: this.isValidVerseReference,
+            })}
+          >
+            Please enter a valid verse reference<br />
+            ${this.validationErrorMessage}
+          </div>
+        </div>
         <button type="submit" class="primary">Search</button>
       </form>
     `;
@@ -102,12 +142,20 @@ export class SearchForm extends LitElement {
 
   #handleFormSubmit(event: Event) {
     event.preventDefault();
-    this.verseReference = this.#textInput;
 
-    // TODO: add better form validation
-    if (this.verseReference) {
-      this.#sendFormSubmitEvent(this.verseReference);
+    const results = VerseReferenceSchema.safeParse(this.#textInput);
+    if (results.success) {
+      this.verseReference = this.#textInput;
+      this.isValidVerseReference = true;
+      this.validationErrorMessage = "";
+    } else {
+      this.isValidVerseReference = false;
+      this.validationErrorMessage = z.prettifyError(results.error);
+      this.verseReference = "";
+      this.inputElementReference.value?.focus();
     }
+
+    this.#sendFormSubmitEvent(this.verseReference);
   }
 
   #sendFormSubmitEvent(verseReference: string) {

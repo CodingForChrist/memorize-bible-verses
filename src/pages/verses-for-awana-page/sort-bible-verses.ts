@@ -1,4 +1,4 @@
-import { parseVerseReferenceIntoParts } from "../../services/parse-bible-verse-reference";
+import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 import {
   oldTestamentBooks,
   newTestamentBooks,
@@ -6,7 +6,7 @@ import {
 
 export function getOldTestamentVerseReferences(verseReferences: string[]) {
   const oldTestamentVerses = verseReferences.filter((verseReferences) => {
-    let { fullBookName } = parseVerseReferenceIntoParts(verseReferences);
+    let { fullBookName } = VerseReferenceSchema.parse(verseReferences);
     if (fullBookName === "Psalm") {
       fullBookName = "Psalms";
     }
@@ -18,7 +18,7 @@ export function getOldTestamentVerseReferences(verseReferences: string[]) {
 
 export function getNewTestamentVerseReferences(verseReferences: string[]) {
   const newTestamentVerses = verseReferences.filter((verseReferences) => {
-    const { fullBookName } = parseVerseReferenceIntoParts(verseReferences);
+    const { fullBookName } = VerseReferenceSchema.parse(verseReferences);
 
     return newTestamentBooks.includes(fullBookName);
   });
@@ -27,7 +27,7 @@ export function getNewTestamentVerseReferences(verseReferences: string[]) {
 
 export function sortBibleVerseReferences(verseReferences: string[]) {
   const verseReferencesWithMetadata = verseReferences.map((verseReference) => {
-    return parseVerseReferenceIntoParts(verseReference);
+    return VerseReferenceSchema.parse(verseReference);
   });
 
   const sortedVerseReferencesWithMetadata = verseReferencesWithMetadata.sort(

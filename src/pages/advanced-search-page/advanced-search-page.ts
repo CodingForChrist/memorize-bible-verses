@@ -83,10 +83,8 @@ export class AdvancedSearchPage extends BasePage(LitElement) {
   #handleFormSubmit(event: CustomEventInit<{ verseReference: string }>) {
     const verseReference = event.detail?.verseReference;
 
-    if (!verseReference) {
-      return;
+    if (typeof verseReference === "string") {
+      this.verseReference = verseReference;
     }
-
-    this.verseReference = verseReference;
   }
 }

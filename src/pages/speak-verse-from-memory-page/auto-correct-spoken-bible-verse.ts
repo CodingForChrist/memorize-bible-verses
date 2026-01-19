@@ -1,4 +1,4 @@
-import { parseVerseReferenceIntoParts } from "../../services/parse-bible-verse-reference";
+import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 
 type AutoCorrectSpeechRecognitionInputOptions = {
   transcript: string;
@@ -90,8 +90,14 @@ function replaceSpelledOutNumbersInBibleReference({
     3: ["3rd", "Third", "third"],
   };
 
+  const { success, data } = VerseReferenceSchema.safeParse(verseReference);
+
+  if (!success) {
+    return transcript;
+  }
+
   const { bookNumber, bookName, chapter, verseNumberStart, verseNumberEnd } =
-    parseVerseReferenceIntoParts(verseReference);
+    data;
 
   let improvedTranscript = transcript;
 
@@ -165,7 +171,15 @@ function useDashForVerseRanges({
 
   const rangeDividers = [" to ", " through ", "2"];
   const singleVerseReference = verseReference.split("-")[0];
-  const { verseNumberEnd } = parseVerseReferenceIntoParts(verseReference);
+
+  const { success, data } = VerseReferenceSchema.safeParse(verseReference);
+
+  if (!success) {
+    return transcript;
+  }
+
+  const { verseNumberEnd } = data;
+
   let improvedTranscript = transcript;
 
   for (const rangeDivider of rangeDividers) {
