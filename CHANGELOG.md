@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.20.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.19.0...v1.20.0) (2026-01-19)
+
+
+### Features
+
+* add auto-complete functionality for bible books ([#309](https://github.com/CodingForChrist/memorize-bible-verses/issues/309)) ([dbdde6f](https://github.com/CodingForChrist/memorize-bible-verses/commit/dbdde6fcf673a9a1b9d8ee591ffa4030f91feb83))
+* add client-side validation for advanced search ([#314](https://github.com/CodingForChrist/memorize-bible-verses/issues/314)) ([c69a793](https://github.com/CodingForChrist/memorize-bible-verses/commit/c69a7932d6950a01cc2b82af1c53ede7377248a4))
+
 ## [1.19.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.18.0...v1.19.0) (2026-01-13)
 
 

@@ -1,7 +1,7 @@
 {
   "name": "memorize-bible-verses-web-app",
   "private": true,
-  "version": "1.19.0",
+  "version": "1.20.0",
   "description": "A web app for memorizing bible verses by speaking them into your phone",
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
     "happy-dom": "^20.1.0",
     "jiti": "^2.6.1",
     "modern-normalize": "^3.0.1",
-    "prettier": "^3.8.0",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.0",
     "vite": "^7.3.1",
