@@ -2,7 +2,9 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { map } from "lit/directives/map.js";
+import { z } from "zod";
 
+import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 import { getStateFromURL } from "../../services/router";
 import {
   formControlStyles,
@@ -21,6 +23,12 @@ import "../../components/bible-verse-fetch-result";
 export class SearchForm extends LitElement {
   @state()
   verseReference = getStateFromURL()?.verse;
+
+  @state()
+  isValidVerseReference = true;
+
+  @state()
+  validationErrorMessage = "";
 
   #textInput = this.verseReference ?? "";
   inputElementReference: Ref<HTMLInputElement> = createRef();
@@ -85,6 +93,7 @@ export class SearchForm extends LitElement {
 
         <button type="submit" class="primary">Search</button>
       </form>
+      ${this.validationErrorMessage}
     `;
   }
 
@@ -102,11 +111,14 @@ export class SearchForm extends LitElement {
 
   #handleFormSubmit(event: Event) {
     event.preventDefault();
-    this.verseReference = this.#textInput;
 
-    // TODO: add better form validation
-    if (this.verseReference) {
+    const results = VerseReferenceSchema.safeParse(this.#textInput);
+    if (results.success) {
+      this.verseReference = this.#textInput;
       this.#sendFormSubmitEvent(this.verseReference);
+    } else {
+      this.isValidVerseReference = false;
+      this.validationErrorMessage = z.prettifyError(results.error);
     }
   }
 

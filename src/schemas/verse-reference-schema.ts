@@ -6,17 +6,22 @@ const VerseReferenceCustomSchema = z
   .object({
     bookNumber: z.number().min(1).max(3).optional(),
     bookName: z.string().min(3),
-    fullBookName: z.enum(getBibleBooks(), {
-      error: () => "invalid book name",
-    }),
+    fullBookName: z.enum(
+      [...oldTestamentBooks, ...newTestamentBooks, "Psalm", "Revelations"],
+      {
+        error: () => "Invalid book name",
+      },
+    ),
     chapter: z.number().min(1),
     verseNumberStart: z.number().min(1),
     verseNumberEnd: z.number().min(1),
   })
   .transform((data) => {
+    const { verseNumberStart, verseNumberEnd } = data;
+
     return {
       ...data,
-      verseCount: 1 + data.verseNumberEnd - data.verseNumberStart,
+      verseCount: 1 + verseNumberEnd - verseNumberStart,
     };
   });
 
@@ -29,11 +34,29 @@ export const VerseReferenceSchema = z
     try {
       parsedVerseReference = parseVerseReferenceIntoParts(verseReference);
     } catch (error) {
-      context.addIssue((error as Error).message);
+      context.addIssue({
+        code: "custom",
+        message: (error as Error).message,
+        input: verseReference,
+      });
       return z.NEVER;
     }
 
-    return VerseReferenceCustomSchema.parse(parsedVerseReference);
+    const { success, error, data } =
+      VerseReferenceCustomSchema.safeParse(parsedVerseReference);
+    if (success) {
+      return data;
+    }
+
+    for (const { message, input } of error.issues) {
+      context.addIssue({
+        message,
+        code: "custom",
+        input,
+      });
+    }
+
+    return z.NEVER;
   });
 
 export type VerseReference = z.infer<typeof VerseReferenceSchema>;
@@ -92,8 +115,4 @@ function parseVerseReferenceIntoParts(verseReference: string) {
     verseNumberStart: Number(verseNumberStart),
     verseNumberEnd: Number(verseNumberEnd),
   };
-}
-
-function getBibleBooks() {
-  return [...oldTestamentBooks, ...newTestamentBooks, "Psalm", "Revelations"];
 }
