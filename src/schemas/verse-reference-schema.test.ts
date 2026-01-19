@@ -47,6 +47,28 @@ describe("VerseReferenceSchema", () => {
     });
   });
 
+  test("should successfully parse verses regardless of case", () => {
+    expect(VerseReferenceSchema.parse("GALATIANS 5:22-23")).toEqual({
+      fullBookName: "Galatians",
+      bookName: "Galatians",
+      bookNumber: undefined,
+      chapter: 5,
+      verseNumberStart: 22,
+      verseNumberEnd: 23,
+      verseCount: 2,
+    });
+
+    expect(VerseReferenceSchema.parse("revelation 4:11")).toEqual({
+      fullBookName: "Revelation",
+      bookName: "Revelation",
+      bookNumber: undefined,
+      chapter: 4,
+      verseNumberStart: 11,
+      verseNumberEnd: 11,
+      verseCount: 1,
+    });
+  });
+
   test("should throw a validation error for missing space", () => {
     const { success, error } = VerseReferenceSchema.safeParse("John3:16");
     expect(success).toBeFalsy();

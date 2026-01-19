@@ -84,8 +84,7 @@ function parseVerseReferenceIntoParts(verseReference: string) {
   const bookName = bookNameRegExpMatchArray[0].trim();
   const fullBookName = bookNumber ? `${bookNumber} ${bookName}` : bookName;
 
-  const spaceIndex = verseReference.indexOf(fullBookName) + fullBookName.length;
-  if (verseReference.charAt(spaceIndex) !== " ") {
+  if (verseReference.charAt(fullBookName.length) !== " ") {
     throw new Error(
       "Must include a single space to separate the book name from the chapter",
     );
@@ -108,11 +107,23 @@ function parseVerseReferenceIntoParts(verseReference: string) {
     : [verseResult, verseResult];
 
   return {
-    fullBookName,
-    bookName,
+    fullBookName: toTitleCase(fullBookName),
+    bookName: toTitleCase(bookName),
     bookNumber,
     chapter: Number(chapter),
     verseNumberStart: Number(verseNumberStart),
     verseNumberEnd: Number(verseNumberEnd),
   };
+}
+
+function toTitleCase(value: string) {
+  const lowerCaseValue = value.toLowerCase();
+  const titleCasedWords = lowerCaseValue.split(" ").map((word) => {
+    if (word === "of") {
+      return word;
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  return titleCasedWords.join(" ");
 }
