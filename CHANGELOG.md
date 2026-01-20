@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.20.0...v1.20.1) (2026-01-20)
+
+
+### Bug Fixes
+
+* update search to check for invalid characters ([#315](https://github.com/CodingForChrist/memorize-bible-verses/issues/315)) ([0d66eb0](https://github.com/CodingForChrist/memorize-bible-verses/commit/0d66eb04f34c848591a9473008aef3a32acd2377))
+
 ## [1.20.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.19.0...v1.20.0) (2026-01-19)
 
 
