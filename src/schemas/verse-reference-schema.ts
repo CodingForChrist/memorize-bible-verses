@@ -29,6 +29,9 @@ export const VerseReferenceSchema = z
   .string()
   .min(6)
   .max(40)
+  .regex(/^[a-zA-Z0-9:\s-]+$/, {
+    message: "Must contain letters, numbers, spaces, colons, or dashes",
+  })
   .transform((verseReference, context) => {
     let parsedVerseReference;
     try {
@@ -105,6 +108,10 @@ function parseVerseReferenceIntoParts(verseReference: string) {
   const [verseNumberStart, verseNumberEnd] = verseResult.includes("-")
     ? verseResult.split("-")
     : [verseResult, verseResult];
+
+  if (!verseNumberStart || !Number.isInteger(Number(verseNumberStart))) {
+    throw new Error("Invalid verse number");
+  }
 
   return {
     fullBookName: toTitleCase(fullBookName),

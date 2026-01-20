@@ -3,7 +3,6 @@ import { customElement, state } from "lit/decorators.js";
 import { ref, createRef, type Ref } from "lit/directives/ref.js";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
-import { z } from "zod";
 
 import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 import { getStateFromURL } from "../../services/router";
@@ -23,7 +22,7 @@ import "../../components/bible-verse-fetch-result";
 @customElement("search-form")
 export class SearchForm extends LitElement {
   @state()
-  verseReference = getStateFromURL()?.verse;
+  verseReference = "";
 
   @state()
   isValidVerseReference = true;
@@ -31,13 +30,19 @@ export class SearchForm extends LitElement {
   @state()
   validationErrorMessage = "";
 
-  #textInput = this.verseReference ?? "";
+  #textInput = getStateFromURL()?.verse ?? "";
   inputElementReference: Ref<HTMLInputElement> = createRef();
 
   static styles = [
     formControlStyles,
     buttonStyles,
     css`
+      :host {
+        --form-invalid-color: #dc3545;
+        --form-invalid-border-color: #dc3545;
+        --form-invalid-color-focus-ring: rgba(220, 53, 69, 0.25);
+      }
+
       label {
         display: block;
       }
@@ -60,12 +65,12 @@ export class SearchForm extends LitElement {
         width: 100%;
       }
       input.invalid {
-        color: #dc3545;
-        border-color: #dc3545;
-        --color-focus-ring: rgba(220, 53, 69, 0.25);
+        color: var(--form-invalid-color);
+        border-color: var(--form-invalid-border-color);
+        --color-focus-ring: var(--form-invalid-color-focus-ring);
       }
       .invalid-feedback {
-        color: #dc3545;
+        color: var(--form-invalid-color);
         width: 100%;
         margin-top: 0.5rem;
         font-size: 0.875rem;
@@ -119,8 +124,7 @@ export class SearchForm extends LitElement {
               hidden: this.isValidVerseReference,
             })}
           >
-            Please enter a valid verse reference<br />
-            ${this.validationErrorMessage}
+            Please enter a valid verse reference. ${this.validationErrorMessage}
           </div>
         </div>
         <button type="submit" class="primary">Search</button>
@@ -129,11 +133,9 @@ export class SearchForm extends LitElement {
   }
 
   firstUpdated() {
-    if (this.verseReference) {
-      this.#sendFormSubmitEvent(this.verseReference);
+    if (this.#textInput) {
+      this.#handleFormSubmit(new Event("submit"));
     }
-
-    this.inputElementReference.value?.focus();
   }
 
   #handleTextInput(event: Event) {
@@ -150,7 +152,7 @@ export class SearchForm extends LitElement {
       this.validationErrorMessage = "";
     } else {
       this.isValidVerseReference = false;
-      this.validationErrorMessage = z.prettifyError(results.error);
+      this.validationErrorMessage = results.error.issues[0].message;
       this.verseReference = "";
       this.inputElementReference.value?.focus();
     }

@@ -49,8 +49,6 @@ test("page load", async ({ page }) => {
   await expect(
     page.getByRole("combobox", { name: "Bible Translation Selection" }),
   ).toHaveValue(bibleIdNKJV);
-
-  await expect(page.getByLabel("Enter a bible verse reference")).toBeFocused();
 });
 
 test("back button", async ({ page }) => {
@@ -70,6 +68,21 @@ test("search for verse", async ({ page }) => {
     /For God so loved the world/,
   );
   await expect(page.locator(".citation")).toHaveText(/New King James Version/);
+});
+
+test("display validation error for invalid verse reference", async ({
+  page,
+}) => {
+  await page.goto("/#/advanced-search");
+  await page
+    .getByLabel("Enter a bible verse reference")
+    .fill("UnknownBookName 1:1");
+  await page.getByRole("button", { name: "Search" }).click();
+
+  await expect(page.locator("search-form")).toHaveText(
+    /Please enter a valid verse reference/,
+  );
+  await expect(page.locator("search-form")).toHaveText(/Invalid book name/);
 });
 
 test("change bible translation", async ({ page }) => {
