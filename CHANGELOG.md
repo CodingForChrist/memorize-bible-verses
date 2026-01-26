@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.20.1...v1.20.2) (2026-01-26)
+
+
+### Bug Fixes
+
+* convert abbreviated book names to full name ([#322](https://github.com/CodingForChrist/memorize-bible-verses/issues/322)) ([a666410](https://github.com/CodingForChrist/memorize-bible-verses/commit/a666410f1cdd21ac81d0424c58cda6e19db2052b))
+
 ## [1.20.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.20.0...v1.20.1) (2026-01-20)
 
 
