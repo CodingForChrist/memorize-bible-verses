@@ -10,10 +10,7 @@ import {
   formControlStyles,
   buttonStyles,
 } from "../../components/shared-styles";
-import {
-  oldTestamentBooks,
-  newTestamentBooks,
-} from "../../data/bible-books.json";
+import { getAllBibleBooks } from "../../data/bible-book-model";
 
 import "../verse-text-page-template";
 import "../../components/bible-translation-drop-down-list";
@@ -82,15 +79,12 @@ export class SearchForm extends LitElement {
   ];
 
   get #bibleBookNames() {
-    return [
-      ...oldTestamentBooks.map((bookName) => {
-        if (bookName === "Psalms") {
-          return "Psalm";
-        }
-        return bookName;
-      }),
-      ...newTestamentBooks,
-    ];
+    return getAllBibleBooks().map((bookName) => {
+      if (bookName === "Psalms") {
+        return "Psalm";
+      }
+      return bookName;
+    });
   }
 
   render() {

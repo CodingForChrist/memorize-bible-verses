@@ -1,20 +1,19 @@
-import type {
-  BibleVerse,
-  BibleVerseContentItem,
-} from "../schemas/bible-verse-schema";
+import { findBibleBookByAbbreviation } from "../data/bible-book-model";
+
+import type { BibleVerse, BibleVerseContentItem } from "./bible-verse-schema";
 
 export function standardizeVerseReference(verseReference: string) {
   let updatedVerseReference = verseReference.trim();
 
-  // the singular version "Psalm" is used for displaying references (ex: Psalm 23)
-  // but the data structure for a verse reference always uses "Psalms"
-  // this code handles that difference to make sure they match
+  // use singular version "Psalm" when displaying references (ex: Psalm 23)
+  // Psalms 23 => Psalm 23
   if (updatedVerseReference.startsWith("Psalms")) {
     updatedVerseReference = verseReference.replace("Psalms", "Psalm");
   }
 
   // the New King James Version (NKJV) uses roman numerals for book numbers
   // replace roman numbers with numbers
+  // III John 1:11 => 3 John 1:11
   const romanNumeralMap = {
     I: "1",
     II: "2",
@@ -25,6 +24,15 @@ export function standardizeVerseReference(verseReference: string) {
     if (updatedVerseReference.startsWith(`${key} `)) {
       updatedVerseReference = verseReference.replace(`${key} `, `${value} `);
     }
+  }
+
+  // replace the abbreviated book name for translations
+  // like the New International Version (NIV)
+  // Matt. 28:18 => Matthew 28:18
+  if (updatedVerseReference.includes(".")) {
+    const [bookAbbreviation, ...rest] = updatedVerseReference.split(/\./);
+    const fullBookName = findBibleBookByAbbreviation(bookAbbreviation);
+    updatedVerseReference = [fullBookName, ...rest].join("");
   }
 
   return updatedVerseReference;

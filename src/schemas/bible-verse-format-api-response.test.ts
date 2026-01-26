@@ -1,7 +1,42 @@
 import { describe, expect, test } from "vitest";
-import { convertBibleVerseContentToText } from "./format-api-response";
+import {
+  convertBibleVerseContentToText,
+  standardizeVerseReference,
+} from "./bible-verse-format-api-response";
 
 import type { BibleVerse } from "../schemas/bible-verse-schema";
+
+describe("standardizeVerseReference()", () => {
+  test("should replace Psalms with singular version", () => {
+    expect(standardizeVerseReference("Psalms 23:1-6")).toBe("Psalm 23:1-6");
+  });
+
+  test("should replace roman numerals with numbers", () => {
+    expect(standardizeVerseReference("I John 3:2")).toBe("1 John 3:2");
+    expect(standardizeVerseReference("II Chronicles 7:14")).toBe(
+      "2 Chronicles 7:14",
+    );
+    expect(standardizeVerseReference("III John 1:11")).toBe("3 John 1:11");
+  });
+
+  test("should convert NIV abbreviations to the full book name", () => {
+    expect(standardizeVerseReference("Matt. 28:18-20")).toBe(
+      "Matthew 28:18-20",
+    );
+    expect(standardizeVerseReference("Gen. 1:10-11")).toBe("Genesis 1:10-11");
+    expect(standardizeVerseReference("Deut. 6:5")).toBe("Deuteronomy 6:5");
+    expect(standardizeVerseReference("1 Chron. 16:34")).toBe(
+      "1 Chronicles 16:34",
+    );
+    expect(standardizeVerseReference("Eccles. 10:10")).toBe(
+      "Ecclesiastes 10:10",
+    );
+    expect(standardizeVerseReference("1 Cor. 10:31")).toBe(
+      "1 Corinthians 10:31",
+    );
+    expect(standardizeVerseReference("Phil. 2:14")).toBe("Philippians 2:14");
+  });
+});
 
 describe("convertBibleVerseContentToText()", () => {
   test("should return plain text for a single verse", () => {

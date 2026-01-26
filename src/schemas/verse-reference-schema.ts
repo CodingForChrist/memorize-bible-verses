@@ -1,17 +1,14 @@
 import { z } from "zod";
 
-import { oldTestamentBooks, newTestamentBooks } from "../data/bible-books.json";
+import { getAllBibleBooks } from "../data/bible-book-model";
 
 const VerseReferenceCustomSchema = z
   .object({
     bookNumber: z.number().min(1).max(3).optional(),
     bookName: z.string().min(3),
-    fullBookName: z.enum(
-      [...oldTestamentBooks, ...newTestamentBooks, "Psalm", "Revelations"],
-      {
-        error: () => "Invalid book name",
-      },
-    ),
+    fullBookName: z.enum([...getAllBibleBooks(), "Psalm", "Revelations"], {
+      error: () => "Invalid book name",
+    }),
     chapter: z.number().min(1),
     verseNumberStart: z.number().min(1),
     verseNumberEnd: z.number().min(1),
