@@ -4,7 +4,7 @@ import { findBibleTranslationById } from "../data/bible-translation-model";
 import {
   convertBibleVerseContentToText,
   standardizeVerseReference,
-} from "../services/format-api-response";
+} from "./bible-verse-format-api-response";
 
 const BaseBibleVerseContentItemSchema = z.object({
   type: z.enum(["tag", "text"]),

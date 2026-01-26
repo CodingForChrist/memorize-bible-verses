@@ -1,9 +1,6 @@
 import { findBibleBookByAbbreviation } from "../data/bible-book-model";
 
-import type {
-  BibleVerse,
-  BibleVerseContentItem,
-} from "../schemas/bible-verse-schema";
+import type { BibleVerse, BibleVerseContentItem } from "./bible-verse-schema";
 
 export function standardizeVerseReference(verseReference: string) {
   let updatedVerseReference = verseReference.trim();

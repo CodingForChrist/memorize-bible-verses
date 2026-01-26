@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   convertBibleVerseContentToText,
   standardizeVerseReference,
-} from "./format-api-response";
+} from "./bible-verse-format-api-response";
 
 import type { BibleVerse } from "../schemas/bible-verse-schema";
 
