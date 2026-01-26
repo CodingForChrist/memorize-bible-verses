@@ -1,10 +1,12 @@
 import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 import {
-  oldTestamentBooks,
-  newTestamentBooks,
-} from "../../data/bible-books.json";
+  getAllBibleBooksGroupedByTestament,
+  getAllBibleBooks,
+} from "../../data/bible-book-model";
 
 export function getOldTestamentVerseReferences(verseReferences: string[]) {
+  const { oldTestamentBooks } = getAllBibleBooksGroupedByTestament();
+
   const oldTestamentVerses = verseReferences.filter((verseReferences) => {
     let { fullBookName } = VerseReferenceSchema.parse(verseReferences);
     if (fullBookName === "Psalm") {
@@ -17,6 +19,8 @@ export function getOldTestamentVerseReferences(verseReferences: string[]) {
 }
 
 export function getNewTestamentVerseReferences(verseReferences: string[]) {
+  const { newTestamentBooks } = getAllBibleBooksGroupedByTestament();
+
   const newTestamentVerses = verseReferences.filter((verseReferences) => {
     const { fullBookName } = VerseReferenceSchema.parse(verseReferences);
 
@@ -32,14 +36,12 @@ export function sortBibleVerseReferences(verseReferences: string[]) {
 
   const sortedVerseReferencesWithMetadata = verseReferencesWithMetadata.sort(
     (a, b) => {
-      const updatedOldTestament = oldTestamentBooks.map((bookName) => {
+      const allBooks = getAllBibleBooks().map((bookName) => {
         if (bookName === "Psalms") {
           return "Psalm";
         }
         return bookName;
       });
-
-      const allBooks = [...updatedOldTestament, ...newTestamentBooks];
 
       const aBookIndex = allBooks.indexOf(a.fullBookName);
       const bBookIndex = allBooks.indexOf(b.fullBookName);
