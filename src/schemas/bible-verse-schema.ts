@@ -8,7 +8,7 @@ import {
 
 const BaseBibleVerseContentItemSchema = z.object({
   type: z.enum(["tag", "text"]),
-  name: z.enum(["para", "verse", "char", "ref"]).optional(),
+  name: z.enum(["para", "verse", "verse-span", "char", "ref"]).optional(),
   text: z.string().optional(),
   attrs: z
     .object({
@@ -25,7 +25,7 @@ const BaseBibleVerseContentItemSchema = z.object({
 
 export type BibleVerseContentItem = {
   type: "tag" | "text";
-  name?: "para" | "verse" | "char" | "ref";
+  name?: "para" | "verse" | "verse-span" | "char" | "ref";
   text?: string;
   items?: BibleVerseContentItem[];
   attrs?: {

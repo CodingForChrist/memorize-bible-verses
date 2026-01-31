@@ -65,6 +65,17 @@ export class BibleVerseBlockquote extends LitElement {
     `,
   ];
 
+  #trimContent(content: BibleVerse["content"]) {
+    // prevent blank line from rendering at the beginning of the verse
+    // ex: { name: "para", type: "tag", attrs: { style: "b" }, items: [] }
+    if (content[0]?.name === "para" && content[0].items?.length === 0) {
+      // remove first item from the array
+      const [, ...newContent] = content;
+      return newContent;
+    }
+    return content;
+  }
+
   #renderItemTag({ type, name, attrs, items }: BibleVerseContentItem) {
     if (type !== "tag" || !items || !attrs) {
       throw new Error('unexpected data for item type "tag"');
@@ -76,7 +87,7 @@ export class BibleVerseBlockquote extends LitElement {
       return html`<p class=${className}>${this.#renderItems(items)}</p>`;
     }
 
-    if (name === "char" || name === "ref") {
+    if (name === "char" || name === "ref" || name === "verse-span") {
       return html`<span class=${className}>${this.#renderItems(items)}</span>`;
     }
 
@@ -171,9 +182,11 @@ export class BibleVerseBlockquote extends LitElement {
       return;
     }
 
+    const trimmedContent = this.#trimContent(this.content);
+
     return html`
       <blockquote class="scripture-styles">
-        ${map(this.content, (itemTag) => this.#renderItemTag(itemTag))}
+        ${map(trimmedContent, (itemTag) => this.#renderItemTag(itemTag))}
       </blockquote>
       ${this.#renderCitation()}
     `;
