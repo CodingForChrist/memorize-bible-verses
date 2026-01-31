@@ -68,6 +68,10 @@ test("search for verse", async ({ page }) => {
     /For God so loved the world/,
   );
   await expect(page.locator(".citation")).toHaveText(/New King James Version/);
+
+  await expect(page).toHaveTitle(
+    /John 3:16 | Advanced Search | Memorize Bible Verses"/,
+  );
 });
 
 test("display validation error for invalid verse reference", async ({
