@@ -19,10 +19,19 @@ export declare class BasePageInterface {
 
 export const BasePage = <T extends Constructor<LitElement>>(superClass: T) => {
   class BasePageElement extends superClass {
-    pageTitle: string = "";
-
     @property({ attribute: "previous-page", reflect: true })
     previousPage?: PageName;
+
+    #pageTitle: string = "";
+
+    set pageTitle(value: string) {
+      this.#pageTitle = `${value} | Memorize Bible Verses`;
+      document.title = this.#pageTitle;
+    }
+
+    get pageTitle() {
+      return this.#pageTitle;
+    }
 
     navigateToPage(pageNavigation: PageNavigation) {
       const eventNavigateToSearchPage = new CustomEvent<{
@@ -33,10 +42,6 @@ export const BasePage = <T extends Constructor<LitElement>>(superClass: T) => {
         composed: true,
       });
       this.dispatchEvent(eventNavigateToSearchPage);
-    }
-
-    firstUpdated() {
-      document.title = `${this.pageTitle} | Memorize Bible Verses`;
     }
   }
   return BasePageElement as Constructor<BasePageInterface> & T;

@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -18,7 +18,8 @@ export class ShareTheGospelPage extends BasePage(LitElement) {
   @property()
   verseReference?: string;
 
-  pageTitle = "Verses for Sharing the Gospel";
+  static defaultPageTitle = "Verses for Sharing the Gospel";
+  pageTitle = ShareTheGospelPage.defaultPageTitle;
 
   static styles = css`
     bible-translation-drop-down-list {
@@ -82,5 +83,15 @@ export class ShareTheGospelPage extends BasePage(LitElement) {
       nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
       previousPage: PAGE_NAME.SHARE_THE_GOSPEL_PAGE,
     });
+  }
+
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (!changedProperties.has("verseReference")) {
+      return;
+    }
+
+    this.pageTitle = this.verseReference
+      ? `${this.verseReference} | ${ShareTheGospelPage.defaultPageTitle}`
+      : ShareTheGospelPage.defaultPageTitle;
   }
 }

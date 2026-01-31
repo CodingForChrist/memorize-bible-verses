@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -18,7 +18,8 @@ export class AdvancedSearchPage extends BasePage(LitElement) {
   @state()
   verseReference?: string;
 
-  pageTitle = "Advanced Search";
+  static defaultPageTitle = "Advanced Search";
+  pageTitle = AdvancedSearchPage.defaultPageTitle;
 
   static styles = css`
     bible-translation-drop-down-list {
@@ -86,5 +87,15 @@ export class AdvancedSearchPage extends BasePage(LitElement) {
     if (typeof verseReference === "string") {
       this.verseReference = verseReference;
     }
+  }
+
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (!changedProperties.has("verseReference")) {
+      return;
+    }
+
+    this.pageTitle = this.verseReference
+      ? `${this.verseReference} | ${AdvancedSearchPage.defaultPageTitle}`
+      : AdvancedSearchPage.defaultPageTitle;
   }
 }

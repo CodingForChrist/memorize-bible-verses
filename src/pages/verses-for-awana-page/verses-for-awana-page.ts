@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 
@@ -23,9 +23,10 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
   bibleId?: string;
 
   @state()
-  selectedBibleVerse = this.#verseReferenceFromQueryString ?? "";
+  verseReference = this.#verseReferenceFromQueryString ?? "";
 
-  pageTitle = "Verses for Awana Club for Kids";
+  static defaultPageTitle = "Verses for Awana Club for Kids";
+  pageTitle = VersesForAwanaPage.defaultPageTitle;
 
   static styles = [
     formControlStyles,
@@ -139,11 +140,11 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
 
     return html`
       <select
-        .value=${this.selectedBibleVerse}
+        .value=${this.verseReference}
         @change=${this.#handleBibleVerseSelectElementChange}
         autofocus
       >
-        <option disabled value="default" ?selected=${!this.selectedBibleVerse}>
+        <option disabled value="default" ?selected=${!this.verseReference}>
           -- select a verse --
         </option>
         <optgroup label="Old Testament">
@@ -151,7 +152,7 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
             (verse) => html`
               <option
                 .value=${verse}
-                ?selected=${verse === this.selectedBibleVerse}
+                ?selected=${verse === this.verseReference}
               >
                 ${verse}
               </option>
@@ -164,7 +165,7 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
             (verse) => html`
               <option
                 .value=${verse}
-                ?selected=${verse === this.selectedBibleVerse}
+                ?selected=${verse === this.verseReference}
               >
                 ${verse}
               </option>
@@ -195,7 +196,7 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
 
           <bible-verse-fetch-result
             bible-id=${ifDefined(this.bibleId)}
-            verse-reference=${ifDefined(this.selectedBibleVerse)}
+            verse-reference=${ifDefined(this.verseReference)}
           ></bible-verse-fetch-result>
         </span>
 
@@ -217,6 +218,16 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
   }
 
   #handleBibleVerseSelectElementChange(event: Event) {
-    this.selectedBibleVerse = (event.target as HTMLSelectElement).value;
+    this.verseReference = (event.target as HTMLSelectElement).value;
+  }
+
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (!changedProperties.has("verseReference")) {
+      return;
+    }
+
+    this.pageTitle = this.verseReference
+      ? `${this.verseReference} | ${VersesForAwanaPage.defaultPageTitle}`
+      : VersesForAwanaPage.defaultPageTitle;
   }
 }

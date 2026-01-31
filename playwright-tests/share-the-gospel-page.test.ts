@@ -82,6 +82,10 @@ test("auto-fill form based on query parameter values", async ({ page }) => {
     /I am the way and the truth and the life/,
   );
   await expect(page.locator(".citation")).toHaveText(/Berean Standard Bible/);
+
+  await expect(page).toHaveTitle(
+    /John 14:6 | Search Options | Memorize Bible Verses"/,
+  );
 });
 
 test("select a verse", async ({ page }) => {
