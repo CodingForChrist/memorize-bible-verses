@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.21.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.20.2...v1.21.0) (2026-01-31)
+
+
+### Features
+
+* include selected verse in page title ([#326](https://github.com/CodingForChrist/memorize-bible-verses/issues/326)) ([389ff2b](https://github.com/CodingForChrist/memorize-bible-verses/commit/389ff2b5327649e52a0f9a6f88577313bb8f0c21))
+
+
+### Bug Fixes
+
+* remove blank lines at the start of verses ([#324](https://github.com/CodingForChrist/memorize-bible-verses/issues/324)) ([9e5e65a](https://github.com/CodingForChrist/memorize-bible-verses/commit/9e5e65ae8ae63c5fefa301e14ca223e38219998f))
+
 ## [1.20.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.20.1...v1.20.2) (2026-01-26)
 
 
