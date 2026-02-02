@@ -8,22 +8,19 @@ describe("BibleTranslationArraySchema", () => {
     const bibleTranslations = [
       {
         id: "bba9f40183526463-01",
-        name: "Berean Standard Bible",
-        nameLocal: "English: Berean Standard Bible",
         abbreviation: "BSB",
-        abbreviationLocal: "BSB",
-        description: "Berean Standard Bible",
-        descriptionLocal: "English: Berean Standard Bible",
+        name: "BSB - Berean Standard Bible",
+        citationText:
+          "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain.",
+        citationLink: "https://berean.bible/",
       },
       {
         id: "63097d2a0a2f7db3-01",
-        name: "New King James Version",
-        nameLocal: "New King James Version",
         abbreviation: "NKJV",
-        abbreviationLocal: "NKJV",
-        description: "English: New King James Version Old and New Testament",
-        descriptionLocal:
-          "English: New King James Version Old and New Testament",
+        name: "NKJV - New King James Version",
+        citationText:
+          "New King James Version®, Copyright © 1982, Thomas Nelson. All rights reserved.",
+        citationLink: "https://www.harpercollins.com/",
       },
     ];
 
@@ -46,6 +43,7 @@ describe("BibleTranslationArraySchema", () => {
       },
     ]);
   });
+
   test("should throw a validation error", () => {
     const invalidBibleTranslations = [
       {

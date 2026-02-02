@@ -1,24 +1,5 @@
 import { vi } from "vitest";
 
-export const mockBibleTranslations = [
-  {
-    id: "bba9f40183526463-01",
-    abbreviation: "BSB",
-    name: "BSB - Berean Standard Bible",
-    citationText:
-      "The Holy Bible, Berean Standard Bible, BSB is produced in cooperation with Bible Hub, Discovery Bible, OpenBible.com, and the Berean Bible Translation Committee. This text of God's Word has been dedicated to the public domain.",
-    citationLink: "https://berean.bible/",
-  },
-  {
-    id: "63097d2a0a2f7db3-01",
-    abbreviation: "NKJV",
-    name: "NKJV - New King James Version",
-    citationText:
-      "New King James Version®, Copyright © 1982, Thomas Nelson. All rights reserved.",
-    citationLink: "https://www.harpercollins.com/",
-  },
-];
-
 const mockBibleVerseJohnChapter3Verse16 = {
   id: "JHN.3.16",
   reference: "John 3:16",
@@ -100,9 +81,6 @@ export const verseOfTheDayVerseList = [
 ];
 
 export const mockApiModule = {
-  fetchBibleTranslationsWithCache: vi
-    .fn()
-    .mockResolvedValue(mockBibleTranslations),
   fetchBibleVerseWithCache: vi
     .fn()
     .mockResolvedValue(mockBibleVerseJohnChapter3Verse16),

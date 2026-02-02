@@ -1,11 +1,12 @@
+import { BibleTranslationArraySchema } from "../schemas/bible-translation-schema";
 import bibleTranslations from "./bible-translations.json";
 
 export function getAllBibleTranslations() {
-  return bibleTranslations;
+  return BibleTranslationArraySchema.parse(bibleTranslations);
 }
 
 export function findBibleTranslationById(id: string) {
-  const bibleTranslation = bibleTranslations.find(
+  const bibleTranslation = getAllBibleTranslations().find(
     (bibleTranslation) => bibleTranslation.id === id,
   );
   if (!bibleTranslation) {
@@ -15,7 +16,7 @@ export function findBibleTranslationById(id: string) {
 }
 
 export function findBibleTranslationByAbbreviation(abbreviation: string) {
-  const bibleTranslation = bibleTranslations.find(
+  const bibleTranslation = getAllBibleTranslations().find(
     (bibleTranslation) => bibleTranslation.abbreviation === abbreviation,
   );
   if (!bibleTranslation) {

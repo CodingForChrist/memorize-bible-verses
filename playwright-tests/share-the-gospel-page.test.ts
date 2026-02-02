@@ -21,10 +21,6 @@ const bibleIdNKJV = findBibleId("NKJV");
 const bibleIdBSB = findBibleId("BSB");
 
 test.beforeEach(async ({ page }) => {
-  await page.route("**/api/v1/bibles", async (route) => {
-    await route.fulfill({ json: bibleData });
-  });
-
   await page.route(
     `**/api/v1/bibles/${bibleIdNKJV}/passages/verse-reference`,
     async (route) => {
