@@ -50,16 +50,18 @@ export class BibleTranslationDropDownList extends LitElement {
   render() {
     return html`
       <select
-           id="select-bible-translation"
-           aria-label="Bible Translation Selection"
-           .value="${this.bibleId}"
-           @change=${this.#handleSelectElementChange}
-         >
-           ${this.bibleTranslations.map(
-        ({ id, name }) => html`
-          <option .value=${id} ?selected=${id === this.bibleId}>${name}</option>
-        `,
-      )}
+        id="select-bible-translation"
+        aria-label="Bible Translation Selection"
+        .value="${this.bibleId}"
+        @change=${this.#handleSelectElementChange}
+      >
+        ${this.bibleTranslations.map(
+          ({ id, name }) => html`
+            <option .value=${id} ?selected=${id === this.bibleId}>
+              ${name}
+            </option>
+          `,
+        )}
       </select>
     `;
   }
