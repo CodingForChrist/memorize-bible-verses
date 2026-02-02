@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.21.0...v1.22.0) (2026-02-02)
+
+
+### Features
+
+* use static list for bible translations ([#332](https://github.com/CodingForChrist/memorize-bible-verses/issues/332)) ([971e8c5](https://github.com/CodingForChrist/memorize-bible-verses/commit/971e8c59ae790bcc7d62e33ad984450497619de1))
+
 ## [1.21.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.20.2...v1.21.0) (2026-01-31)
 
 
