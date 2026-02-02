@@ -1,15 +1,10 @@
 import { test, expect, type Request } from "@playwright/test";
 
-import bibleData from "./mocks/bibles.json" with { type: "json" };
 import verseOfTheDayData from "./mocks/verses/NKJV/verse-of-the-day-2-peter-3-7.json" with { type: "json" };
 
 let interceptedVerseOfTheDayRequest: Request;
 
 test.beforeEach(async ({ page }) => {
-  await page.route("**/api/v1/bibles", async (route) => {
-    await route.fulfill({ json: bibleData });
-  });
-
   await page.route("**/api/v1/bibles/*/verse-of-the-day", async (route) => {
     interceptedVerseOfTheDayRequest = route.request();
     await route.fulfill({ json: verseOfTheDayData });

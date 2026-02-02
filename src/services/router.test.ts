@@ -25,7 +25,6 @@ function stubLocationData({ hash }: { hash: string }) {
 describe("getStateFromURL()", () => {
   beforeEach(() => {
     vi.unstubAllGlobals();
-    vi.clearAllMocks();
   });
 
   test("should return undefined for url with no hash", () => {
@@ -60,7 +59,6 @@ describe("getStateFromURL()", () => {
 describe("setStateInURL()", () => {
   beforeEach(() => {
     vi.unstubAllGlobals();
-    vi.clearAllMocks();
   });
 
   test("should add page name to url with no hash", () => {
@@ -122,7 +120,6 @@ describe("setStateInURL()", () => {
 describe("deleteUnknownParametersInURL()", () => {
   beforeEach(() => {
     vi.unstubAllGlobals();
-    vi.clearAllMocks();
   });
 
   test("should not update url when there is no hash", () => {

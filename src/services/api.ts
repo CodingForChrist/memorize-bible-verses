@@ -1,4 +1,3 @@
-import { BibleTranslationArraySchema } from "../schemas/bible-translation-schema";
 import { BibleVerseSchema } from "../schemas/bible-verse-schema";
 import { VerseOfTheDayListArraySchema } from "../schemas/verse-of-the-day-list-schema";
 
@@ -38,58 +37,6 @@ async function resolveResponseToJSON(responsePromise: Promise<Response>) {
 function assert(condition: unknown, message?: string): asserts condition {
   if (!condition) {
     throw new Error(message || "Assertion failed");
-  }
-}
-
-type FetchBibleTranslationsOptions = {
-  // string of bible ids that are comma separated
-  ids: string;
-  language: string;
-  includeFullDetails: boolean;
-};
-
-export async function fetchBibleTranslationsWithCache({
-  language,
-  ids,
-  includeFullDetails,
-}: FetchBibleTranslationsOptions) {
-  const url = `${API_BASE_URL}/api/v1/bibles`;
-  const cacheKey = createCacheKey({
-    url,
-    options: { language, ids, includeFullDetails },
-  });
-  const cacheResult = cache.get(cacheKey);
-  let responsePromise: Promise<Response>;
-
-  if (cacheResult) {
-    responsePromise = cacheResult;
-  } else {
-    responsePromise = fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        language,
-        ids,
-        includeFullDetails,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        "Application-User-Id": APPLICATION_USER_ID,
-      },
-    });
-    cache.set(cacheKey, responsePromise);
-  }
-
-  try {
-    const jsonData = await resolveResponseToJSON(responsePromise);
-    assert(
-      jsonData && typeof jsonData === "object" && "data" in jsonData,
-      'expected Bible Translations API to return an object containing a "data" key',
-    );
-
-    return BibleTranslationArraySchema.parse(jsonData.data);
-  } catch (error) {
-    cache.delete(cacheKey);
-    throw error;
   }
 }
 
