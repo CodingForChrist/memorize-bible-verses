@@ -38,7 +38,7 @@ test.beforeEach(async ({ page }) => {
 test("page load", async ({ page }) => {
   await page.goto("/#/advanced-search");
 
-  await expect(page).toHaveTitle(/Advanced Search | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Advanced Search - Memorize Bible Verses");
   await expect(
     page.getByRole("heading", { name: "Advanced Search" }),
   ).toBeVisible();
@@ -52,7 +52,7 @@ test("back button", async ({ page }) => {
   await page.getByRole("button", { name: "< Back" }).click();
 
   await page.goto("/#/search-options");
-  await expect(page).toHaveTitle(/Search Options | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Search Options - Memorize Bible Verses");
 });
 
 test("search for verse", async ({ page }) => {
@@ -66,7 +66,7 @@ test("search for verse", async ({ page }) => {
   await expect(page.locator(".citation")).toHaveText(/New King James Version/);
 
   await expect(page).toHaveTitle(
-    /John 3:16 | Advanced Search | Memorize Bible Verses"/,
+    "John 3:16 - Advanced Search - Memorize Bible Verses",
   );
 });
 

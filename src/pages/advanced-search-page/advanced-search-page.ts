@@ -95,7 +95,7 @@ export class AdvancedSearchPage extends BasePage(LitElement) {
     }
 
     this.pageTitle = this.verseReference
-      ? `${this.verseReference} | ${AdvancedSearchPage.defaultPageTitle}`
+      ? `${this.verseReference} - ${AdvancedSearchPage.defaultPageTitle}`
       : AdvancedSearchPage.defaultPageTitle;
   }
 }

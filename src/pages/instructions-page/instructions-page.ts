@@ -8,7 +8,7 @@ import logoURL from "../../images/logo.svg";
 
 @customElement("instructions-page")
 export class InstructionsPage extends BasePage(LitElement) {
-  pageTitle = "︎Instructions";
+  pageTitle = "Instructions";
 
   static styles = [
     buttonStyles,

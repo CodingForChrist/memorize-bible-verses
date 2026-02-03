@@ -45,7 +45,7 @@ test("page load", async ({ page }) => {
   await page.goto("/#/share-the-gospel");
 
   await expect(page).toHaveTitle(
-    /Verses for Sharing the Gospel | Memorize Bible Verses"/,
+    "Romans 3:23 - Verses for Sharing the Gospel - Memorize Bible Verses",
   );
   await expect(
     page.getByRole("heading", { name: "Share the Gospel" }),
@@ -65,7 +65,7 @@ test("back button", async ({ page }) => {
   await page.getByRole("button", { name: "< Back" }).click();
 
   await page.goto("/#/search-options");
-  await expect(page).toHaveTitle(/Search Options | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Search Options - Memorize Bible Verses");
 });
 
 test("auto-fill form based on query parameter values", async ({ page }) => {
@@ -80,7 +80,7 @@ test("auto-fill form based on query parameter values", async ({ page }) => {
   await expect(page.locator(".citation")).toHaveText(/Berean Standard Bible/);
 
   await expect(page).toHaveTitle(
-    /John 14:6 | Search Options | Memorize Bible Verses"/,
+    "John 14:6 - Verses for Sharing the Gospel - Memorize Bible Verses",
   );
 });
 

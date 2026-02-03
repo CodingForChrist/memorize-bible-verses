@@ -18,7 +18,7 @@ test.beforeEach(async ({ page }) => {
 
 test("page load", async ({ page }) => {
   await page.goto("/#/search-options");
-  await expect(page).toHaveTitle(/Search Options | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Search Options - Memorize Bible Verses");
   await expect(page.getByRole("heading", { name: "Search" })).toBeVisible();
 });
 
@@ -27,7 +27,7 @@ test("verse of the day button", async ({ page }) => {
   await page.getByRole("button", { name: "Verse of the Day" }).click();
 
   await expect(page.url()).toContain("/#/verse-of-the-day");
-  await expect(page).toHaveTitle(/Verse of the Day | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Verse of the Day - Memorize Bible Verses");
 });
 
 test("share the gospel button", async ({ page }) => {
@@ -36,7 +36,7 @@ test("share the gospel button", async ({ page }) => {
 
   await expect(page.url()).toContain("/#/share-the-gospel");
   await expect(page).toHaveTitle(
-    /Verses for Sharing the Gospel | Memorize Bible Verses"/,
+    "Romans 3:23 - Verses for Sharing the Gospel - Memorize Bible Verses",
   );
 });
 
@@ -45,7 +45,7 @@ test("psalm 23 button", async ({ page }) => {
   await page.getByRole("button", { name: "Psalm 23" }).click();
 
   await expect(page.url()).toContain("/#/psalm-23");
-  await expect(page).toHaveTitle(/Psalm 23 | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Psalm 23 - Memorize Bible Verses");
 });
 
 test("awana button", async ({ page }) => {
@@ -54,7 +54,7 @@ test("awana button", async ({ page }) => {
 
   await expect(page.url()).toContain("/#/verses-for-awana");
   await expect(page).toHaveTitle(
-    /Verses for Awana Club for Kids | Memorize Bible Verses"/,
+    "Verses for Awana Club for Kids - Memorize Bible Verses",
   );
 });
 
@@ -65,5 +65,5 @@ test("power user button", async ({ page }) => {
     .click();
 
   await expect(page.url()).toContain("/#/advanced-search");
-  await expect(page).toHaveTitle(/Advanced Search | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Advanced Search - Memorize Bible Verses");
 });
