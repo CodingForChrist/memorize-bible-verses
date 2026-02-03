@@ -91,7 +91,7 @@ export class ShareTheGospelPage extends BasePage(LitElement) {
     }
 
     this.pageTitle = this.verseReference
-      ? `${this.verseReference} | ${ShareTheGospelPage.defaultPageTitle}`
+      ? `${this.verseReference} - ${ShareTheGospelPage.defaultPageTitle}`
       : ShareTheGospelPage.defaultPageTitle;
   }
 }

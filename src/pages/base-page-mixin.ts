@@ -25,7 +25,7 @@ export const BasePage = <T extends Constructor<LitElement>>(superClass: T) => {
     #pageTitle: string = "";
 
     set pageTitle(value: string) {
-      this.#pageTitle = `${value} | Memorize Bible Verses`;
+      this.#pageTitle = `${value} - Memorize Bible Verses`;
       document.title = this.#pageTitle;
     }
 

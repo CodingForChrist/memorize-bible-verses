@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 test("page load", async ({ page }) => {
   await page.goto("/#/verse-of-the-day");
 
-  await expect(page).toHaveTitle(/Verse of the Day | Memorize Bible Verses"/);
+  await expect(page).toHaveTitle("Verse of the Day - Memorize Bible Verses");
   await expect(
     page.getByRole("heading", { name: "Verse of the Day" }),
   ).toBeVisible();

@@ -227,7 +227,7 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
     }
 
     this.pageTitle = this.verseReference
-      ? `${this.verseReference} | ${VersesForAwanaPage.defaultPageTitle}`
+      ? `${this.verseReference} - ${VersesForAwanaPage.defaultPageTitle}`
       : VersesForAwanaPage.defaultPageTitle;
   }
 }
