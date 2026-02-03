@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.23.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.22.0...v1.23.0) (2026-02-03)
+
+
+### Features
+
+* use dashes as separator in page titles ([#336](https://github.com/CodingForChrist/memorize-bible-verses/issues/336)) ([1149678](https://github.com/CodingForChrist/memorize-bible-verses/commit/1149678113b139bc60abfefb14813d8fd9090174))
+
 ## [1.22.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.21.0...v1.22.0) (2026-02-02)
 
 
