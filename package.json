@@ -24,7 +24,7 @@
     "eslint": "^9.39.2",
     "eslint-plugin-unicorn": "^62.0.0",
     "globals": "^17.3.0",
-    "happy-dom": "^20.5.0",
+    "happy-dom": "^20.5.3",
     "jiti": "^2.6.1",
     "modern-normalize": "^3.0.1",
     "prettier": "^3.8.1",
