@@ -8,6 +8,7 @@ export default defineConfig({
     sequence: {
       shuffle: true,
     },
+    silent: "passed-only",
     exclude: ["**/node_modules/**", "**/playwright-tests/**"],
   },
 });
