@@ -57,18 +57,34 @@ function addMissingColonsToBibleReference({
     ":",
     "",
   );
-  if (improvedTranscript.includes(singleVerseReferenceWithoutColon)) {
+
+  const searchPatternSingleVerseReferenceWithoutColon = new RegExp(
+    singleVerseReferenceWithoutColon,
+    "gi",
+  );
+
+  if (searchPatternSingleVerseReferenceWithoutColon.test(improvedTranscript)) {
     improvedTranscript = improvedTranscript.replaceAll(
-      singleVerseReferenceWithoutColon,
+      searchPatternSingleVerseReferenceWithoutColon,
       singleVerseReference,
     );
   }
 
   const singleVerseReferenceWithoutColonWithSpace =
     singleVerseReference.replace(":", " ");
-  if (improvedTranscript.includes(singleVerseReferenceWithoutColonWithSpace)) {
+
+  const searchPatternSingleVerseReferenceWithoutColonWithSpace = new RegExp(
+    singleVerseReferenceWithoutColonWithSpace,
+    "gi",
+  );
+
+  if (
+    searchPatternSingleVerseReferenceWithoutColonWithSpace.test(
+      improvedTranscript,
+    )
+  ) {
     improvedTranscript = improvedTranscript.replaceAll(
-      singleVerseReferenceWithoutColonWithSpace,
+      searchPatternSingleVerseReferenceWithoutColonWithSpace,
       singleVerseReference,
     );
   }
@@ -129,7 +145,7 @@ function replaceSpelledOutNumbersInBibleReference({
   if (spelledOutNumbersMap[chapter]) {
     const chapterSpelledOut = spelledOutNumbersMap[chapter];
 
-    const searchPattern = new RegExp(`${bookName} ${chapterSpelledOut}`, "ig");
+    const searchPattern = new RegExp(`${bookName} ${chapterSpelledOut}`, "gi");
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
@@ -142,9 +158,10 @@ function replaceSpelledOutNumbersInBibleReference({
     const verseNumberStartSpelledOut = spelledOutNumbersMap[verseNumberStart];
 
     const searchPattern = new RegExp(
-      `${bookName} ${chapter} ${verseNumberStartSpelledOut}`,
-      "ig",
+      `${bookName} ${chapter}[ : ]?${verseNumberStartSpelledOut}`,
+      "gi",
     );
+
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
@@ -157,9 +174,10 @@ function replaceSpelledOutNumbersInBibleReference({
     const verseNumberEndSpelledOut = spelledOutNumbersMap[verseNumberEnd];
 
     const searchPattern = new RegExp(
-      `${bookName} ${chapter}:${verseNumberStart} [-a-zA-Z]+ ${verseNumberEndSpelledOut}`,
-      "ig",
+      `${bookName} ${chapter}[ : ]?${verseNumberStart} [-a-z]+ ${verseNumberEndSpelledOut}`,
+      "gi",
     );
+
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
