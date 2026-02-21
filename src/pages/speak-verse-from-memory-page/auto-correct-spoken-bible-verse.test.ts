@@ -49,69 +49,74 @@ describe("autoCorrectSpeechRecognitionInput()", () => {
 
     expect(
       autoCorrectSpeechRecognitionInput({
-        verseReference: "Psalms 23:1-2",
+        verseReference: "Psalm 23:1-2",
         transcript:
           "Psalm 23:1 through two The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters psalm 23 one through two",
+        verseText: verseTextPsalmChapter23Verses1To2,
+      }),
+    ).toBe(verseTextPsalmChapter23Verses1To2);
+
+    expect(
+      autoCorrectSpeechRecognitionInput({
+        verseReference: "Psalm 23:1-2",
+        transcript:
+          "Psalm 231 through two The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters psalm 231 through two",
         verseText: verseTextPsalmChapter23Verses1To2,
       }),
     ).toBe(verseTextPsalmChapter23Verses1To2);
   });
 
   test("should match lowercase book names", () => {
-    const transcript =
-      "Psalm 23:1 through 2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters psalm 23 one through two";
-    const expectedOutput =
+    const verseTextPsalmChapter23Verses1To2 =
       "Psalm 23:1-2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters Psalm 23:1-2";
 
     expect(
       autoCorrectSpeechRecognitionInput({
-        transcript,
         verseReference: "Psalm 23:1-2",
-        verseText: expectedOutput,
+        transcript:
+          "Psalm 23:1 through 2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters psalm 23 one through two",
+        verseText: verseTextPsalmChapter23Verses1To2,
       }),
-    ).toBe(expectedOutput);
+    ).toBe(verseTextPsalmChapter23Verses1To2);
   });
 
   test("should convert ordinal numbers for books of the bible", () => {
-    const transcript =
-      "Second Corinthians 57 For we walk by faith not by sight second Corinthians 57";
-    const expectedOutput =
+    const verseText2CorinthiansChapter5Verse7 =
       "2 Corinthians 5:7 For we walk by faith not by sight 2 Corinthians 5:7";
 
     expect(
       autoCorrectSpeechRecognitionInput({
-        transcript,
         verseReference: "2 Corinthians 5:7",
-        verseText: expectedOutput,
+        transcript:
+          "Second Corinthians 57 For we walk by faith not by sight second Corinthians 57",
+        verseText: verseText2CorinthiansChapter5Verse7,
       }),
-    ).toBe(expectedOutput);
+    ).toBe(verseText2CorinthiansChapter5Verse7);
   });
 
   test("should convert word divider to dash for verse range", () => {
-    const transcript =
-      "Genesis 1 122 In the beginning God created the heavens and the earth Now the earth was formless and void and darkness was over the surface of the deep and the Spirit of God was hovering over the surface of the waters Genesis 1 122";
-    const expectedOutput =
+    const verseTextGenesisChapter1Verses1To2 =
       "Genesis 1:1-2 In the beginning God created the heavens and the earth Now the earth was formless and void and darkness was over the surface of the deep and the Spirit of God was hovering over the surface of the waters Genesis 1:1-2";
 
     expect(
       autoCorrectSpeechRecognitionInput({
-        transcript,
+        transcript:
+          "Genesis 1 122 In the beginning God created the heavens and the earth Now the earth was formless and void and darkness was over the surface of the deep and the Spirit of God was hovering over the surface of the waters Genesis 1 122",
         verseReference: "Genesis 1:1-2",
-        verseText: expectedOutput,
+        verseText: verseTextGenesisChapter1Verses1To2,
       }),
-    ).toBe(expectedOutput);
+    ).toBe(verseTextGenesisChapter1Verses1To2);
 
-    const transcript2 =
-      "Psalm 23:1 through 2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters Psalm 23 one through two";
-    const expectedOutput2 =
+    const verseTextPsalmChapter23Verses1To2 =
       "Psalm 23:1-2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters Psalm 23:1-2";
 
     expect(
       autoCorrectSpeechRecognitionInput({
-        transcript: transcript2,
         verseReference: "Psalm 23:1-2",
-        verseText: expectedOutput2,
+        transcript:
+          "Psalm 23:1 through 2 The Lord is my shepherd I shall not want He makes me lie down in green pastures He leads me beside quiet waters Psalm 23 one through two",
+        verseText: verseTextPsalmChapter23Verses1To2,
       }),
-    ).toBe(expectedOutput2);
+    ).toBe(verseTextPsalmChapter23Verses1To2);
   });
 });
