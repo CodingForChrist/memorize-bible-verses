@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.24.0...v1.24.1) (2026-02-21)
+
+
+### Bug Fixes
+
+* **auto-correct:** replace spelled out words when colon is missing ([#345](https://github.com/CodingForChrist/memorize-bible-verses/issues/345)) ([7c943fd](https://github.com/CodingForChrist/memorize-bible-verses/commit/7c943fd5d8f8040a130ae31433816ac38214de7d))
+
 ## [1.24.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.23.0...v1.24.0) (2026-02-21)
 
 
