@@ -162,11 +162,6 @@ function replaceSpelledOutNumbersInBibleReference({
       "gi",
     );
 
-    console.log({
-      searchPattern,
-      improvedTranscript,
-    });
-
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
