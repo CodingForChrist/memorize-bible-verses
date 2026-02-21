@@ -5,6 +5,8 @@ import logoURL from "../images/logo.svg";
 import { hyperlinkStyles, buttonStyles } from "./shared-styles";
 
 import "../components/modal-dialog";
+import "../components/console-logger";
+import "../components/collapsible-content";
 
 @customElement("app-footer")
 export class AppFooter extends LitElement {
@@ -126,6 +128,9 @@ export class AppFooter extends LitElement {
             >
           </p>
           <p>app version ${this.version}</p>
+          <collapsible-content title="Debug Logging">
+            <console-logger></console-logger>
+          </collapsible-content>
         </div>
       </modal-dialog>
       <footer>

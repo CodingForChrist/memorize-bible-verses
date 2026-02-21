@@ -1,4 +1,5 @@
 import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
+import { logger } from "../../services/logger";
 
 type AutoCorrectSpeechRecognitionInputOptions = {
   transcript: string;
@@ -27,6 +28,15 @@ export function autoCorrectSpeechRecognitionInput({
     transcript: improvedTranscript,
     verseReference,
     verseText,
+  });
+
+  logger.debug({
+    message: "autoCorrectSpeechRecognitionInput()",
+    payload: {
+      verseReference,
+      originalTranscript: transcript,
+      improvedTranscript,
+    },
   });
 
   return improvedTranscript;
