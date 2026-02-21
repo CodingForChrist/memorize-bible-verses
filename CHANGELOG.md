@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.23.0...v1.24.0) (2026-02-21)
+
+
+### Features
+
+* add console logger component ([#343](https://github.com/CodingForChrist/memorize-bible-verses/issues/343)) ([8c16ae1](https://github.com/CodingForChrist/memorize-bible-verses/commit/8c16ae1300cfb1efde65ed3292e688f40a260c36))
+
 ## [1.23.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.22.0...v1.23.0) (2026-02-03)
 
 
