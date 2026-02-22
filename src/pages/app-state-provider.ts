@@ -5,6 +5,8 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { CUSTOM_EVENT, PAGE_NAME, type PageName } from "../constants";
 import { setBibleTranslationInLocalStorage } from "../services/local-storage";
+import { logger } from "../services/logger";
+
 import {
   getStateFromURL,
   setStateInURL,
@@ -73,6 +75,10 @@ export class AppStateProvider extends LitElement {
         const pageNavigation = event.detail?.pageNavigation;
         if (pageNavigation) {
           this.#viewTransitionForPageNavigation(pageNavigation);
+          logger.info({
+            message: `${CUSTOM_EVENT.NAVIGATE_TO_PAGE} event`,
+            payload: pageNavigation,
+          });
         }
       },
     );
@@ -95,6 +101,13 @@ export class AppStateProvider extends LitElement {
             id,
             abbreviation,
           });
+          logger.info({
+            message: `${CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION} event`,
+            payload: {
+              id,
+              abbreviation,
+            },
+          });
         }
       },
     );
@@ -111,6 +124,13 @@ export class AppStateProvider extends LitElement {
             verse: bibleVerse.reference,
             shouldUpdateBrowserHistory: false,
           });
+          logger.info({
+            message: `${CUSTOM_EVENT.UPDATE_BIBLE_VERSE} event`,
+            payload: {
+              verse: bibleVerse.reference,
+              bibleId: bibleVerse.bibleId,
+            },
+          });
         }
       },
     );
@@ -121,6 +141,12 @@ export class AppStateProvider extends LitElement {
         const recitedBibleVerse = event.detail?.recitedBibleVerse;
         if (recitedBibleVerse) {
           this.recitedBibleVerse = recitedBibleVerse;
+          logger.info({
+            message: `${CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE} event`,
+            payload: {
+              recitedBibleVerse,
+            },
+          });
         }
       },
     );
@@ -209,6 +235,16 @@ export class AppStateProvider extends LitElement {
       ],
       () => html`<instructions-page></instructions-page>`,
     );
+  }
+
+  firstUpdated() {
+    logger.info({
+      message: "app-state-provider firstUpdated",
+      payload: {
+        version: import.meta.env.PACKAGE_VERSION,
+        currentPage: this.currentPage,
+      },
+    });
   }
 
   #getPageNameFromURLWithFallback() {

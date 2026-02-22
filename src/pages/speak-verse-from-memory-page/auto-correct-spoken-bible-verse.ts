@@ -31,7 +31,7 @@ export function autoCorrectSpeechRecognitionInput({
   });
 
   logger.debug({
-    message: "autoCorrectSpeechRecognitionInput()",
+    message: "autoCorrectSpeechRecognitionInput",
     payload: {
       verseReference,
       originalTranscript: transcript,

@@ -17,6 +17,12 @@ export type LogEntry = {
 type LogOptions = Omit<LogEntry, "level" | "time">;
 
 class Logger {
+  logEntries: LogEntry[];
+
+  constructor() {
+    this.logEntries = [];
+  }
+
   debug(logOptions: LogOptions) {
     this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.DEBUG });
   }
@@ -34,6 +40,7 @@ class Logger {
   }
 
   #log(logEntry: LogEntry) {
+    this.logEntries.push(logEntry);
     this.#sendCustomLogEvent(logEntry);
 
     const { level, message, payload } = logEntry;

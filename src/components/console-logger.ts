@@ -2,12 +2,12 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 
-import type { LogEntry } from "../services/logger";
+import { logger, type LogEntry } from "../services/logger";
 
 @customElement("console-logger")
 export class ConsoleLogger extends LitElement {
   @state()
-  logBuffer: LogEntry[] = [];
+  logEntries: LogEntry[] = logger.logEntries;
 
   static styles = css`
     :host {
@@ -73,7 +73,7 @@ export class ConsoleLogger extends LitElement {
       (event: CustomEventInit<{ logEntry: LogEntry }>) => {
         const logEntry = event.detail?.logEntry;
         if (logEntry) {
-          this.logBuffer = [...this.logBuffer, logEntry];
+          this.logEntries = [...this.logEntries, logEntry];
         }
       },
     );
@@ -82,7 +82,7 @@ export class ConsoleLogger extends LitElement {
   render() {
     return html`
       <div>
-        ${map(this.logBuffer, (logEntry) => this.#renderLogEntry(logEntry))}
+        ${map(this.logEntries, (logEntry) => this.#renderLogEntry(logEntry))}
       </div>
     `;
   }
