@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.25.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.24.1...v1.25.0) (2026-02-24)
+
+
+### Features
+
+* add logging for app events ([#347](https://github.com/CodingForChrist/memorize-bible-verses/issues/347)) ([1adbb9b](https://github.com/CodingForChrist/memorize-bible-verses/commit/1adbb9bcb310d5c8e143c7f3414bece4ba2c9a64))
+
 ## [1.24.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.24.0...v1.24.1) (2026-02-21)
 
 
