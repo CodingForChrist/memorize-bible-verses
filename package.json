@@ -23,7 +23,7 @@
     "corti": "^1.0.0",
     "eslint": "^10.0.1",
     "eslint-plugin-unicorn": "^63.0.0",
-    "globals": "^17.3.0",
+    "globals": "^17.4.0",
     "happy-dom": "^20.5.3",
     "jiti": "^2.6.1",
     "modern-normalize": "^3.0.1",
