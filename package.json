@@ -21,7 +21,7 @@
     "@types/dom-speech-recognition": "^0.0.7",
     "@types/node": "^25.3.0",
     "corti": "^1.0.0",
-    "eslint": "^10.0.1",
+    "eslint": "^10.1.0",
     "eslint-plugin-unicorn": "^63.0.0",
     "globals": "^17.4.0",
     "happy-dom": "^20.8.8",
