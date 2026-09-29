@@ -10,9 +10,6 @@ import "../components/collapsible-content";
 
 @customElement("app-footer")
 export class AppFooter extends LitElement {
-  @state()
-  isDialogOpen: boolean = false;
-
   static styles = [
     hyperlinkStyles,
     buttonStyles,
@@ -71,6 +68,9 @@ export class AppFooter extends LitElement {
     `,
   ];
 
+  @state()
+  isDialogOpen: boolean = false;
+
   version = import.meta.env.PACKAGE_VERSION;
 
   get #infomationCircleIcon() {
@@ -91,6 +91,10 @@ export class AppFooter extends LitElement {
         />
       </svg>
     `;
+  }
+
+  #handleButtonClickToShowDialog() {
+    this.isDialogOpen = true;
   }
 
   render() {
@@ -144,9 +148,5 @@ export class AppFooter extends LitElement {
         </button>
       </footer>
     `;
-  }
-
-  #handleButtonClickToShowDialog() {
-    this.isDialogOpen = true;
   }
 }

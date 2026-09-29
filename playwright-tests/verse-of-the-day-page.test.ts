@@ -6,6 +6,7 @@ let interceptedVerseOfTheDayRequest: Request;
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/v1/bibles/*/verse-of-the-day", async (route) => {
+    // eslint-disable-next-line unicorn/no-top-level-assignment-in-function
     interceptedVerseOfTheDayRequest = route.request();
     await route.fulfill({ json: verseOfTheDayData });
   });

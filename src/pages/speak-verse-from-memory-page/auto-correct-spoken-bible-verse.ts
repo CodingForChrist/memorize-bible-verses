@@ -49,7 +49,7 @@ function addMissingColonsToBibleReference({
   let singleVerseReference = verseReference;
   if (verseReference.includes("-")) {
     // remove the verse range and just use the first verse
-    singleVerseReference = verseReference.split("-")[0];
+    singleVerseReference = verseReference.split("-", 1)[0];
   }
 
   let improvedTranscript = transcript;
@@ -198,7 +198,7 @@ function useDashForVerseRanges({
   }
 
   const rangeDividers = [" to ", " through ", "2"];
-  const singleVerseReference = verseReference.split("-")[0];
+  const singleVerseReference = verseReference.split("-", 1)[0];
 
   const { success, data } = VerseReferenceSchema.safeParse(verseReference);
 

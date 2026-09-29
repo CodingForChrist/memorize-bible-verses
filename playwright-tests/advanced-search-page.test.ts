@@ -120,7 +120,7 @@ test("displays an alert when verse reference api returns invalid json content", 
   await page.route(
     "**/api/v1/bibles/*/passages/verse-reference",
     async (route) => {
-      const copyOfVerseReferenceDataBSB = globalThis.structuredClone(
+      const copyOfVerseReferenceDataBSB = structuredClone(
         verseReferenceDataBSB,
       );
       copyOfVerseReferenceDataBSB.data.content[0].type = "unexpected-type-name";

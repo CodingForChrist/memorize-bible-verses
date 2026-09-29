@@ -14,19 +14,6 @@ import type { BibleVerse } from "../schemas/bible-verse-schema";
 
 @customElement("bible-verse-fetch-result")
 export class BibleVerseFetchResult extends LitElement {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @property({ attribute: "verse-reference", reflect: true })
-  verseReference?: string;
-
-  @property({
-    type: Boolean,
-    attribute: "include-titles",
-    reflect: true,
-  })
-  includeTitles: boolean = false;
-
   static styles = [
     css`
       :host {
@@ -41,6 +28,19 @@ export class BibleVerseFetchResult extends LitElement {
       }
     `,
   ];
+
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
+
+  @property({
+    type: Boolean,
+    attribute: "include-titles",
+    reflect: true,
+  })
+  includeTitles: boolean = false;
 
   #bibleVerseTask = new Task(this, {
     task: async ([bibleId, verseReference]) => {
@@ -59,7 +59,7 @@ export class BibleVerseFetchResult extends LitElement {
   });
 
   #renderVerse(bibleVerse?: BibleVerse) {
-    if (!this.bibleId || !bibleVerse) {
+    if (!bibleVerse || !this.bibleId) {
       return;
     }
     const { content, verseCount, bibleId, citationText, citationLink } =

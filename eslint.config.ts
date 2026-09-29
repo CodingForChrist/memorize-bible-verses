@@ -6,7 +6,7 @@ import unicorn from "eslint-plugin-unicorn";
 
 export default defineConfig([
   {
-    ignores: ["dist/"]
+    ignores: ["dist/"],
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],

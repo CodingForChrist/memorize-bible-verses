@@ -70,19 +70,21 @@ function getTextFromBibleVerseContentItemsArray(
       ];
     }
 
-    if (item.type === "text" && item.text) {
-      // ignore spaces
-      if (item.text.trim() === "") {
-        continue;
-      }
-
-      // ignore heading text not related to a verse
-      if (!item.attrs?.verseId) {
-        continue;
-      }
-
-      textArray.push(item.text.trim());
+    if (!(item.type === "text" && item.text)) {
+      continue;
     }
+
+    // ignore spaces
+    if (item.text.trim() === "") {
+      continue;
+    }
+
+    // ignore heading text not related to a verse
+    if (!item.attrs?.verseId) {
+      continue;
+    }
+
+    textArray.push(item.text.trim());
   }
 
   return textArray;

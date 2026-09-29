@@ -80,10 +80,7 @@ export class SearchForm extends LitElement {
 
   get #bibleBookNames() {
     return getAllBibleBooks().map((bookName) => {
-      if (bookName === "Psalms") {
-        return "Psalm";
-      }
-      return bookName;
+      return bookName === "Psalms" ? "Psalm" : bookName;
     });
   }
 

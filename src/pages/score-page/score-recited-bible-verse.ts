@@ -183,7 +183,7 @@ function removePunctuationFromText(text: string) {
   const hasLettersOrNumbersRegex = /[a-zA-Z0-9]/;
 
   // return empty string when text is only punctuation
-  if (hasLettersOrNumbersRegex.test(text) === false) {
+  if (!hasLettersOrNumbersRegex.test(text)) {
     return "";
   }
 

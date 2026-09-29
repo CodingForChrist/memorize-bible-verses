@@ -37,10 +37,7 @@ export function sortBibleVerseReferences(verseReferences: string[]) {
   const sortedVerseReferencesWithMetadata = verseReferencesWithMetadata.sort(
     (a, b) => {
       const allBooks = getAllBibleBooks().map((bookName) => {
-        if (bookName === "Psalms") {
-          return "Psalm";
-        }
-        return bookName;
+        return bookName === "Psalms" ? "Psalm" : bookName;
       });
 
       const aBookIndex = allBooks.indexOf(a.fullBookName);
@@ -49,25 +46,24 @@ export function sortBibleVerseReferences(verseReferences: string[]) {
       // 1. sort by book
       if (aBookIndex < bBookIndex) {
         return -1;
-      } else if (aBookIndex > bBookIndex) {
+      }
+      if (aBookIndex > bBookIndex) {
         return 1;
       }
 
       // 2. sort by chapter
       if (a.chapter < b.chapter) {
         return -1;
-      } else if (a.chapter > b.chapter) {
+      }
+      if (a.chapter > b.chapter) {
         return 1;
       }
 
       // 3. sort by verse
       if (a.verseNumberStart < b.verseNumberStart) {
         return -1;
-      } else if (a.verseNumberStart > b.verseNumberStart) {
-        return 1;
       }
-
-      return 0;
+      return a.verseNumberStart > b.verseNumberStart ? 1 : 0;
     },
   );
 

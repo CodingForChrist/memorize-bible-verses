@@ -216,7 +216,7 @@ export class SpeechRecognitionService extends EventTarget {
 
   getEventsReport() {
     const report = {
-      userAgent: globalThis.navigator.userAgent,
+      userAgent: navigator.userAgent,
       events: this.#allEvents,
     };
 

@@ -143,7 +143,6 @@ describe("speech recognition events", () => {
           });
 
           recognition.onresult(resultEvent);
-          continue;
         }
       }
 

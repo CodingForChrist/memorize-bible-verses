@@ -44,7 +44,7 @@ class Logger {
     this.#sendCustomLogEvent(logEntry);
 
     const { level, message, payload } = logEntry;
-    if (!console[level]) {
+    if (!Object.values(LOG_LEVEL).includes(level)) {
       throw new Error(
         `Invalid log level - Console API missing operation "${level}"`,
       );
@@ -60,7 +60,7 @@ class Logger {
       bubbles: true,
       composed: true,
     });
-    globalThis.dispatchEvent(eventCustomLog);
+    dispatchEvent(eventCustomLog);
   }
 }
 

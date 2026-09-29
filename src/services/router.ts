@@ -1,12 +1,12 @@
 import { PAGE_NAME, type PageName } from "../constants";
 
 export function getStateFromURL() {
-  if (!globalThis.location.hash) {
+  if (!location.hash) {
     return;
   }
 
-  const pathNameWithQueryString = globalThis.location.hash.replace("#", "");
-  const url = new URL(pathNameWithQueryString, globalThis.location.origin);
+  const pathNameWithQueryString = location.hash.replace("#", "");
+  const url = new URL(pathNameWithQueryString, location.origin);
   const pathName = url.pathname.replace("/", "");
 
   if (!Object.values(PAGE_NAME).includes(pathName as PageName)) {
@@ -73,7 +73,7 @@ export function deleteUnknownParametersInURL() {
 }
 
 function getURLWithoutHash() {
-  const urlWithoutHash = globalThis.location.href.replace(
+  const urlWithoutHash = location.href.replace(
     "/memorize-bible-verses/#/",
     "/memorize-bible-verses/",
   );

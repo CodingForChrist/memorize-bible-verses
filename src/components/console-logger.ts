@@ -68,7 +68,7 @@ export class ConsoleLogger extends LitElement {
   constructor() {
     super();
 
-    globalThis.addEventListener(
+    addEventListener(
       "custom-log",
       (event: CustomEventInit<{ logEntry: LogEntry }>) => {
         const logEntry = event.detail?.logEntry;

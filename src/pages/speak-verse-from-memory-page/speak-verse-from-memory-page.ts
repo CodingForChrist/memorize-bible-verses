@@ -53,8 +53,9 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
   render() {
     return html`
       <verse-text-page-template
-        ?should-hide-page-navigation=${this.speechRecognitionState ===
-        SPEECH_RECOGNITION_STATE.LISTENING}
+        ?should-hide-page-navigation=${
+          this.speechRecognitionState === SPEECH_RECOGNITION_STATE.LISTENING
+        }
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >

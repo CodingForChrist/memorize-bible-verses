@@ -43,7 +43,7 @@ describe("<advanced-search-page>", () => {
 
   test("should render verse from url", async () => {
     vi.stubGlobal("location", {
-      ...globalThis.location,
+      ...location,
       origin: "http://localhost:3000",
       pathname: "/memorize-bible-verses/",
       href: "http://localhost:3000/memorize-bible-verses/#/advanced-search?translation=BSB&verse=John+3%3A16",

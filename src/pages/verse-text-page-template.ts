@@ -183,10 +183,12 @@ export class VerseTextPageTemplate extends LitElement {
   }
 
   #disconnectIntersectionObserver() {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = undefined;
+    if (!this.observer) {
+      return;
     }
+
+    this.observer.disconnect();
+    this.observer = undefined;
   }
 
   #handleIntersection(entries: IntersectionObserverEntry[]) {

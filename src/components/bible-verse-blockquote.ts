@@ -18,25 +18,6 @@ const { id: bibleIdNKJV } = findBibleTranslationByAbbreviation("NKJV");
 
 @customElement("bible-verse-blockquote")
 export class BibleVerseBlockquote extends LitElement {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @property({ type: Array })
-  content?: BibleVerse["content"];
-
-  @property({
-    attribute: "display-verse-numbers",
-    reflect: true,
-    type: Boolean,
-  })
-  displayVerseNumbers: boolean = false;
-
-  @property({ attribute: "citation-text", reflect: true })
-  citationText?: string;
-
-  @property({ attribute: "citation-link", reflect: true })
-  citationLink?: string;
-
   static styles = [
     hyperlinkStyles,
     unsafeCSS(scriptureStyles),
@@ -65,6 +46,25 @@ export class BibleVerseBlockquote extends LitElement {
     `,
   ];
 
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @property({ type: Array })
+  content?: BibleVerse["content"];
+
+  @property({
+    attribute: "display-verse-numbers",
+    reflect: true,
+    type: Boolean,
+  })
+  displayVerseNumbers: boolean = false;
+
+  @property({ attribute: "citation-text", reflect: true })
+  citationText?: string;
+
+  @property({ attribute: "citation-link", reflect: true })
+  citationLink?: string;
+
   #trimContent(content: BibleVerse["content"]) {
     // prevent blank line from rendering at the beginning of the verse
     // ex: { name: "para", type: "tag", attrs: { style: "b" }, items: [] }
@@ -87,7 +87,10 @@ export class BibleVerseBlockquote extends LitElement {
       return html`<p class=${className}>${this.#renderItems(items)}</p>`;
     }
 
-    if (name === "char" || name === "ref" || name === "verse-span") {
+    if (
+      typeof name === "string" &&
+      ["char", "ref", "verse-span"].includes(name)
+    ) {
       return html`<span class=${className}>${this.#renderItems(items)}</span>`;
     }
 
@@ -116,8 +119,8 @@ export class BibleVerseBlockquote extends LitElement {
     }
 
     if (this.bibleId === bibleIdNKJV && !text?.endsWith(" ")) {
-      const whiteSpace = " ";
-      return html`<span>${text}${whiteSpace}</span>`;
+      const whitespace = " ";
+      return html`<span>${text}${whitespace}</span>`;
     }
 
     return html`<span>${text}</span>`;

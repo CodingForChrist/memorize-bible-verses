@@ -70,11 +70,10 @@ export class TranscriptText extends LitElement {
   }
 
   #fieldSizingContentPolyfill() {
-    if (CSS.supports("field-sizing", "content")) {
-      return;
-    }
-
-    if (!this.textareaElementReference.value) {
+    if (
+      CSS.supports("field-sizing", "content") ||
+      !this.textareaElementReference.value
+    ) {
       return;
     }
 

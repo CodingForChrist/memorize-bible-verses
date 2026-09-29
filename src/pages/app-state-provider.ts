@@ -61,10 +61,10 @@ export class AppStateProvider extends LitElement {
   constructor() {
     super();
 
-    globalThis.history.scrollRestoration = "manual";
+    history.scrollRestoration = "manual";
     deleteUnknownParametersInURL();
 
-    globalThis.addEventListener("popstate", () => {
+    addEventListener("popstate", () => {
       const nextPage = this.#getPageNameFromURLWithFallback();
       this.#goto({ nextPage });
     });
@@ -73,13 +73,15 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.NAVIGATE_TO_PAGE,
       (event: CustomEventInit<{ pageNavigation: PageNavigation }>) => {
         const pageNavigation = event.detail?.pageNavigation;
-        if (pageNavigation) {
-          this.#viewTransitionForPageNavigation(pageNavigation);
-          logger.info({
-            message: `${CUSTOM_EVENT.NAVIGATE_TO_PAGE} event`,
-            payload: pageNavigation,
-          });
+        if (!pageNavigation) {
+          return;
         }
+
+        this.#viewTransitionForPageNavigation(pageNavigation);
+        logger.info({
+          message: `${CUSTOM_EVENT.NAVIGATE_TO_PAGE} event`,
+          payload: pageNavigation,
+        });
       },
     );
 
@@ -87,28 +89,28 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION,
       (event: CustomEventInit<{ bibleTranslation: BibleTranslation }>) => {
         const bibleTranslation = event.detail?.bibleTranslation;
-        if (bibleTranslation) {
-          this.selectedBibleTranslation = bibleTranslation;
-          const { id, abbreviation } = bibleTranslation;
-          setStateInURL({
-            pageName: this.currentPage,
-            translation: abbreviation,
-            verse:
-              this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
-            shouldUpdateBrowserHistory: false,
-          });
-          setBibleTranslationInLocalStorage({
+        if (!bibleTranslation) {
+          return;
+        }
+        this.selectedBibleTranslation = bibleTranslation;
+        const { id, abbreviation } = bibleTranslation;
+        setStateInURL({
+          pageName: this.currentPage,
+          translation: abbreviation,
+          verse: this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
+          shouldUpdateBrowserHistory: false,
+        });
+        setBibleTranslationInLocalStorage({
+          id,
+          abbreviation,
+        });
+        logger.info({
+          message: `${CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION} event`,
+          payload: {
             id,
             abbreviation,
-          });
-          logger.info({
-            message: `${CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION} event`,
-            payload: {
-              id,
-              abbreviation,
-            },
-          });
-        }
+          },
+        });
       },
     );
 
@@ -116,22 +118,24 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.UPDATE_BIBLE_VERSE,
       (event: CustomEventInit<{ bibleVerse: BibleVerse }>) => {
         const bibleVerse = event.detail?.bibleVerse;
-        if (bibleVerse) {
-          this.selectedBibleVerse = bibleVerse;
-          this.recitedBibleVerse = undefined;
-          setStateInURL({
-            pageName: this.currentPage,
-            verse: bibleVerse.reference,
-            shouldUpdateBrowserHistory: false,
-          });
-          logger.info({
-            message: `${CUSTOM_EVENT.UPDATE_BIBLE_VERSE} event`,
-            payload: {
-              verse: bibleVerse.reference,
-              bibleId: bibleVerse.bibleId,
-            },
-          });
+        if (!bibleVerse) {
+          return;
         }
+
+        this.selectedBibleVerse = bibleVerse;
+        this.recitedBibleVerse = undefined;
+        setStateInURL({
+          pageName: this.currentPage,
+          verse: bibleVerse.reference,
+          shouldUpdateBrowserHistory: false,
+        });
+        logger.info({
+          message: `${CUSTOM_EVENT.UPDATE_BIBLE_VERSE} event`,
+          payload: {
+            verse: bibleVerse.reference,
+            bibleId: bibleVerse.bibleId,
+          },
+        });
       },
     );
 
@@ -139,15 +143,17 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
       (event: CustomEventInit<{ recitedBibleVerse: string }>) => {
         const recitedBibleVerse = event.detail?.recitedBibleVerse;
-        if (recitedBibleVerse) {
-          this.recitedBibleVerse = recitedBibleVerse;
-          logger.info({
-            message: `${CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE} event`,
-            payload: {
-              recitedBibleVerse,
-            },
-          });
+        if (!recitedBibleVerse) {
+          return;
         }
+
+        this.recitedBibleVerse = recitedBibleVerse;
+        logger.info({
+          message: `${CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE} event`,
+          payload: {
+            recitedBibleVerse,
+          },
+        });
       },
     );
   }

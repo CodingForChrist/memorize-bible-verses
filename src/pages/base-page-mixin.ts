@@ -8,7 +8,6 @@ type PageNavigation = {
   previousPage?: PageName;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Constructor<T> = new (...arguments_: any[]) => T;
 
 export declare class BasePageInterface {
