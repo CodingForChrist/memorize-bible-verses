@@ -1,20 +1,18 @@
 import js from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import { defineConfig, globalIgnores } from "eslint/config";
-import eslintPluginUnicorn from "eslint-plugin-unicorn";
+import { defineConfig } from "eslint/config";
+import unicorn from "eslint-plugin-unicorn";
 
 export default defineConfig([
   {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    plugins: { js },
-    extends: ["js/recommended"],
-    languageOptions: { globals: globals.browser },
+    ignores: ["dist/"]
   },
-  tseslint.configs.recommended,
-  eslintPluginUnicorn.configs.recommended,
-  globalIgnores(["dist/*"]),
   {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    plugins: { js, tseslint: tseslint.plugin, unicorn },
+    extends: ["js/recommended", "tseslint/recommended", "unicorn/recommended"],
+    languageOptions: { globals: globals.browser },
     rules: {
       "unicorn/template-indent": [
         "warn",
@@ -22,7 +20,7 @@ export default defineConfig([
           indent: 2,
         },
       ],
-      "unicorn/prevent-abbreviations": [
+      "unicorn/name-replacements": [
         "error",
         {
           replacements: {
