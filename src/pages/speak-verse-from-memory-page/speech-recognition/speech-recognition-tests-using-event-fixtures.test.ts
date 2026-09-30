@@ -122,28 +122,30 @@ describe("speech recognition events", () => {
           continue;
         }
 
-        if (eventName === "result" && recognition.onresult && value) {
-          const speechRecognitionResults = value.map(
-            (SpeechRecognitionAlternatives) => {
-              return new SpeechRecognitionResult(
-                SpeechRecognitionAlternatives.map(
-                  ({ transcript, confidence }) => {
-                    return new SpeechRecognitionAlternative(
-                      transcript,
-                      confidence,
-                    );
-                  },
-                ),
-              );
-            },
-          );
-
-          const resultEvent = new SpeechRecognitionEvent("result", {
-            results: new SpeechRecognitionResultList(speechRecognitionResults),
-          });
-
-          recognition.onresult(resultEvent);
+        if (eventName !== "result" || !value || !recognition.onresult) {
+          continue;
         }
+
+        const speechRecognitionResults = value.map(
+          (SpeechRecognitionAlternatives) => {
+            return new SpeechRecognitionResult(
+              SpeechRecognitionAlternatives.map(
+                ({ transcript, confidence }) => {
+                  return new SpeechRecognitionAlternative(
+                    transcript,
+                    confidence,
+                  );
+                },
+              ),
+            );
+          },
+        );
+
+        const resultEvent = new SpeechRecognitionEvent("result", {
+          results: new SpeechRecognitionResultList(speechRecognitionResults),
+        });
+
+        recognition.onresult(resultEvent);
       }
 
       const finalTranscript = await listenPromise;

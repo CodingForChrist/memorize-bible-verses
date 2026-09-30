@@ -28,11 +28,9 @@ const {
 } = SPEECH_RECOGNITION_STATE;
 
 export class SpeechRecognitionService extends EventTarget {
-  finalTranscript?: string;
   #interimTranscript: string;
   #transcriptHistory: string[];
   #state: SpeechRecognitionState;
-  recognition: SpeechRecognition;
   #lastResult?: SpeechRecognitionResultList;
   #allEvents?: {
     eventName: string;
@@ -40,6 +38,8 @@ export class SpeechRecognitionService extends EventTarget {
   }[];
   #resolveListener?: (value: string) => void;
   #rejectListener?: (reason: string) => void;
+  finalTranscript?: string;
+  recognition: SpeechRecognition;
 
   constructor() {
     super();
@@ -62,67 +62,6 @@ export class SpeechRecognitionService extends EventTarget {
     this.recognition.onend = this.#onEnd.bind(this);
   }
 
-  get state() {
-    return this.#state;
-  }
-
-  set state(value: SpeechRecognitionState) {
-    this.#state = value;
-
-    const eventUpdateState = new CustomEvent<{
-      state: SpeechRecognitionState;
-    }>(SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE, {
-      detail: { state: value },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(eventUpdateState);
-  }
-
-  get interimTranscript() {
-    return this.#interimTranscript;
-  }
-
-  set interimTranscript(value: string) {
-    this.#interimTranscript = value;
-
-    const eventUpdateState = new CustomEvent<{ interimTranscript: string }>(
-      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
-      {
-        detail: { interimTranscript: value },
-        bubbles: true,
-        composed: true,
-      },
-    );
-    this.dispatchEvent(eventUpdateState);
-  }
-
-  listen() {
-    this.#resetState();
-
-    return new Promise<string>((resolve, reject) => {
-      // resolve or reject get invoked in the "end" event
-      this.#resolveListener = resolve;
-      this.#rejectListener = reject;
-
-      this.state = WAITING_FOR_MICROPHONE_ACCESS;
-      this.recognition.start();
-    });
-  }
-
-  stop() {
-    if (this.state === LISTENING) {
-      this.state = AUDIOEND;
-      this.recognition.stop();
-    } else if (this.state === WAITING_FOR_MICROPHONE_ACCESS) {
-      this.state = REJECTED;
-      this.recognition.stop();
-      if (this.#rejectListener) {
-        this.#rejectListener("Failed to get microphone access");
-      }
-    }
-  }
-
   #resetState() {
     this.#transcriptHistory = [];
     this.interimTranscript = "";
@@ -137,7 +76,7 @@ export class SpeechRecognitionService extends EventTarget {
     for (const result of results) {
       const { confidence, transcript } = result[0];
       // attempt to avoid duplicate phrases for android chrome
-      if (isAndroid() && confidence === 0) {
+      if (confidence === 0 && isAndroid()) {
         continue;
       }
 
@@ -211,6 +150,67 @@ export class SpeechRecognitionService extends EventTarget {
         this.#rejectListener("Failed to get final transcript");
       }
       this.state = REJECTED;
+    }
+  }
+
+  get state() {
+    return this.#state;
+  }
+
+  set state(value: SpeechRecognitionState) {
+    this.#state = value;
+
+    const eventUpdateState = new CustomEvent<{
+      state: SpeechRecognitionState;
+    }>(SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE, {
+      detail: { state: value },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateState);
+  }
+
+  get interimTranscript() {
+    return this.#interimTranscript;
+  }
+
+  set interimTranscript(value: string) {
+    this.#interimTranscript = value;
+
+    const eventUpdateState = new CustomEvent<{ interimTranscript: string }>(
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
+      {
+        detail: { interimTranscript: value },
+        bubbles: true,
+        composed: true,
+      },
+    );
+    this.dispatchEvent(eventUpdateState);
+  }
+
+  listen() {
+    this.#resetState();
+
+    return new Promise<string>((resolve, reject) => {
+      // resolve or reject get invoked in the "end" event
+      this.#resolveListener = resolve;
+      this.#rejectListener = reject;
+
+      this.state = WAITING_FOR_MICROPHONE_ACCESS;
+      this.recognition.start();
+    });
+  }
+
+  stop() {
+    if (this.state === LISTENING) {
+      this.state = AUDIOEND;
+      this.recognition.stop();
+    } else if (this.state === WAITING_FOR_MICROPHONE_ACCESS) {
+      this.state = REJECTED;
+      this.recognition.stop();
+      if (this.#rejectListener) {
+        this.#rejectListener("Failed to get microphone access");
+      }
     }
   }
 

@@ -20,32 +20,6 @@ import "../../components/loading-spinner";
 
 @customElement("recite-bible-verse")
 export class ReciteBibleVerse extends LitElement {
-  @property({ attribute: "verse-reference", reflect: true })
-  verseReference?: string;
-
-  @property({ attribute: "verse-text-content", reflect: true })
-  verseTextContent?: string;
-
-  @property({ reflect: true })
-  transcript: string = "";
-
-  @state()
-  speechRecognitionState: SpeechRecognitionState =
-    SPEECH_RECOGNITION_STATE.INITIAL;
-
-  speechRecognitionService?: SpeechRecognitionService;
-
-  constructor() {
-    super();
-
-    try {
-      this.speechRecognitionService = new SpeechRecognitionService();
-    } catch (error) {
-      this.speechRecognitionState = SPEECH_RECOGNITION_STATE.REJECTED;
-      console.error("Unable to use the SpeechRecognition API", error);
-    }
-  }
-
   static styles = [
     buttonStyles,
     css`
@@ -90,11 +64,77 @@ export class ReciteBibleVerse extends LitElement {
     `,
   ];
 
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
+
+  @property({ attribute: "verse-text-content", reflect: true })
+  verseTextContent?: string;
+
+  @property({ reflect: true })
+  transcript: string = "";
+
+  @state()
+  speechRecognitionState: SpeechRecognitionState =
+    SPEECH_RECOGNITION_STATE.INITIAL;
+
+  speechRecognitionService?: SpeechRecognitionService;
+
+  constructor() {
+    super();
+
+    try {
+      this.speechRecognitionService = new SpeechRecognitionService();
+    } catch (error) {
+      this.speechRecognitionState = SPEECH_RECOGNITION_STATE.REJECTED;
+      console.error("Unable to use the SpeechRecognition API", error);
+    }
+
+    this.handleSpeechRecognitionStateEvent =
+      this.handleSpeechRecognitionStateEvent.bind(this);
+    this.handleSpeechRecognitionInterimTranscriptEvent =
+      this.handleSpeechRecognitionInterimTranscriptEvent.bind(this);
+  }
+
   get #hasSupportForSpeechRecognition() {
     return (
       "SpeechRecognition" in globalThis ||
       "webkitSpeechRecognition" in globalThis
     );
+  }
+
+  #handleStopButtonClick() {
+    this.speechRecognitionService!.stop();
+  }
+
+  #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
+    const eventUpdateRecitedBibleVerse = new CustomEvent<{
+      recitedBibleVerse: string;
+    }>(CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE, {
+      detail: { recitedBibleVerse },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateRecitedBibleVerse);
+  }
+
+  async #handleRecordButtonClick() {
+    // reset state
+    this.transcript = "";
+    this.speechRecognitionState = SPEECH_RECOGNITION_STATE.INITIAL;
+
+    if (window.scrollY < 200) {
+      this.scrollIntoView();
+    }
+
+    const finalTranscript = await this.speechRecognitionService!.listen();
+
+    this.transcript = autoCorrectSpeechRecognitionInput({
+      transcript: finalTranscript,
+      verseReference: this.verseReference!,
+      verseText: this.verseTextContent!,
+    });
+
+    this.#sendEventForRecitedBibleVerse(this.transcript);
   }
 
   render() {
@@ -266,63 +306,9 @@ export class ReciteBibleVerse extends LitElement {
     ])}`;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    this.speechRecognitionService?.addEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE,
-      this.#handleSpeechRecognitionStateEvent,
-    );
-    this.speechRecognitionService?.addEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
-      this.#handleSpeechRecognitionInterimTranscriptEvent,
-    );
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    this.speechRecognitionService?.removeEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE,
-      this.#handleSpeechRecognitionStateEvent,
-    );
-    this.speechRecognitionService?.removeEventListener(
-      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
-      this.#handleSpeechRecognitionInterimTranscriptEvent,
-    );
-
-    if (this.speechRecognitionState === SPEECH_RECOGNITION_STATE.LISTENING) {
-      this.speechRecognitionService?.stop();
-    }
-  }
-
-  #handleRecordButtonClick() {
-    // reset state
-    this.transcript = "";
-    this.speechRecognitionState = SPEECH_RECOGNITION_STATE.INITIAL;
-
-    if (window.scrollY < 200) {
-      this.scrollIntoView();
-    }
-
-    this.speechRecognitionService!.listen().then((finalTranscript) => {
-      this.transcript = autoCorrectSpeechRecognitionInput({
-        transcript: finalTranscript,
-        verseReference: this.verseReference!,
-        verseText: this.verseTextContent!,
-      });
-
-      this.#sendEventForRecitedBibleVerse(this.transcript);
-    });
-  }
-
-  #handleStopButtonClick() {
-    this.speechRecognitionService!.stop();
-  }
-
-  #handleSpeechRecognitionStateEvent = (
+  handleSpeechRecognitionStateEvent(
     event: CustomEventInit<{ state: SpeechRecognitionState }>,
-  ) => {
+  ) {
     const speechRecognitionState = event.detail?.state;
     if (!speechRecognitionState) {
       return;
@@ -338,11 +324,11 @@ export class ReciteBibleVerse extends LitElement {
       composed: true,
     });
     this.dispatchEvent(eventUpdateState);
-  };
+  }
 
-  #handleSpeechRecognitionInterimTranscriptEvent = (
+  handleSpeechRecognitionInterimTranscriptEvent(
     event: CustomEventInit<{ interimTranscript: string }>,
-  ) => {
+  ) {
     const interimTranscript = event.detail?.interimTranscript;
     if (interimTranscript && this.verseReference && this.verseTextContent) {
       this.transcript = autoCorrectSpeechRecognitionInput({
@@ -351,16 +337,35 @@ export class ReciteBibleVerse extends LitElement {
         verseText: this.verseTextContent,
       });
     }
-  };
+  }
 
-  #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
-    const eventUpdateRecitedBibleVerse = new CustomEvent<{
-      recitedBibleVerse: string;
-    }>(CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE, {
-      detail: { recitedBibleVerse },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(eventUpdateRecitedBibleVerse);
+  connectedCallback() {
+    super.connectedCallback();
+
+    this.speechRecognitionService?.addEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE,
+      this.handleSpeechRecognitionStateEvent,
+    );
+    this.speechRecognitionService?.addEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
+      this.handleSpeechRecognitionInterimTranscriptEvent,
+    );
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this.speechRecognitionService?.removeEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE,
+      this.handleSpeechRecognitionStateEvent,
+    );
+    this.speechRecognitionService?.removeEventListener(
+      SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
+      this.handleSpeechRecognitionInterimTranscriptEvent,
+    );
+
+    if (this.speechRecognitionState === SPEECH_RECOGNITION_STATE.LISTENING) {
+      this.speechRecognitionService?.stop();
+    }
   }
 }
