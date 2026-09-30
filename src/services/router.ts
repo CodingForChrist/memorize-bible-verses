@@ -82,7 +82,8 @@ function getURLWithoutHash() {
 }
 
 function convertToHashURL(url: URL) {
-  return url
-    .toString()
-    .replace("/memorize-bible-verses/", "/memorize-bible-verses/#/");
+  return url.href.replace(
+    "/memorize-bible-verses/",
+    "/memorize-bible-verses/#/",
+  );
 }

@@ -22,7 +22,10 @@ export function standardizeVerseReference(verseReference: string) {
 
   for (const [key, value] of Object.entries(romanNumeralMap)) {
     if (updatedVerseReference.startsWith(`${key} `)) {
-      updatedVerseReference = verseReference.replace(`${key} `, `${value} `);
+      updatedVerseReference = verseReference.replace(
+        `${key} `,
+        () => `${value} `,
+      );
     }
   }
 

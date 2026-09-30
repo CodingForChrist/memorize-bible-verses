@@ -6,21 +6,21 @@ import {
   standardizeVerseReference,
 } from "./bible-verse-format-api-response";
 
+const BibleVerseAttributeSchema = z.object({
+  style: z.string().optional(),
+  id: z.string().optional(),
+  number: z.string().optional(),
+  sid: z.string().optional(),
+  vid: z.string().optional(),
+  verseId: z.string().optional(),
+  verseOrgIds: z.array(z.string()).optional(),
+});
+
 const BaseBibleVerseContentItemSchema = z.object({
   type: z.enum(["tag", "text"]),
   name: z.enum(["para", "verse", "verse-span", "char", "ref"]).optional(),
   text: z.string().optional(),
-  attrs: z
-    .object({
-      style: z.string().optional(),
-      id: z.string().optional(),
-      number: z.string().optional(),
-      sid: z.string().optional(),
-      vid: z.string().optional(),
-      verseId: z.string().optional(),
-      verseOrgIds: z.array(z.string()).optional(),
-    })
-    .optional(),
+  attrs: BibleVerseAttributeSchema.optional(),
 });
 
 export type BibleVerseContentItem = {
