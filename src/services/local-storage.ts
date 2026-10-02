@@ -7,9 +7,7 @@ type BibleTranslationForLocalStorage = {
 
 export function getBibleTranslationFromLocalStorage() {
   try {
-    const data = globalThis.localStorage.getItem(
-      bibleTranslationLocalStorageKey,
-    );
+    const data = localStorage.getItem(bibleTranslationLocalStorageKey);
     if (!data) {
       return;
     }
@@ -30,7 +28,7 @@ export function setBibleTranslationInLocalStorage({
   abbreviation,
 }: BibleTranslationForLocalStorage) {
   try {
-    globalThis.localStorage.setItem(
+    localStorage.setItem(
       bibleTranslationLocalStorageKey,
       JSON.stringify({ id, abbreviation }),
     );

@@ -17,21 +17,6 @@ import "../../components/alert-message";
 
 @customElement("speak-verse-from-memory-page")
 export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
-  @property({ attribute: "verse-reference", reflect: true })
-  verseReference?: string;
-
-  @property({ attribute: "verse-text-content", reflect: true })
-  verseTextContent?: string;
-
-  @property({ attribute: "recited-bible-verse", reflect: true })
-  recitedBibleVerse?: string;
-
-  @state()
-  speechRecognitionState: SpeechRecognitionState =
-    SPEECH_RECOGNITION_STATE.INITIAL;
-
-  pageTitle = "Speak";
-
   static styles = [
     buttonStyles,
     css`
@@ -50,11 +35,48 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
     `,
   ];
 
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
+
+  @property({ attribute: "verse-text-content", reflect: true })
+  verseTextContent?: string;
+
+  @property({ attribute: "recited-bible-verse", reflect: true })
+  recitedBibleVerse?: string;
+
+  @state()
+  speechRecognitionState: SpeechRecognitionState =
+    SPEECH_RECOGNITION_STATE.INITIAL;
+
+  pageTitle = "Speak";
+
+  #handleBackButtonClick() {
+    this.navigateToPage({
+      nextPage: this.previousPage ?? PAGE_NAME.ADVANCED_SEARCH_PAGE,
+    });
+  }
+
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SCORE_PAGE,
+    });
+  }
+
+  #handleSpeechRecognitionStateChange(
+    event: CustomEventInit<{ state: SpeechRecognitionState }>,
+  ) {
+    const speechRecognitionState = event.detail?.state;
+    if (speechRecognitionState) {
+      this.speechRecognitionState = speechRecognitionState;
+    }
+  }
+
   render() {
     return html`
       <verse-text-page-template
-        ?should-hide-page-navigation=${this.speechRecognitionState ===
-        SPEECH_RECOGNITION_STATE.LISTENING}
+        ?should-hide-page-navigation=${
+          this.speechRecognitionState === SPEECH_RECOGNITION_STATE.LISTENING
+        }
         @page-navigation-back-button-click=${this.#handleBackButtonClick}
         @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
       >
@@ -93,27 +115,6 @@ export class SpeakVerseFromMemoryPage extends BasePage(LitElement) {
         <span slot="page-navigation-forward-button">Step 3 &gt;</span>
       </verse-text-page-template>
     `;
-  }
-
-  #handleBackButtonClick() {
-    this.navigateToPage({
-      nextPage: this.previousPage ?? PAGE_NAME.ADVANCED_SEARCH_PAGE,
-    });
-  }
-
-  #handleForwardButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SCORE_PAGE,
-    });
-  }
-
-  #handleSpeechRecognitionStateChange(
-    event: CustomEventInit<{ state: SpeechRecognitionState }>,
-  ) {
-    const speechRecognitionState = event.detail?.state;
-    if (speechRecognitionState) {
-      this.speechRecognitionState = speechRecognitionState;
-    }
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

@@ -66,7 +66,7 @@ function parseVerseReferenceIntoParts(verseReference: string) {
   let verseReferenceWithoutBookNumber = verseReference;
 
   // get book number
-  if (Number.isInteger(Number(verseReference.charAt(0)))) {
+  if (Number.isSafeInteger(Number(verseReference.charAt(0)))) {
     if (verseReference.charAt(1) !== " ") {
       throw new Error("Book number must be a single digit followed by a space");
     }
@@ -101,12 +101,12 @@ function parseVerseReferenceIntoParts(verseReference: string) {
     );
   }
 
-  const [chapter, verseResult] = chapterAndVerses.split(":");
+  const [chapter, verseResult] = chapterAndVerses.split(":", 2);
   const [verseNumberStart, verseNumberEnd] = verseResult.includes("-")
     ? verseResult.split("-")
     : [verseResult, verseResult];
 
-  if (!verseNumberStart || !Number.isInteger(Number(verseNumberStart))) {
+  if (!verseNumberStart || !Number.isSafeInteger(Number(verseNumberStart))) {
     throw new Error("Invalid verse number");
   }
 
@@ -123,10 +123,7 @@ function parseVerseReferenceIntoParts(verseReference: string) {
 function toTitleCase(value: string) {
   const lowerCaseValue = value.toLowerCase();
   const titleCasedWords = lowerCaseValue.split(" ").map((word) => {
-    if (word === "of") {
-      return word;
-    }
-    return word.charAt(0).toUpperCase() + word.slice(1);
+    return word === "of" ? word : word.charAt(0).toUpperCase() + word.slice(1);
   });
 
   return titleCasedWords.join(" ");

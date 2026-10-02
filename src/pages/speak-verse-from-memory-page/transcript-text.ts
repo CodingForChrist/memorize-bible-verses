@@ -9,6 +9,16 @@ import { CUSTOM_EVENT } from "../../constants";
 
 @customElement("transcript-text")
 export class TranscriptText extends LitElement {
+  static styles = [
+    formControlStyles,
+    css`
+      :host {
+        display: block;
+        margin: 2rem 0;
+      }
+    `,
+  ];
+
   @property({ attribute: "verse-reference", reflect: true })
   verseReference?: string;
 
@@ -30,22 +40,43 @@ export class TranscriptText extends LitElement {
   @state()
   heightInPixels?: number;
 
-  static styles = [
-    formControlStyles,
-    css`
-      :host {
-        display: block;
-        margin: 2rem 0;
-      }
-    `,
-  ];
-
   get #placeholderText() {
     if (this.disabled) {
       return;
     }
 
     return `${this.noSpeechRecognitionSupport ? "Type" : "Speak or type"} in ${this.verseReference ?? "the verse reference"} from memory...`;
+  }
+
+  #fieldSizingContentPolyfill() {
+    if (
+      CSS.supports("field-sizing", "content") ||
+      !this.textareaElementReference.value
+    ) {
+      return;
+    }
+
+    const { clientHeight, scrollHeight } = this.textareaElementReference.value;
+
+    if (clientHeight < scrollHeight) {
+      this.heightInPixels = scrollHeight;
+    }
+  }
+
+  #handleFocusout(event: FocusEvent) {
+    this.transcript = (event.target as HTMLTextAreaElement).value;
+    this.#sendEventForRecitedBibleVerse(this.transcript);
+  }
+
+  #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
+    const eventUpdateRecitedBibleVerse = new CustomEvent<{
+      recitedBibleVerse: string;
+    }>(CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE, {
+      detail: { recitedBibleVerse },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 
   render() {
@@ -69,39 +100,7 @@ export class TranscriptText extends LitElement {
     `;
   }
 
-  #fieldSizingContentPolyfill() {
-    if (CSS.supports("field-sizing", "content")) {
-      return;
-    }
-
-    if (!this.textareaElementReference.value) {
-      return;
-    }
-
-    const { clientHeight, scrollHeight } = this.textareaElementReference.value;
-
-    if (clientHeight < scrollHeight) {
-      this.heightInPixels = scrollHeight;
-    }
-  }
-
   firstUpdated() {
     this.#fieldSizingContentPolyfill();
-  }
-
-  #handleFocusout(event: FocusEvent) {
-    this.transcript = (event.target as HTMLTextAreaElement).value;
-    this.#sendEventForRecitedBibleVerse(this.transcript);
-  }
-
-  #sendEventForRecitedBibleVerse(recitedBibleVerse: string) {
-    const eventUpdateRecitedBibleVerse = new CustomEvent<{
-      recitedBibleVerse: string;
-    }>(CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE, {
-      detail: { recitedBibleVerse },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(eventUpdateRecitedBibleVerse);
   }
 }

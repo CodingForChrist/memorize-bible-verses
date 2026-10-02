@@ -17,9 +17,6 @@ type VerseOfTheDayVerse = {
 
 @customElement("verse-list-fetch-result")
 export class VerseListFetchResult extends LitElement {
-  @property({ reflect: true })
-  year: string = "2026";
-
   static styles = [
     buttonStyles,
     css`
@@ -65,6 +62,9 @@ export class VerseListFetchResult extends LitElement {
     args: () => [this.year],
   });
 
+  @property({ reflect: true })
+  year: string = "2026";
+
   #abbreviatedDate(dateAsString: string) {
     const date = parseDate(dateAsString, "YYYY-MM-DD");
     const options: Intl.DateTimeFormatOptions = {
@@ -89,6 +89,21 @@ export class VerseListFetchResult extends LitElement {
       }
     }
     return Object.entries(monthMap);
+  }
+
+  #handleClick(event: Event) {
+    const date = (event.target as HTMLButtonElement).dataset.date;
+    if (!date) {
+      throw new Error("verse of the day button missing date");
+    }
+    const changeEvent = new CustomEvent<{
+      date: string;
+    }>("change", {
+      detail: { date },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(changeEvent);
   }
 
   render() {
@@ -126,20 +141,5 @@ export class VerseListFetchResult extends LitElement {
         `;
       },
     });
-  }
-
-  #handleClick(event: Event) {
-    const date = (event.target as HTMLButtonElement).dataset.date;
-    if (!date) {
-      throw new Error("verse of the day button missing date");
-    }
-    const changeEvent = new CustomEvent<{
-      date: string;
-    }>("change", {
-      detail: { date },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(changeEvent);
   }
 }

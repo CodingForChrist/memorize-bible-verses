@@ -3,15 +3,6 @@ import { customElement, property } from "lit/decorators.js";
 
 @customElement("collapsible-content")
 export class CollapsibleContent extends LitElement {
-  @property({ reflect: true, type: Boolean })
-  expanded: boolean = false;
-
-  @property({ reflect: true })
-  title = "Default title";
-
-  @property({ reflect: true })
-  id = crypto.randomUUID();
-
   static styles = css`
     :host {
       --active-color: var(--color-dark-gray);
@@ -76,6 +67,15 @@ export class CollapsibleContent extends LitElement {
     }
   `;
 
+  @property({ reflect: true, type: Boolean })
+  expanded: boolean = false;
+
+  @property({ reflect: true })
+  title = "Default title";
+
+  @property({ reflect: true })
+  id = crypto.randomUUID();
+
   get #chevronUpIcon() {
     // chevron-up from https://heroicons.com/
     return html`
@@ -116,6 +116,10 @@ export class CollapsibleContent extends LitElement {
     `;
   }
 
+  #toggle() {
+    this.expanded = !this.expanded;
+  }
+
   render() {
     return html`
       <h2 class="heading">
@@ -137,9 +141,5 @@ export class CollapsibleContent extends LitElement {
         <slot></slot>
       </div>
     `;
-  }
-
-  #toggle() {
-    this.expanded = !this.expanded;
   }
 }

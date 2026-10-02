@@ -6,9 +6,6 @@ import { logger, type LogEntry } from "../services/logger";
 
 @customElement("console-logger")
 export class ConsoleLogger extends LitElement {
-  @state()
-  logEntries: LogEntry[] = logger.logEntries;
-
   static styles = css`
     :host {
       --debug-color: var(--color-lighter-gray);
@@ -65,10 +62,13 @@ export class ConsoleLogger extends LitElement {
     }
   `;
 
+  @state()
+  logEntries: LogEntry[] = logger.logEntries;
+
   constructor() {
     super();
 
-    globalThis.addEventListener(
+    addEventListener(
       "custom-log",
       (event: CustomEventInit<{ logEntry: LogEntry }>) => {
         const logEntry = event.detail?.logEntry;
@@ -77,14 +77,6 @@ export class ConsoleLogger extends LitElement {
         }
       },
     );
-  }
-
-  render() {
-    return html`
-      <div>
-        ${map(this.logEntries, (logEntry) => this.#renderLogEntry(logEntry))}
-      </div>
-    `;
   }
 
   #renderLogEntry({ level, time, message, payload }: LogEntry) {
@@ -107,5 +99,13 @@ export class ConsoleLogger extends LitElement {
       second: "numeric",
       hour12: false,
     });
+  }
+
+  render() {
+    return html`
+      <div>
+        ${map(this.logEntries, (logEntry) => this.#renderLogEntry(logEntry))}
+      </div>
+    `;
   }
 }

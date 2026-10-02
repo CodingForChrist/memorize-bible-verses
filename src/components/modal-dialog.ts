@@ -6,13 +6,6 @@ import { breakpointsREM, buttonStyles } from "./shared-styles";
 
 @customElement("modal-dialog")
 export class ModalDialog extends LitElement {
-  @property({
-    type: Boolean,
-    reflect: true,
-  })
-  open: boolean = false;
-  dialogElementReference: Ref<HTMLDialogElement> = createRef();
-
   static styles = [
     buttonStyles,
     css`
@@ -90,6 +83,13 @@ export class ModalDialog extends LitElement {
     `,
   ];
 
+  @property({
+    type: Boolean,
+    reflect: true,
+  })
+  open: boolean = false;
+  dialogElementReference: Ref<HTMLDialogElement> = createRef();
+
   get #xMarkIcon() {
     // x-mark from https://heroicons.com/
     return html`
@@ -108,6 +108,23 @@ export class ModalDialog extends LitElement {
         />
       </svg>
     `;
+  }
+
+  #handleBackdropClick(event: Event) {
+    if (event.target === this.dialogElementReference.value) {
+      this.#handleClose();
+    }
+  }
+
+  #handleClose() {
+    this.open = false;
+
+    const eventDialogClose = new CustomEvent("close", {
+      bubbles: true,
+      composed: true,
+    });
+
+    this.dispatchEvent(eventDialogClose);
   }
 
   render() {
@@ -147,22 +164,5 @@ export class ModalDialog extends LitElement {
       this.dialogElementReference.value?.close();
       document.body.classList.remove("no-scroll");
     }
-  }
-
-  #handleBackdropClick(event: Event) {
-    if (event.target === this.dialogElementReference.value) {
-      this.#handleClose();
-    }
-  }
-
-  #handleClose() {
-    this.open = false;
-
-    const eventDialogClose = new CustomEvent("close", {
-      bubbles: true,
-      composed: true,
-    });
-
-    this.dispatchEvent(eventDialogClose);
   }
 }

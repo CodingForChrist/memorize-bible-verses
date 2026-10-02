@@ -17,11 +17,6 @@ import type { BibleTranslation } from "../schemas/bible-translation-schema";
 
 @customElement("bible-translation-drop-down-list")
 export class BibleTranslationDropDownList extends LitElement {
-  @state()
-  bibleId: string = this.#defaultBibleId;
-
-  bibleTranslations = this.#sortedBibleTranslations;
-
   static styles = [
     formControlStyles,
     css`
@@ -30,6 +25,11 @@ export class BibleTranslationDropDownList extends LitElement {
       }
     `,
   ];
+
+  @state()
+  bibleId: string = this.#defaultBibleId;
+
+  bibleTranslations = this.#sortedBibleTranslations;
 
   get #sortedBibleTranslations() {
     return getAllBibleTranslations().sort((a, b) =>
@@ -45,29 +45,6 @@ export class BibleTranslationDropDownList extends LitElement {
 
     const { id } = findBibleTranslationByAbbreviation(abbreviation);
     return id;
-  }
-
-  render() {
-    return html`
-      <select
-        id="select-bible-translation"
-        aria-label="Bible Translation Selection"
-        .value="${this.bibleId}"
-        @change=${this.#handleSelectElementChange}
-      >
-        ${this.bibleTranslations.map(
-          ({ id, name }) => html`
-            <option .value=${id} ?selected=${id === this.bibleId}>
-              ${name}
-            </option>
-          `,
-        )}
-      </select>
-    `;
-  }
-
-  firstUpdated() {
-    this.#sendEventForSelectedBibleTranslation();
   }
 
   #handleSelectElementChange(event: Event) {
@@ -93,5 +70,28 @@ export class BibleTranslationDropDownList extends LitElement {
       composed: true,
     });
     this.dispatchEvent(eventUpdateSelectedBibleTranslation);
+  }
+
+  render() {
+    return html`
+      <select
+        id="select-bible-translation"
+        aria-label="Bible Translation Selection"
+        .value="${this.bibleId}"
+        @change=${this.#handleSelectElementChange}
+      >
+        ${this.bibleTranslations.map(
+          ({ id, name }) => html`
+            <option .value=${id} ?selected=${id === this.bibleId}>
+              ${name}
+            </option>
+          `,
+        )}
+      </select>
+    `;
+  }
+
+  firstUpdated() {
+    this.#sendEventForSelectedBibleTranslation();
   }
 }

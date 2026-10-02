@@ -8,8 +8,6 @@ import logoURL from "../../images/logo.svg";
 
 @customElement("instructions-page")
 export class InstructionsPage extends BasePage(LitElement) {
-  pageTitle = "Instructions";
-
   static styles = [
     buttonStyles,
     css`
@@ -71,6 +69,8 @@ export class InstructionsPage extends BasePage(LitElement) {
       }
     `,
   ];
+
+  pageTitle = "Instructions";
 
   render() {
     return html`

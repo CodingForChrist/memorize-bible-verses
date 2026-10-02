@@ -19,14 +19,7 @@ import "../../components/bible-verse-fetch-result";
 
 @customElement("verses-for-awana-page")
 export class VersesForAwanaPage extends BasePage(LitElement) {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @state()
-  verseReference = this.#verseReferenceFromQueryString ?? "";
-
   static defaultPageTitle = "Verses for Awana Club for Kids";
-  pageTitle = VersesForAwanaPage.defaultPageTitle;
 
   static styles = [
     formControlStyles,
@@ -36,6 +29,14 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
       }
     `,
   ];
+
+  pageTitle = VersesForAwanaPage.defaultPageTitle;
+
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @state()
+  verseReference = this.#verseReferenceFromQueryString ?? "";
 
   // https://store.awana.org/product/tt-mission-discovery-of-grace-kids-handbook
   get #awanaBookDiscoveryOfGraceBibleVerses() {
@@ -176,6 +177,21 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
     `;
   }
 
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
+  }
+
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.VERSES_FOR_AWANA_PAGE,
+    });
+  }
+
+  #handleBibleVerseSelectElementChange(event: Event) {
+    this.verseReference = (event.target as HTMLSelectElement).value;
+  }
+
   render() {
     return html`
       <verse-text-page-template
@@ -204,21 +220,6 @@ export class VersesForAwanaPage extends BasePage(LitElement) {
         <span slot="page-navigation-forward-button">Step 2 &gt;</span>
       </verse-text-page-template>
     `;
-  }
-
-  #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
-  }
-
-  #handleForwardButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.VERSES_FOR_AWANA_PAGE,
-    });
-  }
-
-  #handleBibleVerseSelectElementChange(event: Event) {
-    this.verseReference = (event.target as HTMLSelectElement).value;
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

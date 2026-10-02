@@ -5,9 +5,6 @@ type AlertType = "success" | "info" | "warning" | "danger";
 
 @customElement("alert-message")
 export class AlertMessage extends LitElement {
-  @property({ reflect: true })
-  type: AlertType = "info";
-
   static styles = css`
     :host {
       --success-color: #084a22;
@@ -63,6 +60,9 @@ export class AlertMessage extends LitElement {
       border-color: var(--danger-border-color);
     }
   `;
+
+  @property({ reflect: true })
+  type: AlertType = "info";
 
   get #icon() {
     // source: https://heroicons.com/

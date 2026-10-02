@@ -6,18 +6,6 @@ import { diffWords } from "diff";
 
 @customElement("score-recited-bible-verse")
 export class ScoreRecitedBibleVerse extends LitElement {
-  @property({ attribute: "original-bible-verse-text", reflect: true })
-  originalBibleVerseText?: string;
-
-  @property({ attribute: "recited-bible-verse-text", reflect: true })
-  recitedBibleVerseText?: string;
-
-  @property({ reflect: true })
-  type: "grade" | "diff" = "diff";
-
-  wordCount: number = 0;
-  errorCount: number = 0;
-
   static styles = css`
     :host {
       --text-added-color: #aceebb;
@@ -46,6 +34,18 @@ export class ScoreRecitedBibleVerse extends LitElement {
       border-radius: 0.25rem;
     }
   `;
+
+  @property({ attribute: "original-bible-verse-text", reflect: true })
+  originalBibleVerseText?: string;
+
+  @property({ attribute: "recited-bible-verse-text", reflect: true })
+  recitedBibleVerseText?: string;
+
+  @property({ reflect: true })
+  type: "grade" | "diff" = "diff";
+
+  wordCount: number = 0;
+  errorCount: number = 0;
 
   get grade(): { letter: string; percentage: number } {
     let percentageInDecimal =
@@ -180,10 +180,10 @@ function compareVerses({
 
 function removePunctuationFromText(text: string) {
   const punctuationCharacters = [".", ";", ",", "!", "¶", "“"];
-  const hasLettersOrNumbersRegex = /[a-zA-Z0-9]/;
+  const lettersOrNumbersRegex = /[a-zA-Z0-9]/;
 
   // return empty string when text is only punctuation
-  if (hasLettersOrNumbersRegex.test(text) === false) {
+  if (!lettersOrNumbersRegex.test(text)) {
     return "";
   }
 

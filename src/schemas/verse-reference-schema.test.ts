@@ -72,23 +72,27 @@ describe("VerseReferenceSchema", () => {
   test("should throw a validation error for missing space", () => {
     const { success, error } = VerseReferenceSchema.safeParse("John3:16");
     expect(success).toBeFalsy();
-    if (!success) {
-      expect(error.issues).toHaveLength(1);
-      expect(error.issues[0].message).toContain(
-        "Must include a single space to separate the book name from the chapter",
-      );
+    if (success) {
+      return;
     }
+
+    expect(error.issues).toHaveLength(1);
+    expect(error.issues[0].message).toContain(
+      "Must include a single space to separate the book name from the chapter",
+    );
   });
 
   test("should throw a validation error for a missing colon", () => {
     const { success, error } = VerseReferenceSchema.safeParse("John 316");
     expect(success).toBeFalsy();
-    if (!success) {
-      expect(error.issues).toHaveLength(1);
-      expect(error.issues[0].message).toContain(
-        "Must include a single colon character to separate the chapter from the verse",
-      );
+    if (success) {
+      return;
     }
+
+    expect(error.issues).toHaveLength(1);
+    expect(error.issues[0].message).toContain(
+      "Must include a single colon character to separate the chapter from the verse",
+    );
   });
 
   test("should throw a validation error for an invalid book name", () => {
@@ -96,9 +100,11 @@ describe("VerseReferenceSchema", () => {
       "invalidBookName 3:16",
     );
     expect(success).toBeFalsy();
-    if (!success) {
-      expect(error.issues).toHaveLength(1);
-      expect(error.issues[0].message).toContain("Invalid book name");
+    if (success) {
+      return;
     }
+
+    expect(error.issues).toHaveLength(1);
+    expect(error.issues[0].message).toContain("Invalid book name");
   });
 });

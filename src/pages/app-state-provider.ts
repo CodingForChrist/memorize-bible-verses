@@ -33,6 +33,14 @@ type PageNavigation = {
 
 @customElement("app-state-provider")
 export class AppStateProvider extends LitElement {
+  static styles = css`
+    *,
+    ::before,
+    ::after {
+      box-sizing: border-box;
+    }
+  `;
+
   @state()
   selectedBibleTranslation?: BibleTranslation;
 
@@ -50,36 +58,30 @@ export class AppStateProvider extends LitElement {
   @state()
   previousPage?: PageName;
 
-  static styles = css`
-    *,
-    ::before,
-    ::after {
-      box-sizing: border-box;
-    }
-  `;
-
   constructor() {
     super();
 
-    globalThis.history.scrollRestoration = "manual";
+    history.scrollRestoration = "manual";
     deleteUnknownParametersInURL();
 
-    globalThis.addEventListener("popstate", () => {
+    addEventListener("popstate", () => {
       const nextPage = this.#getPageNameFromURLWithFallback();
       this.#goto({ nextPage });
     });
 
     this.addEventListener(
       CUSTOM_EVENT.NAVIGATE_TO_PAGE,
-      (event: CustomEventInit<{ pageNavigation: PageNavigation }>) => {
+      async (event: CustomEventInit<{ pageNavigation: PageNavigation }>) => {
         const pageNavigation = event.detail?.pageNavigation;
-        if (pageNavigation) {
-          this.#viewTransitionForPageNavigation(pageNavigation);
-          logger.info({
-            message: `${CUSTOM_EVENT.NAVIGATE_TO_PAGE} event`,
-            payload: pageNavigation,
-          });
+        if (!pageNavigation) {
+          return;
         }
+
+        await this.#viewTransitionForPageNavigation(pageNavigation);
+        logger.info({
+          message: `${CUSTOM_EVENT.NAVIGATE_TO_PAGE} event`,
+          payload: pageNavigation,
+        });
       },
     );
 
@@ -87,28 +89,28 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION,
       (event: CustomEventInit<{ bibleTranslation: BibleTranslation }>) => {
         const bibleTranslation = event.detail?.bibleTranslation;
-        if (bibleTranslation) {
-          this.selectedBibleTranslation = bibleTranslation;
-          const { id, abbreviation } = bibleTranslation;
-          setStateInURL({
-            pageName: this.currentPage,
-            translation: abbreviation,
-            verse:
-              this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
-            shouldUpdateBrowserHistory: false,
-          });
-          setBibleTranslationInLocalStorage({
+        if (!bibleTranslation) {
+          return;
+        }
+        this.selectedBibleTranslation = bibleTranslation;
+        const { id, abbreviation } = bibleTranslation;
+        setStateInURL({
+          pageName: this.currentPage,
+          translation: abbreviation,
+          verse: this.selectedBibleVerse?.reference ?? getStateFromURL()?.verse,
+          shouldUpdateBrowserHistory: false,
+        });
+        setBibleTranslationInLocalStorage({
+          id,
+          abbreviation,
+        });
+        logger.info({
+          message: `${CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION} event`,
+          payload: {
             id,
             abbreviation,
-          });
-          logger.info({
-            message: `${CUSTOM_EVENT.UPDATE_BIBLE_TRANSLATION} event`,
-            payload: {
-              id,
-              abbreviation,
-            },
-          });
-        }
+          },
+        });
       },
     );
 
@@ -116,22 +118,24 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.UPDATE_BIBLE_VERSE,
       (event: CustomEventInit<{ bibleVerse: BibleVerse }>) => {
         const bibleVerse = event.detail?.bibleVerse;
-        if (bibleVerse) {
-          this.selectedBibleVerse = bibleVerse;
-          this.recitedBibleVerse = undefined;
-          setStateInURL({
-            pageName: this.currentPage,
-            verse: bibleVerse.reference,
-            shouldUpdateBrowserHistory: false,
-          });
-          logger.info({
-            message: `${CUSTOM_EVENT.UPDATE_BIBLE_VERSE} event`,
-            payload: {
-              verse: bibleVerse.reference,
-              bibleId: bibleVerse.bibleId,
-            },
-          });
+        if (!bibleVerse) {
+          return;
         }
+
+        this.selectedBibleVerse = bibleVerse;
+        this.recitedBibleVerse = undefined;
+        setStateInURL({
+          pageName: this.currentPage,
+          verse: bibleVerse.reference,
+          shouldUpdateBrowserHistory: false,
+        });
+        logger.info({
+          message: `${CUSTOM_EVENT.UPDATE_BIBLE_VERSE} event`,
+          payload: {
+            verse: bibleVerse.reference,
+            bibleId: bibleVerse.bibleId,
+          },
+        });
       },
     );
 
@@ -139,17 +143,71 @@ export class AppStateProvider extends LitElement {
       CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE,
       (event: CustomEventInit<{ recitedBibleVerse: string }>) => {
         const recitedBibleVerse = event.detail?.recitedBibleVerse;
-        if (recitedBibleVerse) {
-          this.recitedBibleVerse = recitedBibleVerse;
-          logger.info({
-            message: `${CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE} event`,
-            payload: {
-              recitedBibleVerse,
-            },
-          });
+        if (!recitedBibleVerse) {
+          return;
         }
+
+        this.recitedBibleVerse = recitedBibleVerse;
+        logger.info({
+          message: `${CUSTOM_EVENT.UPDATE_RECITED_BIBLE_VERSE} event`,
+          payload: {
+            recitedBibleVerse,
+          },
+        });
       },
     );
+  }
+
+  #getPageNameFromURLWithFallback() {
+    const pageNameFromURL = getStateFromURL()?.pageName;
+    if (pageNameFromURL) {
+      return pageNameFromURL;
+    }
+
+    const fallbackPageName = PAGE_NAME.INSTRUCTIONS_PAGE;
+    setStateInURL({
+      pageName: fallbackPageName,
+      shouldUpdateBrowserHistory: false,
+    });
+
+    return fallbackPageName;
+  }
+
+  async #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
+    setStateInURL({
+      pageName: pageNavigation.nextPage,
+      shouldUpdateBrowserHistory: true,
+    });
+
+    // fallback for browsers that don't support the View Transition API
+    if (!document.startViewTransition) {
+      this.#goto(pageNavigation);
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // View Transition API
+    const transition = document.startViewTransition(() => {
+      this.#goto(pageNavigation);
+    });
+
+    try {
+      await transition.ready;
+      // scroll to the top of the page
+      window.scrollTo({ top: 0, behavior: "instant" });
+    } catch (error) {
+      logger.error({
+        message: `Transition API ready promise rejected`,
+        payload: {
+          errorMessage: String(error),
+        },
+      });
+    }
+  }
+
+  #goto({ nextPage, previousPage }: PageNavigation) {
+    this.currentPage = nextPage;
+    if (previousPage) this.previousPage = previousPage;
   }
 
   render() {
@@ -245,49 +303,5 @@ export class AppStateProvider extends LitElement {
         currentPage: this.currentPage,
       },
     });
-  }
-
-  #getPageNameFromURLWithFallback() {
-    const pageNameFromURL = getStateFromURL()?.pageName;
-    if (pageNameFromURL) {
-      return pageNameFromURL;
-    }
-
-    const fallbackPageName = PAGE_NAME.INSTRUCTIONS_PAGE;
-    setStateInURL({
-      pageName: fallbackPageName,
-      shouldUpdateBrowserHistory: false,
-    });
-
-    return fallbackPageName;
-  }
-
-  #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
-    setStateInURL({
-      pageName: pageNavigation.nextPage,
-      shouldUpdateBrowserHistory: true,
-    });
-
-    // fallback for browsers that don't support the View Transition API
-    if (!document.startViewTransition) {
-      this.#goto(pageNavigation);
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    // View Transition API
-    const transition = document.startViewTransition(() => {
-      this.#goto(pageNavigation);
-    });
-
-    transition.ready.then(() => {
-      // scroll to the top of the page
-      window.scrollTo({ top: 0, behavior: "instant" });
-    });
-  }
-
-  #goto({ nextPage, previousPage }: PageNavigation) {
-    this.currentPage = nextPage;
-    if (previousPage) this.previousPage = previousPage;
   }
 }

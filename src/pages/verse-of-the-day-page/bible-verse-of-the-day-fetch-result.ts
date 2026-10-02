@@ -15,12 +15,6 @@ import type { BibleVerse } from "../../schemas/bible-verse-schema";
 
 @customElement("bible-verse-of-the-day-fetch-result")
 export class BibleVerseOfTheDayFetchResult extends LitElement {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @property({ reflect: true })
-  date?: string;
-
   static styles = [
     css`
       :host {
@@ -60,8 +54,14 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
     args: () => [this.bibleId, this.date],
   });
 
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @property({ reflect: true })
+  date?: string;
+
   #renderVerse(bibleVerse?: BibleVerse) {
-    if (!this.bibleId || !bibleVerse) {
+    if (!bibleVerse || !this.bibleId) {
       return;
     }
 
@@ -87,6 +87,17 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
     `;
   }
 
+  #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
+    const eventUpdateSelectedBible = new CustomEvent<{
+      bibleVerse: BibleVerse;
+    }>(CUSTOM_EVENT.UPDATE_BIBLE_VERSE, {
+      detail: { bibleVerse },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateSelectedBible);
+  }
+
   render() {
     if (!this.bibleId || !this.date) {
       return;
@@ -105,16 +116,5 @@ export class BibleVerseOfTheDayFetchResult extends LitElement {
         `;
       },
     });
-  }
-
-  #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
-    const eventUpdateSelectedBible = new CustomEvent<{
-      bibleVerse: BibleVerse;
-    }>(CUSTOM_EVENT.UPDATE_BIBLE_VERSE, {
-      detail: { bibleVerse },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(eventUpdateSelectedBible);
   }
 }

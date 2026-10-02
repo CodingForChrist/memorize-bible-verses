@@ -38,16 +38,6 @@ const accordionVerses = [
 
 @customElement("accordion-gospel-verses")
 export class AccordionGospelVerses extends LitElement {
-  @property({ type: Boolean, reflect: true })
-  hidden = false;
-
-  @state()
-  selectedVerseReference =
-    this.#verseReferenceFromQueryString ?? accordionVerses[0][0].verseReference;
-
-  @queryAll("collapsible-content")
-  accordionItems?: CollapsibleContent[];
-
   static styles = [
     buttonStyles,
     css`
@@ -107,6 +97,16 @@ export class AccordionGospelVerses extends LitElement {
     `,
   ];
 
+  @property({ type: Boolean, reflect: true })
+  hidden = false;
+
+  @state()
+  selectedVerseReference =
+    this.#verseReferenceFromQueryString ?? accordionVerses[0][0].verseReference;
+
+  @queryAll("collapsible-content")
+  accordionItems?: CollapsibleContent[];
+
   get #verseReferenceFromQueryString() {
     const verseReference = getStateFromURL()?.verse;
     const allVerses = accordionVerses
@@ -123,6 +123,47 @@ export class AccordionGospelVerses extends LitElement {
       return this.selectedVerseReference === verseReference;
     });
     return Boolean(foundVerse);
+  }
+
+  #handleVerseButtonClick(event: Event) {
+    const selectedButtonElement = event.target as HTMLButtonElement;
+    const selectedAccordionItem = selectedButtonElement.closest(
+      "collapsible-content",
+    );
+    const verseReference = selectedButtonElement.dataset.verseReference;
+
+    if (!verseReference) {
+      return;
+    }
+    this.selectedVerseReference = verseReference;
+
+    this.#sendSelectedVerseReferenceChangeEvent();
+    this.scrollIntoView();
+
+    // close other open accordion items
+    if (this.accordionItems) {
+      for (const accordionItem of this.accordionItems) {
+        if (selectedAccordionItem === accordionItem) {
+          continue;
+        }
+        accordionItem.expanded = false;
+      }
+    }
+  }
+
+  #sendSelectedVerseReferenceChangeEvent() {
+    if (!this.selectedVerseReference) {
+      throw new Error("Failed to send event because no verse is selected");
+    }
+
+    const eventUpdateSelectedVerseReference = new CustomEvent<{
+      verseReference: string;
+    }>("change", {
+      detail: { verseReference: this.selectedVerseReference },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(eventUpdateSelectedVerseReference);
   }
 
   #renderButtonGroup(
@@ -178,46 +219,5 @@ export class AccordionGospelVerses extends LitElement {
 
   firstUpdated() {
     this.#sendSelectedVerseReferenceChangeEvent();
-  }
-
-  #handleVerseButtonClick(event: Event) {
-    const selectedButtonElement = event.target as HTMLButtonElement;
-    const selectedAccordionItem = selectedButtonElement.closest(
-      "collapsible-content",
-    );
-    const verseReference = selectedButtonElement.dataset.verseReference;
-
-    if (!verseReference) {
-      return;
-    }
-    this.selectedVerseReference = verseReference;
-
-    this.#sendSelectedVerseReferenceChangeEvent();
-    this.scrollIntoView();
-
-    // close other open accordion items
-    if (this.accordionItems) {
-      for (const accordionItem of this.accordionItems) {
-        if (selectedAccordionItem === accordionItem) {
-          continue;
-        }
-        accordionItem.expanded = false;
-      }
-    }
-  }
-
-  #sendSelectedVerseReferenceChangeEvent() {
-    if (!this.selectedVerseReference) {
-      throw new Error("Failed to send event because no verse is selected");
-    }
-
-    const eventUpdateSelectedVerseReference = new CustomEvent<{
-      verseReference: string;
-    }>("change", {
-      detail: { verseReference: this.selectedVerseReference },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(eventUpdateSelectedVerseReference);
   }
 }

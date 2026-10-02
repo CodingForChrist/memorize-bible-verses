@@ -23,28 +23,12 @@ class Logger {
     this.logEntries = [];
   }
 
-  debug(logOptions: LogOptions) {
-    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.DEBUG });
-  }
-
-  info(logOptions: LogOptions) {
-    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.INFO });
-  }
-
-  warn(logOptions: LogOptions) {
-    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.WARN });
-  }
-
-  error(logOptions: LogOptions) {
-    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.ERROR });
-  }
-
   #log(logEntry: LogEntry) {
     this.logEntries.push(logEntry);
     this.#sendCustomLogEvent(logEntry);
 
     const { level, message, payload } = logEntry;
-    if (!console[level]) {
+    if (!Object.values(LOG_LEVEL).includes(level)) {
       throw new Error(
         `Invalid log level - Console API missing operation "${level}"`,
       );
@@ -60,7 +44,23 @@ class Logger {
       bubbles: true,
       composed: true,
     });
-    globalThis.dispatchEvent(eventCustomLog);
+    dispatchEvent(eventCustomLog);
+  }
+
+  debug(logOptions: LogOptions) {
+    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.DEBUG });
+  }
+
+  info(logOptions: LogOptions) {
+    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.INFO });
+  }
+
+  warn(logOptions: LogOptions) {
+    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.WARN });
+  }
+
+  error(logOptions: LogOptions) {
+    this.#log({ ...logOptions, time: Date.now(), level: LOG_LEVEL.ERROR });
   }
 }
 

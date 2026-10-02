@@ -12,20 +12,40 @@ import "../../components/bible-verse-fetch-result";
 
 @customElement("advanced-search-page")
 export class AdvancedSearchPage extends BasePage(LitElement) {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @state()
-  verseReference?: string;
-
   static defaultPageTitle = "Advanced Search";
-  pageTitle = AdvancedSearchPage.defaultPageTitle;
 
   static styles = css`
     bible-translation-drop-down-list {
       margin-bottom: 1.5rem;
     }
   `;
+
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @state()
+  verseReference?: string;
+
+  pageTitle = AdvancedSearchPage.defaultPageTitle;
+
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.ADVANCED_SEARCH_PAGE,
+    });
+  }
+
+  #handleFormSubmit(event: CustomEventInit<{ verseReference: string }>) {
+    const verseReference = event.detail?.verseReference;
+
+    if (typeof verseReference === "string") {
+      this.verseReference = verseReference;
+    }
+  }
+
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
+  }
 
   #renderSearchForm() {
     if (!this.bibleId) {
@@ -68,25 +88,6 @@ export class AdvancedSearchPage extends BasePage(LitElement) {
         <span slot="page-navigation-forward-button">Step 2 &gt;</span>
       </verse-text-page-template>
     `;
-  }
-
-  #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
-  }
-
-  #handleForwardButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.ADVANCED_SEARCH_PAGE,
-    });
-  }
-
-  #handleFormSubmit(event: CustomEventInit<{ verseReference: string }>) {
-    const verseReference = event.detail?.verseReference;
-
-    if (typeof verseReference === "string") {
-      this.verseReference = verseReference;
-    }
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

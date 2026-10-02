@@ -8,7 +8,7 @@ type PageNavigation = {
   previousPage?: PageName;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line tseslint/no-explicit-any
 type Constructor<T> = new (...arguments_: any[]) => T;
 
 export declare class BasePageInterface {
@@ -19,10 +19,10 @@ export declare class BasePageInterface {
 
 export const BasePage = <T extends Constructor<LitElement>>(superClass: T) => {
   class BasePageElement extends superClass {
+    #pageTitle: string = "";
+
     @property({ attribute: "previous-page", reflect: true })
     previousPage?: PageName;
-
-    #pageTitle: string = "";
 
     set pageTitle(value: string) {
       this.#pageTitle = `${value} - Memorize Bible Verses`;

@@ -7,19 +7,6 @@ import { breakpointsREM, buttonStyles } from "../components/shared-styles";
 
 @customElement("verse-text-page-template")
 export class VerseTextPageTemplate extends LitElement {
-  @property({
-    type: Boolean,
-    attribute: "should-hide-page-navigation",
-    reflect: true,
-  })
-  shouldHidePageNavigation: boolean = false;
-
-  @state()
-  isPageNavigationSticky: boolean = false;
-
-  navigationStickyElementReference: Ref<HTMLDivElement> = createRef();
-  observer: IntersectionObserver | undefined;
-
   static styles = [
     buttonStyles,
     css`
@@ -103,6 +90,45 @@ export class VerseTextPageTemplate extends LitElement {
     `,
   ];
 
+  @property({
+    type: Boolean,
+    attribute: "should-hide-page-navigation",
+    reflect: true,
+  })
+  shouldHidePageNavigation: boolean = false;
+
+  @state()
+  isPageNavigationSticky: boolean = false;
+
+  navigationStickyElementReference: Ref<HTMLDivElement> = createRef();
+  observer: IntersectionObserver | undefined;
+
+  #setupIntersectionObserver() {
+    if (!this.navigationStickyElementReference.value) {
+      return;
+    }
+
+    this.observer = new IntersectionObserver(
+      this.#handleIntersection.bind(this),
+    );
+    this.observer.observe(this.navigationStickyElementReference.value);
+  }
+
+  #disconnectIntersectionObserver() {
+    if (!this.observer) {
+      return;
+    }
+
+    this.observer.disconnect();
+    this.observer = undefined;
+  }
+
+  #handleIntersection(entries: IntersectionObserverEntry[]) {
+    for (const { isIntersecting } of entries) {
+      this.isPageNavigationSticky = !isIntersecting;
+    }
+  }
+
   render() {
     return html`
       <h1><slot name="page-heading">PAGE HEADING MISSING</slot></h1>
@@ -169,29 +195,5 @@ export class VerseTextPageTemplate extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     this.#disconnectIntersectionObserver();
-  }
-
-  #setupIntersectionObserver() {
-    if (!this.navigationStickyElementReference.value) {
-      return;
-    }
-
-    this.observer = new IntersectionObserver(
-      this.#handleIntersection.bind(this),
-    );
-    this.observer.observe(this.navigationStickyElementReference.value);
-  }
-
-  #disconnectIntersectionObserver() {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = undefined;
-    }
-  }
-
-  #handleIntersection(entries: IntersectionObserverEntry[]) {
-    for (const { isIntersecting } of entries) {
-      this.isPageNavigationSticky = !isIntersecting;
-    }
   }
 }

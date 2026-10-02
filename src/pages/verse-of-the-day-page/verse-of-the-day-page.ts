@@ -23,17 +23,6 @@ import "../../components/modal-dialog";
 
 @customElement("verse-of-the-day-page")
 export class VerseOfTheDayPage extends BasePage(LitElement) {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @property({ type: Object })
-  dateForVerseOfTheDay: Date = new Date();
-
-  @state()
-  isDialogOpen: boolean = false;
-
-  pageTitle = "Verse of the Day";
-
   static styles = [
     formControlStyles,
     buttonStyles,
@@ -74,6 +63,17 @@ export class VerseOfTheDayPage extends BasePage(LitElement) {
     `,
   ];
 
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @property({ type: Object })
+  dateForVerseOfTheDay: Date = new Date();
+
+  @state()
+  isDialogOpen: boolean = false;
+
+  pageTitle = "Verse of the Day";
+
   #renderModalDialogContent() {
     if (!this.isDialogOpen) {
       return;
@@ -86,88 +86,6 @@ export class VerseOfTheDayPage extends BasePage(LitElement) {
           @change=${this.#handleVerseListChangeEvent}
         ></verse-list-fetch-result>
       </span>
-    `;
-  }
-
-  render() {
-    const dateShortFormat = formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD");
-    const dateLongFormat = formatDate(
-      this.dateForVerseOfTheDay,
-      "dddd, MMMM D, YYYY",
-    );
-
-    return html`
-      <verse-text-page-template
-        @page-navigation-back-button-click=${this.#handleBackButtonClick}
-        @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
-      >
-        <span slot="page-heading">Verse of the Day</span>
-
-        <p slot="page-description">
-          Practice memorizing the verse of the day for
-          <span id="page-heading-date">${dateLongFormat}</span>.
-        </p>
-        <p slot="page-description">When you have it memorized go to Step 2.</p>
-
-        <span slot="page-content">
-          <div class="date-picker-container">
-            <button
-              type="button"
-              aria-label="show verse for previous day"
-              class="svg-icon-container"
-              @click=${this.#handlePreviousDay}
-            >
-              ${this.#chevronLeftIcon}
-            </button>
-            <input
-              type="date"
-              id="date-picker-for-verse-of-the-day"
-              aria-label="Date for Verse of the Day"
-              min="2025-01-01"
-              max="2026-12-31"
-              .value=${dateShortFormat}
-              @input=${this.#handleDateInputChange}
-            />
-            <button
-              type="button"
-              aria-label="show verse for next day"
-              class="svg-icon-container"
-              @click=${this.#handleNextDay}
-            >
-              ${this.#chevronRightIcon}
-            </button>
-          </div>
-          <bible-translation-drop-down-list></bible-translation-drop-down-list>
-
-          <bible-verse-of-the-day-fetch-result
-            date=${dateShortFormat}
-            bible-id=${ifDefined(this.bibleId)}
-          >
-          </bible-verse-of-the-day-fetch-result>
-
-          <modal-dialog
-            ?open=${this.isDialogOpen}
-            @close=${() => {
-              this.isDialogOpen = false;
-            }}
-          >
-            ${this.#renderModalDialogContent()}
-          </modal-dialog>
-
-          <div class="verse-list-container">
-            <button
-              type="button"
-              class="secondary"
-              @click=${this.#handleButtonClickToShowDialog}
-            >
-              Verse List for 2026
-            </button>
-          </div>
-        </span>
-
-        <span slot="page-navigation-back-button">&lt; Back</span>
-        <span slot="page-navigation-forward-button">Step 2 &gt;</span>
-      </verse-text-page-template>
     `;
   }
 
@@ -251,5 +169,87 @@ export class VerseOfTheDayPage extends BasePage(LitElement) {
       nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
       previousPage: PAGE_NAME.VERSE_OF_THE_DAY_PAGE,
     });
+  }
+
+  render() {
+    const dateShortFormat = formatDate(this.dateForVerseOfTheDay, "YYYY-MM-DD");
+    const dateLongFormat = formatDate(
+      this.dateForVerseOfTheDay,
+      "dddd, MMMM D, YYYY",
+    );
+
+    return html`
+      <verse-text-page-template
+        @page-navigation-back-button-click=${this.#handleBackButtonClick}
+        @page-navigation-forward-button-click=${this.#handleForwardButtonClick}
+      >
+        <span slot="page-heading">Verse of the Day</span>
+
+        <p slot="page-description">
+          Practice memorizing the verse of the day for
+          <span id="page-heading-date">${dateLongFormat}</span>.
+        </p>
+        <p slot="page-description">When you have it memorized go to Step 2.</p>
+
+        <span slot="page-content">
+          <div class="date-picker-container">
+            <button
+              type="button"
+              aria-label="show verse for previous day"
+              class="svg-icon-container"
+              @click=${this.#handlePreviousDay}
+            >
+              ${this.#chevronLeftIcon}
+            </button>
+            <input
+              type="date"
+              id="date-picker-for-verse-of-the-day"
+              aria-label="Date for Verse of the Day"
+              min="2025-01-01"
+              max="2026-12-31"
+              .value=${dateShortFormat}
+              @input=${this.#handleDateInputChange}
+            />
+            <button
+              type="button"
+              aria-label="show verse for next day"
+              class="svg-icon-container"
+              @click=${this.#handleNextDay}
+            >
+              ${this.#chevronRightIcon}
+            </button>
+          </div>
+          <bible-translation-drop-down-list></bible-translation-drop-down-list>
+
+          <bible-verse-of-the-day-fetch-result
+            date=${dateShortFormat}
+            bible-id=${ifDefined(this.bibleId)}
+          >
+          </bible-verse-of-the-day-fetch-result>
+
+          <modal-dialog
+            ?open=${this.isDialogOpen}
+            @close=${() => {
+              this.isDialogOpen = false;
+            }}
+          >
+            ${this.#renderModalDialogContent()}
+          </modal-dialog>
+
+          <div class="verse-list-container">
+            <button
+              type="button"
+              class="secondary"
+              @click=${this.#handleButtonClickToShowDialog}
+            >
+              Verse List for 2026
+            </button>
+          </div>
+        </span>
+
+        <span slot="page-navigation-back-button">&lt; Back</span>
+        <span slot="page-navigation-forward-button">Step 2 &gt;</span>
+      </verse-text-page-template>
+    `;
   }
 }
