@@ -49,9 +49,9 @@ export class SpeechRecognitionService extends EventTarget {
     this.#transcriptHistory = [];
     this.#allEvents = [];
 
-    const SpeechRecognition =
+    const SpeechRecognitionWithFallback =
       globalThis.SpeechRecognition || globalThis.webkitSpeechRecognition;
-    this.recognition = new SpeechRecognition();
+    this.recognition = new SpeechRecognitionWithFallback();
     this.recognition.continuous = true;
     this.recognition.lang = "en-US";
     this.recognition.interimResults = true;
