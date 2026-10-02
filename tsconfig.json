@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "types": ["dom-speech-recognition"],
 
     /* Lit decorators */
     "experimentalDecorators": true,
