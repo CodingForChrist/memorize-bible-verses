@@ -16,6 +16,17 @@ export class Psalm23Page extends BasePage(LitElement) {
 
   pageTitle = "Psalm 23";
 
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
+  }
+
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.PSALM_23_PAGE,
+    });
+  }
+
   render() {
     return html`
       <verse-text-page-template
@@ -42,16 +53,5 @@ export class Psalm23Page extends BasePage(LitElement) {
         <span slot="page-navigation-forward-button">Step 2 &gt;</span>
       </verse-text-page-template>
     `;
-  }
-
-  #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
-  }
-
-  #handleForwardButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.PSALM_23_PAGE,
-    });
   }
 }

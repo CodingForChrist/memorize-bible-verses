@@ -18,18 +18,6 @@ import "../../components/bible-verse-fetch-result";
 
 @customElement("search-form")
 export class SearchForm extends LitElement {
-  @state()
-  verseReference = "";
-
-  @state()
-  isValidVerseReference = true;
-
-  @state()
-  validationErrorMessage = "";
-
-  #textInput = getStateFromURL()?.verse ?? "";
-  inputElementReference: Ref<HTMLInputElement> = createRef();
-
   static styles = [
     formControlStyles,
     buttonStyles,
@@ -78,10 +66,55 @@ export class SearchForm extends LitElement {
     `,
   ];
 
+  #textInput = getStateFromURL()?.verse ?? "";
+  inputElementReference: Ref<HTMLInputElement> = createRef();
+
+  @state()
+  verseReference = "";
+
+  @state()
+  isValidVerseReference = true;
+
+  @state()
+  validationErrorMessage = "";
+
   get #bibleBookNames() {
     return getAllBibleBooks().map((bookName) => {
       return bookName === "Psalms" ? "Psalm" : bookName;
     });
+  }
+
+  #handleTextInput(event: Event) {
+    this.#textInput = (event.target as HTMLInputElement).value;
+  }
+
+  #handleFormSubmit(event: Event) {
+    event.preventDefault();
+
+    const results = VerseReferenceSchema.safeParse(this.#textInput);
+    if (results.success) {
+      this.verseReference = this.#textInput;
+      this.isValidVerseReference = true;
+      this.validationErrorMessage = "";
+    } else {
+      this.isValidVerseReference = false;
+      this.validationErrorMessage = results.error.issues[0].message;
+      this.verseReference = "";
+      this.inputElementReference.value?.focus();
+    }
+
+    this.#sendFormSubmitEvent(this.verseReference);
+  }
+
+  #sendFormSubmitEvent(verseReference: string) {
+    const formSubmitEvent = new CustomEvent<{
+      verseReference: string;
+    }>("submit", {
+      detail: { verseReference },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(formSubmitEvent);
   }
 
   render() {
@@ -127,38 +160,5 @@ export class SearchForm extends LitElement {
     if (this.#textInput) {
       this.#handleFormSubmit(new Event("submit"));
     }
-  }
-
-  #handleTextInput(event: Event) {
-    this.#textInput = (event.target as HTMLInputElement).value;
-  }
-
-  #handleFormSubmit(event: Event) {
-    event.preventDefault();
-
-    const results = VerseReferenceSchema.safeParse(this.#textInput);
-    if (results.success) {
-      this.verseReference = this.#textInput;
-      this.isValidVerseReference = true;
-      this.validationErrorMessage = "";
-    } else {
-      this.isValidVerseReference = false;
-      this.validationErrorMessage = results.error.issues[0].message;
-      this.verseReference = "";
-      this.inputElementReference.value?.focus();
-    }
-
-    this.#sendFormSubmitEvent(this.verseReference);
-  }
-
-  #sendFormSubmitEvent(verseReference: string) {
-    const formSubmitEvent = new CustomEvent<{
-      verseReference: string;
-    }>("submit", {
-      detail: { verseReference },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(formSubmitEvent);
   }
 }

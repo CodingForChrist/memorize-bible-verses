@@ -7,11 +7,6 @@ import { breakpointsREM, buttonStyles } from "../../components/shared-styles";
 
 @customElement("search-options-page")
 export class SearchOptionsPage extends BasePage(LitElement) {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  pageTitle = "Search Options";
-
   static styles = [
     buttonStyles,
     css`
@@ -101,6 +96,11 @@ export class SearchOptionsPage extends BasePage(LitElement) {
       }
     `,
   ];
+
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  pageTitle = "Search Options";
 
   render() {
     const {

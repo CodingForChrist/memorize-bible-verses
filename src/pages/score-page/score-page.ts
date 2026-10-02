@@ -12,20 +12,6 @@ import "../../components/alert-message";
 
 @customElement("score-page")
 export class ScorePage extends BasePage(LitElement) {
-  @property({ attribute: "bible-abbreviation", reflect: true })
-  bibleAbbreviation?: string;
-
-  @property({ attribute: "verse-reference", reflect: true })
-  verseReference?: string;
-
-  @property({ attribute: "verse-text-content", reflect: true })
-  verseTextContent?: string;
-
-  @property({ attribute: "recited-bible-verse", reflect: true })
-  recitedBibleVerse?: string;
-
-  pageTitle = "Score";
-
   static styles = css`
     :host {
       display: block;
@@ -52,6 +38,32 @@ export class ScorePage extends BasePage(LitElement) {
       }
     }
   `;
+
+  @property({ attribute: "bible-abbreviation", reflect: true })
+  bibleAbbreviation?: string;
+
+  @property({ attribute: "verse-reference", reflect: true })
+  verseReference?: string;
+
+  @property({ attribute: "verse-text-content", reflect: true })
+  verseTextContent?: string;
+
+  @property({ attribute: "recited-bible-verse", reflect: true })
+  recitedBibleVerse?: string;
+
+  pageTitle = "Score";
+
+  #handleBackButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+    });
+  }
+
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE,
+    });
+  }
 
   #renderReport() {
     if (
@@ -138,18 +150,6 @@ export class ScorePage extends BasePage(LitElement) {
         <span slot="page-navigation-forward-button">New Verse</span>
       </verse-text-page-template>
     `;
-  }
-
-  #handleBackButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-    });
-  }
-
-  #handleForwardButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE,
-    });
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

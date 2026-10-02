@@ -12,20 +12,44 @@ import "../../components/bible-verse-fetch-result";
 
 @customElement("share-the-gospel-page")
 export class ShareTheGospelPage extends BasePage(LitElement) {
-  @property({ attribute: "bible-id", reflect: true })
-  bibleId?: string;
-
-  @property()
-  verseReference?: string;
-
   static defaultPageTitle = "Verses for Sharing the Gospel";
-  pageTitle = ShareTheGospelPage.defaultPageTitle;
 
   static styles = css`
     bible-translation-drop-down-list {
       margin-bottom: 1.5rem;
     }
   `;
+
+  @property({ attribute: "bible-id", reflect: true })
+  bibleId?: string;
+
+  @property()
+  verseReference?: string;
+
+  pageTitle = ShareTheGospelPage.defaultPageTitle;
+
+  #handleVerseReferenceChange(
+    event: CustomEventInit<{ verseReference: string }>,
+  ) {
+    const verseReference = event.detail?.verseReference;
+
+    if (!verseReference) {
+      return;
+    }
+
+    this.verseReference = verseReference;
+  }
+
+  #handleBackButtonClick() {
+    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
+  }
+
+  #handleForwardButtonClick() {
+    this.navigateToPage({
+      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
+      previousPage: PAGE_NAME.SHARE_THE_GOSPEL_PAGE,
+    });
+  }
 
   render() {
     return html`
@@ -60,29 +84,6 @@ export class ShareTheGospelPage extends BasePage(LitElement) {
         <span slot="page-navigation-forward-button">Step 2 &gt;</span>
       </verse-text-page-template>
     `;
-  }
-
-  #handleVerseReferenceChange(
-    event: CustomEventInit<{ verseReference: string }>,
-  ) {
-    const verseReference = event.detail?.verseReference;
-
-    if (!verseReference) {
-      return;
-    }
-
-    this.verseReference = verseReference;
-  }
-
-  #handleBackButtonClick() {
-    this.navigateToPage({ nextPage: PAGE_NAME.SEARCH_OPTIONS_PAGE });
-  }
-
-  #handleForwardButtonClick() {
-    this.navigateToPage({
-      nextPage: PAGE_NAME.SPEAK_VERSE_FROM_MEMORY_PAGE,
-      previousPage: PAGE_NAME.SHARE_THE_GOSPEL_PAGE,
-    });
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {

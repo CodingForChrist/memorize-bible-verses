@@ -116,6 +116,10 @@ export class CollapsibleContent extends LitElement {
     `;
   }
 
+  #toggle() {
+    this.expanded = !this.expanded;
+  }
+
   render() {
     return html`
       <h2 class="heading">
@@ -137,9 +141,5 @@ export class CollapsibleContent extends LitElement {
         <slot></slot>
       </div>
     `;
-  }
-
-  #toggle() {
-    this.expanded = !this.expanded;
   }
 }

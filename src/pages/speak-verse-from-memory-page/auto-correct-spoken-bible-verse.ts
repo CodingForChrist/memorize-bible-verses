@@ -66,7 +66,7 @@ function addMissingColonsToBibleReference({
   if (searchPatternSingleVerseReferenceWithoutColon.test(improvedTranscript)) {
     improvedTranscript = improvedTranscript.replaceAll(
       searchPatternSingleVerseReferenceWithoutColon,
-      singleVerseReference,
+      () => singleVerseReference,
     );
   }
 
@@ -85,7 +85,7 @@ function addMissingColonsToBibleReference({
   ) {
     improvedTranscript = improvedTranscript.replaceAll(
       searchPatternSingleVerseReferenceWithoutColonWithSpace,
-      singleVerseReference,
+      () => singleVerseReference,
     );
   }
 
@@ -127,7 +127,7 @@ function replaceSpelledOutNumbersInBibleReference({
 
   let improvedTranscript = transcript;
 
-  if (bookNumber && ordinalNumbersMap[bookNumber]) {
+  if (bookNumber && Object.hasOwn(ordinalNumbersMap, bookNumber)) {
     const bookNumberAsOrdinalNumbers = ordinalNumbersMap[bookNumber];
 
     for (const bookNumberAsOrdinalNumber of bookNumberAsOrdinalNumbers) {
@@ -136,25 +136,25 @@ function replaceSpelledOutNumbersInBibleReference({
       ) {
         improvedTranscript = improvedTranscript.replaceAll(
           `${bookNumberAsOrdinalNumber} ${bookName}`,
-          `${bookNumber} ${bookName}`,
+          () => `${bookNumber} ${bookName}`,
         );
       }
     }
   }
 
-  if (spelledOutNumbersMap[chapter]) {
+  if (Object.hasOwn(spelledOutNumbersMap, chapter)) {
     const chapterSpelledOut = spelledOutNumbersMap[chapter];
 
     const searchPattern = new RegExp(`${bookName} ${chapterSpelledOut}`, "gi");
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
-        `${bookName} ${chapter}`,
+        () => `${bookName} ${chapter}`,
       );
     }
   }
 
-  if (spelledOutNumbersMap[verseNumberStart]) {
+  if (Object.hasOwn(spelledOutNumbersMap, verseNumberStart)) {
     const verseNumberStartSpelledOut = spelledOutNumbersMap[verseNumberStart];
 
     const searchPattern = new RegExp(
@@ -165,12 +165,12 @@ function replaceSpelledOutNumbersInBibleReference({
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
-        `${bookName} ${chapter}:${verseNumberStart}`,
+        () => `${bookName} ${chapter}:${verseNumberStart}`,
       );
     }
   }
 
-  if (spelledOutNumbersMap[verseNumberEnd]) {
+  if (Object.hasOwn(spelledOutNumbersMap, verseNumberEnd)) {
     const verseNumberEndSpelledOut = spelledOutNumbersMap[verseNumberEnd];
 
     const searchPattern = new RegExp(
@@ -181,7 +181,7 @@ function replaceSpelledOutNumbersInBibleReference({
     if (searchPattern.test(improvedTranscript)) {
       improvedTranscript = improvedTranscript.replaceAll(
         searchPattern,
-        `${bookName} ${chapter}:${verseNumberStart}-${verseNumberEnd}`,
+        () => `${bookName} ${chapter}:${verseNumberStart}-${verseNumberEnd}`,
       );
     }
   }
@@ -215,7 +215,7 @@ function useDashForVerseRanges({
     if (improvedTranscript.includes(verseReferenceWithDividerWord)) {
       improvedTranscript = improvedTranscript.replaceAll(
         verseReferenceWithDividerWord,
-        verseReference,
+        () => verseReference,
       );
     }
   }

@@ -33,6 +33,14 @@ type PageNavigation = {
 
 @customElement("app-state-provider")
 export class AppStateProvider extends LitElement {
+  static styles = css`
+    *,
+    ::before,
+    ::after {
+      box-sizing: border-box;
+    }
+  `;
+
   @state()
   selectedBibleTranslation?: BibleTranslation;
 
@@ -50,14 +58,6 @@ export class AppStateProvider extends LitElement {
   @state()
   previousPage?: PageName;
 
-  static styles = css`
-    *,
-    ::before,
-    ::after {
-      box-sizing: border-box;
-    }
-  `;
-
   constructor() {
     super();
 
@@ -71,13 +71,13 @@ export class AppStateProvider extends LitElement {
 
     this.addEventListener(
       CUSTOM_EVENT.NAVIGATE_TO_PAGE,
-      (event: CustomEventInit<{ pageNavigation: PageNavigation }>) => {
+      async (event: CustomEventInit<{ pageNavigation: PageNavigation }>) => {
         const pageNavigation = event.detail?.pageNavigation;
         if (!pageNavigation) {
           return;
         }
 
-        this.#viewTransitionForPageNavigation(pageNavigation);
+        await this.#viewTransitionForPageNavigation(pageNavigation);
         logger.info({
           message: `${CUSTOM_EVENT.NAVIGATE_TO_PAGE} event`,
           payload: pageNavigation,
@@ -156,6 +156,58 @@ export class AppStateProvider extends LitElement {
         });
       },
     );
+  }
+
+  #getPageNameFromURLWithFallback() {
+    const pageNameFromURL = getStateFromURL()?.pageName;
+    if (pageNameFromURL) {
+      return pageNameFromURL;
+    }
+
+    const fallbackPageName = PAGE_NAME.INSTRUCTIONS_PAGE;
+    setStateInURL({
+      pageName: fallbackPageName,
+      shouldUpdateBrowserHistory: false,
+    });
+
+    return fallbackPageName;
+  }
+
+  async #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
+    setStateInURL({
+      pageName: pageNavigation.nextPage,
+      shouldUpdateBrowserHistory: true,
+    });
+
+    // fallback for browsers that don't support the View Transition API
+    if (!document.startViewTransition) {
+      this.#goto(pageNavigation);
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // View Transition API
+    const transition = document.startViewTransition(() => {
+      this.#goto(pageNavigation);
+    });
+
+    try {
+      await transition.ready;
+      // scroll to the top of the page
+      window.scrollTo({ top: 0, behavior: "instant" });
+    } catch (error) {
+      logger.error({
+        message: `Transition API ready promise rejected`,
+        payload: {
+          errorMessage: String(error),
+        },
+      });
+    }
+  }
+
+  #goto({ nextPage, previousPage }: PageNavigation) {
+    this.currentPage = nextPage;
+    if (previousPage) this.previousPage = previousPage;
   }
 
   render() {
@@ -251,49 +303,5 @@ export class AppStateProvider extends LitElement {
         currentPage: this.currentPage,
       },
     });
-  }
-
-  #getPageNameFromURLWithFallback() {
-    const pageNameFromURL = getStateFromURL()?.pageName;
-    if (pageNameFromURL) {
-      return pageNameFromURL;
-    }
-
-    const fallbackPageName = PAGE_NAME.INSTRUCTIONS_PAGE;
-    setStateInURL({
-      pageName: fallbackPageName,
-      shouldUpdateBrowserHistory: false,
-    });
-
-    return fallbackPageName;
-  }
-
-  #viewTransitionForPageNavigation(pageNavigation: PageNavigation) {
-    setStateInURL({
-      pageName: pageNavigation.nextPage,
-      shouldUpdateBrowserHistory: true,
-    });
-
-    // fallback for browsers that don't support the View Transition API
-    if (!document.startViewTransition) {
-      this.#goto(pageNavigation);
-      window.scrollTo(0, 0);
-      return;
-    }
-
-    // View Transition API
-    const transition = document.startViewTransition(() => {
-      this.#goto(pageNavigation);
-    });
-
-    transition.ready.then(() => {
-      // scroll to the top of the page
-      window.scrollTo({ top: 0, behavior: "instant" });
-    });
-  }
-
-  #goto({ nextPage, previousPage }: PageNavigation) {
-    this.currentPage = nextPage;
-    if (previousPage) this.previousPage = previousPage;
   }
 }
