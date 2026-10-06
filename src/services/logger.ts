@@ -1,3 +1,5 @@
+import { CUSTOM_EVENT } from "../constants";
+
 export const LOG_LEVEL = {
   DEBUG: "debug",
   INFO: "info",
@@ -17,15 +19,16 @@ export type LogEntry = {
 type LogOptions = Omit<LogEntry, "level" | "time">;
 
 class Logger {
-  logEntries: LogEntry[];
+  logEntries: Map<string, LogEntry>;
 
   constructor() {
-    this.logEntries = [];
+    this.logEntries = new Map<string, LogEntry>();
   }
 
   #log(logEntry: LogEntry) {
-    this.logEntries.push(logEntry);
-    this.#sendCustomLogEvent(logEntry);
+    const uuid = crypto.randomUUID();
+    this.logEntries.set(uuid, logEntry);
+    this.#sendCustomLogEvent(uuid, logEntry);
 
     const { level, message, payload } = logEntry;
     if (!Object.values(LOG_LEVEL).includes(level)) {
@@ -36,11 +39,12 @@ class Logger {
     console[level](message, payload);
   }
 
-  #sendCustomLogEvent(logEntry: LogEntry) {
+  #sendCustomLogEvent(uuid: string, logEntry: LogEntry) {
     const eventCustomLog = new CustomEvent<{
+      uuid: string;
       logEntry: LogEntry;
-    }>("custom-log", {
-      detail: { logEntry },
+    }>(CUSTOM_EVENT.LOG_ENTRY, {
+      detail: { uuid, logEntry },
       bubbles: true,
       composed: true,
     });

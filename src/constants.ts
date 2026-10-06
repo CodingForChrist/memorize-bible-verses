@@ -1,4 +1,5 @@
 export const CUSTOM_EVENT = {
+  LOG_ENTRY: "log-entry",
   UPDATE_BIBLE_TRANSLATION: "update-bible-translation",
   UPDATE_BIBLE_VERSE: "update-bible-verse",
   UPDATE_RECITED_BIBLE_VERSE: "update-recited-bible-verse",
