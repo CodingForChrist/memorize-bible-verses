@@ -304,14 +304,16 @@ export class AppStateProvider extends LitElement {
         currentPage: this.currentPage,
       },
     });
-
     try {
       // verify the api server is up and running
       await fetchHealthCheck();
+      logger.info({
+        message: "health check succeeded",
+      });
     } catch (error) {
       logger.warn({
         message: "health check failed",
-        payload: { errorMessage: String(error) },
+        payload: { errorMessage: error },
       });
     }
   }

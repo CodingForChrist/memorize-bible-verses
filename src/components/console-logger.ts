@@ -3,6 +3,7 @@ import { customElement, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 
 import { logger, type LogEntry } from "../services/logger";
+import { CUSTOM_EVENT } from "../constants";
 
 @customElement("console-logger")
 export class ConsoleLogger extends LitElement {
@@ -34,6 +35,7 @@ export class ConsoleLogger extends LitElement {
     .log-entry pre {
       margin: 0;
       font-size: 0.6rem;
+      white-space: pre-wrap;
     }
     .pill {
       font-size: 0.6rem;
@@ -63,19 +65,29 @@ export class ConsoleLogger extends LitElement {
   `;
 
   @state()
-  logEntries: LogEntry[] = logger.logEntries;
+  logEntries: Map<string, LogEntry> = structuredClone(logger.logEntries);
 
   constructor() {
     super();
+    this.handleLogEntryEvent = this.handleLogEntryEvent.bind(this);
+  }
 
-    addEventListener(
-      "custom-log",
-      (event: CustomEventInit<{ logEntry: LogEntry }>) => {
-        const logEntry = event.detail?.logEntry;
-        if (logEntry) {
-          this.logEntries = [...this.logEntries, logEntry];
+  #stringifyPayload(payload: Record<string, unknown> | undefined) {
+    if (!payload) {
+      return "";
+    }
+
+    return JSON.stringify(
+      payload,
+      (_key: string, value: unknown) => {
+        if (value instanceof Error) {
+          return {
+            message: value.message,
+          };
         }
+        return value;
       },
+      2,
     );
   }
 
@@ -85,7 +97,7 @@ export class ConsoleLogger extends LitElement {
         <span>${this.#formatTime(time)}</span>
         <span class="pill pill-${level}">${level}</span>
         <span>${message}</span>
-        <pre>${JSON.stringify(payload, undefined, 2)}</pre>
+        <pre>${this.#stringifyPayload(payload)}</pre>
       </div>
     `;
   }
@@ -101,11 +113,33 @@ export class ConsoleLogger extends LitElement {
     });
   }
 
+  handleLogEntryEvent(
+    event: CustomEventInit<{ uuid: string; logEntry: LogEntry }>,
+  ) {
+    console.log(event.detail);
+    if (event.detail === undefined) {
+      return;
+    }
+    const { uuid, logEntry } = event.detail;
+    this.logEntries.set(uuid, logEntry);
+    this.requestUpdate();
+  }
+
   render() {
     return html`
       <div>
-        ${map(this.logEntries, (logEntry) => this.#renderLogEntry(logEntry))}
+        ${map(this.logEntries.values(), (logEntry) => this.#renderLogEntry(logEntry))}
       </div>
     `;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    addEventListener(CUSTOM_EVENT.LOG_ENTRY, this.handleLogEntryEvent);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    removeEventListener(CUSTOM_EVENT.LOG_ENTRY, this.handleLogEntryEvent);
   }
 }
