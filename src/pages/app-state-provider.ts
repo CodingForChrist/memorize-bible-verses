@@ -5,6 +5,7 @@ import { ifDefined } from "lit/directives/if-defined.js";
 
 import { CUSTOM_EVENT, PAGE_NAME, type PageName } from "../constants";
 import { setBibleTranslationInLocalStorage } from "../services/local-storage";
+import { fetchHealthCheck } from "../services/api";
 import { logger } from "../services/logger";
 
 import {
@@ -295,7 +296,7 @@ export class AppStateProvider extends LitElement {
     );
   }
 
-  firstUpdated() {
+  async firstUpdated() {
     logger.info({
       message: "app-state-provider firstUpdated",
       payload: {
@@ -303,5 +304,15 @@ export class AppStateProvider extends LitElement {
         currentPage: this.currentPage,
       },
     });
+
+    try {
+      // verify the api server is up and running
+      await fetchHealthCheck();
+    } catch (error) {
+      logger.warn({
+          message: "health check failed",
+          payload: { errorMessage: String(error) }
+      })
+    }
   }
 }
