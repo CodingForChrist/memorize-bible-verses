@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.26.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.25.0...v1.26.0) (2026-10-06)
+
+
+### Features
+
+* add api health check on first render ([#391](https://github.com/CodingForChrist/memorize-bible-verses/issues/391)) ([b0f1cce](https://github.com/CodingForChrist/memorize-bible-verses/commit/b0f1cceb5fd657f0cf88ee5e02709fb0534711fd))
+
+
+### Bug Fixes
+
+* prevent duplicate log events from displaying ([#393](https://github.com/CodingForChrist/memorize-bible-verses/issues/393)) ([0393d15](https://github.com/CodingForChrist/memorize-bible-verses/commit/0393d15fcfc31ebb01d2819fe2b944f1bdf880e9))
+
 ## [1.25.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.24.1...v1.25.0) (2026-10-03)
 
 
