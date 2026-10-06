@@ -198,9 +198,8 @@ export async function fetchHealthCheck() {
       throw new Error("status is down");
     }
   } catch (error) {
-    throw new Error(
-      "health check returned an unexpected response",
-      { cause: error }
-    );
+    throw new Error("health check returned an unexpected response", {
+      cause: error,
+    });
   }
 }

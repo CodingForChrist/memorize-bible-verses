@@ -310,9 +310,9 @@ export class AppStateProvider extends LitElement {
       await fetchHealthCheck();
     } catch (error) {
       logger.warn({
-          message: "health check failed",
-          payload: { errorMessage: String(error) }
-      })
+        message: "health check failed",
+        payload: { errorMessage: String(error) },
+      });
     }
   }
 }
