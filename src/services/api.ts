@@ -181,3 +181,25 @@ export async function fetchVerseOfTheDayVerseListWithCache({
     throw error;
   }
 }
+
+export async function fetchHealthCheck() {
+  try {
+    const responsePromise = fetch(`${API_BASE_URL}/health`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const jsonData = await resolveResponseToJSON(responsePromise);
+    assert(
+      jsonData && typeof jsonData === "object" && "status" in jsonData,
+      "unexpected JSON",
+    );
+    if (jsonData.status === "DOWN") {
+      throw new Error("status is down");
+    }
+  } catch (error) {
+    throw new Error("health check returned an unexpected response", {
+      cause: error,
+    });
+  }
+}
