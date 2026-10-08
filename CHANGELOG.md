@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.26.0...v1.27.0) (2026-10-08)
+
+
+### Features
+
+* maximize width on mobile ([#394](https://github.com/CodingForChrist/memorize-bible-verses/issues/394)) ([b7303b0](https://github.com/CodingForChrist/memorize-bible-verses/commit/b7303b0cb4c7f2efe3e9d5b7e263c5424707cdf1))
+
 ## [1.26.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.25.0...v1.26.0) (2026-10-06)
 
 
