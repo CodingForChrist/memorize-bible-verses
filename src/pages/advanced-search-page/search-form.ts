@@ -7,8 +7,9 @@ import { classMap } from "lit/directives/class-map.js";
 import { VerseReferenceSchema } from "../../schemas/verse-reference-schema";
 import { getStateFromURL } from "../../services/router";
 import {
-  formControlStyles,
+  breakpointsREM,
   buttonStyles,
+  formControlStyles,
 } from "../../components/shared-styles";
 import { getAllBibleBooks } from "../../data/bible-book-model";
 
@@ -42,9 +43,12 @@ export class SearchForm extends LitElement {
       }
       button[type="submit"] {
         --primary-box-shadow-color-rgb: var(--color-primary-bright-pink-rgb);
-        min-width: 6rem;
         height: 2.5rem;
         align-self: flex-start;
+
+        @media (min-width: ${breakpointsREM.medium}rem) {
+          min-width: 6rem;
+        }
       }
       .input-container {
         width: 100%;
