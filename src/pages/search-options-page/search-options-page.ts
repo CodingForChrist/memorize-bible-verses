@@ -14,6 +14,7 @@ export class SearchOptionsPage extends BasePage(LitElement) {
         margin: 1rem auto;
         text-align: center;
         display: block;
+        padding: 0 0.5rem;
       }
       h1 {
         font-family: var(--font-heading);
