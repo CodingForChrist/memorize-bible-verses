@@ -200,7 +200,7 @@ export class AppStateProvider extends LitElement {
       logger.error({
         message: `Transition API ready promise rejected`,
         payload: {
-          errorMessage: String(error),
+          errorMessage: error,
         },
       });
     }
