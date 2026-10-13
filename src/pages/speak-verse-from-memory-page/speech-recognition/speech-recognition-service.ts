@@ -1,3 +1,5 @@
+import { logger } from "../../../services/logger";
+
 export const SPEECH_RECOGNITION_STATE = {
   INITIAL: "initial",
   WAITING_FOR_MICROPHONE_ACCESS: "waiting-for-microphone-access",
@@ -86,7 +88,7 @@ export class SpeechRecognitionService extends EventTarget {
     if (isAndroid()) {
       transcriptArray =
         this.state === AUDIOEND &&
-        this.#transcriptHistory[0].endsWith(transcriptArray[0])
+        this.#transcriptHistory[0]?.endsWith(transcriptArray[0])
           ? [...this.#transcriptHistory]
           : [...this.#transcriptHistory, ...transcriptArray];
     }
@@ -134,15 +136,22 @@ export class SpeechRecognitionService extends EventTarget {
     }
 
     if (this.state === AUDIOEND && this.#lastResult) {
-      const transcript = this.#getTranscriptAsText(this.#lastResult);
-      this.interimTranscript = transcript;
-      this.finalTranscript = transcript;
+      try {
+        const transcript = this.#getTranscriptAsText(this.#lastResult);
+        this.interimTranscript = transcript;
+        this.finalTranscript = transcript;
 
-      if (this.#resolveListener) {
-        this.#resolveListener(this.finalTranscript);
+        if (this.#resolveListener) {
+          this.#resolveListener(this.finalTranscript);
+        }
+        this.state = RESOLVED;
+      } catch (error) {
+        logger.error({
+          message: "Failed to get final transcript",
+          payload: { errorMessage: error },
+        });
+        this.state = REJECTED;
       }
-      this.state = RESOLVED;
-
       // console.log(this.getEventsReport());
       this.#allEvents = [];
     } else {
