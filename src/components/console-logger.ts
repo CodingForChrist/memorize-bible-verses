@@ -116,7 +116,6 @@ export class ConsoleLogger extends LitElement {
   handleLogEntryEvent(
     event: CustomEventInit<{ uuid: string; logEntry: LogEntry }>,
   ) {
-    console.log(event.detail);
     if (event.detail === undefined) {
       return;
     }
