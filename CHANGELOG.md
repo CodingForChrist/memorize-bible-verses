@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.27.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.26.0...v1.27.0) (2026-10-13)
+
+
+### Features
+
+* maximize width on mobile ([#394](https://github.com/CodingForChrist/memorize-bible-verses/issues/394)) ([b7303b0](https://github.com/CodingForChrist/memorize-bible-verses/commit/b7303b0cb4c7f2efe3e9d5b7e263c5424707cdf1))
+
+
+### Bug Fixes
+
+* catch errors on audioend event ([#400](https://github.com/CodingForChrist/memorize-bible-verses/issues/400)) ([c877870](https://github.com/CodingForChrist/memorize-bible-verses/commit/c8778709052ed0f5451db42d69caa3ef8f259ac6))
+* pass errors directly to logger ([#399](https://github.com/CodingForChrist/memorize-bible-verses/issues/399)) ([2c08ba7](https://github.com/CodingForChrist/memorize-bible-verses/commit/2c08ba75b78253233ab01a281790f7d44c4a8c9d))
+
 ## [1.26.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.25.0...v1.26.0) (2026-10-06)
 
 
