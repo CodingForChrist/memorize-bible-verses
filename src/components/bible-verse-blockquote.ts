@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import { classMap } from "lit/directives/class-map.js";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { animate, fadeIn } from "@lit-labs/motion";
 
 import scriptureStyles from "scripture-styles/dist/css/scripture-styles.css?inline";
 
@@ -188,10 +189,22 @@ export class BibleVerseBlockquote extends LitElement {
     const trimmedContent = this.#trimContent(this.content);
 
     return html`
-      <blockquote class="scripture-styles">
-        ${map(trimmedContent, (itemTag) => this.#renderItemTag(itemTag))}
-      </blockquote>
-      ${this.#renderCitation()}
+      <div
+        ${animate({
+          properties: ["opacity"],
+          keyframeOptions: {
+            duration: 1000,
+            easing: "ease-in-out",
+            fill: "both",
+          },
+          in: fadeIn,
+        })}
+      >
+        <blockquote class="scripture-styles">
+          ${map(trimmedContent, (itemTag) => this.#renderItemTag(itemTag))}
+        </blockquote>
+        ${this.#renderCitation()}
+      </div>
     `;
   }
 }
