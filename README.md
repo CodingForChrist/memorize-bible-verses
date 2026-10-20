@@ -3,7 +3,7 @@
 Practice memorizing bible verses by speaking them into your phone. This web app is built with the following tools:
 
 - [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) for speech recognition
-- [API.Bible](https://scripture.api.bible/) for searching for bible verses based on the selected bible translation
+- [API.Bible](https://api.bible/) for searching for bible verses based on the selected bible translation
 - [jsdiff](https://www.npmjs.com/package/diff) for a text comparison of the spoken verse with the actual verse
 
 ## Running Locally
@@ -12,7 +12,7 @@ Practice memorizing bible verses by speaking them into your phone. This web app 
    ```
    git clone https://github.com/CodingForChrist/memorize-bible-verses.git
    ```
-2. Create a `.env` file based on the `.env.example` file at the root of this repository. You only need this .env file if you want to change the url for the [memorize-bible-verses-api-server](https://github.com/CodingForChrist/memorize-bible-verses-api-server) to run it locally.
+2. Create a `.env` file based on the `.env.example` file at the root of this repository. You only need this .env file if you want to change the url for the [API Server](https://github.com/CodingForChrist/memorize-bible-verses-api-server) to run it locally.
 
    ```bash
    cd memorize-bible-verses
@@ -24,3 +24,11 @@ Practice memorizing bible verses by speaking them into your phone. This web app 
    npm install
    npm run dev
    ```
+
+# How-to Video
+
+Here's a video that demonstrates how to use this bible memorization app:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=oVg6cT8aDH8" target="_blank">
+ <img src="http://img.youtube.com/vi/oVg6cT8aDH8/hqdefault.jpg" alt="Watch the video" width="480" height="360" />
+</a>
