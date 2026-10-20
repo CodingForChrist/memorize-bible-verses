@@ -29,6 +29,4 @@ Practice memorizing bible verses by speaking them into your phone. This web app 
 
 Here's a video that demonstrates how to use this bible memorization app:
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=oVg6cT8aDH8" target="_blank">
- <img src="http://img.youtube.com/vi/oVg6cT8aDH8/hqdefault.jpg" alt="Watch the video" width="480" height="360" />
-</a>
+[![ How-to video for bible verse memorization app](https://img.youtube.com/vi/oVg6cT8aDH8/0.jpg)](https://youtu.be/oVg6cT8aDH8)
