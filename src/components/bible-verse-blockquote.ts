@@ -147,7 +147,6 @@ export class BibleVerseBlockquote extends LitElement {
     };
 
     if (items.length === 1 && items[0].type === "text") {
-      // eslint-disable-next-line unicorn/template-indent
       return html`<span
         class=${classMap(classes)}
         data-number=${ifDefined(number)}

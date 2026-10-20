@@ -34,9 +34,12 @@ async function resolveResponseToJSON(responsePromise: Promise<Response>) {
   return json as unknown;
 }
 
-function assert(condition: unknown, message?: string): asserts condition {
+function assert(
+  condition: unknown,
+  message = "Assertion failed",
+): asserts condition {
   if (!condition) {
-    throw new Error(message || "Assertion failed");
+    throw new Error(message);
   }
 }
 

@@ -77,13 +77,11 @@ function getTextFromBibleVerseContentItemsArray(
       continue;
     }
 
-    // ignore spaces
-    if (item.text.trim() === "") {
-      continue;
-    }
+    const isWhitespaceOnly = item.text.trim() === "";
+    const isHeadingText = item.attrs?.verseId === undefined;
 
-    // ignore heading text not related to a verse
-    if (!item.attrs?.verseId) {
+    // ignore spaces and heading text not related to a verse
+    if (isWhitespaceOnly || isHeadingText) {
       continue;
     }
 
