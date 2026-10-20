@@ -13,14 +13,14 @@ export function parseDate(value: string, format: "YYYY-MM-DD"): Date {
 }
 
 /**
- * Formats a Date object into one of the following formats:
- * - YYYY-MM-DD (2025-12-25)
- * - dddd, MMMM D, YYYY (Thursday, December 25, 2025)
- * - ISO8601 (2025-12-25T23:38:04-06:00)
- * @param {Date} value - Date object.
- * @param {("YYYY-MM-DD" | "dddd, MMMM D, YYYY" | "ISO8601" )} format - string format.
- * @returns {string} formatted date as a string.
- */
+Formats a Date object into one of the following formats:
+- YYYY-MM-DD (2025-12-25)
+- dddd, MMMM D, YYYY (Thursday, December 25, 2025)
+- ISO8601 (2025-12-25T23:38:04-06:00)
+@param {Date} value - Date object.
+@param {("YYYY-MM-DD" | "dddd, MMMM D, YYYY" | "ISO8601" )} format - string format.
+@returns {string} formatted date as a string.
+*/
 export function formatDate(
   value: Date,
   format: "YYYY-MM-DD" | "ddd, MMM DD, YYYY" | "dddd, MMMM D, YYYY" | "ISO8601",

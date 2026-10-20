@@ -171,7 +171,7 @@ export class AccordionGospelVerses extends LitElement {
   ) {
     return html`
       <div class="verse-container">
-        ${map(verses, ({ verseReference, verseLabel }) => {
+        ${map(verses, ({ verseReference, verseLabel = verseReference }) => {
           const classes = {
             active: this.selectedVerseReference === verseReference,
             secondary: true,
@@ -183,7 +183,7 @@ export class AccordionGospelVerses extends LitElement {
               @click=${this.#handleVerseButtonClick}
               data-verse-reference=${verseReference}
             >
-              ${verseLabel ?? verseReference}
+              ${verseLabel}
             </button>
           `;
         })}

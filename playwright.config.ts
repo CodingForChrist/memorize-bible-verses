@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
+/* eslint-disable unicorn/no-top-level-side-effects */
 export default defineConfig({
   testDir: "./playwright-tests",
   fullyParallel: true,
