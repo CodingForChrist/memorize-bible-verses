@@ -6,6 +6,8 @@ import { PAGE_NAME } from "../../constants";
 import { breakpointsREM, buttonStyles } from "../../components/shared-styles";
 import logoURL from "../../images/logo.svg";
 
+import "../../components/video-player";
+
 @customElement("instructions-page")
 export class InstructionsPage extends BasePage(LitElement) {
   static styles = [
@@ -53,6 +55,13 @@ export class InstructionsPage extends BasePage(LitElement) {
         margin-top: 3rem;
         min-width: 12rem;
       }
+      video-player {
+        margin-top: 3rem;
+
+        @media (min-width: ${breakpointsREM.large}rem) {
+          margin-top: 5rem;
+        }
+      }
       .grid-container {
         display: grid;
         gap: 2rem;
@@ -64,7 +73,7 @@ export class InstructionsPage extends BasePage(LitElement) {
         @media (min-width: ${breakpointsREM.large}rem) {
           grid-auto-flow: column;
           grid-auto-columns: 1fr;
-          margin: 2.5rem 0 4rem;
+          margin: 2.5rem 0;
         }
       }
     `,
@@ -108,6 +117,10 @@ export class InstructionsPage extends BasePage(LitElement) {
       >
         Get Started
       </button>
+      <video-player
+        id="oVg6cT8aDH8"
+        title="How-to video for bible verse memorization app"
+      ></video-player>
     `;
   }
 }
