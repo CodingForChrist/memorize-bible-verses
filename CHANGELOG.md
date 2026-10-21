@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.28.0...v1.29.0) (2026-10-21)
+
+
+### Features
+
+* add how-to video to home page ([#410](https://github.com/CodingForChrist/memorize-bible-verses/issues/410)) ([eb8f657](https://github.com/CodingForChrist/memorize-bible-verses/commit/eb8f6578054b23ccd488c95d3219a9df6cc743cf))
+
 ## [1.28.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.27.0...v1.28.0) (2026-10-20)
 
 
