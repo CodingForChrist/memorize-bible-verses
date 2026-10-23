@@ -4,14 +4,18 @@ import { getAllBibleBooks } from "../data/bible-book-model";
 
 const VerseReferenceCustomSchema = z
   .object({
-    bookNumber: z.number().min(1).max(3).optional(),
+    bookNumber: z.number().int().min(1).max(3).optional(),
     bookName: z.string().min(3),
     fullBookName: z.enum([...getAllBibleBooks(), "Psalm", "Revelations"], {
       error: () => "Invalid book name",
     }),
-    chapter: z.number().min(1),
-    verseNumberStart: z.number().min(1),
-    verseNumberEnd: z.number().min(1),
+    chapter: z.number().int().min(1),
+    verseNumberStart: z.number().int().min(1),
+    verseNumberEnd: z.number().int().min(1),
+  })
+  .refine((data) => data.verseNumberEnd >= data.verseNumberStart, {
+    message: "End verse cannot be less than start verse",
+    path: ["verseNumberEnd"],
   })
   .transform((data) => {
     const { verseNumberStart, verseNumberEnd } = data;
@@ -30,93 +34,122 @@ export const VerseReferenceSchema = z
     message: "Must contain letters, numbers, spaces, colons, or dashes",
   })
   .transform((verseReference, context) => {
-    let parsedVerseReference;
     try {
-      parsedVerseReference = parseVerseReferenceIntoParts(verseReference);
+      const parsedParts = parseVerseReferenceIntoParts(verseReference);
+      const validation = VerseReferenceCustomSchema.safeParse(parsedParts);
+
+      if (!validation.success) {
+        for (const issue of validation.error.issues) {
+          context.addIssue({
+            code: "custom",
+            message: issue.message,
+            path: issue.path,
+          });
+        }
+        return z.NEVER;
+      }
+
+      return validation.data;
     } catch (error) {
       context.addIssue({
         code: "custom",
-        message: (error as Error).message,
-        input: verseReference,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to parse verse reference",
       });
       return z.NEVER;
     }
-
-    const { success, error, data } =
-      VerseReferenceCustomSchema.safeParse(parsedVerseReference);
-    if (success) {
-      return data;
-    }
-
-    for (const { message, input } of error.issues) {
-      context.addIssue({
-        message,
-        code: "custom",
-        input,
-      });
-    }
-
-    return z.NEVER;
   });
 
 export type VerseReference = z.infer<typeof VerseReferenceSchema>;
 
 function parseVerseReferenceIntoParts(verseReference: string) {
-  let bookNumber;
-  let verseReferenceWithoutBookNumber = verseReference;
+  const cleanInput = verseReference.trim();
 
-  // get book number
-  if (Number.isSafeInteger(Number(verseReference.charAt(0)))) {
-    if (verseReference.charAt(1) !== " ") {
-      throw new Error("Book number must be a single digit followed by a space");
-    }
-
-    verseReferenceWithoutBookNumber = verseReference.slice(1).trim();
-    bookNumber = Number(verseReference.charAt(0));
-  }
-
-  // get book name
-  const bookNameRegExpMatchArray =
-    verseReferenceWithoutBookNumber.match(/[a-zA-Z ]+/);
-  if (!bookNameRegExpMatchArray) {
-    throw new Error("Failed to parse book name out of the verse reference");
-  }
-  const bookName = bookNameRegExpMatchArray[0].trim();
-  const fullBookName = bookNumber ? `${bookNumber} ${bookName}` : bookName;
-
-  if (verseReference.charAt(fullBookName.length) !== " ") {
+  // 1. Broadly split the string by the colon to isolate Book/Chapter from Verses
+  if (!cleanInput.includes(":")) {
     throw new Error(
-      "Must include a single space to separate the book name from the chapter",
+      "Missing a colon ':' to separate the chapter from the verse",
     );
   }
 
-  // get chapter and verse
-  const chapterAndVerses = verseReferenceWithoutBookNumber
-    .split(bookName)[1]
+  if ((cleanInput.match(/:/g) || []).length > 1) {
+    throw new Error("Must include only a single colon character");
+  }
+
+  const [bookAndChapter, verseResult] = cleanInput.split(":", 2);
+
+  // 2. Extract the chapter from the end of the first segment
+  // This safely grabs trailing digits even if the book name is duplicated or messy
+  const chapterMatch = bookAndChapter.match(/\s+(\d+)$/);
+  if (!chapterMatch) {
+    throw new Error("Could not find a valid chapter number before the colon");
+  }
+
+  const rawChapter = chapterMatch[1];
+  // Remove the chapter digits and trailing spaces to isolate the book portion
+  const rawFullBookName = bookAndChapter
+    .slice(
+      0,
+      Math.max(
+        0,
+        chapterMatch.index === undefined ? Infinity : chapterMatch.index,
+      ),
+    )
     .trim();
 
-  if (chapterAndVerses.match(/:/g)?.length !== 1) {
-    throw new Error(
-      "Must include a single colon character to separate the chapter from the verse",
-    );
+  // 3. Granularly validate the Book portion for common typos
+  if (!rawFullBookName) {
+    throw new Error("Book name cannot be blank");
   }
 
-  const [chapter, verseResult] = chapterAndVerses.split(":", 2);
-  const [verseNumberStart, verseNumberEnd] = verseResult.includes("-")
-    ? verseResult.split("-")
+  // Parse out an optional leading book number (1, 2, or 3)
+  const bookNumberMatch = rawFullBookName.match(/^[1-3](?:\s+|$)/);
+  let bookNumber: number | undefined;
+  let rawBookName = rawFullBookName;
+
+  if (bookNumberMatch) {
+    bookNumber = Number(bookNumberMatch[0]);
+    rawBookName = rawFullBookName.slice(bookNumberMatch[0].length).trim();
+  } else if (/^\d/.test(rawFullBookName)) {
+    // Catches cases like "4 John" or "1John" (missing space)
+    const invalidNumber = rawFullBookName.charAt(0);
+    if (["1", "2", "3"].includes(invalidNumber)) {
+      throw new Error(
+        `Book number '${invalidNumber}' must be followed by a space`,
+      );
+    }
+    throw new Error("Book numbers can only be 1, 2, or 3");
+  }
+
+  // 4. Validate the Verse portion
+  if (!verseResult.trim()) {
+    throw new Error("Verse section cannot be empty after the colon");
+  }
+
+  const [rawStart, rawEnd] = verseResult.includes("-")
+    ? verseResult.split("-", 2)
     : [verseResult, verseResult];
 
-  if (!verseNumberStart || !Number.isSafeInteger(Number(verseNumberStart))) {
-    throw new Error("Invalid verse number");
+  const verseNumberStart = Number(rawStart.trim());
+  const verseNumberEnd = Number(rawEnd.trim());
+
+  if (Number.isNaN(verseNumberStart) || Number.isNaN(verseNumberEnd)) {
+    throw new TypeError("Verse references must be valid numbers");
   }
 
+  // Final check on the text portion of the book name
+  const bookName = toTitleCase(rawBookName);
+  const fullBookName = bookNumber ? `${bookNumber} ${bookName}` : bookName;
+
   return {
-    fullBookName: toTitleCase(fullBookName),
-    bookName: toTitleCase(bookName),
     bookNumber,
-    chapter: Number(chapter),
-    verseNumberStart: Number(verseNumberStart),
-    verseNumberEnd: Number(verseNumberEnd),
+    bookName,
+    fullBookName,
+    chapter: Number(rawChapter),
+    verseNumberStart,
+    verseNumberEnd,
   };
 }
 
