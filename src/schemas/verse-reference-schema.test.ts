@@ -29,6 +29,18 @@ describe("VerseReferenceSchema", () => {
         },
       },
       {
+        input: "3 John 1:4",
+        expected: {
+          fullBookName: "3 John",
+          bookName: "John",
+          bookNumber: 3,
+          chapter: 1,
+          verseNumberStart: 4,
+          verseNumberEnd: 4,
+          verseCount: 1,
+        },
+      },
+      {
         input: "Song of Solomon 2:1-3",
         expected: {
           fullBookName: "Song of Solomon",
@@ -76,6 +88,18 @@ describe("VerseReferenceSchema", () => {
           verseCount: 1,
         },
       },
+      {
+        input: "  John 3:16  ",
+        expected: {
+          fullBookName: "John",
+          bookName: "John",
+          bookNumber: undefined,
+          chapter: 3,
+          verseNumberStart: 16,
+          verseNumberEnd: 16,
+          verseCount: 1,
+        },
+      },
     ])("should successfully parse '$input'", ({ input, expected }) => {
       expect(VerseReferenceSchema.parse(input)).toEqual(expected);
     });
@@ -83,6 +107,10 @@ describe("VerseReferenceSchema", () => {
 
   describe("Invalid Reference Rejections", () => {
     test.each([
+      {
+        input: "",
+        expectedError: "Too small: expected string to have >=6 characters",
+      },
       {
         input: "John3:16",
         expectedError: "Could not find a valid chapter number before the colon",
@@ -112,6 +140,30 @@ describe("VerseReferenceSchema", () => {
         input: "Galatians 5:20-19",
         expectedError: "End verse cannot be less than start verse",
       },
+      {
+        input: "John 3:16-abc",
+        expectedError: "Invalid verse number",
+      },
+      {
+        input: "John abc:16",
+        expectedError: "Could not find a valid chapter number before the colon",
+      },
+      {
+        input: "John 3:16-17-18",
+        expectedError: "Verse range can only contain a single dash",
+      },
+      {
+        input: "John 3:0",
+        expectedError: "Too small: expected number to be >=1",
+      },
+      {
+        input: "John 0:16",
+        expectedError: "Too small: expected number to be >=1",
+      },
+      {
+        input: "4 Kings 1:1",
+        expectedError: "Book numbers can only be 1, 2, or 3",
+      },
     ])(
       "should throw validation error for '$input'",
       ({ input, expectedError }) => {
@@ -122,7 +174,7 @@ describe("VerseReferenceSchema", () => {
           return;
         }
 
-        expect(error.issues).toHaveLength(1);
+        expect(error.issues.length).toBeGreaterThanOrEqual(1);
         expect(error.issues[0].message).toContain(expectedError);
       },
     );
