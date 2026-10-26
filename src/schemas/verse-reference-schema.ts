@@ -128,6 +128,10 @@ function parseVerseReferenceIntoParts(verseReference: string) {
     throw new Error("Verse section cannot be empty after the colon");
   }
 
+  if (verseResult.includes("-") && (verseResult.match(/-/g) || []).length > 1) {
+    throw new Error("Verse range can only contain a single dash");
+  }
+
   const [rawStart, rawEnd] = verseResult.includes("-")
     ? verseResult.split("-", 2)
     : [verseResult, verseResult];
@@ -136,7 +140,7 @@ function parseVerseReferenceIntoParts(verseReference: string) {
   const verseNumberEnd = Number(rawEnd.trim());
 
   if (Number.isNaN(verseNumberStart) || Number.isNaN(verseNumberEnd)) {
-    throw new TypeError("Verse references must be valid numbers");
+    throw new TypeError("Invalid verse number");
   }
 
   // Final check on the text portion of the book name
