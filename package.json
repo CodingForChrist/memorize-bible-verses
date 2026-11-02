@@ -22,7 +22,7 @@
     "@types/node": "^26.6.5",
     "corti": "^2.1.0",
     "eslint": "^10.13.0",
-    "eslint-plugin-unicorn": "^78.0.0",
+    "eslint-plugin-unicorn": "^79.0.0",
     "globals": "^17.13.0",
     "happy-dom": "^21.0.3",
     "jiti": "^2.7.0",
