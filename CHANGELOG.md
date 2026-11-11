@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.29.1...v1.29.2) (2026-11-11)
+
+
+### Bug Fixes
+
+* show error description for passage not found errors ([#419](https://github.com/CodingForChrist/memorize-bible-verses/issues/419)) ([dac292c](https://github.com/CodingForChrist/memorize-bible-verses/commit/dac292cdde8f06447508e5f16cf1fdad57b005c2))
+
 ## [1.29.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.29.0...v1.29.1) (2026-10-23)
 
 
