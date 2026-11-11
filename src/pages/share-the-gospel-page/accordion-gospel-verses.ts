@@ -119,10 +119,10 @@ export class AccordionGospelVerses extends LitElement {
   }
 
   #hasSelectedBibleVerse(index: number) {
-    const foundVerse = accordionVerses[index].find(({ verseReference }) => {
+    const hasVerse = accordionVerses[index].some(({ verseReference }) => {
       return this.selectedVerseReference === verseReference;
     });
-    return Boolean(foundVerse);
+    return hasVerse;
   }
 
   #handleVerseButtonClick(event: Event) {
