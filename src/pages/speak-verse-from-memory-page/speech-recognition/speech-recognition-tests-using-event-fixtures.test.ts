@@ -23,19 +23,6 @@ import eventsFixtureChromeAndroid from "./test-fixtures/events-fixture-chrome-an
 import eventsFixtureSafariIOS from "./test-fixtures/events-fixture-safari-ios.json";
 import eventsFixtureChromeIOS from "./test-fixtures/events-fixture-chrome-ios.json";
 
-type TestFixture = {
-  browser: string;
-  operatingSystem: string;
-  userAgent: string;
-  events: {
-    eventName: string;
-    value?: {
-      transcript: string;
-      confidence: number;
-    }[][];
-  }[];
-};
-
 beforeAll(() => {
   class SpeechRecognitionMock {
     start() {}
@@ -53,6 +40,18 @@ afterAll(() => {
 });
 
 describe("speech recognition events", () => {
+  type TestFixture = {
+    browser: string;
+    operatingSystem: string;
+    userAgent: string;
+    events: {
+      eventName: string;
+      value?: {
+        transcript: string;
+        confidence: number;
+      }[][];
+    }[];
+  };
   const originalUserAgent = navigator.userAgent;
 
   beforeEach(() => {
