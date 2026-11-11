@@ -23,7 +23,7 @@ function createCacheKey({ url, options }: CreateCacheKeyOptions) {
 async function resolveResponseToJSON(responsePromise: Promise<Response>) {
   const response = await responsePromise;
   if (!response.ok) {
-    if (response.status === 400) {
+    if ([400, 404].includes(response.status)) {
       const { errorDescription } = await response.clone().json();
       throw new Error(errorDescription);
     }
