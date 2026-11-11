@@ -100,7 +100,7 @@ export class BibleVerseFetchResult extends LitElement {
           error instanceof Error ? error.message : "Internal Server Error";
         return html`
           <alert-message type="danger">
-            Failed to load bible verse. <br />${errorMessage}
+            Failed to load bible verse reference. <br />${errorMessage}
           </alert-message>
         `;
       },
