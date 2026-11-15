@@ -17,6 +17,7 @@ export function getStateFromURL() {
     pageName: pathName as PageName,
     verse: url.searchParams.get("verse") ?? undefined,
     translation: url.searchParams.get("translation") ?? undefined,
+    awanaBook: url.searchParams.get("awana-book") ?? undefined,
   };
 }
 
@@ -24,11 +25,13 @@ export function setStateInURL({
   pageName,
   verse,
   translation,
+  awanaBook,
   shouldUpdateBrowserHistory,
 }: {
   pageName: PageName;
   verse?: string;
   translation?: string;
+  awanaBook?: string;
   shouldUpdateBrowserHistory?: boolean;
 }) {
   const url = getURLWithoutHash();
@@ -41,7 +44,9 @@ export function setStateInURL({
   if (verse) {
     url.searchParams.set("verse", verse);
   }
-
+  if (awanaBook) {
+    url.searchParams.set("awana-book", awanaBook);
+  }
   if (shouldUpdateBrowserHistory) {
     history.pushState({}, "", convertToHashURL(url));
   } else {
@@ -50,7 +55,7 @@ export function setStateInURL({
 }
 
 export function deleteUnknownParametersInURL() {
-  const allowedParameters = new Set(["translation", "verse"]);
+  const allowedParameters = new Set(["translation", "verse", "awana-book"]);
   const url = getURLWithoutHash();
 
   const parametersToDelete = [];

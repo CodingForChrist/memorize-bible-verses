@@ -1,5 +1,6 @@
 import { BibleVerseSchema } from "../schemas/bible-verse-schema";
 import { VerseOfTheDayListArraySchema } from "../schemas/verse-of-the-day-list-schema";
+import { AwanaBookVerseListSchema } from "../schemas/awana-book-verse-list-schema";
 
 const API_BASE_URL =
   import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
@@ -179,6 +180,51 @@ export async function fetchVerseOfTheDayVerseListWithCache({
       "expected Verse of the Day List API to return an array",
     );
     return VerseOfTheDayListArraySchema.parse(jsonData);
+  } catch (error) {
+    cache.delete(cacheKey);
+    throw error;
+  }
+}
+
+type FetchAwanaBookOptions = {
+  awanaBookId: string;
+};
+
+export async function fetchAwanaBookVerseListWithCache({
+  awanaBookId,
+}: FetchAwanaBookOptions) {
+  const url = `${API_BASE_URL}/api/v1/awana-books/${awanaBookId}`;
+
+  const cacheKey = createCacheKey({
+    url,
+    options: { includeMemoryVerses: true },
+  });
+  const cacheResult = cache.get(cacheKey);
+  let responsePromise: Promise<Response>;
+
+  if (cacheResult) {
+    responsePromise = cacheResult;
+  } else {
+    responsePromise = fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        includeVerses: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Application-User-Id": APPLICATION_USER_ID,
+      },
+    });
+
+    cache.set(cacheKey, responsePromise);
+  }
+  try {
+    const jsonData = await resolveResponseToJSON(responsePromise);
+    assert(
+      jsonData && typeof jsonData === "object",
+      "expected Awana Book Verse List API to return an object",
+    );
+    return AwanaBookVerseListSchema.parse(jsonData);
   } catch (error) {
     cache.delete(cacheKey);
     throw error;
