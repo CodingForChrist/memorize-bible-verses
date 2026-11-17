@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.30.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.29.1...v1.30.0) (2026-11-17)
+
+
+### Features
+
+* redesign awana page ([#422](https://github.com/CodingForChrist/memorize-bible-verses/issues/422)) ([b43e10f](https://github.com/CodingForChrist/memorize-bible-verses/commit/b43e10f827cbe3a3883b73fc2ab44d5ac3f27110))
+
+
+### Bug Fixes
+
+* show error description for passage not found errors ([#419](https://github.com/CodingForChrist/memorize-bible-verses/issues/419)) ([dac292c](https://github.com/CodingForChrist/memorize-bible-verses/commit/dac292cdde8f06447508e5f16cf1fdad57b005c2))
+
 ## [1.29.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.29.0...v1.29.1) (2026-10-23)
 
 
