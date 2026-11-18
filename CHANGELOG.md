@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.30.0...v1.30.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* update awana book for sparks ([#425](https://github.com/CodingForChrist/memorize-bible-verses/issues/425)) ([ed5362a](https://github.com/CodingForChrist/memorize-bible-verses/commit/ed5362a1387a06b9891c40d80a5c524cea421e8d))
+
 ## [1.30.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.29.1...v1.30.0) (2026-11-17)
 
 
