@@ -32,8 +32,8 @@ export class AwanaBookDropDownList extends LitElement {
   get #awanaBooks() {
     return [
       {
-        label: "Sparks Wing Runner",
-        value: "sparks-wingrunner-handbook",
+        label: "Sparks HangGlider",
+        value: "sparks-hangglider-handbook",
       },
       {
         label: "T&T Mission: Agents of Grace",
