@@ -784,22 +784,52 @@ describe("<bible-verse-blockquote>", () => {
       document.body.append(bibleVerseBlockquoteElement);
       bibleVerseBlockquoteElement.bibleId = bibleIdNIV;
       bibleVerseBlockquoteElement.content = [
-        { name: "para", type: "tag", attrs: { style: "b" }, items: [] },
         {
           name: "para",
           type: "tag",
-          attrs: { style: "m" },
+          attrs: {
+            style: "p",
+          },
           items: [
             {
               name: "verse",
               type: "tag",
-              attrs: { number: "12", style: "v", sid: "JHN 8:12" },
-              items: [{ text: "12", type: "text" }],
+              attrs: {
+                number: "12",
+                style: "v",
+                sid: "JHN 8:12",
+              },
+              items: [
+                {
+                  text: "12",
+                  type: "text",
+                },
+              ],
             },
             {
-              text: "Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”",
+              text: "When Jesus spoke again to the people, he said, ",
               type: "text",
-              attrs: { verseId: "JHN.8.12", verseOrgIds: ["JHN.8.12"] },
+              attrs: {
+                verseId: "JHN.8.12",
+                verseOrgIds: ["JHN.8.12"],
+              },
+            },
+            {
+              name: "char",
+              type: "tag",
+              attrs: {
+                style: "wj",
+              },
+              items: [
+                {
+                  text: "“I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”",
+                  type: "text",
+                  attrs: {
+                    verseId: "JHN.8.12",
+                    verseOrgIds: ["JHN.8.12"],
+                  },
+                },
+              ],
             },
           ],
         },
@@ -812,11 +842,11 @@ describe("<bible-verse-blockquote>", () => {
         ) as HTMLSpanElement;
 
       expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="m"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”</span></p>',
+        '<p class="p"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>When Jesus spoke again to the people, he said, </span><span class="wj"><span>“I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”</span></span></p>',
       );
 
       expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”",
+        "When Jesus spoke again to the people, he said, “I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”",
       );
     });
 
