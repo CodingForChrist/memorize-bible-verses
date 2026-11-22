@@ -60,6 +60,13 @@ export class BibleVerseBlockquote extends LitElement {
   })
   displayVerseNumbers: boolean = false;
 
+  @property({
+    attribute: "include-chapter-labels",
+    reflect: true,
+    type: Boolean,
+  })
+  includeChapterLabels: boolean = false;
+
   @property({ attribute: "citation-text", reflect: true })
   citationText?: string;
 
@@ -83,6 +90,10 @@ export class BibleVerseBlockquote extends LitElement {
     }
 
     const { style: className = "" } = attrs;
+
+    if (name === "para" && className === "cl" && !this.includeChapterLabels) {
+      return;
+    }
 
     if (name === "para") {
       return html`<p class=${className}>${this.#renderItems(items)}</p>`;

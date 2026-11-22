@@ -776,4 +776,178 @@ describe("<bible-verse-blockquote>", () => {
       );
     });
   });
+
+  describe("NIV", () => {
+    const { id: bibleIdNIV } = findBibleTranslationByAbbreviation("NIV");
+
+    test("should render John 8:12", async () => {
+      document.body.append(bibleVerseBlockquoteElement);
+      bibleVerseBlockquoteElement.bibleId = bibleIdNIV;
+      bibleVerseBlockquoteElement.content = [
+        { name: "para", type: "tag", attrs: { style: "b" }, items: [] },
+        {
+          name: "para",
+          type: "tag",
+          attrs: { style: "m" },
+          items: [
+            {
+              name: "verse",
+              type: "tag",
+              attrs: { number: "12", style: "v", sid: "JHN 8:12" },
+              items: [{ text: "12", type: "text" }],
+            },
+            {
+              text: "Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”",
+              type: "text",
+              attrs: { verseId: "JHN.8.12", verseOrgIds: ["JHN.8.12"] },
+            },
+          ],
+        },
+      ];
+
+      await bibleVerseBlockquoteElement.updateComplete;
+      const containerElement =
+        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
+          ".scripture-styles",
+        ) as HTMLSpanElement;
+
+      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
+        '<p class="m"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”</span></p>',
+      );
+
+      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
+        "Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”",
+      );
+    });
+
+    test("should render Psalm 1:1", async () => {
+      document.body.append(bibleVerseBlockquoteElement);
+      bibleVerseBlockquoteElement.bibleId = bibleIdNIV;
+      bibleVerseBlockquoteElement.content = [
+        {
+          name: "para",
+          type: "tag",
+          attrs: {
+            style: "ie",
+          },
+          items: [],
+        },
+        {
+          name: "para",
+          type: "tag",
+          attrs: {
+            style: "cl",
+          },
+          items: [
+            {
+              text: "Psalm 1",
+              type: "text",
+            },
+          ],
+        },
+        {
+          name: "para",
+          type: "tag",
+          attrs: {
+            style: "q1",
+          },
+          items: [
+            {
+              name: "verse",
+              type: "tag",
+              attrs: {
+                number: "1",
+                style: "v",
+                sid: "PSA 1:1",
+              },
+              items: [
+                {
+                  text: "1",
+                  type: "text",
+                },
+              ],
+            },
+            {
+              text: "Blessed is the one",
+              type: "text",
+              attrs: {
+                verseId: "PSA.1.1",
+                verseOrgIds: ["PSA.1.1"],
+              },
+            },
+          ],
+        },
+        {
+          name: "para",
+          type: "tag",
+          attrs: {
+            style: "q2",
+            vid: "PSA 1:1",
+          },
+          items: [
+            {
+              text: "who does not walk in step with the wicked",
+              type: "text",
+              attrs: {
+                verseId: "PSA.1.1",
+                verseOrgIds: ["PSA.1.1"],
+              },
+            },
+          ],
+        },
+        {
+          name: "para",
+          type: "tag",
+          attrs: {
+            style: "q1",
+            vid: "PSA 1:1",
+          },
+          items: [
+            {
+              text: "or stand in the way that sinners take",
+              type: "text",
+              attrs: {
+                verseId: "PSA.1.1",
+                verseOrgIds: ["PSA.1.1"],
+              },
+            },
+          ],
+        },
+        {
+          name: "para",
+          type: "tag",
+          attrs: {
+            style: "q2",
+            vid: "PSA 1:1",
+          },
+          items: [
+            {
+              text: "or sit in the company of mockers,",
+              type: "text",
+              attrs: {
+                verseId: "PSA.1.1",
+                verseOrgIds: ["PSA.1.1"],
+              },
+            },
+          ],
+        },
+      ];
+
+      bibleVerseBlockquoteElement.includeChapterLabels = false;
+      await bibleVerseBlockquoteElement.updateComplete;
+
+      const containerElement =
+        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
+          ".scripture-styles",
+        ) as HTMLSpanElement;
+
+      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
+        '<p class="q1"><span class=" v hidden " data-number="1" data-sid="PSA 1:1">1</span><span>Blessed is the one</span></p><p class="q2"><span>who does not walk in step with the wicked</span></p><p class="q1"><span>or stand in the way that sinners take</span></p><p class="q2"><span>or sit in the company of mockers,</span></p>',
+      );
+
+      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
+        "Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers,",
+      );
+    });
+  });
 });
