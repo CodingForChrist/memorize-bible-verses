@@ -10,6 +10,12 @@ function convertBibleVerseHTMLToText(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = htmlContentString;
 
+  for (const hiddenElement of divElement.querySelectorAll(
+    ".hidden",
+  )) {
+    hiddenElement.remove();
+  }
+
   for (const verseNumberElement of divElement.querySelectorAll(
     "span[data-number]",
   )) {
@@ -972,7 +978,7 @@ describe("<bible-verse-blockquote>", () => {
         ) as HTMLSpanElement;
 
       expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="q1"><span class=" v hidden " data-number="1" data-sid="PSA 1:1">1</span><span>Blessed is the one</span></p><p class="q2"><span>who does not walk in step with the wicked</span></p><p class="q1"><span>or stand in the way that sinners take</span></p><p class="q2"><span>or sit in the company of mockers,</span></p>',
+        '<p class="hidden cl"><span>Psalm 1</span></p><p class="q1"><span class=" v hidden " data-number="1" data-sid="PSA 1:1">1</span><span>Blessed is the one</span></p><p class="q2"><span>who does not walk in step with the wicked</span></p><p class="q1"><span>or stand in the way that sinners take</span></p><p class="q2"><span>or sit in the company of mockers,</span></p>',
       );
 
       expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(

@@ -91,12 +91,12 @@ export class BibleVerseBlockquote extends LitElement {
 
     const { style: className = "" } = attrs;
 
-    if (name === "para" && className === "cl" && !this.includeChapterLabels) {
-      return;
-    }
-
     if (name === "para") {
-      return html`<p class=${className}>${this.#renderItems(items)}</p>`;
+      const shouldHideParagraph =
+        className === "cl" && !this.includeChapterLabels;
+      const classes = shouldHideParagraph ? `hidden ${className}` : className;
+
+      return html`<p class=${classes}>${this.#renderItems(items)}</p>`;
     }
 
     if (
