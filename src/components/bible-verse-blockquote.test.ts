@@ -10,9 +10,7 @@ function convertBibleVerseHTMLToText(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = htmlContentString;
 
-  for (const hiddenElement of divElement.querySelectorAll(
-    ".hidden",
-  )) {
+  for (const hiddenElement of divElement.querySelectorAll(".hidden")) {
     hiddenElement.remove();
   }
 
