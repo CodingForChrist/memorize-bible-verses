@@ -10,54 +10,74 @@ function convertBibleVerseHTMLToText(htmlContentString: string) {
   const divElement = document.createElement("div");
   divElement.innerHTML = htmlContentString;
 
-  for (const hiddenElement of divElement.querySelectorAll(".hidden")) {
-    hiddenElement.remove();
+  for (const elementToRemove of divElement.querySelectorAll(".hidden")) {
+    elementToRemove.remove();
   }
 
-  for (const verseNumberElement of divElement.querySelectorAll(
-    "span[data-number]",
-  )) {
-    verseNumberElement.remove();
-  }
-
-  const textArray = [...divElement.children].map((childElement) => {
-    if (childElement.nodeName === "P") {
-      const textContent = (
-        childElement as HTMLParagraphElement
-      ).textContent.trim();
-      // browsers render two spaces as a single space
-      // so its safe to ignore double spaces
-      return textContent.replaceAll("  ", " ");
-    }
-    throw new Error(
-      `Unexpected element in verse html "${childElement.nodeName}"`,
-    );
-  });
-
-  return textArray.join(" ");
+  return [...divElement.children]
+    .map((childElement) => {
+      if (childElement.nodeName === "P") {
+        // browsers render two spaces as a single space
+        // so its safe to ignore double spaces
+        return childElement.textContent!.trim().replaceAll("  ", " ");
+      }
+      throw new Error(
+        `Unexpected element in verse html "${childElement.nodeName}"`,
+      );
+    })
+    .join(" ");
 }
 
 describe("<bible-verse-blockquote>", () => {
-  let bibleVerseBlockquoteElement: BibleVerseBlockquote;
+  let element: BibleVerseBlockquote;
 
   beforeEach(() => {
-    bibleVerseBlockquoteElement = document.createElement(
+    element = document.createElement(
       "bible-verse-blockquote",
     ) as BibleVerseBlockquote;
+    document.body.append(element);
   });
 
   afterEach(() => {
-    bibleVerseBlockquoteElement.remove();
+    element.remove();
   });
 
+  async function renderAndAssertVerse({
+    bibleId,
+    content,
+    expectedHtml,
+    expectedText,
+    displayVerseNumbers = false,
+    includeChapterLabels = false,
+  }: {
+    bibleId: string;
+    content: BibleVerseBlockquote["content"];
+    expectedHtml: string;
+    expectedText: string;
+    displayVerseNumbers?: boolean;
+    includeChapterLabels?: boolean;
+  }) {
+    element.bibleId = bibleId;
+    element.displayVerseNumbers = displayVerseNumbers;
+    element.includeChapterLabels = includeChapterLabels;
+    element.content = content;
+
+    await element.updateComplete;
+
+    const container = element.shadowRoot!.querySelector(
+      ".scripture-styles",
+    ) as HTMLSpanElement;
+    const rawHtml = container.getHTML();
+
+    expect(stripExpressionComments(rawHtml).trim()).toBe(expectedHtml);
+    expect(convertBibleVerseHTMLToText(rawHtml)).toBe(expectedText);
+  }
+
   describe("NKJV", () => {
-    const { id: bibleIdNKJV } = findBibleTranslationByAbbreviation("NKJV");
+    const { id: bibleId } = findBibleTranslationByAbbreviation("NKJV");
 
     test("should render John 3:16-17", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNKJV;
-      bibleVerseBlockquoteElement.displayVerseNumbers = true;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -125,25 +145,30 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="p"><span class=" v hidden " data-number="16" data-sid="JHN 3:16">16</span><span class="wj"><span>For God so loved the world that He gave His only begotten </span></span><span> </span><span class="wj"><span>Son, that whoever believes in Him should not perish but have everlasting life. </span></span><span> </span><span class=" v hidden " data-number="17" data-sid="JHN 3:17">17</span><span class="wj"><span>For God did not send His Son into the world to condemn the world, but that the world through Him might be saved. </span></span></p>',
+        expectedText:
+          "For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life. For God did not send His Son into the world to condemn the world, but that the world through Him might be saved.",
+      });
 
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="p"><span class=" v " data-number="16" data-sid="JHN 3:16">16</span><span class="wj"><span>For God so loved the world that He gave His only begotten </span></span><span> </span><span class="wj"><span>Son, that whoever believes in Him should not perish but have everlasting life. </span></span><span> </span><span class=" v " data-number="17" data-sid="JHN 3:17">17</span><span class="wj"><span>For God did not send His Son into the world to condemn the world, but that the world through Him might be saved. </span></span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life. For God did not send His Son into the world to condemn the world, but that the world through Him might be saved.",
-      );
+      // should render the verse numbers
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: true,
+        content,
+        expectedHtml:
+          '<p class="p"><span class="v" data-number="16" data-sid="JHN 3:16">16</span><span class="wj"><span>For God so loved the world that He gave His only begotten </span></span><span> </span><span class="wj"><span>Son, that whoever believes in Him should not perish but have everlasting life. </span></span><span> </span><span class="v" data-number="17" data-sid="JHN 3:17">17</span><span class="wj"><span>For God did not send His Son into the world to condemn the world, but that the world through Him might be saved. </span></span></p>',
+        expectedText:
+          "16For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life. 17For God did not send His Son into the world to condemn the world, but that the world through Him might be saved.",
+      });
     });
 
     test("should render Revelation 4:11", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNKJV;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -248,25 +273,19 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="q1"><span class=" v hidden " data-number="11" data-sid="REV 4:11">11</span><span>“You </span><span>are worthy, O Lord, </span></p><p class="q2"><span>To receive glory and honor and power; </span></p><p class="q2"><span>For You created all things, </span></p><p class="q2"><span>And by </span><span>Your will they exist and were created.” </span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "“You are worthy, O Lord, To receive glory and honor and power; For You created all things, And by Your will they exist and were created.”",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="q1"><span class=" v hidden " data-number="11" data-sid="REV 4:11">11</span><span>“You </span><span>are worthy, O Lord, </span></p><p class="q2"><span>To receive glory and honor and power; </span></p><p class="q2"><span>For You created all things, </span></p><p class="q2"><span>And by </span><span>Your will they exist and were created.” </span></p>',
+        expectedText:
+          "“You are worthy, O Lord, To receive glory and honor and power; For You created all things, And by Your will they exist and were created.”",
+      });
     });
 
     test("should render Acts 1:8", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNKJV;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -378,30 +397,23 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="p"><span class=" v hidden " data-number="8" data-sid="ACT 1:8">8</span><span class="wj"><span>But you shall receive power </span></span><span class="wj"><span>when the Holy Spirit has come upon you; and </span></span><span class="wj"><span>you shall be witnesses to Me in Jerusalem, and in all Judea and </span></span><span class="wj"><span>Samaria, and to the </span></span><span class="wj"><span>end of the earth.” </span></span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "But you shall receive power when the Holy Spirit has come upon you; and you shall be witnesses to Me in Jerusalem, and in all Judea and Samaria, and to the end of the earth.”",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="p"><span class=" v hidden " data-number="8" data-sid="ACT 1:8">8</span><span class="wj"><span>But you shall receive power </span></span><span class="wj"><span>when the Holy Spirit has come upon you; and </span></span><span class="wj"><span>you shall be witnesses to Me in Jerusalem, and in all Judea and </span></span><span class="wj"><span>Samaria, and to the </span></span><span class="wj"><span>end of the earth.” </span></span></p>',
+        expectedText:
+          "But you shall receive power when the Holy Spirit has come upon you; and you shall be witnesses to Me in Jerusalem, and in all Judea and Samaria, and to the end of the earth.”",
+      });
     });
   });
 
   describe("NASB 1995", () => {
-    const { id: bibleIdNASB1995 } =
-      findBibleTranslationByAbbreviation("NASB 1995");
+    const { id: bibleId } = findBibleTranslationByAbbreviation("NASB 1995");
 
     test("should render Psalm 23:1", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNASB1995;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -479,25 +491,18 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="q"><span class=" v hidden " data-number="1" data-sid="PSA 23:1">1</span><span>The L</span><span class="sc"><span>ord</span></span><span> is my shepherd,</span></p><p class="q"><span>I shall not want.</span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "The Lord is my shepherd, I shall not want.",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="q"><span class=" v hidden " data-number="1" data-sid="PSA 23:1">1</span><span>The L</span><span class="sc"><span>ord</span></span><span> is my shepherd,</span></p><p class="q"><span>I shall not want.</span></p>',
+        expectedText: "The Lord is my shepherd, I shall not want.",
+      });
     });
 
     test("should render Jeremiah 32:17", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNASB1995;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -557,25 +562,19 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="p"><span class=" v hidden " data-number="17" data-sid="JER 32:17">17</span><span>‘Ah Lord G</span><span class="sc"><span>od</span></span><span>! Behold, You have made the heavens and the earth by Your great power and by Your outstretched arm! Nothing is too difficult for You, </span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "‘Ah Lord God! Behold, You have made the heavens and the earth by Your great power and by Your outstretched arm! Nothing is too difficult for You,",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="p"><span class=" v hidden " data-number="17" data-sid="JER 32:17">17</span><span>‘Ah Lord G</span><span class="sc"><span>od</span></span><span>! Behold, You have made the heavens and the earth by Your great power and by Your outstretched arm! Nothing is too difficult for You, </span></p>',
+        expectedText:
+          "‘Ah Lord God! Behold, You have made the heavens and the earth by Your great power and by Your outstretched arm! Nothing is too difficult for You,",
+      });
     });
 
     test("should render Luke 19:38", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNASB1995;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -721,29 +720,23 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="p"><span class=" v hidden " data-number="38" data-sid="LUK 19:38">38</span><span>shouting:</span></p><p class="q"><span>“B</span><span class="sc"><span>lessed is the</span></span><span> K</span><span class="sc"><span>ing who comes in the name of the</span></span><span> L</span><span class="sc"><span>ord</span></span><span>;</span></p><p class="q"><span>Peace in heaven and glory in the highest!”</span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "shouting: “Blessed is the King who comes in the name of the Lord; Peace in heaven and glory in the highest!”",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="p"><span class=" v hidden " data-number="38" data-sid="LUK 19:38">38</span><span>shouting:</span></p><p class="q"><span>“B</span><span class="sc"><span>lessed is the</span></span><span> K</span><span class="sc"><span>ing who comes in the name of the</span></span><span> L</span><span class="sc"><span>ord</span></span><span>;</span></p><p class="q"><span>Peace in heaven and glory in the highest!”</span></p>',
+        expectedText:
+          "shouting: “Blessed is the King who comes in the name of the Lord; Peace in heaven and glory in the highest!”",
+      });
     });
   });
 
   describe("BSB", () => {
-    const { id: bibleIdBSB } = findBibleTranslationByAbbreviation("BSB");
+    const { id: bibleId } = findBibleTranslationByAbbreviation("BSB");
 
     test("should render John 8:12", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdBSB;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         { name: "para", type: "tag", attrs: { style: "b" }, items: [] },
         {
           name: "para",
@@ -765,29 +758,23 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="m"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”</span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="m"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”</span></p>',
+        expectedText:
+          "Once again, Jesus spoke to the people and said, “I am the light of the world. Whoever follows Me will never walk in the darkness, but will have the light of life.”",
+      });
     });
   });
 
   describe("NIV", () => {
-    const { id: bibleIdNIV } = findBibleTranslationByAbbreviation("NIV");
+    const { id: bibleId } = findBibleTranslationByAbbreviation("NIV");
 
     test("should render John 8:12", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNIV;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -839,25 +826,19 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      await bibleVerseBlockquoteElement.updateComplete;
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="p"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>When Jesus spoke again to the people, he said, </span><span class="wj"><span>“I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”</span></span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "When Jesus spoke again to the people, he said, “I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”",
-      );
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        content,
+        expectedHtml:
+          '<p class="p"><span class=" v hidden " data-number="12" data-sid="JHN 8:12">12</span><span>When Jesus spoke again to the people, he said, </span><span class="wj"><span>“I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”</span></span></p>',
+        expectedText:
+          "When Jesus spoke again to the people, he said, “I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.”",
+      });
     });
 
     test("should render Psalm 1:1", async () => {
-      document.body.append(bibleVerseBlockquoteElement);
-      bibleVerseBlockquoteElement.bibleId = bibleIdNIV;
-      bibleVerseBlockquoteElement.content = [
+      const content: BibleVerseBlockquote["content"] = [
         {
           name: "para",
           type: "tag",
@@ -967,21 +948,28 @@ describe("<bible-verse-blockquote>", () => {
         },
       ];
 
-      bibleVerseBlockquoteElement.includeChapterLabels = false;
-      await bibleVerseBlockquoteElement.updateComplete;
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        includeChapterLabels: false,
+        content,
+        expectedHtml:
+          '<p class="hidden cl"><span>Psalm 1</span></p><p class="q1"><span class=" v hidden " data-number="1" data-sid="PSA 1:1">1</span><span>Blessed is the one</span></p><p class="q2"><span>who does not walk in step with the wicked</span></p><p class="q1"><span>or stand in the way that sinners take</span></p><p class="q2"><span>or sit in the company of mockers,</span></p>',
+        expectedText:
+          "Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers,",
+      });
 
-      const containerElement =
-        bibleVerseBlockquoteElement.shadowRoot!.querySelector(
-          ".scripture-styles",
-        ) as HTMLSpanElement;
-
-      expect(stripExpressionComments(containerElement.getHTML()).trim()).toBe(
-        '<p class="hidden cl"><span>Psalm 1</span></p><p class="q1"><span class=" v hidden " data-number="1" data-sid="PSA 1:1">1</span><span>Blessed is the one</span></p><p class="q2"><span>who does not walk in step with the wicked</span></p><p class="q1"><span>or stand in the way that sinners take</span></p><p class="q2"><span>or sit in the company of mockers,</span></p>',
-      );
-
-      expect(convertBibleVerseHTMLToText(containerElement.getHTML())).toBe(
-        "Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers,",
-      );
+      // should render the chapter label "Psalm 1"
+      await renderAndAssertVerse({
+        bibleId,
+        displayVerseNumbers: false,
+        includeChapterLabels: true,
+        content,
+        expectedHtml:
+          '<p class="cl"><span>Psalm 1</span></p><p class="q1"><span class=" v hidden " data-number="1" data-sid="PSA 1:1">1</span><span>Blessed is the one</span></p><p class="q2"><span>who does not walk in step with the wicked</span></p><p class="q1"><span>or stand in the way that sinners take</span></p><p class="q2"><span>or sit in the company of mockers,</span></p>',
+        expectedText:
+          "Psalm 1 Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers,",
+      });
     });
   });
 });
