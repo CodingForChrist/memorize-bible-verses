@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.30.1...v1.30.2) (2026-11-24)
+
+
+### Bug Fixes
+
+* hide chapter labels for NIV translation ([#427](https://github.com/CodingForChrist/memorize-bible-verses/issues/427)) ([86186b5](https://github.com/CodingForChrist/memorize-bible-verses/commit/86186b522753e597b2056194c396c8aee6179e16))
+
 ## [1.30.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.30.0...v1.30.1) (2026-11-18)
 
 
