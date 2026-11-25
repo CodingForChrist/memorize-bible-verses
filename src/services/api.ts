@@ -1,6 +1,7 @@
 import { BibleVerseSchema } from "../schemas/bible-verse-schema";
 import { VerseOfTheDayListArraySchema } from "../schemas/verse-of-the-day-list-schema";
 import { AwanaBookVerseListSchema } from "../schemas/awana-book-verse-list-schema";
+import { HealthCheckSchema } from "../schemas/health-check-schema";
 
 const API_BASE_URL =
   import.meta.env.VITE_MEMORIZE_BIBLE_VERSES_API_BASE_URL ??
@@ -246,6 +247,7 @@ export async function fetchHealthCheck() {
     if (jsonData.status === "DOWN") {
       throw new Error("status is down");
     }
+    return HealthCheckSchema.parse(jsonData);
   } catch (error) {
     throw new Error("health check returned an unexpected response", {
       cause: error,
