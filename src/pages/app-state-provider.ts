@@ -306,9 +306,10 @@ export class AppStateProvider extends LitElement {
     });
     try {
       // verify the api server is up and running
-      await fetchHealthCheck();
+      const { status, version } = await fetchHealthCheck();
       logger.info({
         message: "health check succeeded",
+        payload: { status, serverVersion: version },
       });
     } catch (error) {
       logger.warn({
