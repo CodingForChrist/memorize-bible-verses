@@ -65,7 +65,6 @@ export class BibleVerseFetchResult extends LitElement {
   })
   includeChapterLabels: boolean = false;
 
-
   #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
     const eventUpdateSelectedBible = new CustomEvent<{
       bibleVerse: BibleVerse;
