@@ -7,11 +7,11 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
-interface InvalidDateTestCase {
+type InvalidDateTestCase = {
   label: string;
   input: string;
   expectedError: string;
-}
+};
 
 describe("parseDate()", () => {
   beforeEach(() => {
