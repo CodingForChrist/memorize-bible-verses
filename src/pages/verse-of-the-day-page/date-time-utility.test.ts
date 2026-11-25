@@ -7,7 +7,6 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
-
 describe("parseDate()", () => {
   type InvalidDateTestCase = {
     label: string;
