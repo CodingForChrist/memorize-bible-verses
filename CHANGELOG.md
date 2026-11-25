@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.31.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.30.2...v1.31.0) (2026-11-25)
+
+
+### Features
+
+* log server version from health check ([#435](https://github.com/CodingForChrist/memorize-bible-verses/issues/435)) ([4cb3e95](https://github.com/CodingForChrist/memorize-bible-verses/commit/4cb3e95decd41ebad21b0a6ffa8aba6dae7c6746))
+
+
+### Bug Fixes
+
+* display chapter label for Psalm 23 ([#437](https://github.com/CodingForChrist/memorize-bible-verses/issues/437)) ([5fe9e72](https://github.com/CodingForChrist/memorize-bible-verses/commit/5fe9e7290e9c0539666d17cc5c2d703f60c9b671))
+
 ## [1.30.2](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.30.1...v1.30.2) (2026-11-24)
 
 
