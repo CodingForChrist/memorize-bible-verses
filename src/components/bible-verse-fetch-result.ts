@@ -58,6 +58,14 @@ export class BibleVerseFetchResult extends LitElement {
   })
   includeTitles: boolean = false;
 
+  @property({
+    type: Boolean,
+    attribute: "include-chapter-labels",
+    reflect: true,
+  })
+  includeChapterLabels: boolean = false;
+
+
   #sendEventForSelectedBibleVerse(bibleVerse: BibleVerse) {
     const eventUpdateSelectedBible = new CustomEvent<{
       bibleVerse: BibleVerse;
@@ -79,6 +87,7 @@ export class BibleVerseFetchResult extends LitElement {
       <bible-verse-blockquote
         .content=${content}
         ?display-verse-numbers=${verseCount > 1}
+        ?include-chapter-labels=${this.includeChapterLabels}
         bible-id=${bibleId}
         citation-text=${citationText}
         citation-link=${ifDefined(citationLink)}
