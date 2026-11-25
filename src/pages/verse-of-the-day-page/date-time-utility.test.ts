@@ -7,22 +7,23 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
+beforeEach(() => {
+  vi.stubEnv("TZ", "America/Chicago");
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date("2025-01-30 06:15:00"));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllEnvs();
+});
+
 describe("parseDate()", () => {
   type InvalidDateTestCase = {
     label: string;
     input: string;
     expectedError: string;
   };
-  beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date("2025-01-30 06:15:00"));
-    vi.stubEnv("TZ", "America/Chicago");
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-    vi.unstubAllEnvs();
-  });
 
   test("should preserve the local time", () => {
     const now = new Date();
@@ -108,7 +109,7 @@ describe("parseDate()", () => {
 });
 
 describe("formatDate()", () => {
-  const sampleDate = new Date("2025-12-25T23:38:04-06:00");
+  const sampleDate = new Date("2025-12-25T23:38:04");
 
   type FormatDateTestCase = {
     format: Parameters<typeof formatDate>[1];
