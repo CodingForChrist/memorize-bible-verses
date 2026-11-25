@@ -7,8 +7,14 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
+const timezoneConfig = {
+  name: "America/New_York",
+  offsetStandardTime: "05:00",
+  offsetDaylightSavingsTime: "04:00",
+};
+
 beforeEach(() => {
-  vi.stubEnv("TZ", "America/Chicago");
+  vi.stubEnv("TZ", timezoneConfig.name);
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2025-01-30 06:15:00"));
 });
@@ -109,7 +115,9 @@ describe("parseDate()", () => {
 });
 
 describe("formatDate()", () => {
-  const sampleDate = new Date("2025-12-25T23:38:04");
+  const sampleDate = new Date(
+    `2025-12-25T23:38:04-${timezoneConfig.offsetStandardTime}`,
+  );
 
   type FormatDateTestCase = {
     format: Parameters<typeof formatDate>[1];
@@ -120,7 +128,10 @@ describe("formatDate()", () => {
     { format: "YYYY-MM-DD", expected: "2025-12-25" },
     { format: "ddd, MMM DD, YYYY", expected: "Thu, Dec 25, 2025" },
     { format: "dddd, MMMM D, YYYY", expected: "Thursday, December 25, 2025" },
-    { format: "ISO8601", expected: "2025-12-25T23:38:04-06:00" },
+    {
+      format: "ISO8601",
+      expected: `2025-12-25T23:38:04-${timezoneConfig.offsetStandardTime}`,
+    },
   ])("should format to $format", ({ format, expected }) => {
     expect(formatDate(sampleDate, format)).toBe(expected);
   });
