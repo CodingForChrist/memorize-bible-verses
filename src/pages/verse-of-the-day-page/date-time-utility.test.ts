@@ -7,13 +7,13 @@ import {
   subtractDays,
 } from "./date-time-utility";
 
-type InvalidDateTestCase = {
-  label: string;
-  input: string;
-  expectedError: string;
-};
 
 describe("parseDate()", () => {
+  type InvalidDateTestCase = {
+    label: string;
+    input: string;
+    expectedError: string;
+  };
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2025-01-30 06:15:00"));
