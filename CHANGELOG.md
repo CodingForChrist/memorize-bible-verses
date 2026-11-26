@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.31.0...v1.31.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* release microphone control after use ([#438](https://github.com/CodingForChrist/memorize-bible-verses/issues/438)) ([5a4fb17](https://github.com/CodingForChrist/memorize-bible-verses/commit/5a4fb1775c7f27781ac31bc8c1f626e76fcb3085))
+
 ## [1.31.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.30.2...v1.31.0) (2026-11-25)
 
 
