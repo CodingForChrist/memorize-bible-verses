@@ -40,8 +40,11 @@ export class SpeechRecognitionService extends EventTarget {
   }[];
   #resolveListener?: (value: string) => void;
   #rejectListener?: (reason: string) => void;
+  #recognitionAbortController?: AbortController;
+  #visibilityAbortController?: AbortController;
+
   finalTranscript?: string;
-  recognition: SpeechRecognition;
+  recognition?: SpeechRecognition;
 
   constructor() {
     super();
@@ -51,17 +54,64 @@ export class SpeechRecognitionService extends EventTarget {
     this.#transcriptHistory = [];
     this.#allEvents = [];
 
+    this.#visibilityAbortController = new AbortController();
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        if (
+          document.hidden &&
+          (this.state === LISTENING ||
+            this.state === WAITING_FOR_MICROPHONE_ACCESS)
+        ) {
+          this.abort();
+        }
+      },
+      { signal: this.#visibilityAbortController.signal },
+    );
+  }
+
+  #createRecognitionInstance() {
     const SpeechRecognitionWithFallback =
       globalThis.SpeechRecognition || globalThis.webkitSpeechRecognition;
-    this.recognition = new SpeechRecognitionWithFallback();
-    this.recognition.continuous = true;
-    this.recognition.lang = "en-US";
-    this.recognition.interimResults = true;
-    this.recognition.maxAlternatives = 1;
+    const recognition = new SpeechRecognitionWithFallback();
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
 
-    this.recognition.onstart = this.#onStart.bind(this);
-    this.recognition.onresult = this.#onResult.bind(this);
-    this.recognition.onend = this.#onEnd.bind(this);
+    this.#recognitionAbortController = new AbortController();
+    const { signal } = this.#recognitionAbortController;
+
+    recognition.addEventListener("start", () => this.#onStart(), { signal });
+    recognition.addEventListener(
+      "result",
+      (event) => this.#onResult(event as SpeechRecognitionEvent),
+      { signal },
+    );
+    recognition.addEventListener(
+      "error",
+      (event) => this.#onError(event as SpeechRecognitionErrorEvent),
+      { signal },
+    );
+    recognition.addEventListener("end", () => this.#onEnd(), { signal });
+
+    return recognition;
+  }
+
+  #cleanupRecognition() {
+    if (!this.recognition) {
+      return;
+    }
+
+    this.#recognitionAbortController?.abort();
+    this.#recognitionAbortController = undefined;
+
+    try {
+      this.recognition.abort();
+    } catch {
+      // Ignore if recognition has already ended
+    }
+    this.recognition = undefined;
   }
 
   #resetState() {
@@ -119,6 +169,17 @@ export class SpeechRecognitionService extends EventTarget {
     this.#lastResult = event.results;
   }
 
+  #onError(event: SpeechRecognitionErrorEvent) {
+    this.#allEvents?.push({ eventName: "error", value: event.error });
+    this.#cleanupRecognition();
+    this.#rejectListener?.(`Speech recognition error: ${event.error}`);
+    this.state = REJECTED;
+    logger.error({
+      message: "Speech recognition error",
+      payload: { errorCode: event.error, errorMessage: event.message },
+    });
+  }
+
   #onEnd() {
     this.#allEvents?.push({
       eventName: "end",
@@ -130,8 +191,8 @@ export class SpeechRecognitionService extends EventTarget {
         this.#transcriptHistory = [this.interimTranscript];
       }
 
-      this.recognition.stop();
-      this.recognition.start();
+      this.recognition?.stop();
+      this.recognition?.start();
       return;
     }
 
@@ -160,6 +221,8 @@ export class SpeechRecognitionService extends EventTarget {
       }
       this.state = REJECTED;
     }
+
+    this.#cleanupRecognition();
   }
 
   get state() {
@@ -198,6 +261,7 @@ export class SpeechRecognitionService extends EventTarget {
   }
 
   listen() {
+    this.#cleanupRecognition();
     this.#resetState();
 
     return new Promise<string>((resolve, reject) => {
@@ -205,6 +269,7 @@ export class SpeechRecognitionService extends EventTarget {
       this.#resolveListener = resolve;
       this.#rejectListener = reject;
 
+      this.recognition = this.#createRecognitionInstance();
       this.state = WAITING_FOR_MICROPHONE_ACCESS;
       this.recognition.start();
     });
@@ -213,14 +278,22 @@ export class SpeechRecognitionService extends EventTarget {
   stop() {
     if (this.state === LISTENING) {
       this.state = AUDIOEND;
-      this.recognition.stop();
+      this.recognition?.stop();
     } else if (this.state === WAITING_FOR_MICROPHONE_ACCESS) {
-      this.state = REJECTED;
-      this.recognition.stop();
-      if (this.#rejectListener) {
-        this.#rejectListener("Failed to get microphone access");
-      }
+      this.abort();
     }
+  }
+
+  abort() {
+    this.state = REJECTED;
+    this.#rejectListener?.("Speech recognition aborted");
+    this.#cleanupRecognition();
+  }
+
+  destroy() {
+    this.#cleanupRecognition();
+    this.#visibilityAbortController?.abort();
+    this.#visibilityAbortController = undefined;
   }
 
   getEventsReport() {

@@ -364,8 +364,6 @@ export class ReciteBibleVerse extends LitElement {
       this.handleSpeechRecognitionInterimTranscriptEvent,
     );
 
-    if (this.speechRecognitionState === SPEECH_RECOGNITION_STATE.LISTENING) {
-      this.speechRecognitionService?.stop();
-    }
+    this.speechRecognitionService?.destroy();
   }
 }
