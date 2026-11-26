@@ -24,12 +24,15 @@ import eventsFixtureSafariIOS from "./test-fixtures/events-fixture-safari-ios.js
 import eventsFixtureChromeIOS from "./test-fixtures/events-fixture-chrome-ios.json";
 
 beforeAll(() => {
-  class SpeechRecognitionMock {
+  class SpeechRecognitionMock extends EventTarget {
+    continuous = false;
+    lang = "";
+    interimResults = false;
+    maxAlternatives = 1;
+
     start() {}
     stop() {}
-    onstart() {}
-    onend() {}
-    onresult() {}
+    abort() {}
   }
 
   vi.stubGlobal("SpeechRecognition", SpeechRecognitionMock);
@@ -107,48 +110,53 @@ describe("speech recognition events", () => {
       const listenPromise = speechRecognitionService.listen();
       const { recognition } = speechRecognitionService;
 
-      for (const [index, { eventName, value }] of events.entries()) {
-        if (eventName === "start" && recognition.onstart) {
-          recognition.onstart(new Event("start"));
-          continue;
-        }
-        if (eventName === "end" && recognition.onend) {
-          // call stop() when its the last event in the array
-          if (index === events.length - 1) {
-            speechRecognitionService.stop();
+      try {
+        for (const [index, { eventName, value }] of events.entries()) {
+          if (eventName === "start") {
+            recognition?.dispatchEvent(new Event("start"));
+            continue;
           }
-          recognition.onend(new Event("end"));
-          continue;
+
+          if (eventName === "end") {
+            // call stop() when it's the last event in the array
+            if (index === events.length - 1) {
+              speechRecognitionService.stop();
+            }
+            recognition?.dispatchEvent(new Event("end"));
+            continue;
+          }
+
+          if (eventName !== "result" || !value) {
+            continue;
+          }
+
+          const speechRecognitionResults = value.map(
+            (speechRecognitionAlternatives) => {
+              return new SpeechRecognitionResult(
+                speechRecognitionAlternatives.map(
+                  ({ transcript, confidence }) => {
+                    return new SpeechRecognitionAlternative(
+                      transcript,
+                      confidence,
+                    );
+                  },
+                ),
+              );
+            },
+          );
+
+          const resultEvent = new SpeechRecognitionEvent("result", {
+            results: new SpeechRecognitionResultList(speechRecognitionResults),
+          });
+
+          recognition?.dispatchEvent(resultEvent);
         }
 
-        if (eventName !== "result" || !value || !recognition.onresult) {
-          continue;
-        }
-
-        const speechRecognitionResults = value.map(
-          (SpeechRecognitionAlternatives) => {
-            return new SpeechRecognitionResult(
-              SpeechRecognitionAlternatives.map(
-                ({ transcript, confidence }) => {
-                  return new SpeechRecognitionAlternative(
-                    transcript,
-                    confidence,
-                  );
-                },
-              ),
-            );
-          },
-        );
-
-        const resultEvent = new SpeechRecognitionEvent("result", {
-          results: new SpeechRecognitionResultList(speechRecognitionResults),
-        });
-
-        recognition.onresult(resultEvent);
+        const finalTranscript = await listenPromise;
+        expect(finalTranscript).toBe(expectedTranscript);
+      } finally {
+        speechRecognitionService.destroy();
       }
-
-      const finalTranscript = await listenPromise;
-      expect(finalTranscript).toBe(expectedTranscript);
     },
   );
 });
