@@ -297,7 +297,8 @@ export class ReciteBibleVerse extends LitElement {
         REJECTED,
         () => html`
           <alert-message type="danger">
-            Failed to use microphone input. ${this.speechRecognitionError ? `(Error code: ${this.speechRecognitionError.code})` : ""}
+            Failed to use microphone input.
+            ${this.speechRecognitionError ? `(Error code: ${this.speechRecognitionError.code})` : ""}
           </alert-message>
           <transcript-text
             verse-reference=${ifDefined(this.verseReference)}
