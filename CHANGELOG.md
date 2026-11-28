@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.0](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.31.1...v1.32.0) (2026-11-28)
+
+
+### Features
+
+* render speech recognition error code ([#440](https://github.com/CodingForChrist/memorize-bible-verses/issues/440)) ([4ce08c1](https://github.com/CodingForChrist/memorize-bible-verses/commit/4ce08c1101271b51c3ef9c2a7fa00c9c79f1da67))
+
 ## [1.31.1](https://github.com/CodingForChrist/memorize-bible-verses/compare/v1.31.0...v1.31.1) (2026-11-26)
 
 
