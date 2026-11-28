@@ -1,3 +1,5 @@
+import { SpeechRecognitionError } from "./speech-recognition-error";
+
 import { logger } from "../../../services/logger";
 
 export const SPEECH_RECOGNITION_STATE = {
@@ -34,12 +36,12 @@ export class SpeechRecognitionService extends EventTarget {
   #transcriptHistory: string[];
   #state: SpeechRecognitionState;
   #lastResult?: SpeechRecognitionResultList;
-  #allEvents?: {
+  #allEvents: {
     eventName: string;
     value?: unknown;
   }[];
   #resolveListener?: (value: string) => void;
-  #rejectListener?: (reason: string) => void;
+  #rejectListener?: (error: Error) => void;
   #recognitionAbortController?: AbortController;
   #visibilityAbortController?: AbortController;
 
@@ -73,6 +75,14 @@ export class SpeechRecognitionService extends EventTarget {
   #createRecognitionInstance() {
     const SpeechRecognitionWithFallback =
       globalThis.SpeechRecognition || globalThis.webkitSpeechRecognition;
+
+    if (!SpeechRecognitionWithFallback) {
+      throw new SpeechRecognitionError({
+        code: "not-supported",
+        message: "SpeechRecognition API is not supported in this browser.",
+      });
+    }
+
     const recognition = new SpeechRecognitionWithFallback();
     recognition.continuous = true;
     recognition.lang = "en-US";
@@ -147,14 +157,14 @@ export class SpeechRecognitionService extends EventTarget {
   }
 
   #onStart() {
-    this.#allEvents?.push({
+    this.#allEvents.push({
       eventName: "start",
     });
     this.state = LISTENING;
   }
 
   #onResult(event: SpeechRecognitionEvent) {
-    this.#allEvents?.push({
+    this.#allEvents.push({
       eventName: "result",
       value: [...event.results].map((result) => {
         return [...result].map(({ confidence, transcript }) => {
@@ -169,19 +179,19 @@ export class SpeechRecognitionService extends EventTarget {
     this.#lastResult = event.results;
   }
 
-  #onError(event: SpeechRecognitionErrorEvent) {
-    this.#allEvents?.push({ eventName: "error", value: event.error });
-    this.#cleanupRecognition();
-    this.#rejectListener?.(`Speech recognition error: ${event.error}`);
-    this.state = REJECTED;
+  #onError({ error: code, message }: SpeechRecognitionErrorEvent) {
+    this.#allEvents.push({ eventName: "error", value: code });
     logger.error({
       message: "Speech recognition error",
-      payload: { errorCode: event.error, errorMessage: event.message },
+      payload: { code, message },
     });
+    this.state = REJECTED;
+    this.#rejectListener?.(new SpeechRecognitionError({ code, message }));
+    this.#cleanupRecognition();
   }
 
   #onEnd() {
-    this.#allEvents?.push({
+    this.#allEvents.push({
       eventName: "end",
     });
 
@@ -202,24 +212,28 @@ export class SpeechRecognitionService extends EventTarget {
         this.interimTranscript = transcript;
         this.finalTranscript = transcript;
 
-        if (this.#resolveListener) {
-          this.#resolveListener(this.finalTranscript);
-        }
         this.state = RESOLVED;
+        this.#resolveListener?.(this.finalTranscript);
       } catch (error) {
         logger.error({
           message: "Failed to get final transcript",
           payload: { errorMessage: error },
         });
         this.state = REJECTED;
+        this.#rejectListener?.(
+          error instanceof Error ? error : new Error(String(error)),
+        );
       }
       // console.log(this.getEventsReport());
       this.#allEvents = [];
     } else {
-      if (this.#rejectListener) {
-        this.#rejectListener("Failed to get final transcript");
-      }
       this.state = REJECTED;
+      this.#rejectListener?.(
+        new SpeechRecognitionError({
+          code: "no-speech",
+          message: "Failed to get final transcript",
+        }),
+      );
     }
 
     this.#cleanupRecognition();
@@ -236,8 +250,6 @@ export class SpeechRecognitionService extends EventTarget {
       state: SpeechRecognitionState;
     }>(SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_STATE, {
       detail: { state: value },
-      bubbles: true,
-      composed: true,
     });
     this.dispatchEvent(eventUpdateState);
   }
@@ -253,8 +265,6 @@ export class SpeechRecognitionService extends EventTarget {
       SPEECH_RECOGNITION_CUSTOM_EVENT.UPDATE_INTERIM_TRANSCRIPT,
       {
         detail: { interimTranscript: value },
-        bubbles: true,
-        composed: true,
       },
     );
     this.dispatchEvent(eventUpdateState);
@@ -269,9 +279,14 @@ export class SpeechRecognitionService extends EventTarget {
       this.#resolveListener = resolve;
       this.#rejectListener = reject;
 
-      this.recognition = this.#createRecognitionInstance();
-      this.state = WAITING_FOR_MICROPHONE_ACCESS;
-      this.recognition.start();
+      try {
+        this.recognition = this.#createRecognitionInstance();
+        this.state = WAITING_FOR_MICROPHONE_ACCESS;
+        this.recognition.start();
+      } catch (error) {
+        this.state = REJECTED;
+        throw error;
+      }
     });
   }
 
@@ -286,7 +301,12 @@ export class SpeechRecognitionService extends EventTarget {
 
   abort() {
     this.state = REJECTED;
-    this.#rejectListener?.("Speech recognition aborted");
+    this.#rejectListener?.(
+      new SpeechRecognitionError({
+        code: "aborted",
+        message: "Speech recognition aborted",
+      }),
+    );
     this.#cleanupRecognition();
   }
 

@@ -7,6 +7,7 @@ import { CUSTOM_EVENT } from "../../constants";
 
 import {
   SpeechRecognitionService,
+  SpeechRecognitionError,
   SPEECH_RECOGNITION_STATE,
   SPEECH_RECOGNITION_CUSTOM_EVENT,
   type SpeechRecognitionState,
@@ -77,6 +78,9 @@ export class ReciteBibleVerse extends LitElement {
   speechRecognitionState: SpeechRecognitionState =
     SPEECH_RECOGNITION_STATE.INITIAL;
 
+  @state()
+  speechRecognitionError?: SpeechRecognitionError;
+
   speechRecognitionService?: SpeechRecognitionService;
 
   constructor() {
@@ -126,7 +130,15 @@ export class ReciteBibleVerse extends LitElement {
       this.scrollIntoView();
     }
 
-    const finalTranscript = await this.speechRecognitionService!.listen();
+    let finalTranscript = "";
+
+    try {
+      finalTranscript = await this.speechRecognitionService!.listen();
+    } catch (error) {
+      if (error instanceof SpeechRecognitionError) {
+        this.speechRecognitionError = error;
+      }
+    }
 
     this.transcript = autoCorrectSpeechRecognitionInput({
       transcript: finalTranscript,
@@ -285,7 +297,8 @@ export class ReciteBibleVerse extends LitElement {
         REJECTED,
         () => html`
           <alert-message type="danger">
-            Failed to use microphone input
+            Failed to use microphone input.
+            ${this.speechRecognitionError ? `(Error code: ${this.speechRecognitionError.code})` : ""}
           </alert-message>
           <transcript-text
             verse-reference=${ifDefined(this.verseReference)}

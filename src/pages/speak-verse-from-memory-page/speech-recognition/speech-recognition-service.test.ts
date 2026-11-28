@@ -1,13 +1,4 @@
-import {
-  describe,
-  expect,
-  test,
-  beforeEach,
-  afterEach,
-  beforeAll,
-  afterAll,
-  vi,
-} from "vitest";
+import { describe, expect, test, beforeEach, afterEach, vi } from "vitest";
 import { SpeechRecognition as SpeechRecognitionMock } from "corti";
 
 import {
@@ -22,14 +13,6 @@ const {
   RESOLVED,
   REJECTED,
 } = SPEECH_RECOGNITION_STATE;
-
-beforeAll(() => {
-  vi.stubGlobal("SpeechRecognition", SpeechRecognitionMock);
-});
-
-afterAll(() => {
-  vi.unstubAllGlobals();
-});
 
 /**
 Why `abort()` is called twice in `corti` once listening has started:
@@ -47,12 +30,28 @@ describe("SpeechRecognitionService", () => {
   let speechRecognitionService: SpeechRecognitionService;
 
   beforeEach(() => {
+    vi.stubGlobal("SpeechRecognition", SpeechRecognitionMock);
     speechRecognitionService = new SpeechRecognitionService();
   });
 
   afterEach(() => {
     speechRecognitionService.destroy();
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  describe("browser support", () => {
+    test('should reject with "not-supported" SpeechRecognitionError when API is unavailable', async () => {
+      vi.stubGlobal("SpeechRecognition", undefined);
+      vi.stubGlobal("webkitSpeechRecognition", undefined);
+
+      const service = new SpeechRecognitionService();
+      await expect(service.listen()).rejects.toMatchObject({
+        name: "SpeechRecognitionError",
+        code: "not-supported",
+        message: "SpeechRecognition API is not supported in this browser.",
+      });
+    });
   });
 
   describe("listen() and stop()", () => {
@@ -102,9 +101,10 @@ describe("SpeechRecognitionService", () => {
       expect(speechRecognitionService.state).toBe(LISTENING);
       speechRecognitionService.stop();
 
-      await expect(listenPromise).rejects.toThrow(
-        "Failed to get final transcript",
-      );
+      await expect(listenPromise).rejects.toMatchObject({
+        code: "no-speech",
+        message: "Failed to get final transcript",
+      });
       expect(speechRecognitionService.state).toBe(REJECTED);
       expect(stopSpy).toHaveBeenCalledTimes(1);
       expect(abortSpy, ABORT_CALL_EXPLANATION).toHaveBeenCalledTimes(
@@ -201,13 +201,17 @@ describe("SpeechRecognitionService", () => {
       const abortSpy = vi.spyOn(recognitionInstance, "abort");
 
       const errorEvent = new Event("error") as SpeechRecognitionErrorEvent;
-      Object.defineProperty(errorEvent, "error", { value: "no-speech" });
+      Object.defineProperties(errorEvent, {
+        error: { value: "not-allowed" },
+        message: { value: "Permission denied" },
+      });
 
       capturedErrorHandler?.(errorEvent);
 
-      await expect(listenPromise).rejects.toThrow(
-        "Failed to get final transcript",
-      );
+      await expect(listenPromise).rejects.toMatchObject({
+        code: "not-allowed",
+        message: "Permission denied",
+      });
       expect(speechRecognitionService.state).toBe(REJECTED);
       expect(abortSpy, ABORT_CALL_EXPLANATION).toHaveBeenCalledTimes(
         EXPECTED_CORTI_ABORT_CALLS,

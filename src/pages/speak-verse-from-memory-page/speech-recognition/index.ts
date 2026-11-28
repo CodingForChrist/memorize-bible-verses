@@ -4,4 +4,6 @@ export {
   SpeechRecognitionService,
 } from "./speech-recognition-service";
 
+export { SpeechRecognitionError } from "./speech-recognition-error";
+
 export type { SpeechRecognitionState } from "./speech-recognition-service";
